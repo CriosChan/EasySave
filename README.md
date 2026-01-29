@@ -1,6 +1,7 @@
 # EasySave
+![Version 1.0](https://img.shields.io/badge/Version-1.0-green) ![Project framework .NET](https://img.shields.io/badge/Project%20framework-.NET-purple)
+
 EasySave est un outil de sauvegarde automatisé | EasySave is a save automation tool
-https://img.shields.io/badge/Version-1.0-green
 
 ## Installation
 Téléchargez le fichier .exe disponible dans la partie Releases
@@ -26,6 +27,6 @@ Successfully deleted "big save"
 Voir le fichier [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
-Tout droits réservés par l'entreprise ProSoft©[1]
+Tout droits réservés par l'entreprise ProSoft©[^1]
 
-[1] Prosoft est une entreprise FICTIVE
+[^1]: Prosoft est une entreprise FICTIVE
