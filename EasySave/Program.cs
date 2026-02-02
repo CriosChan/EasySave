@@ -6,11 +6,7 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        // Récupération de la configuration
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
-        var appSettings = configuration.Get<ApplicationConfiguration>();
+        ApplicationConfiguration.Load();
+        var appConfig = ApplicationConfiguration.Instance;
     }
 }
