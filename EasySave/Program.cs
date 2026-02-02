@@ -1,12 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace EasySave;
+﻿namespace EasySave;
 
 internal static class Program
 {
     private static void Main(string[] args)
     {
-        ApplicationConfiguration.Load();
-        var appConfig = ApplicationConfiguration.Instance;
+        // Main program logic would go here
     }
 }
