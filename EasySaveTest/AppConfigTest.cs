@@ -9,11 +9,8 @@ public class AppConfigTest
     [OneTimeSetUp]
     public void Setup()
     {
-        _appSettings = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false)
-            .Build()
-            .Get<EasySave.ApplicationConfiguration>()!;
+        EasySave.ApplicationConfiguration.Load();
+        _appSettings = EasySave.ApplicationConfiguration.Instance;
     }
 
     [Test]
@@ -22,13 +19,13 @@ public class AppConfigTest
 
     [Test]
     public void ConfigHasJobConfigPath()
-        => Assert.That(_appSettings.jobConfigPath, Is.EqualTo("/config"));
+        => Assert.That(_appSettings.JobConfigPath, Is.EqualTo("/config"));
 
     [Test]
     public void ConfigHasLocalization()
-        => Assert.That(_appSettings.localization, Is.EqualTo("fr-FR"));
+        => Assert.That(_appSettings.Localization, Is.EqualTo("fr-FR"));
 
     [Test]
     public void ConfigHasLogPath()
-        => Assert.That(_appSettings.logPath, Is.EqualTo("/log"));
+        => Assert.That(_appSettings.LogPath, Is.EqualTo("/log"));
 }
