@@ -64,8 +64,7 @@ public sealed class BackupService
                 TargetPath = PathTools.ToFullUncLikePath(job.TargetDirectory),
                 FileSizeBytes = 0,
                 TransferTimeMs = -1,
-                Action = "job_start",
-                Error = "Source directory does not exist."
+                // Action and Error fields removed from LogEntry
             });
 
             return;
@@ -110,7 +109,7 @@ public sealed class BackupService
                     TargetPath = PathTools.ToFullUncLikePath(targetDir),
                     FileSizeBytes = 0,
                     TransferTimeMs = 0,
-                    Action = "directory_create"
+                    // Action field removed from LogEntry
                 });
             }
 
@@ -149,8 +148,7 @@ public sealed class BackupService
                 TargetPath = PathTools.ToFullUncLikePath(targetFile),
                 FileSizeBytes = fileSize,
                 TransferTimeMs = elapsedMs,
-                Action = "file_transfer",
-                Error = error
+                // Action and Error fields removed from LogEntry
             });
 
             if (elapsedMs >= 0)

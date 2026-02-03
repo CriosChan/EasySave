@@ -15,6 +15,5 @@ public sealed class LogEntry
     public long TransferTimeMs { get; set; }
 
     // Optional additional information for support.
-    public string Action { get; set; } = "file_transfer";
-    public string? Error { get; set; }
+    // (Action and Error fields removed per request)
 }
