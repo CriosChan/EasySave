@@ -1,9 +1,11 @@
-﻿namespace EasySave;
+﻿using EasySave.View;
+
+namespace EasySave;
 
 internal static class Program
 {
     private static void Main(string[] args)
     {
-        // Main program logic would go here
+        UserInterface.ShowMenu();
     }
 }
