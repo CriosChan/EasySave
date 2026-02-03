@@ -1,75 +1,113 @@
-﻿using System;
+using EasySave.Models;
+using EasySave.Services;
 
-public class CommandController
+namespace EasySave.Controller;
+
+/// <summary>
+/// Handles execution of backup jobs via command line arguments.
+/// </summary>
+public static class CommandController
 {
     /// <summary>
-    /// Entry point of the application.
-    /// This method is called automatically when the executable is launched.
+    /// Entry point for command-line execution.
+    ///
+    /// Supported formats:
+    /// - "1-3"  → backups 1, 2, 3
+    /// - "1;3"  → backups 1 and 3
+    /// - "2"    → backup 2 only
     /// </summary>
-    /// <param name="args">
-    /// Command-line arguments passed to the executable.
-    /// Example:
-    ///   EasySave.exe 1-3
-    ///   EasySave.exe 1;3
-    /// </param>
-    private static void Run(string[] args)
+    /// <returns>Process exit code.</returns>
+    public static int Run(string[] args, JobRepository repository, BackupService backupService, StateFileService stateService)
     {
-
-        // If no argument is provided, the program cannot know which backups to run
-        if (args.Length == 0)
+        string raw = string.Join(string.Empty, args).Trim();
+        if (string.IsNullOrWhiteSpace(raw))
         {
-            // Display usage information
-            return;
+            PrintUsage();
+            return 1;
         }
 
-        // Parse the first argument to determine which backups must be executed
-        List<int> sauvegardes = ParseArguments(args[0]);
-
-        foreach (int id in sauvegardes)
+        List<int> ids;
+        try
         {
-            // Execute the backup with the specified ID
+            ids = ParseArguments(raw);
         }
+        catch
+        {
+            PrintUsage();
+            return 1;
+        }
+
+        List<BackupJob> jobs = repository.Load().OrderBy(j => j.Id).ToList();
+        if (jobs.Count == 0)
+        {
+            Console.WriteLine("No backup job configured.");
+            return 1;
+        }
+
+        // Ensure the state file contains all configured jobs before running.
+        stateService.Initialize(jobs);
+
+        foreach (int id in ids)
+        {
+            BackupJob? job = jobs.FirstOrDefault(j => j.Id == id);
+            if (job == null)
+            {
+                Console.WriteLine($"Job {id} not found.");
+                continue;
+            }
+
+            Console.WriteLine($"Running job {job.Id} - {job.Name}...");
+            backupService.RunJob(job);
+        }
+
+        return 0;
     }
 
-    /// <summary>
-    /// Parses the command-line argument and converts it into a list of backup IDs.
-    /// Supported formats:
-    ///   - "1-3"  → backups 1, 2, 3
-    ///   - "1;3"  → backups 1 and 3
-    ///   - "2"    → backup 2 only
-    /// </summary>
-    /// <param name="arg">Raw argument string passed from the command line</param>
-    /// <returns>List of backup IDs to execute</returns>
+    private static void PrintUsage()
+    {
+        Console.WriteLine("Usage:");
+        Console.WriteLine("  EasySave.exe 1-3");
+        Console.WriteLine("  EasySave.exe 1;3");
+        Console.WriteLine("  EasySave.exe 2");
+    }
+
     private static List<int> ParseArguments(string arg)
     {
-        // List that will contain all backup IDs to execute
         var result = new List<int>();
+        string normalized = arg.Replace(" ", string.Empty);
 
-        // Case 1: Range format (e.g. "1-3")
-        if (arg.Contains("-"))
+        if (normalized.Contains('-'))
         {
-            var parts = arg.Split('-');
+            var parts = normalized.Split('-', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length != 2)
+                throw new FormatException();
+
             int start = int.Parse(parts[0]);
             int end = int.Parse(parts[1]);
+            if (start <= 0 || end <= 0)
+                throw new FormatException();
+
+            if (end < start)
+            {
+                (start, end) = (end, start);
+            }
+
             for (int i = start; i <= end; i++)
                 result.Add(i);
         }
-
-        // Case 2: Multiple explicit values (e.g. "1;3;5")
-        else if (arg.Contains(";"))
+        else if (normalized.Contains(';'))
         {
-            result = arg
-                .Split(';')
+            result = normalized
+                .Split(';', StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToList();
         }
-
-        // Case 3: Single backup ID (e.g. "2")
         else
         {
-            result.Add(int.Parse(arg));
+            result.Add(int.Parse(normalized));
         }
 
-        return result;
+        // Avoid duplicates while keeping the initial order.
+        return result.Distinct().ToList();
     }
 }

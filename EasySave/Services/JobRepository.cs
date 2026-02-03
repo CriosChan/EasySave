@@ -52,11 +52,11 @@ public sealed class JobRepository
     public (bool ok, string error) AddJob(List<BackupJob> jobs, BackupJob job)
     {
         if (jobs.Count >= MaxJobs)
-            return (false, $"Maximum number of jobs reached ({MaxJobs}).");
+            return (false, "Error.MaxJobs");
 
         int id = GetNextFreeId(jobs);
         if (id == -1)
-            return (false, $"No free slot available (1..{MaxJobs}).");
+            return (false, "Error.NoFreeSlot");
 
         job.Id = id;
         jobs.Add(job);

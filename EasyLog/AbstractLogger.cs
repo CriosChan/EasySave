@@ -7,6 +7,8 @@ public abstract class AbstractLogger<T>(string logDirectory, string extension)
     protected List<T> ReadLogFile()
     {
         DateTime now = DateTime.Now;
+        // Ensure the directory exists before reading/writing.
+        Directory.CreateDirectory(logDirectory);
         // Make us able to use the same name when writting the file.
         _logFilePath = Path.Join(logDirectory, now.ToString("yyyy-MM-dd") + "." + extension);
         // If log file doesn't exist return Empty Array, else return Deserialized file content.

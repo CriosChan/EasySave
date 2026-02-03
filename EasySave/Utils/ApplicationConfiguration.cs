@@ -30,7 +30,9 @@ public class ApplicationConfiguration
             if (_instance == null)
             {
                 var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
+                    // Use the executable directory so the config is found even if the app is started
+                    // from a different working directory.
+                    .SetBasePath(AppContext.BaseDirectory)
                     .AddJsonFile(configFile, optional: false, reloadOnChange: true)
                     .Build();
 

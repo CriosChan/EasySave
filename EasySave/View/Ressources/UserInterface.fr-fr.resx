@@ -26,4 +26,85 @@
     <data name="Menu.Header" xml:space="preserve">
         <value>=== Menu EasySave ===</value>
     </data>
+    <data name="Common.PressAnyKey" xml:space="preserve">
+        <value>Appuyez sur une touche pour revenir au menu.</value>
+    </data>
+    <data name="Common.InvalidInput" xml:space="preserve">
+        <value>Saisie invalide, veuillez réessayer.</value>
+    </data>
+    <data name="Common.Cancelled" xml:space="preserve">
+        <value>Action annulée.</value>
+    </data>
+    <data name="Jobs.Header" xml:space="preserve">
+        <value>Travaux de sauvegarde configurés</value>
+    </data>
+    <data name="Jobs.None" xml:space="preserve">
+        <value>Aucun travail de sauvegarde n'est configuré.</value>
+    </data>
+    <data name="Jobs.Columns" xml:space="preserve">
+        <value>Id | Nom                  | Type         | Source -> Cible</value>
+    </data>
+    <data name="Add.Header" xml:space="preserve">
+        <value>Ajouter un travail de sauvegarde</value>
+    </data>
+    <data name="Add.PromptName" xml:space="preserve">
+        <value>Nom de la sauvegarde :</value>
+    </data>
+    <data name="Add.PromptSource" xml:space="preserve">
+        <value>Répertoire source :</value>
+    </data>
+    <data name="Add.PromptTarget" xml:space="preserve">
+        <value>Répertoire cible :</value>
+    </data>
+    <data name="Add.PromptType" xml:space="preserve">
+        <value>Type de sauvegarde :</value>
+    </data>
+    <data name="Add.TypeOptions" xml:space="preserve">
+        <value>1) Complète   2) Différentielle</value>
+    </data>
+    <data name="Add.Success" xml:space="preserve">
+        <value>Travail de sauvegarde créé.</value>
+    </data>
+    <data name="Add.Failed" xml:space="preserve">
+        <value>Impossible de créer le travail :</value>
+    </data>
+    <data name="Add.Error.MaxJobs" xml:space="preserve">
+        <value>Nombre maximum de travaux atteint (5).</value>
+    </data>
+    <data name="Add.Error.NoFreeSlot" xml:space="preserve">
+        <value>Aucune place libre disponible (1..5).</value>
+    </data>
+    <data name="Remove.Header" xml:space="preserve">
+        <value>Supprimer un travail de sauvegarde</value>
+    </data>
+    <data name="Remove.Prompt" xml:space="preserve">
+        <value>Saisissez un id (ex : 1) ou un nom de sauvegarde :</value>
+    </data>
+    <data name="Remove.NotFound" xml:space="preserve">
+        <value>Aucun travail correspondant n'a été trouvé.</value>
+    </data>
+    <data name="Remove.Success" xml:space="preserve">
+        <value>Travail supprimé.</value>
+    </data>
+    <data name="Launch.Header" xml:space="preserve">
+        <value>Lancer une sauvegarde</value>
+    </data>
+    <data name="Launch.Prompt" xml:space="preserve">
+        <value>Saisissez l'id à exécuter, ou 0 pour exécuter tous les travaux séquentiellement :</value>
+    </data>
+    <data name="Launch.Invalid" xml:space="preserve">
+        <value>Id invalide.</value>
+    </data>
+    <data name="Launch.NotFound" xml:space="preserve">
+        <value>Travail introuvable.</value>
+    </data>
+    <data name="Launch.RunningAll" xml:space="preserve">
+        <value>Exécution de tous les travaux...</value>
+    </data>
+    <data name="Launch.RunningOne" xml:space="preserve">
+        <value>Exécution du travail {0} - {1}...</value>
+    </data>
+    <data name="Launch.Done" xml:space="preserve">
+        <value>Exécution terminée.</value>
+    </data>
 </root>

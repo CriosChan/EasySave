@@ -71,7 +71,20 @@ public sealed class BackupService
         }
 
         // Ensure target exists.
+        bool targetExisted = Directory.Exists(job.TargetDirectory);
         Directory.CreateDirectory(job.TargetDirectory);
+        if (!targetExisted)
+        {
+            _logger.Log(new LogEntry
+            {
+                Timestamp = DateTime.Now,
+                BackupName = job.Name,
+                SourcePath = PathTools.ToFullUncLikePath(job.SourceDirectory),
+                TargetPath = PathTools.ToFullUncLikePath(job.TargetDirectory),
+                FileSizeBytes = 0,
+                TransferTimeMs = 0,
+            });
+        }
 
         List<string> filesToCopy = GetFilesToCopy(job);
         long totalSize = filesToCopy.Sum(f => new FileInfo(f).Length);
