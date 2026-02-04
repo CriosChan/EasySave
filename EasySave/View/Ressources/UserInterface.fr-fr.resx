@@ -107,4 +107,10 @@
     <data name="Launch.Done" xml:space="preserve">
         <value>Exécution terminée.</value>
     </data>
+    <data name="Path.SourceNotFound" xml:space="preserve">
+        <value>Le répertoire source n'existe pas. Veuillez saisir un répertoire existant.</value>
+    </data>
+    <data name="Path.TargetNotFound" xml:space="preserve">
+        <value>Le répertoire cible n'existe pas. Veuillez saisir un répertoire existant.</value>
+    </data>
 </root>

@@ -114,4 +114,10 @@
     <data name="Launch.Done" xml:space="preserve">
         <value>Execution finished.</value>
     </data>
+    <data name="Path.SourceNotFound" xml:space="preserve">
+        <value>Source directory does not exist. Please enter an existing directory.</value>
+    </data>
+    <data name="Path.TargetNotFound" xml:space="preserve">
+        <value>Target directory does not exist. Please enter an existing directory.</value>
+    </data>
 </root>

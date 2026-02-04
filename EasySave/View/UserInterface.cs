@@ -1,5 +1,6 @@
 using EasySave.Models;
 using EasySave.Services;
+using EasySave.Utils;
 
 namespace EasySave.View;
 
@@ -69,8 +70,8 @@ public static class UserInterface
         Console.WriteLine();
 
         string name = ReadNonEmpty(Text.Get("Add.PromptName"));
-        string source = ReadNonEmpty(Text.Get("Add.PromptSource"));
-        string target = ReadNonEmpty(Text.Get("Add.PromptTarget"));
+        string source = ReadExistingDirectory(Text.Get("Add.PromptSource"), "Path.SourceNotFound");
+        string target = ReadExistingDirectory(Text.Get("Add.PromptTarget"), "Path.TargetNotFound");
 
         BackupType type = ReadBackupType();
 
@@ -173,7 +174,26 @@ public static class UserInterface
         if (input == "0")
         {
             Console.WriteLine(Text.Get("Launch.RunningAll"));
-            _backupService!.RunJobsSequential(jobs);
+            // Skip invalid jobs so we don't report a run when paths are incorrect.
+            foreach (BackupJob j in jobs.OrderBy(j => j.Id))
+            {
+                // Use distinct names here to avoid shadowing variables declared later in the method.
+                string srcDir = PathTools.NormalizeUserPath(j.SourceDirectory);
+                string dstDir = PathTools.NormalizeUserPath(j.TargetDirectory);
+
+                if (string.IsNullOrWhiteSpace(srcDir) || !Directory.Exists(srcDir))
+                {
+                    Console.WriteLine($"[{j.Id}] {Text.Get("Path.SourceNotFound")}");
+                    continue;
+                }
+                if (string.IsNullOrWhiteSpace(dstDir) || !Directory.Exists(dstDir))
+                {
+                    Console.WriteLine($"[{j.Id}] {Text.Get("Path.TargetNotFound")}");
+                    continue;
+                }
+
+                _backupService!.RunJob(j);
+            }
             Console.WriteLine(Text.Get("Launch.Done"));
             Pause();
             return;
@@ -195,9 +215,46 @@ public static class UserInterface
         }
 
         Console.WriteLine(string.Format(Text.Get("Launch.RunningOne"), job.Id, job.Name));
+
+        // Validate directories before launching so the UI does not report a run for invalid paths.
+        string src = PathTools.NormalizeUserPath(job.SourceDirectory);
+        string dst = PathTools.NormalizeUserPath(job.TargetDirectory);
+        if (string.IsNullOrWhiteSpace(src) || !Directory.Exists(src))
+        {
+            Console.WriteLine(Text.Get("Path.SourceNotFound"));
+            Pause();
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(dst) || !Directory.Exists(dst))
+        {
+            Console.WriteLine(Text.Get("Path.TargetNotFound"));
+            Pause();
+            return;
+        }
+
         _backupService!.RunJob(job);
         Console.WriteLine(Text.Get("Launch.Done"));
         Pause();
+    }
+
+    private static string ReadExistingDirectory(string prompt, string notFoundKey)
+    {
+        while (true)
+        {
+            string raw = ReadNonEmpty(prompt);
+            string normalized = PathTools.NormalizeUserPath(raw);
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(normalized) && Directory.Exists(normalized))
+                    return raw;
+            }
+            catch
+            {
+                // Ignore and retry.
+            }
+
+            Console.WriteLine(Text.Get(notFoundKey));
+        }
     }
 
     private static void RefreshStateFile()

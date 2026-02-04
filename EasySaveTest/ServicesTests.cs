@@ -24,7 +24,15 @@ public class JobRepositoryTests
     [TearDown]
     public void TearDown()
     {
-        try { Directory.Delete(_tempDir, true); } catch { }
+        try
+        {
+            Directory.Delete(_tempDir, true);
+        }
+        catch (Exception ex)
+        {
+            // Best-effort cleanup: log failure but do not fail the test.
+            TestContext.WriteLine($"Failed to delete temp directory '{_tempDir}': {ex}");
+        }
     }
 
     [Test]
@@ -56,7 +64,7 @@ public class JobRepositoryTests
         var jobs = new List<BackupJob>();
         var job = new BackupJob { Name = "newJob", SourceDirectory = "/src", TargetDirectory = "/dst" };
 
-        var (ok, err) = _repo.AddJob(jobs, job);
+        var (ok, _) = _repo.AddJob(jobs, job);
 
         Assert.That(ok, Is.True);
         Assert.That(job.Id, Is.EqualTo(1));
@@ -72,7 +80,7 @@ public class JobRepositoryTests
         };
         var job = new BackupJob { Name = "j3", SourceDirectory = "/src", TargetDirectory = "/dst" };
 
-        var (ok, err) = _repo.AddJob(jobs, job);
+        var (ok, _) = _repo.AddJob(jobs, job);
 
         Assert.That(ok, Is.True);
         Assert.That(job.Id, Is.EqualTo(3));
@@ -173,7 +181,14 @@ public class StateFileServiceTests
     [TearDown]
     public void TearDown()
     {
-        try { Directory.Delete(_tempDir, true); } catch { }
+        try
+        {
+            Directory.Delete(_tempDir, true);
+        }
+        catch (Exception ex)
+        {
+            TestContext.WriteLine($"Failed to delete temp directory '{_tempDir}': {ex}");
+        }
     }
 
     [Test]
@@ -260,10 +275,10 @@ public class StateFileServiceTests
         state1.State = JobRunState.Active;
         _stateService.Update(state1);
 
-        // Verify ordering by loading from file
-        string json = File.ReadAllText(Path.Combine(_tempDir, "state.json"));
         var loaded = JsonFile.ReadOrDefault(Path.Combine(_tempDir, "state.json"), new List<BackupJobState>());
-        Assert.That(loaded[0].JobId, Is.LessThanOrEqualTo(loaded[loaded.Count - 1].JobId));
+        var ids = loaded.Select(s => s.JobId).ToList();
+        var sorted = ids.OrderBy(id => id).ToList();
+        Assert.That(ids, Is.EqualTo(sorted));
     }
 }
 
@@ -295,7 +310,14 @@ public class BackupServiceTests
     [TearDown]
     public void TearDown()
     {
-        try { Directory.Delete(_tempDir, true); } catch { }
+        try
+        {
+            Directory.Delete(_tempDir, true);
+        }
+        catch (Exception ex)
+        {
+            TestContext.WriteLine($"Failed to delete temp directory '{_tempDir}': {ex}");
+        }
     }
 
     [Test]
@@ -364,6 +386,8 @@ public class BackupServiceTests
     {
         File.WriteAllText(Path.Combine(_sourceDir, "file.txt"), "test");
 
+        string day = DateTime.Now.ToString("yyyy-MM-dd");
+
         var job = new BackupJob
         {
             Id = 1,
@@ -375,7 +399,7 @@ public class BackupServiceTests
 
         _backupService.RunJob(job);
 
-        string logPath = Path.Combine(_logDir, DateTime.Now.ToString("yyyy-MM-dd") + ".json");
+        string logPath = Path.Combine(_logDir, day + ".json");
         var logs = JsonFile.ReadOrDefault(logPath, new List<LogEntry>());
         
         Assert.That(logs.Count, Is.GreaterThan(0));

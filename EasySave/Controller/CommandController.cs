@@ -1,5 +1,6 @@
 using EasySave.Models;
 using EasySave.Services;
+using EasySave.Utils;
 
 namespace EasySave.Controller;
 
@@ -53,6 +54,20 @@ public static class CommandController
             if (job == null)
             {
                 Console.WriteLine($"Job {id} not found.");
+                continue;
+            }
+
+            // Validate directories before reporting a run.
+            string src = PathTools.NormalizeUserPath(job.SourceDirectory);
+            string dst = PathTools.NormalizeUserPath(job.TargetDirectory);
+            if (string.IsNullOrWhiteSpace(src) || !Directory.Exists(src))
+            {
+                Console.WriteLine($"Job {job.Id} skipped: source directory not found.");
+                continue;
+            }
+            if (string.IsNullOrWhiteSpace(dst) || !Directory.Exists(dst))
+            {
+                Console.WriteLine($"Job {job.Id} skipped: target directory not found.");
                 continue;
             }
 
