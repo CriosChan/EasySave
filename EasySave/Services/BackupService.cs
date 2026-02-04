@@ -22,12 +22,22 @@ public sealed class BackupService
     /// <summary>
     /// Creates a new backup service.
     /// </summary>
+    /// <param name="logger">Logger implementation used to write daily logs.</param>
+    /// <param name="state">State service used to update the real-time state file.</param>
+    internal BackupService(AbstractLogger<LogEntry> logger, StateFileService state)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _state = state ?? throw new ArgumentNullException(nameof(state));
+    }
+
+    /// <summary>
+    /// Creates a new backup service.
+    /// </summary>
     /// <param name="logDirectory">Directory where the daily log file will be created.</param>
     /// <param name="state">State service used to update the real-time state file.</param>
     public BackupService(string logDirectory, StateFileService state)
+        : this(new JsonLogger<LogEntry>(logDirectory), state)
     {
-        _logger = new JsonLogger<LogEntry>(logDirectory);
-        _state = state;
     }
 
     /// <summary>
@@ -50,17 +60,12 @@ public sealed class BackupService
         jobState.BackupName = job.Name;
         jobState.LastActionTimestamp = DateTime.Now;
 
-        // Normalize user-provided paths (trim, strip quotes, expand env vars).
-        string sourceDir = PathTools.NormalizeUserPath(job.SourceDirectory);
-        string targetDir = PathTools.NormalizeUserPath(job.TargetDirectory);
+        // Normalize user-provided paths (trim, strip quotes, expand env vars) and validate existence.
+        bool sourceOk = PathTools.TryNormalizeExistingDirectory(job.SourceDirectory, out string sourceDir);
+        bool targetOk = PathTools.TryNormalizeExistingDirectory(job.TargetDirectory, out string targetDir);
 
         // Validate source directory.
-        try
-        {
-            if (string.IsNullOrWhiteSpace(sourceDir) || !Directory.Exists(sourceDir))
-                throw new DirectoryNotFoundException();
-        }
-        catch
+        if (!sourceOk)
         {
             jobState.State = JobRunState.Failed;
             jobState.CurrentAction = "source_missing";
@@ -82,12 +87,7 @@ public sealed class BackupService
 
         // Validate target directory.
         // For v1.0, we only execute the job if both source and target directories exist.
-        try
-        {
-            if (string.IsNullOrWhiteSpace(targetDir) || !Directory.Exists(targetDir))
-                throw new DirectoryNotFoundException();
-        }
-        catch
+        if (!targetOk)
         {
             jobState.State = JobRunState.Failed;
             jobState.CurrentAction = "target_missing";

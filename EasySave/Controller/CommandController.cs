@@ -58,14 +58,12 @@ public static class CommandController
             }
 
             // Validate directories before reporting a run.
-            string src = PathTools.NormalizeUserPath(job.SourceDirectory);
-            string dst = PathTools.NormalizeUserPath(job.TargetDirectory);
-            if (string.IsNullOrWhiteSpace(src) || !Directory.Exists(src))
+            if (!PathTools.TryNormalizeExistingDirectory(job.SourceDirectory, out _))
             {
                 Console.WriteLine($"Job {job.Id} skipped: source directory not found.");
                 continue;
             }
-            if (string.IsNullOrWhiteSpace(dst) || !Directory.Exists(dst))
+            if (!PathTools.TryNormalizeExistingDirectory(job.TargetDirectory, out _))
             {
                 Console.WriteLine($"Job {job.Id} skipped: target directory not found.");
                 continue;

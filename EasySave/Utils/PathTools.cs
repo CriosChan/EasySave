@@ -47,6 +47,28 @@ public static class PathTools
         return cleaned;
     }
 
+    /// <summary>
+    /// Tries to normalize a user-provided path and validates that it points to an existing directory.
+    /// </summary>
+    /// <param name="rawPath">User input path (may contain quotes, env vars, etc.).</param>
+    /// <param name="normalizedPath">Normalized path ready to be used with <see cref="Directory"/> APIs.</param>
+    /// <returns><c>true</c> if the directory exists; otherwise <c>false</c>.</returns>
+    public static bool TryNormalizeExistingDirectory(string rawPath, out string normalizedPath)
+    {
+        normalizedPath = NormalizeUserPath(rawPath);
+        if (string.IsNullOrWhiteSpace(normalizedPath))
+            return false;
+
+        try
+        {
+            return Directory.Exists(normalizedPath);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public static string ToFullUncLikePath(string path)
     {
         if (string.IsNullOrWhiteSpace(path))

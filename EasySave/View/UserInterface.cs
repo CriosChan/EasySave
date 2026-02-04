@@ -177,16 +177,12 @@ public static class UserInterface
             // Skip invalid jobs so we don't report a run when paths are incorrect.
             foreach (BackupJob j in jobs.OrderBy(j => j.Id))
             {
-                // Use distinct names here to avoid shadowing variables declared later in the method.
-                string srcDir = PathTools.NormalizeUserPath(j.SourceDirectory);
-                string dstDir = PathTools.NormalizeUserPath(j.TargetDirectory);
-
-                if (string.IsNullOrWhiteSpace(srcDir) || !Directory.Exists(srcDir))
+                if (!PathTools.TryNormalizeExistingDirectory(j.SourceDirectory, out _))
                 {
                     Console.WriteLine($"[{j.Id}] {Text.Get("Path.SourceNotFound")}");
                     continue;
                 }
-                if (string.IsNullOrWhiteSpace(dstDir) || !Directory.Exists(dstDir))
+                if (!PathTools.TryNormalizeExistingDirectory(j.TargetDirectory, out _))
                 {
                     Console.WriteLine($"[{j.Id}] {Text.Get("Path.TargetNotFound")}");
                     continue;
@@ -217,15 +213,13 @@ public static class UserInterface
         Console.WriteLine(string.Format(Text.Get("Launch.RunningOne"), job.Id, job.Name));
 
         // Validate directories before launching so the UI does not report a run for invalid paths.
-        string src = PathTools.NormalizeUserPath(job.SourceDirectory);
-        string dst = PathTools.NormalizeUserPath(job.TargetDirectory);
-        if (string.IsNullOrWhiteSpace(src) || !Directory.Exists(src))
+        if (!PathTools.TryNormalizeExistingDirectory(job.SourceDirectory, out _))
         {
             Console.WriteLine(Text.Get("Path.SourceNotFound"));
             Pause();
             return;
         }
-        if (string.IsNullOrWhiteSpace(dst) || !Directory.Exists(dst))
+        if (!PathTools.TryNormalizeExistingDirectory(job.TargetDirectory, out _))
         {
             Console.WriteLine(Text.Get("Path.TargetNotFound"));
             Pause();
@@ -242,16 +236,8 @@ public static class UserInterface
         while (true)
         {
             string raw = ReadNonEmpty(prompt);
-            string normalized = PathTools.NormalizeUserPath(raw);
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(normalized) && Directory.Exists(normalized))
-                    return raw;
-            }
-            catch
-            {
-                // Ignore and retry.
-            }
+            if (PathTools.TryNormalizeExistingDirectory(raw, out _))
+                return raw;
 
             Console.WriteLine(Text.Get(notFoundKey));
         }
