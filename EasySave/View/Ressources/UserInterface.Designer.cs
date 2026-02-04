@@ -58,6 +58,96 @@ namespace EasySave.View.Ressources {
                 resourceCulture = value;
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add a backup job.
+        /// </summary>
+        internal static string Add_Header {
+            get {
+                return ResourceManager.GetString("Add.Header", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Backup name:.
+        /// </summary>
+        internal static string Add_PromptName {
+            get {
+                return ResourceManager.GetString("Add.PromptName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Source directory:.
+        /// </summary>
+        internal static string Add_PromptSource {
+            get {
+                return ResourceManager.GetString("Add.PromptSource", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Target directory:.
+        /// </summary>
+        internal static string Add_PromptTarget {
+            get {
+                return ResourceManager.GetString("Add.PromptTarget", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Backup type:.
+        /// </summary>
+        internal static string Add_PromptType {
+            get {
+                return ResourceManager.GetString("Add.PromptType", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to 1) Complete   2) Differential.
+        /// </summary>
+        internal static string Add_TypeOptions {
+            get {
+                return ResourceManager.GetString("Add.TypeOptions", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Backup job created..
+        /// </summary>
+        internal static string Add_Success {
+            get {
+                return ResourceManager.GetString("Add.Success", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to create the job:.
+        /// </summary>
+        internal static string Add_Failed {
+            get {
+                return ResourceManager.GetString("Add.Failed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum number of jobs reached (5)..
+        /// </summary>
+        internal static string Add_Error_MaxJobs {
+            get {
+                return ResourceManager.GetString("Add.Error.MaxJobs", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No free slot available (1..5)..
+        /// </summary>
+        internal static string Add_Error_NoFreeSlot {
+            get {
+                return ResourceManager.GetString("Add.Error.NoFreeSlot", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Add backup configuration.
