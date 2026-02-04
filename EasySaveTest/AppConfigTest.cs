@@ -19,7 +19,7 @@ public class AppConfigTest
 
     [Test]
     public void ConfigHasJobConfigPath()
-        => Assert.That(_appSettings.JobConfigPath, Is.EqualTo("/config"));
+        => Assert.That(_appSettings.JobConfigPath, Is.EqualTo("./config"));
 
     [Test]
     public void ConfigHasLocalization()
@@ -27,5 +27,5 @@ public class AppConfigTest
 
     [Test]
     public void ConfigHasLogPath()
-        => Assert.That(_appSettings.LogPath, Is.EqualTo("/log"));
+        => Assert.That(_appSettings.LogPath, Is.EqualTo("./log"));
 }
