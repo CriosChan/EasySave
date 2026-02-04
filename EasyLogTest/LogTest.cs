@@ -33,13 +33,12 @@ public class Tests
         // Check if the log file exists
         Assert.That(File.Exists(logPath), Is.EqualTo(true));
         // Get the file content
-        string lines = File.ReadAllText(logPath);
+        IEnumerable<string> lines = File.ReadLines(logPath);
+        Assert.That(lines.Count(), Is.Not.EqualTo(0));
         // Deserialize it
-        List<FakeLogObject>? logs = JsonSerializer.Deserialize<List<FakeLogObject>>(lines);
-        // Verify it's not null
-        Assert.That(logs, Is.Not.EqualTo(null));
+        FakeLogObject readedLog = JsonSerializer.Deserialize<FakeLogObject>(lines.ElementAt(0));
         // Check if the first one is equal to the object we gave
-        Assert.That(logs[0], Is.EqualTo(log));
+        Assert.That(readedLog, Is.EqualTo(log));
         
         // Change some values 
         log.Name = "Test2";
@@ -49,10 +48,9 @@ public class Tests
         // Log a second object
         _logger.Log(log);
         // Read again
-        lines = File.ReadAllText(logPath);
+        lines = File.ReadLines(logPath);
         // And check again if the second log is correct
-        logs = JsonSerializer.Deserialize<List<FakeLogObject>>(lines);
-        Assert.That(logs, Is.Not.EqualTo(null));
-        Assert.That(logs[1], Is.EqualTo(log));
+        readedLog = JsonSerializer.Deserialize<FakeLogObject>(lines.ElementAt(1));
+        Assert.That(readedLog, Is.EqualTo(log));
     }
 }
