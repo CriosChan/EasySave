@@ -1,4 +1,4 @@
-﻿using EasySave.View;
+using EasySave.Application;
 
 namespace EasySave;
 
@@ -6,6 +6,7 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        UserInterface.ShowMenu();
+        IApplication app = new EasySaveApplication();
+        Environment.ExitCode = app.Run(args);
     }
 }

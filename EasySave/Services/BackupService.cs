@@ -22,12 +22,22 @@ public sealed class BackupService
     /// <summary>
     /// Creates a new backup service.
     /// </summary>
+    /// <param name="logger">Logger implementation used to write daily logs.</param>
+    /// <param name="state">State service used to update the real-time state file.</param>
+    internal BackupService(AbstractLogger<LogEntry> logger, StateFileService state)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _state = state ?? throw new ArgumentNullException(nameof(state));
+    }
+
+    /// <summary>
+    /// Creates a new backup service.
+    /// </summary>
     /// <param name="logDirectory">Directory where the daily log file will be created.</param>
     /// <param name="state">State service used to update the real-time state file.</param>
     public BackupService(string logDirectory, StateFileService state)
+        : this(new JsonLogger<LogEntry>(logDirectory), state)
     {
-        _logger = new JsonLogger<LogEntry>(logDirectory);
-        _state = state;
     }
 
     /// <summary>
@@ -50,7 +60,12 @@ public sealed class BackupService
         jobState.BackupName = job.Name;
         jobState.LastActionTimestamp = DateTime.Now;
 
-        if (!Directory.Exists(job.SourceDirectory))
+        // Normalize user-provided paths (trim, strip quotes, expand env vars) and validate existence.
+        bool sourceOk = PathTools.TryNormalizeExistingDirectory(job.SourceDirectory, out string sourceDir);
+        bool targetOk = PathTools.TryNormalizeExistingDirectory(job.TargetDirectory, out string targetDir);
+
+        // Validate source directory.
+        if (!sourceOk)
         {
             jobState.State = JobRunState.Failed;
             jobState.CurrentAction = "source_missing";
@@ -60,8 +75,8 @@ public sealed class BackupService
             {
                 Timestamp = DateTime.Now,
                 BackupName = job.Name,
-                SourcePath = PathTools.ToFullUncLikePath(job.SourceDirectory),
-                TargetPath = PathTools.ToFullUncLikePath(job.TargetDirectory),
+                SourcePath = PathTools.ToFullUncLikePath(sourceDir),
+                TargetPath = PathTools.ToFullUncLikePath(targetDir),
                 FileSizeBytes = 0,
                 TransferTimeMs = -1,
                 // Action and Error fields removed from LogEntry
@@ -70,10 +85,45 @@ public sealed class BackupService
             return;
         }
 
-        // Ensure target exists.
-        Directory.CreateDirectory(job.TargetDirectory);
+        // Validate target directory.
+        // For v1.0, we only execute the job if both source and target directories exist.
+        if (!targetOk)
+        {
+            jobState.State = JobRunState.Failed;
+            jobState.CurrentAction = "target_missing";
+            jobState.LastActionTimestamp = DateTime.Now;
+            _state.Update(jobState);
 
-        List<string> filesToCopy = GetFilesToCopy(job);
+            _logger.Log(new LogEntry
+            {
+                Timestamp = DateTime.Now,
+                BackupName = job.Name,
+                SourcePath = PathTools.ToFullUncLikePath(sourceDir),
+                TargetPath = PathTools.ToFullUncLikePath(targetDir),
+                FileSizeBytes = 0,
+                TransferTimeMs = -1,
+            });
+
+            return;
+        }
+
+        // Always write at least one log entry when a job starts.
+        // This ensures the daily log file exists even if there are no eligible files to transfer.
+        _logger.Log(new LogEntry
+        {
+            Timestamp = DateTime.Now,
+            BackupName = job.Name,
+            SourcePath = PathTools.ToFullUncLikePath(sourceDir),
+            TargetPath = PathTools.ToFullUncLikePath(targetDir),
+            FileSizeBytes = 0,
+            TransferTimeMs = 0,
+        });
+
+        // Mirror the directory structure (including empty directories).
+        // This matches the requirement: all subdirectories must be preserved.
+        CreateMissingTargetDirectories(job, sourceDir, targetDir);
+
+        List<string> filesToCopy = GetFilesToCopy(job, sourceDir, targetDir);
         long totalSize = filesToCopy.Sum(f => new FileInfo(f).Length);
 
         jobState.State = JobRunState.Active;
@@ -93,20 +143,20 @@ public sealed class BackupService
 
         foreach (string sourceFile in filesToCopy)
         {
-            string relative = PathTools.GetRelativePath(job.SourceDirectory, sourceFile);
-            string targetFile = Path.Combine(job.TargetDirectory, relative);
-            string? targetDir = Path.GetDirectoryName(targetFile);
+            string relative = PathTools.GetRelativePath(sourceDir, sourceFile);
+            string targetFile = Path.Combine(targetDir, relative);
+            string? targetFileDir = Path.GetDirectoryName(targetFile);
 
-            if (!string.IsNullOrWhiteSpace(targetDir) && !Directory.Exists(targetDir))
+            if (!string.IsNullOrWhiteSpace(targetFileDir) && !Directory.Exists(targetFileDir))
             {
-                Directory.CreateDirectory(targetDir);
+                Directory.CreateDirectory(targetFileDir);
                 // Log directory creation (requested by the specification).
                 _logger.Log(new LogEntry
                 {
                     Timestamp = DateTime.Now,
                     BackupName = job.Name,
-                    SourcePath = PathTools.ToFullUncLikePath(Path.GetDirectoryName(sourceFile) ?? job.SourceDirectory),
-                    TargetPath = PathTools.ToFullUncLikePath(targetDir),
+                    SourcePath = PathTools.ToFullUncLikePath(Path.GetDirectoryName(sourceFile) ?? sourceDir),
+                    TargetPath = PathTools.ToFullUncLikePath(targetFileDir),
                     FileSizeBytes = 0,
                     TransferTimeMs = 0,
                     // Action field removed from LogEntry
@@ -170,6 +220,17 @@ public sealed class BackupService
         jobState.RemainingFiles = 0;
         jobState.RemainingSizeBytes = 0;
         _state.Update(jobState);
+
+        // Log job completion (keeps logs consistent and helps troubleshooting).
+        _logger.Log(new LogEntry
+        {
+            Timestamp = DateTime.Now,
+            BackupName = job.Name,
+            SourcePath = PathTools.ToFullUncLikePath(sourceDir),
+            TargetPath = PathTools.ToFullUncLikePath(targetDir),
+            FileSizeBytes = 0,
+            TransferTimeMs = hadError ? -1 : 0,
+        });
     }
 
     /// <summary>
@@ -182,7 +243,12 @@ public sealed class BackupService
     /// </remarks>
     private List<string> GetFilesToCopy(BackupJob job)
     {
-        IEnumerable<string> allFiles = Directory.EnumerateFiles(job.SourceDirectory, "*", SearchOption.AllDirectories);
+        return GetFilesToCopy(job, job.SourceDirectory, job.TargetDirectory);
+    }
+
+    private List<string> GetFilesToCopy(BackupJob job, string sourceDir, string targetDir)
+    {
+        IEnumerable<string> allFiles = Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories);
 
         if (job.Type == BackupType.Complete)
             return allFiles.ToList();
@@ -191,8 +257,8 @@ public sealed class BackupService
         List<string> differential = new();
         foreach (string sourceFile in allFiles)
         {
-            string rel = PathTools.GetRelativePath(job.SourceDirectory, sourceFile);
-            string targetFile = Path.Combine(job.TargetDirectory, rel);
+            string rel = PathTools.GetRelativePath(sourceDir, sourceFile);
+            string targetFile = Path.Combine(targetDir, rel);
             if (!File.Exists(targetFile))
             {
                 differential.Add(sourceFile);
@@ -208,6 +274,36 @@ public sealed class BackupService
         }
 
         return differential;
+    }
+
+    private void CreateMissingTargetDirectories(BackupJob job, string sourceDir, string targetDir)
+    {
+        try
+        {
+            foreach (string srcDir in Directory.EnumerateDirectories(sourceDir, "*", SearchOption.AllDirectories))
+            {
+                string relative = PathTools.GetRelativePath(sourceDir, srcDir);
+                string dstDir = Path.Combine(targetDir, relative);
+
+                if (Directory.Exists(dstDir))
+                    continue;
+
+                Directory.CreateDirectory(dstDir);
+                _logger.Log(new LogEntry
+                {
+                    Timestamp = DateTime.Now,
+                    BackupName = job.Name,
+                    SourcePath = PathTools.ToFullUncLikePath(srcDir),
+                    TargetPath = PathTools.ToFullUncLikePath(dstDir),
+                    FileSizeBytes = 0,
+                    TransferTimeMs = 0,
+                });
+            }
+        }
+        catch
+        {
+            // Directory enumeration/creation errors will be reflected during file transfers.
+        }
     }
 
     /// <summary>
