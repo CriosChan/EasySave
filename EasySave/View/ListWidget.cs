@@ -36,6 +36,8 @@ public static class ListWidget
         {
             if (option == selectedOption)
             {
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.Write(@"> ");
             }
             else
@@ -44,6 +46,8 @@ public static class ListWidget
             }
             
             Console.WriteLine(option.Description);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
     
