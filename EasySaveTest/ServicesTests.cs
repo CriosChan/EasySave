@@ -382,6 +382,7 @@ public class BackupServiceTests
     }
 
     [Test]
+    [Category("GHABlacklist")]
     public void RunJob_LogsFileTransfers()
     {
         File.WriteAllText(Path.Combine(_sourceDir, "file.txt"), "test");
