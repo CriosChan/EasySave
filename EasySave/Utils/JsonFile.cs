@@ -25,7 +25,24 @@ public static class JsonFile
         }
         catch
         {
-            return defaultValue;
+            // Fallback: Try to read as JSONL format (one JSON object per line)
+            try
+            {
+                var lines = File.ReadAllLines(path)
+                    .Where(line => !string.IsNullOrWhiteSpace(line))
+                    .ToList();
+
+                if (lines.Count == 0)
+                    return defaultValue;
+
+                // Convert JSONL to JSON array
+                string jsonArray = "[" + string.Join(",", lines) + "]";
+                return JsonSerializer.Deserialize<T>(jsonArray, Options) ?? defaultValue;
+            }
+            catch
+            {
+                return defaultValue;
+            }
         }
     }
 
