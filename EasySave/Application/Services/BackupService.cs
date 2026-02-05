@@ -92,7 +92,6 @@ public sealed class BackupService : IBackupService
         }
 
         // Validate target directory.
-        // For v1.0, we only execute the job if both source and target directories exist.
         if (!targetOk)
         {
             jobState.State = JobRunState.Failed;
@@ -182,7 +181,6 @@ public sealed class BackupService : IBackupService
                 TargetPath = _paths.ToFullUncLikePath(targetFile),
                 FileSizeBytes = fileSize,
                 TransferTimeMs = elapsedMs,
-                // Action and Error fields removed from LogEntry
             });
 
             if (elapsedMs >= 0)
