@@ -1,3 +1,5 @@
+using EasySave.Presentation.Resources;
+
 namespace EasySave.Presentation.Cli;
 
 /// <summary>
@@ -10,7 +12,7 @@ internal static class CommandUsagePrinter
     /// </summary>
     internal static void Print()
     {
-        Console.WriteLine("Usage:");
+        Console.WriteLine(UserInterface.Terminal_log_Usage);
         Console.WriteLine("  EasySave.exe 1-3");
         Console.WriteLine("  EasySave.exe 1;3");
         Console.WriteLine("  EasySave.exe 2");

@@ -34,4 +34,7 @@ public interface IConsole
     /// <param name="intercept">Whether the key is hidden.</param>
     /// <returns>Key info.</returns>
     ConsoleKeyInfo ReadKey(bool intercept);
+    
+    void Selected();
+    void ResetColor();
 }

@@ -50,54 +50,29 @@ internal sealed class JobLaunchView
         List<BackupJob> jobs = _repository.Load().OrderBy(j => j.Id).ToList();
 
         _console.Clear();
-        _console.WriteLine(Resources.UserInterface.Launch_Header);
-        _console.WriteLine(string.Empty);
-
+        
         if (jobs.Count == 0)
         {
+            _console.WriteLine(Resources.UserInterface.Menu_Title_StartJob);
+            _console.WriteLine(string.Empty);
             _console.WriteLine(Resources.UserInterface.Jobs_None);
             _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
             return;
         }
 
-        _console.WriteLine(Resources.UserInterface.Launch_Prompt);
-        string? input = _console.ReadLine();
-        input = (input ?? string.Empty).Trim();
-
-        if (string.IsNullOrWhiteSpace(input))
+        List<Option> options =
+        [
+            new(Resources.UserInterface.Jobs_Execute_All, () => RunAll(jobs))
+        ];
+        foreach (var _job in jobs)
         {
-            _console.WriteLine(Resources.UserInterface.Common_Cancelled);
-            _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
-            return;
+            options.Add(new Option(String.Format(Resources.UserInterface.Jobs_Execute_ID, _job.Id, _job.Name),
+                () => RunOne(_job)));
         }
 
-        // Always re-initialize the state file so it contains all jobs before execution.
-        _stateService.Initialize(jobs);
-
-        if (input == "0")
-        {
-            RunAll(jobs);
-            _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
-            return;
-        }
-
-        if (!int.TryParse(input, out int id))
-        {
-            _console.WriteLine(Resources.UserInterface.Launch_Invalid);
-            _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
-            return;
-        }
-
-        BackupJob? job = jobs.FirstOrDefault(j => j.Id == id);
-        if (job == null)
-        {
-            _console.WriteLine(Resources.UserInterface.Launch_NotFound);
-            _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
-            return;
-        }
-
-        RunOne(job);
-        _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
+        options.Add(new Option(Resources.UserInterface.Return, UserInterface.ShowMenu));
+        
+        ListWidget.ShowList(options, _console, Resources.UserInterface.Menu_Title_StartJob);
     }
 
     /// <summary>

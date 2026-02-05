@@ -4,6 +4,7 @@ using EasySave.Application.Services;
 using EasySave.Domain.Models;
 using EasySave.Infrastructure.Configuration;
 using EasySave.Infrastructure.IO;
+using EasySave.Infrastructure.Lang;
 using EasySave.Infrastructure.Logging;
 using EasySave.Infrastructure.Persistence;
 using EasySave.Presentation.Cli;
@@ -28,7 +29,7 @@ internal sealed class EasySaveApplication : IApplication
         ApplicationConfiguration cfg = ApplicationConfiguration.Instance;
 
         // Apply localization early so menus/prompts pick the right resource.
-        TryApplyCulture(cfg.Localization);
+        LangUtil.TryApplyCulture(cfg.Localization);
 
         // Resolve data directories to OS-appropriate locations.
         string configDir = DataPathResolver.ResolveDirectory(cfg.JobConfigPath, "config");
@@ -59,26 +60,5 @@ internal sealed class EasySaveApplication : IApplication
         UserInterface.Initialize(repository, backupService, state, stateSynchronizer, paths);
         UserInterface.ShowMenu();
         return 0;
-    }
-
-    /// <summary>
-    /// Applies UI/thread culture if it is valid.
-    /// </summary>
-    /// <param name="cultureName">Culture name (e.g., fr-FR).</param>
-    private static void TryApplyCulture(string cultureName)
-    {
-        if (string.IsNullOrWhiteSpace(cultureName))
-            return;
-
-        try
-        {
-            CultureInfo culture = new CultureInfo(cultureName);
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            CultureInfo.DefaultThreadCurrentUICulture = culture;
-        }
-        catch
-        {
-            // If localization is invalid, keep the default system culture.
-        }
     }
 }
