@@ -39,9 +39,7 @@ internal static class Program
         var assemblyPaths = new[]
         {
             Path.Combine(root, "EasySave", "bin", "Debug", "net10.0", "EasySave.dll"),
-            Path.Combine(root, "EasyLog", "bin", "Debug", "net10.0", "EasyLog.dll"),
-            Path.Combine(root, "EasySaveTest", "bin", "Debug", "net10.0", "EasySaveTest.dll"),
-            Path.Combine(root, "EasyLogTest", "bin", "Debug", "net10.0", "EasyLogTest.dll")
+            Path.Combine(root, "EasyLog", "bin", "Debug", "net10.0", "EasyLog.dll")
         };
 
         var assemblies = assemblyPaths
@@ -89,90 +87,103 @@ internal static class Program
         var sb = new StringBuilder();
         sb.AppendLine("@startuml");
         sb.AppendLine("skinparam classAttributeIconSize 0");
+        sb.AppendLine("skinparam linetype ortho");
+        sb.AppendLine("skinparam ranksep 80");
+        sb.AppendLine("skinparam nodesep 50");
+        sb.AppendLine("left to right direction");
         sb.AppendLine("set namespaceSeparator .");
         sb.AppendLine();
 
-        foreach (Type t in types.OrderBy(t => t.FullName))
+        foreach (IGrouping<string, Type> group in types
+                     .OrderBy(t => t.Namespace)
+                     .ThenBy(t => t.Name)
+                     .GroupBy(t => t.Namespace ?? "<global>"))
         {
-            string umlName = GetPlantUmlTypeName(t);
-            string alias = GetAlias(t, aliasMap);
-            if (t.IsEnum)
+            sb.AppendLine($"package \"{group.Key}\" {{");
+            foreach (Type t in group)
             {
-                sb.AppendLine($"enum \"{umlName}\" as {alias} {{");
-                foreach (string name in Enum.GetNames(t))
-                    sb.AppendLine($"  {name}");
-                sb.AppendLine("}");
+                string umlName = GetDisplayName(t);
+                string alias = GetAlias(t, aliasMap);
+                if (t.IsEnum)
+                {
+                    sb.AppendLine($"  enum \"{umlName}\" as {alias} {{");
+                    foreach (string name in Enum.GetNames(t))
+                        sb.AppendLine($"    {name}");
+                    sb.AppendLine("  }");
+                    sb.AppendLine();
+                    continue;
+                }
+
+                string kind = "class";
+                if (t.IsInterface) kind = "interface";
+                else if (t.IsAbstract && !t.IsSealed) kind = "abstract class";
+
+                string header = kind + " \"" + umlName + "\" as " + alias;
+                if (t.IsValueType && !t.IsEnum) header += " <<struct>>";
+                sb.AppendLine("  " + header + " {");
+
+                const BindingFlags binding = BindingFlags.Instance | BindingFlags.Static |
+                                             BindingFlags.Public | BindingFlags.NonPublic |
+                                             BindingFlags.DeclaredOnly;
+
+                foreach (FieldInfo f in t.GetFields(binding))
+                {
+                    if (f.IsDefined(typeof(CompilerGeneratedAttribute), false)) continue;
+                    string vis = GetVisibilitySymbol(f);
+                    string mods = "";
+                    if (f.IsStatic) mods += "{static} ";
+                    if (f.IsInitOnly) mods += "{readonly} ";
+                    if (f.IsLiteral) mods += "{const} ";
+                    sb.AppendLine($"    {vis} {mods}{f.Name}: {GetSimpleTypeName(f.FieldType)}");
+                }
+
+                foreach (PropertyInfo p in t.GetProperties(binding))
+                {
+                    string vis = GetVisibilitySymbol(p);
+                    string mods = "";
+                    MethodInfo? accGet = p.GetGetMethod(true);
+                    MethodInfo? accSet = p.GetSetMethod(true);
+                    if ((accGet != null && accGet.IsStatic) || (accSet != null && accSet.IsStatic))
+                        mods += "{static} ";
+
+                    var accessors = new List<string>();
+                    if (accGet != null) accessors.Add("get");
+                    if (accSet != null) accessors.Add("set");
+                    string accText = accessors.Count > 0 ? " { " + string.Join("; ", accessors) + "; }" : "";
+
+                    sb.AppendLine($"    {vis} {mods}{p.Name}: {GetSimpleTypeName(p.PropertyType)}{accText}");
+                }
+
+                foreach (EventInfo e in t.GetEvents(binding))
+                {
+                    MethodInfo acc = e.AddMethod!;
+                    string vis = GetVisibilitySymbol(acc);
+                    string mods = acc.IsStatic ? "{static} " : "";
+                    sb.AppendLine($"    {vis} {mods}event {e.Name}: {GetSimpleTypeName(e.EventHandlerType!)}");
+                }
+
+                foreach (ConstructorInfo ctor in t.GetConstructors(binding))
+                {
+                    string vis = GetVisibilitySymbol(ctor);
+                    string mods = ctor.IsStatic ? "{static} " : "";
+                    string parameters = string.Join(", ", ctor.GetParameters().Select(FormatParameter));
+                    sb.AppendLine($"    {vis} {mods}{GetSimpleTypeName(t)}({parameters})");
+                }
+
+                foreach (MethodInfo m in t.GetMethods(binding))
+                {
+                    if (m.IsSpecialName) continue;
+                    string vis = GetVisibilitySymbol(m);
+                    string mods = "";
+                    if (m.IsStatic) mods += "{static} ";
+                    if (m.IsAbstract) mods += "{abstract} ";
+                    string parameters = string.Join(", ", m.GetParameters().Select(FormatParameter));
+                    sb.AppendLine($"    {vis} {mods}{m.Name}({parameters}): {GetSimpleTypeName(m.ReturnType)}");
+                }
+
+                sb.AppendLine("  }");
                 sb.AppendLine();
-                continue;
             }
-
-            string kind = "class";
-            if (t.IsInterface) kind = "interface";
-            else if (t.IsAbstract && !t.IsSealed) kind = "abstract class";
-
-            string header = kind + " \"" + umlName + "\" as " + alias;
-            if (t.IsValueType && !t.IsEnum) header += " <<struct>>";
-            sb.AppendLine(header + " {");
-
-            const BindingFlags binding = BindingFlags.Instance | BindingFlags.Static |
-                                         BindingFlags.Public | BindingFlags.NonPublic |
-                                         BindingFlags.DeclaredOnly;
-
-            foreach (FieldInfo f in t.GetFields(binding))
-            {
-                if (f.IsDefined(typeof(CompilerGeneratedAttribute), false)) continue;
-                string vis = GetVisibilitySymbol(f);
-                string mods = "";
-                if (f.IsStatic) mods += "{static} ";
-                if (f.IsInitOnly) mods += "{readonly} ";
-                if (f.IsLiteral) mods += "{const} ";
-                sb.AppendLine($"  {vis} {mods}{f.Name}: {GetSimpleTypeName(f.FieldType)}");
-            }
-
-            foreach (PropertyInfo p in t.GetProperties(binding))
-            {
-                string vis = GetVisibilitySymbol(p);
-                string mods = "";
-                MethodInfo? accGet = p.GetGetMethod(true);
-                MethodInfo? accSet = p.GetSetMethod(true);
-                if ((accGet != null && accGet.IsStatic) || (accSet != null && accSet.IsStatic))
-                    mods += "{static} ";
-
-                var accessors = new List<string>();
-                if (accGet != null) accessors.Add("get");
-                if (accSet != null) accessors.Add("set");
-                string accText = accessors.Count > 0 ? " { " + string.Join("; ", accessors) + "; }" : "";
-
-                sb.AppendLine($"  {vis} {mods}{p.Name}: {GetSimpleTypeName(p.PropertyType)}{accText}");
-            }
-
-            foreach (EventInfo e in t.GetEvents(binding))
-            {
-                MethodInfo acc = e.AddMethod!;
-                string vis = GetVisibilitySymbol(acc);
-                string mods = acc.IsStatic ? "{static} " : "";
-                sb.AppendLine($"  {vis} {mods}event {e.Name}: {GetSimpleTypeName(e.EventHandlerType!)}");
-            }
-
-            foreach (ConstructorInfo ctor in t.GetConstructors(binding))
-            {
-                string vis = GetVisibilitySymbol(ctor);
-                string mods = ctor.IsStatic ? "{static} " : "";
-                string parameters = string.Join(", ", ctor.GetParameters().Select(FormatParameter));
-                sb.AppendLine($"  {vis} {mods}{GetSimpleTypeName(t)}({parameters})");
-            }
-
-            foreach (MethodInfo m in t.GetMethods(binding))
-            {
-                if (m.IsSpecialName) continue;
-                string vis = GetVisibilitySymbol(m);
-                string mods = "";
-                if (m.IsStatic) mods += "{static} ";
-                if (m.IsAbstract) mods += "{abstract} ";
-                string parameters = string.Join(", ", m.GetParameters().Select(FormatParameter));
-                sb.AppendLine($"  {vis} {mods}{m.Name}({parameters}): {GetSimpleTypeName(m.ReturnType)}");
-            }
-
             sb.AppendLine("}");
             sb.AppendLine();
         }
@@ -344,6 +355,18 @@ internal static class Program
 
         string name = (t.FullName ?? t.Name).Replace("+", ".");
         return name.Split('`')[0];
+    }
+
+    private static string GetDisplayName(Type t)
+    {
+        if (t.IsGenericTypeDefinition)
+        {
+            string baseName = t.Name.Split('`')[0];
+            string args = string.Join(", ", t.GetGenericArguments().Select(a => a.Name));
+            return $"{baseName}<{args}>";
+        }
+
+        return t.Name.Split('`')[0];
     }
 
     private static string GetAlias(Type t, Dictionary<string, string> aliasMap)

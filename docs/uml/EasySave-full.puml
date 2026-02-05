@@ -1,534 +1,452 @@
-@startuml name "EasySave"
+@startuml
 skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam ranksep 80
+skinparam nodesep 50
+left to right direction
 set namespaceSeparator .
 
-abstract class "EasyLog.AbstractLogger<T>" as T0001 {
-  # AbstractLogger<T>(logDirectory: string, extension: string)
-  # WriteLogFile(log: T): void
-  # {abstract} Serialize(logs: T): string
-  + {abstract} Log(content: T): void
+package "EasyLog" {
+  abstract class "AbstractLogger<T>" as T0001 {
+    # AbstractLogger<T>(logDirectory: string, extension: string)
+    # WriteLogFile(log: T): void
+    # {abstract} Serialize(logs: T): string
+    + {abstract} Log(content: T): void
+  }
+
+  class "JsonLogger<T>" as T0002 {
+    - {readonly} _options: JsonSerializerOptions
+    + JsonLogger<T>(logDirectory: string)
+    # Serialize(log: T): string
+    + Log(content: T): void
+  }
+
 }
 
-class "EasyLog.JsonLogger<T>" as T0002 {
-  - {readonly} _options: JsonSerializerOptions
-  + JsonLogger<T>(logDirectory: string)
-  # Serialize(log: T): string
-  + Log(content: T): void
+package "EasySave.Application.Abstractions" {
+  interface "IBackupDirectoryPreparer" as T0003 {
+    + {abstract} EnsureTargetDirectories(job: BackupJob, sourceDir: string, targetDir: string): void
+    + {abstract} EnsureTargetDirectoryForFile(job: BackupJob, sourceFile: string, targetFile: string): void
+  }
+
+  interface "IBackupFileSelector" as T0004 {
+    + {abstract} GetFilesToCopy(job: BackupJob, sourceDir: string, targetDir: string): List<string>
+  }
+
+  interface "IBackupService" as T0005 {
+    + {abstract} RunJobsSequential(jobs: IEnumerable<BackupJob>): void
+    + {abstract} RunJob(job: BackupJob): void
+  }
+
+  interface "IFileCopier" as T0006 {
+    + {abstract} Copy(sourceFile: string, targetFile: string): long
+  }
+
+  interface "IJobRepository" as T0007 {
+    + {abstract} Load(): List<BackupJob>
+    + {abstract} Save(jobs: List<BackupJob>): void
+    + {abstract} AddJob(jobs: List<BackupJob>, job: BackupJob): ValueTuple<bool, string>
+    + {abstract} RemoveJob(jobs: List<BackupJob>, idOrName: string): bool
+  }
+
+  interface "ILogWriter<T>" as T0008 {
+    + {abstract} Log(entry: T): void
+  }
+
+  interface "IPathService" as T0009 {
+    + {abstract} TryNormalizeExistingDirectory(rawPath: string, out normalizedPath: string): bool
+    + {abstract} ToFullUncLikePath(path: string): string
+    + {abstract} GetRelativePath(basePath: string, fullPath: string): string
+  }
+
+  interface "IStateService" as T0010 {
+    + {abstract} Initialize(jobs: IEnumerable<BackupJob>): void
+    + {abstract} Update(updated: BackupJobState): void
+    + {abstract} GetOrCreate(job: BackupJob): BackupJobState
+  }
+
+  interface "IStateSynchronizer" as T0011 {
+    + {abstract} Refresh(): void
+  }
+
 }
 
-class "EasyLogTest.FakeLogObject" as T0003 <<struct>> {
-  + Name: string { get; set; }
-  + FileSource: string { get; set; }
-  + FileTarget: string { get; set; }
-  + FileSize: int { get; set; }
-  + FileTransferTime: int { get; set; }
-  + Time: DateTime { get; set; }
-  + FakeLogObject(name: string, fileSource: string, fileTarget: string, fileSize: int, fileTransferTime: int, time: DateTime)
+package "EasySave.Application.Services" {
+  class "BackupDirectoryPreparer" as T0012 {
+    - {readonly} _logger: ILogWriter<LogEntry>
+    - {readonly} _paths: IPathService
+    + BackupDirectoryPreparer(logger: ILogWriter<LogEntry>, paths: IPathService)
+    + EnsureTargetDirectories(job: BackupJob, sourceDir: string, targetDir: string): void
+    + EnsureTargetDirectoryForFile(job: BackupJob, sourceFile: string, targetFile: string): void
+  }
+
+  class "BackupFileSelector" as T0013 {
+    - {readonly} _paths: IPathService
+    + BackupFileSelector(paths: IPathService)
+    + GetFilesToCopy(job: BackupJob, sourceDir: string, targetDir: string): List<string>
+  }
+
+  class "BackupService" as T0014 {
+    - {readonly} _logger: ILogWriter<LogEntry>
+    - {readonly} _state: IStateService
+    - {readonly} _paths: IPathService
+    - {readonly} _fileSelector: IBackupFileSelector
+    - {readonly} _directoryPreparer: IBackupDirectoryPreparer
+    - {readonly} _fileCopier: IFileCopier
+    + BackupService(logger: ILogWriter<LogEntry>, state: IStateService, paths: IPathService, fileSelector: IBackupFileSelector, directoryPreparer: IBackupDirectoryPreparer, fileCopier: IFileCopier)
+    + RunJobsSequential(jobs: IEnumerable<BackupJob>): void
+    + RunJob(job: BackupJob): void
+  }
+
+  class "FileCopier" as T0015 {
+    + FileCopier()
+    + Copy(sourceFile: string, targetFile: string): long
+  }
+
+  class "StateSynchronizer" as T0016 {
+    - {readonly} _repository: IJobRepository
+    - {readonly} _state: IStateService
+    + StateSynchronizer(repository: IJobRepository, state: IStateService)
+    + Refresh(): void
+  }
+
 }
 
-class "EasyLogTest.Tests" as T0004 {
-  - _logger: AbstractLogger<FakeLogObject>
-  + Tests()
-  + Setup(): void
-  + TestLogCreation(): void
+package "EasySave.Bootstrap" {
+  class "EasySaveApplication" as T0017 {
+    + EasySaveApplication()
+    + Run(args: string[]): int
+    - {static} TryApplyCulture(cultureName: string): void
+  }
+
+  interface "IApplication" as T0018 {
+    + {abstract} Run(args: string[]): int
+  }
+
+  class "Program" as T0019 {
+    - {static} Main(args: string[]): void
+  }
+
 }
 
-interface "EasySave.Application.Abstractions.IBackupDirectoryPreparer" as T0005 {
-  + {abstract} EnsureTargetDirectories(job: BackupJob, sourceDir: string, targetDir: string): void
-  + {abstract} EnsureTargetDirectoryForFile(job: BackupJob, sourceFile: string, targetFile: string): void
+package "EasySave.Domain.Models" {
+  class "BackupJob" as T0020 {
+    + Id: int { get; set; }
+    + Name: string { get; set; }
+    + SourceDirectory: string { get; set; }
+    + TargetDirectory: string { get; set; }
+    + Type: BackupType { get; set; }
+    + BackupJob()
+  }
+
+  class "BackupJobState" as T0021 {
+    + JobId: int { get; set; }
+    + BackupName: string { get; set; }
+    + LastActionTimestamp: DateTime { get; set; }
+    + State: JobRunState { get; set; }
+    + TotalFiles: int { get; set; }
+    + TotalSizeBytes: long { get; set; }
+    + ProgressPercent: double { get; set; }
+    + RemainingFiles: int { get; set; }
+    + RemainingSizeBytes: long { get; set; }
+    + CurrentSourcePath: string { get; set; }
+    + CurrentTargetPath: string { get; set; }
+    + CurrentAction: string { get; set; }
+    + BackupJobState()
+  }
+
+  enum "BackupType" as T0022 {
+    Complete
+    Differential
+  }
+
+  enum "JobRunState" as T0023 {
+    Inactive
+    Active
+    Completed
+    Failed
+  }
+
+  class "LogEntry" as T0024 {
+    + Timestamp: DateTime { get; set; }
+    + BackupName: string { get; set; }
+    + SourcePath: string { get; set; }
+    + TargetPath: string { get; set; }
+    + FileSizeBytes: long { get; set; }
+    + TransferTimeMs: long { get; set; }
+    + LogEntry()
+  }
+
 }
 
-interface "EasySave.Application.Abstractions.IBackupFileSelector" as T0006 {
-  + {abstract} GetFilesToCopy(job: BackupJob, sourceDir: string, targetDir: string): List<string>
+package "EasySave.Infrastructure.Configuration" {
+  class "ApplicationConfiguration" as T0025 {
+    - {static} _instance: ApplicationConfiguration
+    - {static} {readonly} _lock: object
+    + {static} Instance: ApplicationConfiguration { get; }
+    + LogPath: string { get; set; }
+    + JobConfigPath: string { get; set; }
+    + Localization: string { get; set; }
+    + ApplicationConfiguration()
+    - {static} ApplicationConfiguration()
+    + {static} Load(configFile: string): void
+  }
+
+  class "DataPathResolver" as T0026 {
+    - {static} {const} AppFolderName: string
+    + {static} ResolveDirectory(configuredPath: string, defaultSubfolder: string): string
+    - {static} GetBaseDataDirectory(): string
+    - {static} IsSafeAbsolute(path: string): bool
+  }
+
 }
 
-interface "EasySave.Application.Abstractions.IBackupService" as T0007 {
-  + {abstract} RunJobsSequential(jobs: IEnumerable<BackupJob>): void
-  + {abstract} RunJob(job: BackupJob): void
+package "EasySave.Infrastructure.IO" {
+  class "JsonFile" as T0027 {
+    + {static} {readonly} Options: JsonSerializerOptions
+    - {static} JsonFile()
+    + {static} ReadOrDefault(path: string, defaultValue: T): T
+    + {static} WriteAtomic(path: string, value: T): void
+  }
+
+  class "PathService" as T0028 {
+    + PathService()
+    + TryNormalizeExistingDirectory(rawPath: string, out normalizedPath: string): bool
+    + ToFullUncLikePath(path: string): string
+    + GetRelativePath(basePath: string, fullPath: string): string
+    - {static} NormalizeUserPath(path: string): string
+    - {static} StripWrappingQuotes(path: string): string
+  }
+
 }
 
-interface "EasySave.Application.Abstractions.IFileCopier" as T0008 {
-  + {abstract} Copy(sourceFile: string, targetFile: string): long
+package "EasySave.Infrastructure.Logging" {
+  class "JsonLogWriter<T>" as T0029 {
+    - {readonly} _logger: AbstractLogger<T>
+    + JsonLogWriter<T>(logDirectory: string)
+    + JsonLogWriter<T>(logger: AbstractLogger<T>)
+    + Log(entry: T): void
+  }
+
 }
 
-interface "EasySave.Application.Abstractions.IJobRepository" as T0009 {
-  + {abstract} Load(): List<BackupJob>
-  + {abstract} Save(jobs: List<BackupJob>): void
-  + {abstract} AddJob(jobs: List<BackupJob>, job: BackupJob): ValueTuple<bool, string>
-  + {abstract} RemoveJob(jobs: List<BackupJob>, idOrName: string): bool
+package "EasySave.Infrastructure.Persistence" {
+  class "JobRepository" as T0030 {
+    - {readonly} _jobsPath: string
+    - {static} {const} MaxJobs: int
+    + JobRepository(configDirectory: string)
+    + Load(): List<BackupJob>
+    + Save(jobs: List<BackupJob>): void
+    + AddJob(jobs: List<BackupJob>, job: BackupJob): ValueTuple<bool, string>
+    + RemoveJob(jobs: List<BackupJob>, idOrName: string): bool
+    - {static} GetNextFreeId(jobs: IReadOnlyCollection<BackupJob>): int
+  }
+
+  class "StateFileService" as T0031 {
+    - {readonly} _statePath: string
+    - _states: List<BackupJobState>
+    + StateFileService(stateDirectory: string)
+    + Initialize(jobs: IEnumerable<BackupJob>): void
+    + Update(updated: BackupJobState): void
+    + GetOrCreate(job: BackupJob): BackupJobState
+  }
+
 }
 
-interface "EasySave.Application.Abstractions.ILogWriter<T>" as T0010 {
-  + {abstract} Log(entry: T): void
+package "EasySave.Presentation.Cli" {
+  class "CommandController" as T0032 {
+    + {static} Run(args: string[], repository: IJobRepository, backupService: IBackupService, stateService: IStateService, paths: IPathService): int
+    - {static} PrintUsage(): void
+    - {static} ParseArguments(arg: string): List<int>
+  }
+
+  class "CommandJobRunner" as T0033 {
+    - {readonly} _repository: IJobRepository
+    - {readonly} _backupService: IBackupService
+    - {readonly} _stateService: IStateService
+    - {readonly} _paths: IPathService
+    + CommandJobRunner(repository: IJobRepository, backupService: IBackupService, stateService: IStateService, paths: IPathService)
+    + RunJobs(ids: IEnumerable<int>): int
+    - IsJobRunnable(job: BackupJob, out message: string): bool
+  }
+
+  class "CommandLineArgumentParser" as T0034 {
+    ~ {static} Parse(arg: string): List<int>
+  }
+
+  class "CommandUsagePrinter" as T0035 {
+    ~ {static} Print(): void
+  }
+
 }
 
-interface "EasySave.Application.Abstractions.IPathService" as T0011 {
-  + {abstract} TryNormalizeExistingDirectory(rawPath: string, out normalizedPath: string): bool
-  + {abstract} ToFullUncLikePath(path: string): string
-  + {abstract} GetRelativePath(basePath: string, fullPath: string): string
+package "EasySave.Presentation.Ui" {
+  class "JobCreationView" as T0039 {
+    - {readonly} _console: IConsole
+    - {readonly} _repository: IJobRepository
+    - {readonly} _stateSync: IStateSynchronizer
+    - {readonly} _prompter: ConsolePrompter
+    - {readonly} _errorTranslator: JobRepositoryErrorTranslator
+    + JobCreationView(console: IConsole, repository: IJobRepository, stateSync: IStateSynchronizer, prompter: ConsolePrompter, errorTranslator: JobRepositoryErrorTranslator)
+    + Show(): void
+  }
+
+  class "JobLaunchView" as T0040 {
+    - {readonly} _console: IConsole
+    - {readonly} _repository: IJobRepository
+    - {readonly} _backupService: IBackupService
+    - {readonly} _stateService: IStateService
+    - {readonly} _prompter: ConsolePrompter
+    - {readonly} _paths: IPathService
+    + JobLaunchView(console: IConsole, repository: IJobRepository, backupService: IBackupService, stateService: IStateService, prompter: ConsolePrompter, paths: IPathService)
+    + Show(): void
+    - RunAll(jobs: List<BackupJob>): void
+    - RunOne(job: BackupJob): void
+  }
+
+  class "JobListView" as T0041 {
+    - {readonly} _console: IConsole
+    - {readonly} _repository: IJobRepository
+    - {readonly} _prompter: ConsolePrompter
+    + JobListView(console: IConsole, repository: IJobRepository, prompter: ConsolePrompter)
+    + Show(): void
+  }
+
+  class "JobRemovalView" as T0042 {
+    - {readonly} _console: IConsole
+    - {readonly} _repository: IJobRepository
+    - {readonly} _stateSync: IStateSynchronizer
+    - {readonly} _prompter: ConsolePrompter
+    + JobRemovalView(console: IConsole, repository: IJobRepository, stateSync: IStateSynchronizer, prompter: ConsolePrompter)
+    + Show(): void
+  }
+
+  class "JobRepositoryErrorTranslator" as T0043 {
+    + JobRepositoryErrorTranslator()
+    + Translate(errorCode: string): string
+  }
+
+  class "ListWidget" as T0044 {
+    + {static} ShowList(options: List<Option>): void
+    + {static} ShowList(options: List<Option>, console: IConsole): void
+    - {static} WriteMenu(console: IConsole, options: List<Option>, selectedOption: Option): void
+  }
+
+  class "MainMenuController" as T0045 {
+    - {readonly} _console: IConsole
+    - {readonly} _jobList: JobListView
+    - {readonly} _jobCreation: JobCreationView
+    - {readonly} _jobRemoval: JobRemovalView
+    - {readonly} _jobLaunch: JobLaunchView
+    + MainMenuController(console: IConsole, jobList: JobListView, jobCreation: JobCreationView, jobRemoval: JobRemovalView, jobLaunch: JobLaunchView)
+    + Show(): void
+  }
+
+  class "Option" as T0046 {
+    + Description: string { get; }
+    + Selected: Action { get; }
+    + Option(description: string, selected: Action)
+  }
+
+  class "UserInterface" as T0047 {
+    - {static} _menu: MainMenuController
+    + {static} Initialize(repository: IJobRepository, backupService: IBackupService, stateService: IStateService, stateSynchronizer: IStateSynchronizer, paths: IPathService): void
+    + {static} ShowMenu(): void
+    - {static} EnsureInitialized(): void
+  }
+
 }
 
-interface "EasySave.Application.Abstractions.IStateService" as T0012 {
-  + {abstract} Initialize(jobs: IEnumerable<BackupJob>): void
-  + {abstract} Update(updated: BackupJobState): void
-  + {abstract} GetOrCreate(job: BackupJob): BackupJobState
-}
+package "EasySave.Presentation.Ui.Console" {
+  class "ConsolePrompter" as T0036 {
+    - {readonly} _console: IConsole
+    - {readonly} _paths: IPathService
+    + ConsolePrompter(console: IConsole, paths: IPathService)
+    + ReadNonEmpty(prompt: string): string
+    + ReadExistingDirectory(prompt: string, notFoundMessage: string): string
+    + ReadBackupType(prompt: string, options: string, invalidInputMessage: string): BackupType
+    + Pause(pressAnyKeyMessage: string): void
+  }
 
-interface "EasySave.Application.Abstractions.IStateSynchronizer" as T0013 {
-  + {abstract} Refresh(): void
-}
+  interface "IConsole" as T0037 {
+    + {abstract} Clear(): void
+    + {abstract} Write(value: string): void
+    + {abstract} WriteLine(value: string): void
+    + {abstract} ReadLine(): string
+    + {abstract} ReadKey(intercept: bool): ConsoleKeyInfo
+  }
 
-class "EasySave.Application.Services.BackupDirectoryPreparer" as T0014 {
-  - {readonly} _logger: ILogWriter<LogEntry>
-  - {readonly} _paths: IPathService
-  + BackupDirectoryPreparer(logger: ILogWriter<LogEntry>, paths: IPathService)
-  + EnsureTargetDirectories(job: BackupJob, sourceDir: string, targetDir: string): void
-  + EnsureTargetDirectoryForFile(job: BackupJob, sourceFile: string, targetFile: string): void
-}
+  class "SystemConsole" as T0038 {
+    + SystemConsole()
+    + Clear(): void
+    + Write(value: string): void
+    + WriteLine(value: string): void
+    + ReadLine(): string
+    + ReadKey(intercept: bool): ConsoleKeyInfo
+  }
 
-class "EasySave.Application.Services.BackupFileSelector" as T0015 {
-  - {readonly} _paths: IPathService
-  + BackupFileSelector(paths: IPathService)
-  + GetFilesToCopy(job: BackupJob, sourceDir: string, targetDir: string): List<string>
-}
-
-class "EasySave.Application.Services.BackupService" as T0016 {
-  - {readonly} _logger: ILogWriter<LogEntry>
-  - {readonly} _state: IStateService
-  - {readonly} _paths: IPathService
-  - {readonly} _fileSelector: IBackupFileSelector
-  - {readonly} _directoryPreparer: IBackupDirectoryPreparer
-  - {readonly} _fileCopier: IFileCopier
-  + BackupService(logger: ILogWriter<LogEntry>, state: IStateService, paths: IPathService, fileSelector: IBackupFileSelector, directoryPreparer: IBackupDirectoryPreparer, fileCopier: IFileCopier)
-  + RunJobsSequential(jobs: IEnumerable<BackupJob>): void
-  + RunJob(job: BackupJob): void
-}
-
-class "EasySave.Application.Services.FileCopier" as T0017 {
-  + FileCopier()
-  + Copy(sourceFile: string, targetFile: string): long
-}
-
-class "EasySave.Application.Services.StateSynchronizer" as T0018 {
-  - {readonly} _repository: IJobRepository
-  - {readonly} _state: IStateService
-  + StateSynchronizer(repository: IJobRepository, state: IStateService)
-  + Refresh(): void
-}
-
-class "EasySave.Bootstrap.EasySaveApplication" as T0019 {
-  + EasySaveApplication()
-  + Run(args: string[]): int
-  - {static} TryApplyCulture(cultureName: string): void
-}
-
-interface "EasySave.Bootstrap.IApplication" as T0020 {
-  + {abstract} Run(args: string[]): int
-}
-
-class "EasySave.Bootstrap.Program" as T0021 {
-  - {static} Main(args: string[]): void
-}
-
-class "EasySave.Domain.Models.BackupJob" as T0022 {
-  + Id: int { get; set; }
-  + Name: string { get; set; }
-  + SourceDirectory: string { get; set; }
-  + TargetDirectory: string { get; set; }
-  + Type: BackupType { get; set; }
-  + BackupJob()
-}
-
-class "EasySave.Domain.Models.BackupJobState" as T0023 {
-  + JobId: int { get; set; }
-  + BackupName: string { get; set; }
-  + LastActionTimestamp: DateTime { get; set; }
-  + State: JobRunState { get; set; }
-  + TotalFiles: int { get; set; }
-  + TotalSizeBytes: long { get; set; }
-  + ProgressPercent: double { get; set; }
-  + RemainingFiles: int { get; set; }
-  + RemainingSizeBytes: long { get; set; }
-  + CurrentSourcePath: string { get; set; }
-  + CurrentTargetPath: string { get; set; }
-  + CurrentAction: string { get; set; }
-  + BackupJobState()
-}
-
-enum "EasySave.Domain.Models.BackupType" as T0024 {
-  Complete
-  Differential
-}
-
-enum "EasySave.Domain.Models.JobRunState" as T0025 {
-  Inactive
-  Active
-  Completed
-  Failed
-}
-
-class "EasySave.Domain.Models.LogEntry" as T0026 {
-  + Timestamp: DateTime { get; set; }
-  + BackupName: string { get; set; }
-  + SourcePath: string { get; set; }
-  + TargetPath: string { get; set; }
-  + FileSizeBytes: long { get; set; }
-  + TransferTimeMs: long { get; set; }
-  + LogEntry()
-}
-
-class "EasySave.Infrastructure.Configuration.ApplicationConfiguration" as T0027 {
-  - {static} _instance: ApplicationConfiguration
-  - {static} {readonly} _lock: object
-  + {static} Instance: ApplicationConfiguration { get; }
-  + LogPath: string { get; set; }
-  + JobConfigPath: string { get; set; }
-  + Localization: string { get; set; }
-  + ApplicationConfiguration()
-  - {static} ApplicationConfiguration()
-  + {static} Load(configFile: string): void
-}
-
-class "EasySave.Infrastructure.Configuration.DataPathResolver" as T0028 {
-  - {static} {const} AppFolderName: string
-  + {static} ResolveDirectory(configuredPath: string, defaultSubfolder: string): string
-  - {static} GetBaseDataDirectory(): string
-  - {static} IsSafeAbsolute(path: string): bool
-}
-
-class "EasySave.Infrastructure.IO.JsonFile" as T0029 {
-  + {static} {readonly} Options: JsonSerializerOptions
-  - {static} JsonFile()
-  + {static} ReadOrDefault(path: string, defaultValue: T): T
-  + {static} WriteAtomic(path: string, value: T): void
-}
-
-class "EasySave.Infrastructure.IO.PathService" as T0030 {
-  + PathService()
-  + TryNormalizeExistingDirectory(rawPath: string, out normalizedPath: string): bool
-  + ToFullUncLikePath(path: string): string
-  + GetRelativePath(basePath: string, fullPath: string): string
-  - {static} NormalizeUserPath(path: string): string
-  - {static} StripWrappingQuotes(path: string): string
-}
-
-class "EasySave.Infrastructure.Logging.JsonLogWriter<T>" as T0031 {
-  - {readonly} _logger: AbstractLogger<T>
-  + JsonLogWriter<T>(logDirectory: string)
-  + JsonLogWriter<T>(logger: AbstractLogger<T>)
-  + Log(entry: T): void
-}
-
-class "EasySave.Infrastructure.Persistence.JobRepository" as T0032 {
-  - {readonly} _jobsPath: string
-  - {static} {const} MaxJobs: int
-  + JobRepository(configDirectory: string)
-  + Load(): List<BackupJob>
-  + Save(jobs: List<BackupJob>): void
-  + AddJob(jobs: List<BackupJob>, job: BackupJob): ValueTuple<bool, string>
-  + RemoveJob(jobs: List<BackupJob>, idOrName: string): bool
-  - {static} GetNextFreeId(jobs: IReadOnlyCollection<BackupJob>): int
-}
-
-class "EasySave.Infrastructure.Persistence.StateFileService" as T0033 {
-  - {readonly} _statePath: string
-  - _states: List<BackupJobState>
-  + StateFileService(stateDirectory: string)
-  + Initialize(jobs: IEnumerable<BackupJob>): void
-  + Update(updated: BackupJobState): void
-  + GetOrCreate(job: BackupJob): BackupJobState
-}
-
-class "EasySave.Presentation.Cli.CommandController" as T0034 {
-  + {static} Run(args: string[], repository: IJobRepository, backupService: IBackupService, stateService: IStateService, paths: IPathService): int
-  - {static} PrintUsage(): void
-  - {static} ParseArguments(arg: string): List<int>
-}
-
-class "EasySave.Presentation.Cli.CommandJobRunner" as T0035 {
-  - {readonly} _repository: IJobRepository
-  - {readonly} _backupService: IBackupService
-  - {readonly} _stateService: IStateService
-  - {readonly} _paths: IPathService
-  + CommandJobRunner(repository: IJobRepository, backupService: IBackupService, stateService: IStateService, paths: IPathService)
-  + RunJobs(ids: IEnumerable<int>): int
-  - IsJobRunnable(job: BackupJob, out message: string): bool
-}
-
-class "EasySave.Presentation.Cli.CommandLineArgumentParser" as T0036 {
-  ~ {static} Parse(arg: string): List<int>
-}
-
-class "EasySave.Presentation.Cli.CommandUsagePrinter" as T0037 {
-  ~ {static} Print(): void
-}
-
-class "EasySave.Presentation.Ui.Console.ConsolePrompter" as T0038 {
-  - {readonly} _console: IConsole
-  - {readonly} _paths: IPathService
-  + ConsolePrompter(console: IConsole, paths: IPathService)
-  + ReadNonEmpty(prompt: string): string
-  + ReadExistingDirectory(prompt: string, notFoundMessage: string): string
-  + ReadBackupType(prompt: string, options: string, invalidInputMessage: string): BackupType
-  + Pause(pressAnyKeyMessage: string): void
-}
-
-interface "EasySave.Presentation.Ui.Console.IConsole" as T0039 {
-  + {abstract} Clear(): void
-  + {abstract} Write(value: string): void
-  + {abstract} WriteLine(value: string): void
-  + {abstract} ReadLine(): string
-  + {abstract} ReadKey(intercept: bool): ConsoleKeyInfo
-}
-
-class "EasySave.Presentation.Ui.Console.SystemConsole" as T0040 {
-  + SystemConsole()
-  + Clear(): void
-  + Write(value: string): void
-  + WriteLine(value: string): void
-  + ReadLine(): string
-  + ReadKey(intercept: bool): ConsoleKeyInfo
-}
-
-class "EasySave.Presentation.Ui.JobCreationView" as T0041 {
-  - {readonly} _console: IConsole
-  - {readonly} _repository: IJobRepository
-  - {readonly} _stateSync: IStateSynchronizer
-  - {readonly} _prompter: ConsolePrompter
-  - {readonly} _errorTranslator: JobRepositoryErrorTranslator
-  + JobCreationView(console: IConsole, repository: IJobRepository, stateSync: IStateSynchronizer, prompter: ConsolePrompter, errorTranslator: JobRepositoryErrorTranslator)
-  + Show(): void
-}
-
-class "EasySave.Presentation.Ui.JobLaunchView" as T0042 {
-  - {readonly} _console: IConsole
-  - {readonly} _repository: IJobRepository
-  - {readonly} _backupService: IBackupService
-  - {readonly} _stateService: IStateService
-  - {readonly} _prompter: ConsolePrompter
-  - {readonly} _paths: IPathService
-  + JobLaunchView(console: IConsole, repository: IJobRepository, backupService: IBackupService, stateService: IStateService, prompter: ConsolePrompter, paths: IPathService)
-  + Show(): void
-  - RunAll(jobs: List<BackupJob>): void
-  - RunOne(job: BackupJob): void
-}
-
-class "EasySave.Presentation.Ui.JobListView" as T0043 {
-  - {readonly} _console: IConsole
-  - {readonly} _repository: IJobRepository
-  - {readonly} _prompter: ConsolePrompter
-  + JobListView(console: IConsole, repository: IJobRepository, prompter: ConsolePrompter)
-  + Show(): void
-}
-
-class "EasySave.Presentation.Ui.JobRemovalView" as T0044 {
-  - {readonly} _console: IConsole
-  - {readonly} _repository: IJobRepository
-  - {readonly} _stateSync: IStateSynchronizer
-  - {readonly} _prompter: ConsolePrompter
-  + JobRemovalView(console: IConsole, repository: IJobRepository, stateSync: IStateSynchronizer, prompter: ConsolePrompter)
-  + Show(): void
-}
-
-class "EasySave.Presentation.Ui.JobRepositoryErrorTranslator" as T0045 {
-  + JobRepositoryErrorTranslator()
-  + Translate(errorCode: string): string
-}
-
-class "EasySave.Presentation.Ui.ListWidget" as T0046 {
-  + {static} ShowList(options: List<Option>): void
-  + {static} ShowList(options: List<Option>, console: IConsole): void
-  - {static} WriteMenu(console: IConsole, options: List<Option>, selectedOption: Option): void
-}
-
-class "EasySave.Presentation.Ui.MainMenuController" as T0047 {
-  - {readonly} _console: IConsole
-  - {readonly} _jobList: JobListView
-  - {readonly} _jobCreation: JobCreationView
-  - {readonly} _jobRemoval: JobRemovalView
-  - {readonly} _jobLaunch: JobLaunchView
-  + MainMenuController(console: IConsole, jobList: JobListView, jobCreation: JobCreationView, jobRemoval: JobRemovalView, jobLaunch: JobLaunchView)
-  + Show(): void
-}
-
-class "EasySave.Presentation.Ui.Option" as T0048 {
-  + Description: string { get; }
-  + Selected: Action { get; }
-  + Option(description: string, selected: Action)
-}
-
-class "EasySave.Presentation.Ui.UserInterface" as T0049 {
-  - {static} _menu: MainMenuController
-  + {static} Initialize(repository: IJobRepository, backupService: IBackupService, stateService: IStateService, stateSynchronizer: IStateSynchronizer, paths: IPathService): void
-  + {static} ShowMenu(): void
-  - {static} EnsureInitialized(): void
-}
-
-class "EasySaveTest.AppConfigInitTest" as T0050 {
-  + AppConfigInitTest()
-  + AppConfigThrowExceptionIfInstanceCalledBeforeLoading(): void
-}
-
-class "EasySaveTest.AppConfigTest" as T0051 {
-  - _appSettings: ApplicationConfiguration
-  + AppConfigTest()
-  + Setup(): void
-  + ConfigIsNotNull(): void
-  + ConfigHasJobConfigPath(): void
-  + ConfigHasLocalization(): void
-  + ConfigHasLogPath(): void
-}
-
-class "EasySaveTest.BackupServiceTests" as T0052 {
-  - _tempDir: string
-  - _sourceDir: string
-  - _targetDir: string
-  - _stateService: StateFileService
-  - _logDir: string
-  - _backupService: BackupService
-  + BackupServiceTests()
-  + Setup(): void
-  + TearDown(): void
-  + RunJob_CopiesFiles_InCompleteBackup(): void
-  + RunJob_CreatesSubdirectories(): void
-  + RunJob_HandlesEmptyDirectory(): void
-  + RunJob_LogsFileTransfers(): void
-  + RunJob_FailsWhenSourceMissing(): void
-  + RunJob_PreservesFileTimestamps(): void
-  + RunJobsSequential_RunsMultipleJobs_InOrder(): void
-  + RunJob_DifferentialBackup_OnlyUpdatesDifferentFiles(): void
-}
-
-class "EasySaveTest.CommandControllerTests" as T0053 {
-  - _rootDir: string
-  - _configDir: string
-  - _logDir: string
-  - _repo: JobRepository
-  - _state: StateFileService
-  - _backup: BackupService
-  - _paths: PathService
-  + CommandControllerTests()
-  + Setup(): void
-  + TearDown(): void
-  - SaveJobs(jobs: BackupJob[]): void
-  - RunWithOutput(args: string[]): ValueTuple<int, string>
-  - ReadStateFile(): List<BackupJobState>
-  - ReadAllLogEntries(): List<LogEntry>
-  - {static} CountOccurrences(text: string, value: string): int
-  - {static} MakeJob(id: int, name: string, sourceDir: string, targetDir: string, type: BackupType): BackupJob
-  + Run_NoArgs_PrintsUsageAndReturns1(): void
-  + Run_InvalidArgs_PrintsUsageAndReturns1(): void
-  + Run_NoJobsConfigured_Returns1_AndDoesNotCreateStateFile(): void
-  + Run_SingleId_RunsJob_UpdatesState_AndWritesLogs(): void
-  + Run_Range_RunsAllJobsInIncreasingOrder(): void
-  + Run_SemicolonList_RunsOnlySpecifiedJobs(): void
-  + Run_DeduplicatesIds_AndDoesNotRunSameJobTwice(): void
-  + Run_UnknownJobId_PrintsNotFound_AndKeepsStateInactive(): void
-  + Run_SkipsJob_WhenSourceDirectoryIsMissing(): void
-  + Run_SupportsSplitArgumentsLikeShellWouldProvide(): void
-}
-
-class "EasySaveTest.JobRepositoryTests" as T0054 {
-  - _tempDir: string
-  - _repo: JobRepository
-  + JobRepositoryTests()
-  + Setup(): void
-  + TearDown(): void
-  + Load_EmptyRepository_ReturnsEmptyList(): void
-  + Save_PersistsJobsToFile(): void
-  + AddJob_AssignsId_WhenSlotAvailable(): void
-  + AddJob_AssignsNextAvailableId(): void
-  + AddJob_ReturnsError_WhenMaxJobsReached(): void
-  + RemoveJob_ById_RemovesJob(): void
-  + RemoveJob_ByName_RemovesJob(): void
-  + RemoveJob_NonExistent_ReturnsFalse(): void
-  + RemoveJob_ByName_CaseInsensitive(): void
-}
-
-class "EasySaveTest.StateFileServiceTests" as T0055 {
-  - _tempDir: string
-  - _stateService: StateFileService
-  + StateFileServiceTests()
-  + Setup(): void
-  + TearDown(): void
-  + Initialize_CreatesStateFile(): void
-  + Initialize_SetsJobsToInactive(): void
-  + GetOrCreate_ReturnsExisting_WhenStateExists(): void
-  + GetOrCreate_CreatesNewState_WhenMissing(): void
-  + Update_ModifiesState_AndWritesFile(): void
-  + Update_OrdersStatesByJobId(): void
 }
 
 
-T0004 "1" o-- "1" T0001
+T0012 ..|> T0003
+T0012 "1" o-- "1" T0008
+T0012 "1" o-- "1" T0009
+T0013 ..|> T0004
+T0013 "1" o-- "1" T0009
+T0014 "1" o-- "1" T0003
+T0014 "1" o-- "1" T0004
 T0014 ..|> T0005
+T0014 "1" o-- "1" T0006
+T0014 "1" o-- "1" T0008
+T0014 "1" o-- "1" T0009
 T0014 "1" o-- "1" T0010
-T0014 "1" o-- "1" T0011
 T0015 ..|> T0006
-T0015 "1" o-- "1" T0011
-T0016 "1" o-- "1" T0005
-T0016 "1" o-- "1" T0006
-T0016 ..|> T0007
-T0016 "1" o-- "1" T0008
+T0016 "1" o-- "1" T0007
 T0016 "1" o-- "1" T0010
-T0016 "1" o-- "1" T0011
-T0016 "1" o-- "1" T0012
-T0017 ..|> T0008
-T0018 "1" o-- "1" T0009
-T0018 "1" o-- "1" T0012
-T0018 ..|> T0013
-T0019 ..|> T0020
-T0022 "1" o-- "1" T0024
-T0023 "1" o-- "1" T0025
-T0024 "1" o-- "1" T0024
-T0025 "1" o-- "1" T0025
-T0027 "1" o-- "0..1" T0027
-T0030 ..|> T0011
-T0031 "1" o-- "1" T0001
-T0032 ..|> T0009
-T0033 ..|> T0012
-T0033 "1" o-- "0..*" T0023
-T0034 ..> T0009
-T0035 "1" o-- "1" T0007
-T0035 "1" o-- "1" T0009
-T0035 "1" o-- "1" T0011
-T0035 "1" o-- "1" T0012
-T0038 "1" o-- "1" T0011
-T0038 "1" o-- "1" T0039
-T0040 ..|> T0039
-T0041 "1" o-- "1" T0009
-T0041 "1" o-- "1" T0013
-T0041 "1" o-- "1" T0038
-T0041 "1" o-- "1" T0039
-T0041 "1" o-- "1" T0045
+T0016 ..|> T0011
+T0017 ..|> T0018
+T0020 "1" o-- "1" T0022
+T0021 "1" o-- "1" T0023
+T0022 "1" o-- "1" T0022
+T0023 "1" o-- "1" T0023
+T0025 "1" o-- "0..1" T0025
+T0028 ..|> T0009
+T0029 "1" o-- "1" T0001
+T0030 ..|> T0007
+T0031 ..|> T0010
+T0031 "1" o-- "0..*" T0021
+T0032 ..> T0007
+T0033 "1" o-- "1" T0005
+T0033 "1" o-- "1" T0007
+T0033 "1" o-- "1" T0009
+T0033 "1" o-- "1" T0010
+T0036 "1" o-- "1" T0009
+T0036 "1" o-- "1" T0037
+T0038 ..|> T0037
+T0039 "1" o-- "1" T0007
+T0039 "1" o-- "1" T0011
+T0039 "1" o-- "1" T0036
+T0039 "1" o-- "1" T0037
+T0039 "1" o-- "1" T0043
+T0040 "1" o-- "1" T0005
+T0040 "1" o-- "1" T0007
+T0040 "1" o-- "1" T0009
+T0040 "1" o-- "1" T0010
+T0040 "1" o-- "1" T0036
+T0040 "1" o-- "1" T0037
+T0041 "1" o-- "1" T0007
+T0041 "1" o-- "1" T0036
+T0041 "1" o-- "1" T0037
 T0042 "1" o-- "1" T0007
-T0042 "1" o-- "1" T0009
 T0042 "1" o-- "1" T0011
-T0042 "1" o-- "1" T0012
-T0042 "1" o-- "1" T0038
-T0042 "1" o-- "1" T0039
-T0043 "1" o-- "1" T0009
-T0043 "1" o-- "1" T0038
-T0043 "1" o-- "1" T0039
-T0044 "1" o-- "1" T0009
-T0044 "1" o-- "1" T0013
-T0044 "1" o-- "1" T0038
-T0044 "1" o-- "1" T0039
-T0046 ..> T0048
-T0047 "1" o-- "1" T0039
-T0047 "1" o-- "1" T0041
-T0047 "1" o-- "1" T0042
-T0047 "1" o-- "1" T0043
-T0047 "1" o-- "1" T0044
-T0049 "1" o-- "0..1" T0047
-T0051 "1" o-- "1" T0027
-T0052 "1" o-- "1" T0016
-T0052 "1" o-- "1" T0033
-T0053 "1" o-- "1" T0016
-T0053 "1" o-- "1" T0030
-T0053 "1" o-- "1" T0032
-T0053 "1" o-- "1" T0033
-T0054 "1" o-- "1" T0032
-T0055 "1" o-- "1" T0033
+T0042 "1" o-- "1" T0036
+T0042 "1" o-- "1" T0037
+T0044 ..> T0046
+T0045 "1" o-- "1" T0037
+T0045 "1" o-- "1" T0039
+T0045 "1" o-- "1" T0040
+T0045 "1" o-- "1" T0041
+T0045 "1" o-- "1" T0042
+T0047 "1" o-- "0..1" T0045
 
 @enduml
