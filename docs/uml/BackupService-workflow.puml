@@ -1,0 +1,69 @@
+@startuml
+title BackupService - Workflow detaille
+
+skinparam backgroundColor #FFFFFF
+skinparam sequenceArrowThickness 1
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 80
+
+actor Caller
+participant BackupService
+participant "IStateService" as State
+participant "IPathService" as Paths
+participant "ILogWriter<LogEntry>" as Logger
+participant "IBackupDirectoryPreparer" as DirPrep
+participant "IBackupFileSelector" as Selector
+participant "IFileCopier" as Copier
+participant "ProgressWidget" as Progress
+
+Caller -> BackupService: RunJob(job)
+activate BackupService
+
+BackupService -> State: GetOrCreate(job)
+BackupService -> Paths: TryNormalizeExistingDirectory(source)
+BackupService -> Paths: TryNormalizeExistingDirectory(target)
+
+alt source invalide
+  BackupService -> State: Update(Failed, source_missing)
+  BackupService -> Logger: Log(error, TransferTimeMs=-1)
+  BackupService --> Caller: return
+  deactivate BackupService
+else target invalide
+  BackupService -> State: Update(Failed, target_missing)
+  BackupService -> Logger: Log(error, TransferTimeMs=-1)
+  BackupService --> Caller: return
+  deactivate BackupService
+else source et target valides
+  BackupService -> Logger: Log(start)
+  BackupService -> DirPrep: EnsureTargetDirectories(...)
+  BackupService -> Selector: GetFilesToCopy(job, sourceDir, targetDir)
+  BackupService -> State: Update(Active, start, totals)
+  create Progress
+  BackupService -> Progress: new SystemConsole()
+
+  loop pour chaque fichier selectionne
+    BackupService -> DirPrep: EnsureTargetDirectoryForFile(...)
+    BackupService -> State: Update(file_transfer, current paths)
+    BackupService -> Copier: Copy(sourceFile, targetFile)
+    alt copie OK
+      BackupService -> Logger: Log(file, elapsedMs>=0)
+      BackupService -> State: Update(progress, remaining)
+    else exception pendant copy
+      BackupService -> Logger: Log(file, elapsedMs=-1)
+      BackupService -> State: Update(progress, remaining)
+    end
+    BackupService -> Progress: UpdateProgress(%)
+  end
+
+  alt au moins une erreur de copie
+    BackupService -> State: Update(Failed, completed_with_errors)
+    BackupService -> Logger: Log(end, TransferTimeMs=-1)
+  else aucune erreur
+    BackupService -> State: Update(Completed, completed)
+    BackupService -> Logger: Log(end, TransferTimeMs=0)
+  end
+
+  BackupService --> Caller: return
+  deactivate BackupService
+end
+@enduml
