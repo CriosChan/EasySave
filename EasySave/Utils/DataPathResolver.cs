@@ -65,8 +65,12 @@ public static class DataPathResolver
             if (path.StartsWith("\\\\"))
                 return true;
 
-            // Accept drive-rooted paths.
-            return path.Length >= 2 && char.IsLetter(path[0]) && path[1] == ':';
+            // Accept drive-rooted paths (e.g., C:\...), but NOT paths like C:folder
+            if (path.Length >= 3 && char.IsLetter(path[0]) && path[1] == ':' &&
+                (path[2] == '\\' || path[2] == '/'))
+                return true;
+
+            return false;
         }
 
         // On non-Windows systems, we deliberately avoid writing to filesystem root by default.

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace EasySaveTest;
+﻿namespace EasySaveTest;
 
 public class AppConfigTest
 {
