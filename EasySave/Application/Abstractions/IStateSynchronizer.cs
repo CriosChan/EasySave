@@ -1,12 +1,12 @@
 namespace EasySave.Application.Abstractions;
 
 /// <summary>
-/// Contrat de synchronisation entre configuration des jobs et etat d'execution.
+/// Contract for synchronizing job configuration with execution state.
 /// </summary>
 public interface IStateSynchronizer
 {
     /// <summary>
-    /// Recharge les jobs et reinitialise l'etat.
+    /// Reloads jobs and reinitializes state.
     /// </summary>
     void Refresh();
 }

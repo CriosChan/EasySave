@@ -8,10 +8,10 @@ namespace EasySave.Presentation.Ui;
 internal sealed class JobRepositoryErrorTranslator
 {
     /// <summary>
-    /// Traduit un code d'erreur en message localise.
+    /// Translates an error code into a localized message.
     /// </summary>
-    /// <param name="errorCode">Code d'erreur.</param>
-    /// <returns>Message utilisateur.</returns>
+    /// <param name="errorCode">Error code.</param>
+    /// <returns>User-facing message.</returns>
     public string Translate(string errorCode)
     {
         return errorCode switch

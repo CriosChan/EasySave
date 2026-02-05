@@ -4,13 +4,13 @@ using EasyLog;
 namespace EasyLogTest;
 
 /// <summary>
-/// Tests unitaires pour la creation de logs JSON.
+/// Unit tests for JSON log creation.
 /// </summary>
 public class Tests
 {
     private AbstractLogger<FakeLogObject> _logger = new JsonLogger<FakeLogObject>("./");
     /// <summary>
-    /// Preparation commune des tests (vide ici).
+    /// Shared test setup (empty for now).
     /// </summary>
     [SetUp]
     public void Setup()
@@ -18,7 +18,7 @@ public class Tests
     }
 
     /// <summary>
-    /// Verifie que l'ecriture de logs cree bien un fichier et contient les entrees.
+    /// Verifies that logging creates a file and contains entries.
     /// </summary>
     [Test]
     public void TestLogCreation()
@@ -37,7 +37,7 @@ public class Tests
         // If the file already exists remove it.
         if (File.Exists(logPath))
             File.Delete(logPath);
-        // Log the objet
+        // Log the object
         _logger.Log(log);
         // Check if the log file exists
         Assert.That(File.Exists(logPath), Is.EqualTo(true));

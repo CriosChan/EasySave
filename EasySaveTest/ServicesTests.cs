@@ -11,7 +11,7 @@ using System;
 namespace EasySaveTest;
 
 /// <summary>
-/// Tests pour le depot des jobs de sauvegarde.
+/// Tests for the backup job repository.
 /// </summary>
 public class JobRepositoryTests
 {
@@ -19,7 +19,7 @@ public class JobRepositoryTests
     private JobRepository _repo = null!;
 
     /// <summary>
-    /// Prepare un dossier temporaire et un depot de jobs.
+    /// Prepares a temporary folder and a job repository.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -30,7 +30,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Nettoie les ressources temporaires.
+    /// Cleans up temporary resources.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -47,7 +47,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie que le chargement d'un depot vide retourne une liste vide.
+    /// Verifies loading an empty repository returns an empty list.
     /// </summary>
     [Test]
     public void Load_EmptyRepository_ReturnsEmptyList()
@@ -58,7 +58,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie que la sauvegarde persiste les jobs dans le fichier.
+    /// Verifies saving persists jobs to the file.
     /// </summary>
     [Test]
     public void Save_PersistsJobsToFile()
@@ -76,7 +76,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie l'assignation d'un ID quand un slot est disponible.
+    /// Verifies an ID is assigned when a slot is available.
     /// </summary>
     [Test]
     public void AddJob_AssignsId_WhenSlotAvailable()
@@ -91,7 +91,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie l'assignation du prochain ID disponible.
+    /// Verifies the next available ID is assigned.
     /// </summary>
     [Test]
     public void AddJob_AssignsNextAvailableId()
@@ -110,7 +110,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie l'erreur lorsque la limite de jobs est atteinte.
+    /// Verifies an error is returned when the job limit is reached.
     /// </summary>
     [Test]
     public void AddJob_ReturnsError_WhenMaxJobsReached()
@@ -132,7 +132,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie la suppression d'un job par ID.
+    /// Verifies removal of a job by ID.
     /// </summary>
     [Test]
     public void RemoveJob_ById_RemovesJob()
@@ -151,7 +151,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie la suppression d'un job par nom.
+    /// Verifies removal of a job by name.
     /// </summary>
     [Test]
     public void RemoveJob_ByName_RemovesJob()
@@ -170,7 +170,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie qu'un job inexistant ne peut pas etre supprime.
+    /// Verifies a non-existent job cannot be removed.
     /// </summary>
     [Test]
     public void RemoveJob_NonExistent_ReturnsFalse()
@@ -187,7 +187,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifie la suppression par nom sans sensibilite a la casse.
+    /// Verifies name-based removal is case-insensitive.
     /// </summary>
     [Test]
     public void RemoveJob_ByName_CaseInsensitive()
@@ -204,7 +204,7 @@ public class JobRepositoryTests
 }
 
 /// <summary>
-/// Tests pour le service de fichier d'etat.
+/// Tests for the state file service.
 /// </summary>
 public class StateFileServiceTests
 {
@@ -212,7 +212,7 @@ public class StateFileServiceTests
     private StateFileService _stateService = null!;
 
     /// <summary>
-    /// Prepare un dossier temporaire et le service d'etat.
+    /// Prepares a temporary folder and the state service.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -223,7 +223,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Nettoie les ressources temporaires.
+    /// Cleans up temporary resources.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -239,7 +239,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifie que l'initialisation cree le fichier d'etat.
+    /// Verifies initialization creates the state file.
     /// </summary>
     [Test]
     public void Initialize_CreatesStateFile()
@@ -257,7 +257,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifie que les jobs sont initialises en etat Inactive.
+    /// Verifies jobs are initialized in the Inactive state.
     /// </summary>
     [Test]
     public void Initialize_SetsJobsToInactive()
@@ -275,7 +275,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifie que GetOrCreate retourne l'etat existant.
+    /// Verifies GetOrCreate returns the existing state.
     /// </summary>
     [Test]
     public void GetOrCreate_ReturnsExisting_WhenStateExists()
@@ -290,7 +290,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifie que GetOrCreate cree un etat s'il est absent.
+    /// Verifies GetOrCreate creates a state when missing.
     /// </summary>
     [Test]
     public void GetOrCreate_CreatesNewState_WhenMissing()
@@ -304,7 +304,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifie la mise a jour d'etat et l'ecriture du fichier.
+    /// Verifies state updates and file writes.
     /// </summary>
     [Test]
     public void Update_ModifiesState_AndWritesFile()
@@ -323,7 +323,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifie que les etats sont ordonnes par ID.
+    /// Verifies states are ordered by ID.
     /// </summary>
     [Test]
     public void Update_OrdersStatesByJobId()
@@ -348,7 +348,7 @@ public class StateFileServiceTests
 }
 
 /// <summary>
-/// Tests pour le service d'execution de sauvegarde.
+/// Tests for the backup execution service.
 /// </summary>
 public class BackupServiceTests
 {
@@ -360,7 +360,7 @@ public class BackupServiceTests
     private BackupService _backupService = null!;
 
     /// <summary>
-    /// Prepare les dossiers temporaires et le service de sauvegarde.
+    /// Prepares temporary folders and the backup service.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -386,7 +386,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Nettoie les ressources temporaires.
+    /// Cleans up temporary resources.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -402,7 +402,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifie la copie des fichiers en sauvegarde complete.
+    /// Verifies files are copied in a complete backup.
     /// </summary>
     [Test]
     public void RunJob_CopiesFiles_InCompleteBackup()
@@ -426,7 +426,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifie la creation des sous-dossiers dans la cible.
+    /// Verifies subdirectories are created in the target.
     /// </summary>
     [Test]
     public void RunJob_CreatesSubdirectories()
@@ -451,7 +451,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifie qu'une sauvegarde d'un dossier vide se termine correctement.
+    /// Verifies an empty directory backup completes correctly.
     /// </summary>
     [Test]
     public void RunJob_HandlesEmptyDirectory()
@@ -472,7 +472,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifie que les transferts sont bien journalises.
+    /// Verifies transfers are properly logged.
     /// </summary>
     [Test]
     [Category("GHABlacklist")]
@@ -502,7 +502,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifie l'echec lorsque la source est introuvable.
+    /// Verifies failure when the source is missing.
     /// </summary>
     [Test]
     public void RunJob_FailsWhenSourceMissing()
@@ -523,7 +523,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifie la preservation des timestamps des fichiers.
+    /// Verifies file timestamps are preserved.
     /// </summary>
     [Test]
     public void RunJob_PreservesFileTimestamps()
@@ -551,7 +551,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifie l'execution sequentielle de plusieurs jobs.
+    /// Verifies sequential execution of multiple jobs.
     /// </summary>
     [Test]
     public void RunJobsSequential_RunsMultipleJobs_InOrder()
@@ -582,7 +582,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifie le comportement de la sauvegarde differentielle.
+    /// Verifies differential backup behavior.
     /// </summary>
     [Test]
     public void RunJob_DifferentialBackup_OnlyUpdatesDifferentFiles()

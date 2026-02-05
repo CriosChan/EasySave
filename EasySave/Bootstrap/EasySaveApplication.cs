@@ -17,10 +17,10 @@ namespace EasySave.Bootstrap;
 internal sealed class EasySaveApplication : IApplication
 {
     /// <summary>
-    /// Point d'entree applicatif: charge la configuration, construit les services et demarre le mode CLI ou UI.
+    /// Application entry point: loads configuration, builds services, and starts CLI or UI mode.
     /// </summary>
-    /// <param name="args">Arguments de ligne de commande.</param>
-    /// <returns>Code de sortie de l'execution.</returns>
+    /// <param name="args">Command-line arguments.</param>
+    /// <returns>Execution exit code.</returns>
     public int Run(string[] args)
     {
         // Load configuration (paths, localization).
@@ -62,9 +62,9 @@ internal sealed class EasySaveApplication : IApplication
     }
 
     /// <summary>
-    /// Applique la culture UI/Thread si elle est valide.
+    /// Applies UI/thread culture if it is valid.
     /// </summary>
-    /// <param name="cultureName">Nom de culture (ex: fr-FR).</param>
+    /// <param name="cultureName">Culture name (e.g., fr-FR).</param>
     private static void TryApplyCulture(string cultureName)
     {
         if (string.IsNullOrWhiteSpace(cultureName))

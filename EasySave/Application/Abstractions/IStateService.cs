@@ -3,26 +3,26 @@ using EasySave.Domain.Models;
 namespace EasySave.Application.Abstractions;
 
 /// <summary>
-/// Contrat de gestion de l'etat d'execution des sauvegardes.
+/// Contract for managing backup execution state.
 /// </summary>
 public interface IStateService
 {
     /// <summary>
-    /// Initialise l'etat pour un ensemble de jobs.
+    /// Initializes state for a set of jobs.
     /// </summary>
-    /// <param name="jobs">Jobs a initialiser.</param>
+    /// <param name="jobs">Jobs to initialize.</param>
     void Initialize(IEnumerable<BackupJob> jobs);
 
     /// <summary>
-    /// Met a jour l'etat d'un job.
+    /// Updates the state of a job.
     /// </summary>
-    /// <param name="updated">Etat mis a jour.</param>
+    /// <param name="updated">Updated state.</param>
     void Update(BackupJobState updated);
 
     /// <summary>
-    /// Recupere l'etat d'un job ou le cree s'il n'existe pas.
+    /// Gets the state of a job or creates it if it does not exist.
     /// </summary>
-    /// <param name="job">Job cible.</param>
-    /// <returns>Etat courant.</returns>
+    /// <param name="job">Target job.</param>
+    /// <returns>Current state.</returns>
     BackupJobState GetOrCreate(BackupJob job);
 }

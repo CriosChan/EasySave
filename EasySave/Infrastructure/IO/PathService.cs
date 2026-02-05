@@ -3,16 +3,16 @@ using EasySave.Application.Abstractions;
 namespace EasySave.Infrastructure.IO;
 
 /// <summary>
-/// Implementation des operations de normalisation et conversion de chemins.
+/// Implementation of path normalization and conversion operations.
 /// </summary>
 public sealed class PathService : IPathService
 {
     /// <summary>
-    /// Normalise un chemin et verifie l'existence du dossier.
+    /// Normalizes a path and verifies the directory exists.
     /// </summary>
-    /// <param name="rawPath">Chemin brut.</param>
-    /// <param name="normalizedPath">Chemin normalise.</param>
-    /// <returns>Vrai si le dossier existe.</returns>
+    /// <param name="rawPath">Raw path.</param>
+    /// <param name="normalizedPath">Normalized path.</param>
+    /// <returns>True if the directory exists.</returns>
     public bool TryNormalizeExistingDirectory(string rawPath, out string normalizedPath)
     {
         normalizedPath = NormalizeUserPath(rawPath);
@@ -30,10 +30,10 @@ public sealed class PathService : IPathService
     }
 
     /// <summary>
-    /// Convertit un chemin en chemin absolu en respectant les UNC.
+    /// Converts a path to an absolute path while respecting UNC paths.
     /// </summary>
-    /// <param name="path">Chemin a convertir.</param>
-    /// <returns>Chemin absolu.</returns>
+    /// <param name="path">Path to convert.</param>
+    /// <returns>Absolute path.</returns>
     public string ToFullUncLikePath(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
@@ -59,11 +59,11 @@ public sealed class PathService : IPathService
     }
 
     /// <summary>
-    /// Calcule un chemin relatif entre deux chemins.
+    /// Computes a relative path between two paths.
     /// </summary>
-    /// <param name="basePath">Chemin de base.</param>
-    /// <param name="fullPath">Chemin complet.</param>
-    /// <returns>Chemin relatif.</returns>
+    /// <param name="basePath">Base path.</param>
+    /// <param name="fullPath">Full path.</param>
+    /// <returns>Relative path.</returns>
     public string GetRelativePath(string basePath, string fullPath)
     {
         try
@@ -80,10 +80,10 @@ public sealed class PathService : IPathService
     }
 
     /// <summary>
-    /// Nettoie un chemin saisi par l'utilisateur (espaces, quotes, variables env).
+    /// Cleans a user-provided path (spaces, quotes, env vars).
     /// </summary>
-    /// <param name="path">Chemin brut.</param>
-    /// <returns>Chemin nettoye.</returns>
+    /// <param name="path">Raw path.</param>
+    /// <returns>Cleaned path.</returns>
     private static string NormalizeUserPath(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
@@ -103,10 +103,10 @@ public sealed class PathService : IPathService
     }
 
     /// <summary>
-    /// Supprime une paire de guillemets d'encadrement si presente.
+    /// Removes wrapping quotes if present.
     /// </summary>
-    /// <param name="path">Chemin brut.</param>
-    /// <returns>Chemin sans guillemets d'encadrement.</returns>
+    /// <param name="path">Raw path.</param>
+    /// <returns>Path without wrapping quotes.</returns>
     private static string StripWrappingQuotes(string path)
     {
         if (string.IsNullOrWhiteSpace(path))

@@ -6,32 +6,32 @@ namespace EasySave.Presentation.Ui.Console;
 public interface IConsole
 {
     /// <summary>
-    /// Efface l'ecran.
+    /// Clears the screen.
     /// </summary>
     void Clear();
 
     /// <summary>
-    /// Ecrit du texte sans saut de ligne.
+    /// Writes text without a line break.
     /// </summary>
-    /// <param name="value">Texte a ecrire.</param>
+    /// <param name="value">Text to write.</param>
     void Write(string value);
 
     /// <summary>
-    /// Ecrit du texte avec saut de ligne.
+    /// Writes text with a line break.
     /// </summary>
-    /// <param name="value">Texte a ecrire.</param>
+    /// <param name="value">Text to write.</param>
     void WriteLine(string value);
 
     /// <summary>
-    /// Lit une ligne depuis l'entree standard.
+    /// Reads a line from standard input.
     /// </summary>
-    /// <returns>Ligne lue ou null.</returns>
+    /// <returns>Read line or null.</returns>
     string? ReadLine();
 
     /// <summary>
-    /// Lit une touche clavier.
+    /// Reads a keyboard key.
     /// </summary>
-    /// <param name="intercept">Indique si la touche est masquee.</param>
-    /// <returns>Infos de touche.</returns>
+    /// <param name="intercept">Whether the key is hidden.</param>
+    /// <returns>Key info.</returns>
     ConsoleKeyInfo ReadKey(bool intercept);
 }

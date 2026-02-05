@@ -3,12 +3,12 @@ using EasySave.Infrastructure.Configuration;
 namespace EasySaveTest;
 
 /// <summary>
-/// Verifie le comportement avant chargement de la configuration.
+/// Verifies behavior before configuration is loaded.
 /// </summary>
 public class AppConfigInitTest
 {
     /// <summary>
-    /// S'assure que l'acces a Instance avant Load declenche une exception.
+    /// Ensures accessing Instance before Load throws an exception.
     /// </summary>
     [Test]
     public void AppConfigThrowExceptionIfInstanceCalledBeforeLoading()

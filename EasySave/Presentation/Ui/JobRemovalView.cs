@@ -6,7 +6,7 @@ using EasySave.Presentation.Ui.Console;
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Vue de suppression d'un job de sauvegarde.
+/// View for removing a backup job.
 /// </summary>
 internal sealed class JobRemovalView
 {
@@ -16,12 +16,12 @@ internal sealed class JobRemovalView
     private readonly ConsolePrompter _prompter;
 
     /// <summary>
-    /// Construit la vue de suppression.
+    /// Builds the removal view.
     /// </summary>
-    /// <param name="console">Console cible.</param>
-    /// <param name="repository">Depot des jobs.</param>
-    /// <param name="stateSync">Synchroniseur d'etat.</param>
-    /// <param name="prompter">Gestionnaire de saisie.</param>
+    /// <param name="console">Target console.</param>
+    /// <param name="repository">Job repository.</param>
+    /// <param name="stateSync">State synchronizer.</param>
+    /// <param name="prompter">Input prompter.</param>
     public JobRemovalView(IConsole console, IJobRepository repository, IStateSynchronizer stateSync, ConsolePrompter prompter)
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
@@ -31,7 +31,7 @@ internal sealed class JobRemovalView
     }
 
     /// <summary>
-    /// Affiche l'ecran de suppression et applique la demande.
+    /// Displays the removal screen and applies the request.
     /// </summary>
     public void Show()
     {

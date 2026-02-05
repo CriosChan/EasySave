@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 namespace EasySave.Infrastructure.Configuration;
 
 /// <summary>
-/// Charge et expose la configuration applicative.
+/// Loads and exposes application configuration.
 /// </summary>
 public class ApplicationConfiguration
 {
@@ -11,7 +11,7 @@ public class ApplicationConfiguration
     private static readonly object _lock = new();
 
     /// <summary>
-    /// Instance chargee de la configuration.
+    /// Loaded configuration instance.
     /// </summary>
     public static ApplicationConfiguration Instance
     {
@@ -28,14 +28,14 @@ public class ApplicationConfiguration
     public string Localization { get; set; } = "";
     
     /// <summary>
-    /// Initialise une configuration vide (utilise par le binder).
+    /// Initializes an empty configuration (used by the binder).
     /// </summary>
     public ApplicationConfiguration() { }
 
     /// <summary>
-    /// Charge la configuration depuis un fichier JSON.
+    /// Loads configuration from a JSON file.
     /// </summary>
-    /// <param name="configFile">Nom du fichier de configuration.</param>
+    /// <param name="configFile">Configuration file name.</param>
     public static void Load(string configFile = "appsettings.json")
     {
         lock (_lock)

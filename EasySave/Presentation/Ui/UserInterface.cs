@@ -11,13 +11,13 @@ public static class UserInterface
     private static MainMenuController? _menu;
 
     /// <summary>
-    /// Initialise les composants de l'UI avec les services necessaires.
+    /// Initializes UI components with the required services.
     /// </summary>
-    /// <param name="repository">Depot des jobs.</param>
-    /// <param name="backupService">Service de sauvegarde.</param>
-    /// <param name="stateService">Service d'etat.</param>
-    /// <param name="stateSynchronizer">Synchroniseur d'etat.</param>
-    /// <param name="paths">Service de chemins.</param>
+    /// <param name="repository">Job repository.</param>
+    /// <param name="backupService">Backup service.</param>
+    /// <param name="stateService">State service.</param>
+    /// <param name="stateSynchronizer">State synchronizer.</param>
+    /// <param name="paths">Path service.</param>
     public static void Initialize(
         IJobRepository repository,
         IBackupService backupService,
@@ -53,7 +53,7 @@ public static class UserInterface
     }
 
     /// <summary>
-    /// Verifie que l'UI a bien ete initialisee.
+    /// Ensures the UI has been initialized.
     /// </summary>
     private static void EnsureInitialized()
     {

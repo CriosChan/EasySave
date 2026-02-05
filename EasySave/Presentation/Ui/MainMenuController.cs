@@ -15,13 +15,13 @@ internal sealed class MainMenuController
     private readonly JobLaunchView _jobLaunch;
 
     /// <summary>
-    /// Construit le controleur du menu principal.
+    /// Builds the main menu controller.
     /// </summary>
-    /// <param name="console">Console cible.</param>
-    /// <param name="jobList">Vue de liste des jobs.</param>
-    /// <param name="jobCreation">Vue de creation.</param>
-    /// <param name="jobRemoval">Vue de suppression.</param>
-    /// <param name="jobLaunch">Vue de lancement.</param>
+    /// <param name="console">Target console.</param>
+    /// <param name="jobList">Job list view.</param>
+    /// <param name="jobCreation">Job creation view.</param>
+    /// <param name="jobRemoval">Job removal view.</param>
+    /// <param name="jobLaunch">Job launch view.</param>
     public MainMenuController(
         IConsole console,
         JobListView jobList,
@@ -37,7 +37,7 @@ internal sealed class MainMenuController
     }
 
     /// <summary>
-    /// Affiche le menu principal et gere la navigation.
+    /// Displays the main menu and handles navigation.
     /// </summary>
     public void Show()
     {

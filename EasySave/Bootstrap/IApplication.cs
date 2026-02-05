@@ -6,9 +6,9 @@ namespace EasySave.Bootstrap;
 internal interface IApplication
 {
     /// <summary>
-    /// Execute l'application avec les arguments fournis.
+    /// Executes the application with the provided arguments.
     /// </summary>
-    /// <param name="args">Arguments de ligne de commande.</param>
-    /// <returns>Code de sortie du processus.</returns>
+    /// <param name="args">Command-line arguments.</param>
+    /// <returns>Process exit code.</returns>
     int Run(string[] args);
 }

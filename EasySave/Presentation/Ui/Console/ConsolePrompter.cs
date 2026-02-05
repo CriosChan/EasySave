@@ -13,10 +13,10 @@ internal sealed class ConsolePrompter
     private readonly IPathService _paths;
 
     /// <summary>
-    /// Construit le prompter avec ses dependances.
+    /// Builds the prompter with its dependencies.
     /// </summary>
-    /// <param name="console">Console cible.</param>
-    /// <param name="paths">Service de chemins.</param>
+    /// <param name="console">Target console.</param>
+    /// <param name="paths">Path service.</param>
     public ConsolePrompter(IConsole console, IPathService paths)
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
@@ -24,10 +24,10 @@ internal sealed class ConsolePrompter
     }
 
     /// <summary>
-    /// Lit une valeur non vide.
+    /// Reads a non-empty value.
     /// </summary>
-    /// <param name="prompt">Message invite.</param>
-    /// <returns>Valeur non vide.</returns>
+    /// <param name="prompt">Prompt message.</param>
+    /// <returns>Non-empty value.</returns>
     public string ReadNonEmpty(string prompt)
     {
         while (true)
@@ -43,11 +43,11 @@ internal sealed class ConsolePrompter
     }
 
     /// <summary>
-    /// Lit un chemin de dossier existant.
+    /// Reads an existing directory path.
     /// </summary>
-    /// <param name="prompt">Message invite.</param>
-    /// <param name="notFoundMessage">Message d'erreur si introuvable.</param>
-    /// <returns>Chemin normalise.</returns>
+    /// <param name="prompt">Prompt message.</param>
+    /// <param name="notFoundMessage">Error message if not found.</param>
+    /// <returns>Normalized path.</returns>
     public string ReadExistingDirectory(string prompt, string notFoundMessage)
     {
         while (true)
@@ -61,12 +61,12 @@ internal sealed class ConsolePrompter
     }
 
     /// <summary>
-    /// Lit le type de sauvegarde via un choix utilisateur.
+    /// Reads the backup type from a user choice.
     /// </summary>
-    /// <param name="prompt">Message invite.</param>
-    /// <param name="options">Options affichees.</param>
-    /// <param name="invalidInputMessage">Message en cas d'erreur.</param>
-    /// <returns>Type de sauvegarde selectionne.</returns>
+    /// <param name="prompt">Prompt message.</param>
+    /// <param name="options">Displayed options.</param>
+    /// <param name="invalidInputMessage">Message for invalid input.</param>
+    /// <returns>Selected backup type.</returns>
     public BackupType ReadBackupType(string prompt, string options, string invalidInputMessage)
     {
         while (true)
@@ -86,9 +86,9 @@ internal sealed class ConsolePrompter
     }
 
     /// <summary>
-    /// Met en pause l'interface jusqu'a une touche.
+    /// Pauses the UI until a key is pressed.
     /// </summary>
-    /// <param name="pressAnyKeyMessage">Message affiche.</param>
+    /// <param name="pressAnyKeyMessage">Displayed message.</param>
     public void Pause(string pressAnyKeyMessage)
     {
         _console.WriteLine(string.Empty);

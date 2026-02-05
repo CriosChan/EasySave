@@ -3,35 +3,35 @@ using EasySave.Domain.Models;
 namespace EasySave.Application.Abstractions;
 
 /// <summary>
-/// Contrat de persistence des jobs de sauvegarde.
+/// Contract for backup job persistence.
 /// </summary>
 public interface IJobRepository
 {
     /// <summary>
-    /// Charge la liste des jobs.
+    /// Loads the list of jobs.
     /// </summary>
-    /// <returns>Liste de jobs.</returns>
+    /// <returns>List of jobs.</returns>
     List<BackupJob> Load();
 
     /// <summary>
-    /// Sauvegarde la liste des jobs.
+    /// Saves the list of jobs.
     /// </summary>
-    /// <param name="jobs">Jobs a persister.</param>
+    /// <param name="jobs">Jobs to persist.</param>
     void Save(List<BackupJob> jobs);
 
     /// <summary>
-    /// Ajoute un job a la liste et le persiste.
+    /// Adds a job to the list and persists it.
     /// </summary>
-    /// <param name="jobs">Liste courante en memoire.</param>
-    /// <param name="job">Job a ajouter.</param>
-    /// <returns>Resultat et code d'erreur eventuel.</returns>
+    /// <param name="jobs">Current in-memory list.</param>
+    /// <param name="job">Job to add.</param>
+    /// <returns>Result and optional error code.</returns>
     (bool ok, string error) AddJob(List<BackupJob> jobs, BackupJob job);
 
     /// <summary>
-    /// Supprime un job par identifiant ou par nom.
+    /// Removes a job by id or by name.
     /// </summary>
-    /// <param name="jobs">Liste courante en memoire.</param>
-    /// <param name="idOrName">Identifiant ou nom du job.</param>
-    /// <returns>Vrai si un job a ete supprime.</returns>
+    /// <param name="jobs">Current in-memory list.</param>
+    /// <param name="idOrName">Job id or name.</param>
+    /// <returns>True if a job was removed.</returns>
     bool RemoveJob(List<BackupJob> jobs, string idOrName);
 }

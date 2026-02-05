@@ -3,16 +3,16 @@ using EasySave.Domain.Models;
 namespace EasySave.Application.Abstractions;
 
 /// <summary>
-/// Contrat de selection des fichiers a copier pour un job.
+/// Contract for selecting files to copy for a job.
 /// </summary>
 public interface IBackupFileSelector
 {
     /// <summary>
-    /// Retourne la liste des fichiers a copier pour un job donne.
+    /// Returns the list of files to copy for a given job.
     /// </summary>
-    /// <param name="job">Job de sauvegarde.</param>
-    /// <param name="sourceDir">Dossier source normalise.</param>
-    /// <param name="targetDir">Dossier cible normalise.</param>
-    /// <returns>Liste des fichiers a copier.</returns>
+    /// <param name="job">Backup job.</param>
+    /// <param name="sourceDir">Normalized source directory.</param>
+    /// <param name="targetDir">Normalized target directory.</param>
+    /// <returns>List of files to copy.</returns>
     List<string> GetFilesToCopy(BackupJob job, string sourceDir, string targetDir);
 }

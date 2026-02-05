@@ -46,7 +46,7 @@ public static class CommandController
     }
 
     /// <summary>
-    /// Affiche la syntaxe d'utilisation.
+    /// Prints usage syntax.
     /// </summary>
     private static void PrintUsage()
     {
@@ -54,10 +54,10 @@ public static class CommandController
     }
 
     /// <summary>
-    /// Parse les arguments bruts en liste d'identifiants.
+    /// Parses raw arguments into a list of ids.
     /// </summary>
-    /// <param name="arg">Argument brut.</param>
-    /// <returns>Liste d'IDs.</returns>
+    /// <param name="arg">Raw argument string.</param>
+    /// <returns>List of ids.</returns>
     private static List<int> ParseArguments(string arg)
     {
         return CommandLineArgumentParser.Parse(arg);

@@ -6,7 +6,7 @@ using EasySave.Presentation.Ui.Console;
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Vue de lancement d'un job de sauvegarde.
+/// View for launching a backup job.
 /// </summary>
 internal sealed class JobLaunchView
 {
@@ -18,14 +18,14 @@ internal sealed class JobLaunchView
     private readonly IPathService _paths;
 
     /// <summary>
-    /// Construit la vue de lancement.
+    /// Builds the launch view.
     /// </summary>
-    /// <param name="console">Console cible.</param>
-    /// <param name="repository">Depot des jobs.</param>
-    /// <param name="backupService">Service de sauvegarde.</param>
-    /// <param name="stateService">Service d'etat.</param>
-    /// <param name="prompter">Gestionnaire de saisie.</param>
-    /// <param name="paths">Service de chemins.</param>
+    /// <param name="console">Target console.</param>
+    /// <param name="repository">Job repository.</param>
+    /// <param name="backupService">Backup service.</param>
+    /// <param name="stateService">State service.</param>
+    /// <param name="prompter">Input prompter.</param>
+    /// <param name="paths">Path service.</param>
     public JobLaunchView(
         IConsole console,
         IJobRepository repository,
@@ -43,7 +43,7 @@ internal sealed class JobLaunchView
     }
 
     /// <summary>
-    /// Affiche l'ecran de lancement et execute le(s) job(s) selectionne(s).
+    /// Displays the launch screen and executes the selected job(s).
     /// </summary>
     public void Show()
     {
@@ -101,9 +101,9 @@ internal sealed class JobLaunchView
     }
 
     /// <summary>
-    /// Execute tous les jobs valides.
+    /// Executes all valid jobs.
     /// </summary>
-    /// <param name="jobs">Liste des jobs.</param>
+    /// <param name="jobs">Job list.</param>
     private void RunAll(List<BackupJob> jobs)
     {
         _console.WriteLine(Resources.UserInterface.Launch_RunningAll);
@@ -128,9 +128,9 @@ internal sealed class JobLaunchView
     }
 
     /// <summary>
-    /// Execute un job specifique.
+    /// Executes a specific job.
     /// </summary>
-    /// <param name="job">Job a lancer.</param>
+    /// <param name="job">Job to run.</param>
     private void RunOne(BackupJob job)
     {
         _console.WriteLine(string.Format(Resources.UserInterface.Launch_RunningOne, job.Id, job.Name));

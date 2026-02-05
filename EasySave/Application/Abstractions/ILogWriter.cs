@@ -1,13 +1,13 @@
 namespace EasySave.Application.Abstractions;
 
 /// <summary>
-/// Contrat minimal pour l'ecriture de logs.
+/// Minimal contract for log writing.
 /// </summary>
 public interface ILogWriter<in T>
 {
     /// <summary>
-    /// Ecrit une entree de log.
+    /// Writes a log entry.
     /// </summary>
-    /// <param name="entry">Entree a enregistrer.</param>
+    /// <param name="entry">Entry to record.</param>
     void Log(T entry);
 }

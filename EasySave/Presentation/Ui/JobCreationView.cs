@@ -6,7 +6,7 @@ using EasySave.Presentation.Ui.Console;
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Vue de creation d'un job de sauvegarde.
+/// View for creating a backup job.
 /// </summary>
 internal sealed class JobCreationView
 {
@@ -17,13 +17,13 @@ internal sealed class JobCreationView
     private readonly JobRepositoryErrorTranslator _errorTranslator;
 
     /// <summary>
-    /// Construit la vue de creation.
+    /// Builds the creation view.
     /// </summary>
-    /// <param name="console">Console cible.</param>
-    /// <param name="repository">Depot des jobs.</param>
-    /// <param name="stateSync">Synchroniseur d'etat.</param>
-    /// <param name="prompter">Gestionnaire de saisie.</param>
-    /// <param name="errorTranslator">Traducteur d'erreurs.</param>
+    /// <param name="console">Target console.</param>
+    /// <param name="repository">Job repository.</param>
+    /// <param name="stateSync">State synchronizer.</param>
+    /// <param name="prompter">Input prompter.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     public JobCreationView(
         IConsole console,
         IJobRepository repository,
@@ -39,7 +39,7 @@ internal sealed class JobCreationView
     }
 
     /// <summary>
-    /// Affiche l'ecran de creation et enregistre le job.
+    /// Displays the creation screen and saves the job.
     /// </summary>
     public void Show()
     {

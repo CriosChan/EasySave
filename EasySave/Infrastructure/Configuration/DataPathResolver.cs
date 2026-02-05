@@ -16,11 +16,11 @@ public static class DataPathResolver
     private const string AppFolderName = "EasySave";
 
     /// <summary>
-    /// Resolue un dossier de donnees en fonction de la configuration et d'un sous-dossier par defaut.
+    /// Resolves a data directory based on configuration and a default subfolder.
     /// </summary>
-    /// <param name="configuredPath">Chemin configure.</param>
-    /// <param name="defaultSubfolder">Sous-dossier par defaut.</param>
-    /// <returns>Chemin absolu resolu.</returns>
+    /// <param name="configuredPath">Configured path.</param>
+    /// <param name="defaultSubfolder">Default subfolder.</param>
+    /// <returns>Resolved absolute path.</returns>
     public static string ResolveDirectory(string configuredPath, string defaultSubfolder)
     {
         string baseDir = GetBaseDataDirectory();
@@ -42,7 +42,7 @@ public static class DataPathResolver
     }
 
     /// <summary>
-    /// Retourne le dossier de base pour les donnees applicatives.
+    /// Returns the base folder for application data.
     /// </summary>
     private static string GetBaseDataDirectory()
     {
@@ -64,10 +64,10 @@ public static class DataPathResolver
     }
 
     /// <summary>
-    /// Indique si un chemin absolu peut etre utilise sans risque (selon l'OS).
+    /// Indicates whether an absolute path can be used safely (OS-aware).
     /// </summary>
-    /// <param name="path">Chemin a evaluer.</param>
-    /// <returns>Vrai si le chemin est accepte.</returns>
+    /// <param name="path">Path to evaluate.</param>
+    /// <returns>True if the path is accepted.</returns>
     private static bool IsSafeAbsolute(string path)
     {
         if (!Path.IsPathRooted(path))

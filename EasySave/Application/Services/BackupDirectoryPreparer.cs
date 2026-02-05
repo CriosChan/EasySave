@@ -4,7 +4,7 @@ using EasySave.Domain.Models;
 namespace EasySave.Application.Services;
 
 /// <summary>
-/// Prepare l'arborescence cible et journalise les creations de dossiers.
+/// Prepares the target directory tree and logs directory creations.
 /// </summary>
 public sealed class BackupDirectoryPreparer : IBackupDirectoryPreparer
 {
@@ -18,11 +18,11 @@ public sealed class BackupDirectoryPreparer : IBackupDirectoryPreparer
     }
 
     /// <summary>
-    /// Cree tous les dossiers manquants dans la cible a partir de la source.
+    /// Creates all missing target folders based on the source tree.
     /// </summary>
-    /// <param name="job">Job de sauvegarde.</param>
-    /// <param name="sourceDir">Dossier source normalise.</param>
-    /// <param name="targetDir">Dossier cible normalise.</param>
+    /// <param name="job">Backup job.</param>
+    /// <param name="sourceDir">Normalized source directory.</param>
+    /// <param name="targetDir">Normalized target directory.</param>
     public void EnsureTargetDirectories(BackupJob job, string sourceDir, string targetDir)
     {
         try
@@ -54,11 +54,11 @@ public sealed class BackupDirectoryPreparer : IBackupDirectoryPreparer
     }
 
     /// <summary>
-    /// S'assure que le dossier parent du fichier cible existe.
+    /// Ensures the parent directory of the target file exists.
     /// </summary>
-    /// <param name="job">Job de sauvegarde.</param>
-    /// <param name="sourceFile">Fichier source.</param>
-    /// <param name="targetFile">Fichier cible.</param>
+    /// <param name="job">Backup job.</param>
+    /// <param name="sourceFile">Source file.</param>
+    /// <param name="targetFile">Target file.</param>
     public void EnsureTargetDirectoryForFile(BackupJob job, string sourceFile, string targetFile)
     {
         string? targetFileDir = Path.GetDirectoryName(targetFile);

@@ -6,7 +6,7 @@ namespace EasySave.Presentation.Cli;
 internal static class CommandUsagePrinter
 {
     /// <summary>
-    /// Affiche l'aide d'utilisation de la ligne de commande.
+    /// Prints command-line usage help.
     /// </summary>
     internal static void Print()
     {

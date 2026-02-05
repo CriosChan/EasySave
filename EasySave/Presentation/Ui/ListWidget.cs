@@ -4,24 +4,24 @@ using EasySave.Presentation.Ui.Console;
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Composant d'affichage de menus navigables au clavier.
+/// Component for displaying keyboard-navigable menus.
 /// </summary>
 public static class ListWidget
 {
     /// <summary>
-    /// Affiche un menu dans une nouvelle console systeme.
+    /// Displays a menu in a new system console.
     /// </summary>
-    /// <param name="options">Options a afficher.</param>
+    /// <param name="options">Options to display.</param>
     public static void ShowList(List<Option> options)
     {
         ShowList(options, new SystemConsole());
     }
 
     /// <summary>
-    /// Affiche un menu dans une console fournie.
+    /// Displays a menu in a provided console.
     /// </summary>
-    /// <param name="options">Options a afficher.</param>
-    /// <param name="console">Console cible.</param>
+    /// <param name="options">Options to display.</param>
+    /// <param name="console">Target console.</param>
     public static void ShowList(List<Option> options, IConsole console)
     {
         if (options == null) throw new ArgumentNullException(nameof(options));
@@ -51,14 +51,11 @@ public static class ListWidget
     }
 
     /// <summary>
-    /// Write the menu to the console.
+    /// Writes the menu and highlights the selected option.
     /// </summary>
-    /// <summary>
-    /// Ecrit le menu et met en evidence l'option selectionnee.
-    /// </summary>
-    /// <param name="console">Console cible.</param>
-    /// <param name="options">Options a afficher.</param>
-    /// <param name="selectedOption">Option active.</param>
+    /// <param name="console">Target console.</param>
+    /// <param name="options">Options to display.</param>
+    /// <param name="selectedOption">Active option.</param>
     private static void WriteMenu(IConsole console, List<Option> options, Option selectedOption)
     {
         console.Clear();

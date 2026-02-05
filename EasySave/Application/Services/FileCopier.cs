@@ -4,16 +4,16 @@ using EasySave.Application.Abstractions;
 namespace EasySave.Application.Services;
 
 /// <summary>
-/// Copie des fichiers avec mesure du temps et preservation des timestamps.
+/// Copies files while measuring time and preserving timestamps.
 /// </summary>
 public sealed class FileCopier : IFileCopier
 {
     /// <summary>
-    /// Copie un fichier et renvoie la duree de transfert en millisecondes.
+    /// Copies a file and returns the transfer duration in milliseconds.
     /// </summary>
-    /// <param name="sourceFile">Chemin source.</param>
-    /// <param name="targetFile">Chemin cible.</param>
-    /// <returns>Duree de copie en ms.</returns>
+    /// <param name="sourceFile">Source path.</param>
+    /// <param name="targetFile">Target path.</param>
+    /// <returns>Copy duration in ms.</returns>
     public long Copy(string sourceFile, string targetFile)
     {
         const int BufferSize = 1024 * 1024; // 1 MiB

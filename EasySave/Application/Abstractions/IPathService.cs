@@ -1,30 +1,30 @@
 namespace EasySave.Application.Abstractions;
 
 /// <summary>
-/// Contrat de normalisation et conversion des chemins.
+/// Contract for path normalization and conversion.
 /// </summary>
 public interface IPathService
 {
     /// <summary>
-    /// Normalise un chemin et verifie l'existence du dossier.
+    /// Normalizes a path and verifies the directory exists.
     /// </summary>
-    /// <param name="rawPath">Chemin brut saisi par l'utilisateur.</param>
-    /// <param name="normalizedPath">Chemin normalise.</param>
-    /// <returns>Vrai si le dossier existe.</returns>
+    /// <param name="rawPath">Raw path provided by the user.</param>
+    /// <param name="normalizedPath">Normalized path.</param>
+    /// <returns>True if the directory exists.</returns>
     bool TryNormalizeExistingDirectory(string rawPath, out string normalizedPath);
 
     /// <summary>
-    /// Convertit un chemin en chemin absolu (UNC-like sur Windows si applicable).
+    /// Converts a path to an absolute path (UNC-like on Windows when applicable).
     /// </summary>
-    /// <param name="path">Chemin a convertir.</param>
-    /// <returns>Chemin converti.</returns>
+    /// <param name="path">Path to convert.</param>
+    /// <returns>Converted path.</returns>
     string ToFullUncLikePath(string path);
 
     /// <summary>
-    /// Calcule un chemin relatif entre une base et un chemin complet.
+    /// Computes a relative path between a base and a full path.
     /// </summary>
-    /// <param name="basePath">Chemin de base.</param>
-    /// <param name="fullPath">Chemin complet.</param>
-    /// <returns>Chemin relatif.</returns>
+    /// <param name="basePath">Base path.</param>
+    /// <param name="fullPath">Full path.</param>
+    /// <returns>Relative path.</returns>
     string GetRelativePath(string basePath, string fullPath);
 }

@@ -4,7 +4,7 @@ using EasySave.Domain.Models;
 namespace EasySave.Application.Services;
 
 /// <summary>
-/// Selectionne les fichiers eligibles a la copie selon le type de sauvegarde.
+/// Selects files eligible for copying based on the backup type.
 /// </summary>
 public sealed class BackupFileSelector : IBackupFileSelector
 {
@@ -16,12 +16,12 @@ public sealed class BackupFileSelector : IBackupFileSelector
     }
 
     /// <summary>
-    /// Determine la liste des fichiers a copier pour un job.
+    /// Determines the list of files to copy for a job.
     /// </summary>
-    /// <param name="job">Job de sauvegarde.</param>
-    /// <param name="sourceDir">Dossier source normalise.</param>
-    /// <param name="targetDir">Dossier cible normalise.</param>
-    /// <returns>Liste des fichiers a copier.</returns>
+    /// <param name="job">Backup job.</param>
+    /// <param name="sourceDir">Normalized source directory.</param>
+    /// <param name="targetDir">Normalized target directory.</param>
+    /// <returns>List of files to copy.</returns>
     public List<string> GetFilesToCopy(BackupJob job, string sourceDir, string targetDir)
     {
         IEnumerable<string> allFiles = Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories);

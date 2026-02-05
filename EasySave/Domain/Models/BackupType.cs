@@ -1,16 +1,16 @@
 namespace EasySave.Domain.Models;
 
 /// <summary>
-/// Types de sauvegarde supportes.
+/// Supported backup types.
 /// </summary>
 public enum BackupType
 {
     /// <summary>
-    /// Sauvegarde complete.
+    /// Full backup.
     /// </summary>
     Complete,
     /// <summary>
-    /// Sauvegarde differentielle.
+    /// Differential backup.
     /// </summary>
     Differential
 }

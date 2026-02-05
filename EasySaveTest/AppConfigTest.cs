@@ -4,14 +4,14 @@ using Microsoft.Extensions.Configuration;
 namespace EasySaveTest;
 
 /// <summary>
-/// Tests de chargement de la configuration applicative.
+/// Tests for application configuration loading.
 /// </summary>
 public class AppConfigTest
 {
     private ApplicationConfiguration _appSettings = null!;
 
     /// <summary>
-    /// Charge la configuration une seule fois pour la suite.
+    /// Loads configuration once for the rest of the tests.
     /// </summary>
     [OneTimeSetUp]
     public void Setup()
@@ -21,28 +21,28 @@ public class AppConfigTest
     }
 
     /// <summary>
-    /// Verifie que la configuration chargee n'est pas nulle.
+    /// Verifies that the loaded configuration is not null.
     /// </summary>
     [Test]
     public void ConfigIsNotNull()
         => Assert.That(_appSettings, Is.Not.Null);
 
     /// <summary>
-    /// Verifie la presence du chemin de configuration des jobs.
+    /// Verifies the configured job config path.
     /// </summary>
     [Test]
     public void ConfigHasJobConfigPath()
         => Assert.That(_appSettings.JobConfigPath, Is.EqualTo("./config"));
 
     /// <summary>
-    /// Verifie la culture configuree.
+    /// Verifies the configured culture.
     /// </summary>
     [Test]
     public void ConfigHasLocalization()
         => Assert.That(_appSettings.Localization, Is.EqualTo("fr-FR"));
 
     /// <summary>
-    /// Verifie le chemin de logs configure.
+    /// Verifies the configured log path.
     /// </summary>
     [Test]
     public void ConfigHasLogPath()

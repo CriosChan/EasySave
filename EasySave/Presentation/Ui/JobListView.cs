@@ -6,7 +6,7 @@ using EasySave.Presentation.Ui.Console;
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Vue de listing des jobs de sauvegarde.
+/// View for listing backup jobs.
 /// </summary>
 internal sealed class JobListView
 {
@@ -15,11 +15,11 @@ internal sealed class JobListView
     private readonly ConsolePrompter _prompter;
 
     /// <summary>
-    /// Construit la vue de liste.
+    /// Builds the list view.
     /// </summary>
-    /// <param name="console">Console cible.</param>
-    /// <param name="repository">Depot des jobs.</param>
-    /// <param name="prompter">Gestionnaire de saisie.</param>
+    /// <param name="console">Target console.</param>
+    /// <param name="repository">Job repository.</param>
+    /// <param name="prompter">Input prompter.</param>
     public JobListView(IConsole console, IJobRepository repository, ConsolePrompter prompter)
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
@@ -28,7 +28,7 @@ internal sealed class JobListView
     }
 
     /// <summary>
-    /// Affiche la liste des jobs disponibles.
+    /// Displays the list of available jobs.
     /// </summary>
     public void Show()
     {

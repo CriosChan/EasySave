@@ -3,23 +3,23 @@ using EasySave.Domain.Models;
 namespace EasySave.Application.Abstractions;
 
 /// <summary>
-/// Contrat de preparation des dossiers cibles pour une sauvegarde.
+/// Contract for preparing target directories for a backup.
 /// </summary>
 public interface IBackupDirectoryPreparer
 {
     /// <summary>
-    /// Cree l'arborescence cible complete pour un job.
+    /// Creates the full target directory tree for a job.
     /// </summary>
-    /// <param name="job">Job de sauvegarde.</param>
-    /// <param name="sourceDir">Dossier source normalise.</param>
-    /// <param name="targetDir">Dossier cible normalise.</param>
+    /// <param name="job">Backup job.</param>
+    /// <param name="sourceDir">Normalized source directory.</param>
+    /// <param name="targetDir">Normalized target directory.</param>
     void EnsureTargetDirectories(BackupJob job, string sourceDir, string targetDir);
 
     /// <summary>
-    /// Cree le dossier parent d'un fichier cible si necessaire.
+    /// Creates the parent folder for a target file if needed.
     /// </summary>
-    /// <param name="job">Job de sauvegarde.</param>
-    /// <param name="sourceFile">Fichier source.</param>
-    /// <param name="targetFile">Fichier cible.</param>
+    /// <param name="job">Backup job.</param>
+    /// <param name="sourceFile">Source file.</param>
+    /// <param name="targetFile">Target file.</param>
     void EnsureTargetDirectoryForFile(BackupJob job, string sourceFile, string targetFile);
 }

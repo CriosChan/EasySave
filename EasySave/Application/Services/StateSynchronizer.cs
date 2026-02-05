@@ -4,7 +4,7 @@ using EasySave.Domain.Models;
 namespace EasySave.Application.Services;
 
 /// <summary>
-/// Synchronise l'etat d'execution avec la configuration courante.
+/// Synchronizes execution state with the current configuration.
 /// </summary>
 public sealed class StateSynchronizer : IStateSynchronizer
 {
@@ -18,7 +18,7 @@ public sealed class StateSynchronizer : IStateSynchronizer
     }
 
     /// <summary>
-    /// Recharge les jobs depuis le depot et reinitialise l'etat.
+    /// Reloads jobs from the repository and reinitializes state.
     /// </summary>
     public void Refresh()
     {

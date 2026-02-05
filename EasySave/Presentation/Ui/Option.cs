@@ -1,17 +1,17 @@
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Decrit une option selectable dans un menu.
+/// Describes a selectable option in a menu.
 /// </summary>
 public class Option
 {
     public string Description { get; }
     public Action Selected { get; }
     /// <summary>
-    /// Construit une option de menu.
+    /// Builds a menu option.
     /// </summary>
-    /// <param name="description">Texte affiche.</param>
-    /// <param name="selected">Action a executer.</param>
+    /// <param name="description">Displayed text.</param>
+    /// <param name="selected">Action to execute.</param>
     public Option(string description, Action selected)
     {
         Description = description;

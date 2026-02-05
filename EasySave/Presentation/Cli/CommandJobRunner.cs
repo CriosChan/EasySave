@@ -14,12 +14,12 @@ internal sealed class CommandJobRunner
     private readonly IPathService _paths;
 
     /// <summary>
-    /// Construit l'executant CLI avec ses dependances.
+    /// Builds the CLI runner with its dependencies.
     /// </summary>
-    /// <param name="repository">Depot des jobs.</param>
-    /// <param name="backupService">Service de sauvegarde.</param>
-    /// <param name="stateService">Service d'etat.</param>
-    /// <param name="paths">Service de chemins.</param>
+    /// <param name="repository">Job repository.</param>
+    /// <param name="backupService">Backup service.</param>
+    /// <param name="stateService">State service.</param>
+    /// <param name="paths">Path service.</param>
     public CommandJobRunner(
         IJobRepository repository,
         IBackupService backupService,
@@ -33,10 +33,10 @@ internal sealed class CommandJobRunner
     }
 
     /// <summary>
-    /// Execute une liste d'IDs de jobs en mode CLI.
+    /// Executes a list of job IDs in CLI mode.
     /// </summary>
-    /// <param name="ids">IDs a executer.</param>
-    /// <returns>Code de sortie.</returns>
+    /// <param name="ids">IDs to execute.</param>
+    /// <returns>Exit code.</returns>
     public int RunJobs(IEnumerable<int> ids)
     {
         List<BackupJob> jobs = _repository.Load().OrderBy(j => j.Id).ToList();
@@ -72,11 +72,11 @@ internal sealed class CommandJobRunner
     }
 
     /// <summary>
-    /// Verifie qu'un job peut etre execute (sources/targets valides).
+    /// Verifies a job can run (valid source/target directories).
     /// </summary>
-    /// <param name="job">Job cible.</param>
-    /// <param name="message">Message d'erreur si non executable.</param>
-    /// <returns>Vrai si le job est executable.</returns>
+    /// <param name="job">Target job.</param>
+    /// <param name="message">Error message if not runnable.</param>
+    /// <returns>True if the job is runnable.</returns>
     private bool IsJobRunnable(BackupJob job, out string? message)
     {
         // Validate directories before reporting a run.

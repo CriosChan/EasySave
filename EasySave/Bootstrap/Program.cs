@@ -1,14 +1,14 @@
 namespace EasySave.Bootstrap;
 
 /// <summary>
-/// Point d'entree principal du programme.
+/// Main program entry point.
 /// </summary>
 internal static class Program
 {
     /// <summary>
-    /// Lance l'application et renvoie le code de sortie.
+    /// Starts the application and returns the exit code.
     /// </summary>
-    /// <param name="args">Arguments de ligne de commande.</param>
+    /// <param name="args">Command-line arguments.</param>
     private static void Main(string[] args)
     {
         IApplication app = new EasySaveApplication();

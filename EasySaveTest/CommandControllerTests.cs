@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace EasySaveTest;
 
 /// <summary>
-/// Tests d'integration du controleur de ligne de commande.
+/// Integration tests for the command-line controller.
 /// </summary>
 [TestFixture]
 public class CommandControllerTests
@@ -29,7 +29,7 @@ public class CommandControllerTests
     private PathService _paths = null!;
 
     /// <summary>
-    /// Prepare l'environnement de test temporaire.
+    /// Prepares the temporary test environment.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -54,7 +54,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Nettoie l'environnement de test temporaire.
+    /// Cleans up the temporary test environment.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -71,16 +71,16 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Enregistre une liste de jobs dans le depot.
+    /// Saves a list of jobs in the repository.
     /// </summary>
-    /// <param name="jobs">Jobs a enregistrer.</param>
+    /// <param name="jobs">Jobs to save.</param>
     private void SaveJobs(params BackupJob[] jobs) => _repo.Save(jobs.ToList());
 
     /// <summary>
-    /// Execute le controleur en capturant la sortie console.
+    /// Executes the controller while capturing console output.
     /// </summary>
-    /// <param name="args">Arguments CLI.</param>
-    /// <returns>Code de sortie et sortie capturee.</returns>
+    /// <param name="args">CLI arguments.</param>
+    /// <returns>Exit code and captured output.</returns>
     private (int exitCode, string output) RunWithOutput(params string[] args)
     {
         TextWriter originalOut = Console.Out;
@@ -99,9 +99,9 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Lit et deserialise le fichier d'etat.
+    /// Reads and deserializes the state file.
     /// </summary>
-    /// <returns>Liste d'etats.</returns>
+    /// <returns>List of states.</returns>
     private List<BackupJobState> ReadStateFile()
     {
         string statePath = Path.Combine(_configDir, "state.json");
@@ -110,9 +110,9 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Lit toutes les entrees de logs JSON presentes.
+    /// Reads all available JSON log entries.
     /// </summary>
-    /// <returns>Liste d'entrees de log.</returns>
+    /// <returns>List of log entries.</returns>
     private List<LogEntry> ReadAllLogEntries()
     {
         if (!Directory.Exists(_logDir))
@@ -143,7 +143,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Compte le nombre d'occurrences d'une valeur dans un texte.
+    /// Counts occurrences of a value within a text.
     /// </summary>
     private static int CountOccurrences(string text, string value)
     {
@@ -164,13 +164,13 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Fabrique un job de sauvegarde pour les tests.
+    /// Creates a backup job for tests.
     /// </summary>
     private static BackupJob MakeJob(int id, string name, string sourceDir, string targetDir, BackupType type = BackupType.Complete)
         => new() { Id = id, Name = name, SourceDirectory = sourceDir, TargetDirectory = targetDir, Type = type };
 
     /// <summary>
-    /// Verifie l'affichage de l'usage quand aucun argument n'est fourni.
+    /// Verifies usage is printed when no argument is provided.
     /// </summary>
     [Test]
     public void Run_NoArgs_PrintsUsageAndReturns1()
@@ -185,7 +185,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie l'affichage de l'usage pour des arguments invalides.
+    /// Verifies usage is printed for invalid arguments.
     /// </summary>
     [Test]
     public void Run_InvalidArgs_PrintsUsageAndReturns1()
@@ -197,7 +197,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie qu'aucun job configure renvoie 1 et ne cree pas state.json.
+    /// Verifies that no configured job returns 1 and does not create state.json.
     /// </summary>
     [Test]
     public void Run_NoJobsConfigured_Returns1_AndDoesNotCreateStateFile()
@@ -211,7 +211,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie l'execution d'un job unique avec mise a jour d'etat et logs.
+    /// Verifies running a single job updates state and writes logs.
     /// </summary>
     [Test]
     public void Run_SingleId_RunsJob_UpdatesState_AndWritesLogs()
@@ -237,7 +237,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie l'execution d'une plage d'IDs dans l'ordre.
+    /// Verifies running a range of IDs in order.
     /// </summary>
     [Test]
     public void Run_Range_RunsAllJobsInIncreasingOrder()
@@ -283,7 +283,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie l'execution d'une liste separee par des points-virgules.
+    /// Verifies running a list separated by semicolons.
     /// </summary>
     [Test]
     public void Run_SemicolonList_RunsOnlySpecifiedJobs()
@@ -322,7 +322,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie la deduplication des IDs passes en entree.
+    /// Verifies deduplication of input IDs.
     /// </summary>
     [Test]
     public void Run_DeduplicatesIds_AndDoesNotRunSameJobTwice()
@@ -354,7 +354,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie le comportement pour un ID de job inconnu.
+    /// Verifies behavior for an unknown job ID.
     /// </summary>
     [Test]
     public void Run_UnknownJobId_PrintsNotFound_AndKeepsStateInactive()
@@ -377,7 +377,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie qu'un job est ignore si le dossier source manque.
+    /// Verifies a job is skipped when the source folder is missing.
     /// </summary>
     [Test]
     public void Run_SkipsJob_WhenSourceDirectoryIsMissing()
@@ -404,7 +404,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifie la prise en charge d'arguments fournis en morceaux par le shell.
+    /// Verifies support for arguments split by the shell.
     /// </summary>
     [Test]
     public void Run_SupportsSplitArgumentsLikeShellWouldProvide()

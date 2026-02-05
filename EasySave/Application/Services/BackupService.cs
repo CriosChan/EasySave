@@ -22,14 +22,14 @@ public sealed class BackupService : IBackupService
     private readonly IFileCopier _fileCopier;
 
     /// <summary>
-    /// Construit l'orchestrateur de sauvegarde.
+    /// Builds the backup orchestrator.
     /// </summary>
-    /// <param name="logger">Writer de logs.</param>
-    /// <param name="state">Service de gestion d'etat.</param>
-    /// <param name="paths">Service de chemins.</param>
-    /// <param name="fileSelector">Selecteur de fichiers a copier.</param>
-    /// <param name="directoryPreparer">Prepare l'arborescence cible.</param>
-    /// <param name="fileCopier">Copieur de fichiers.</param>
+    /// <param name="logger">Log writer.</param>
+    /// <param name="state">State management service.</param>
+    /// <param name="paths">Path service.</param>
+    /// <param name="fileSelector">File selector.</param>
+    /// <param name="directoryPreparer">Target directory preparer.</param>
+    /// <param name="fileCopier">File copier.</param>
     public BackupService(
         ILogWriter<LogEntry> logger,
         IStateService state,

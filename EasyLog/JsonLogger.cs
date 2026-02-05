@@ -3,7 +3,7 @@ using System.Text.Json;
 namespace EasyLog;
 
 /// <summary>
-/// Logger qui serialise les entrees au format JSON.
+/// Logger that serializes entries to JSON.
 /// </summary>
 public class JsonLogger<T>(string logDirectory) : AbstractLogger<T>(logDirectory, "json")
 {

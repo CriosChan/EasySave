@@ -6,32 +6,32 @@ namespace EasySave.Presentation.Ui.Console;
 internal sealed class SystemConsole : IConsole
 {
     /// <summary>
-    /// Efface l'ecran via la console systeme.
+    /// Clears the screen using the system console.
     /// </summary>
     public void Clear() => System.Console.Clear();
 
     /// <summary>
-    /// Ecrit du texte sans saut de ligne.
+    /// Writes text without a line break.
     /// </summary>
-    /// <param name="value">Texte a ecrire.</param>
+    /// <param name="value">Text to write.</param>
     public void Write(string value) => System.Console.Write(value);
 
     /// <summary>
-    /// Ecrit du texte avec saut de ligne.
+    /// Writes text with a line break.
     /// </summary>
-    /// <param name="value">Texte a ecrire.</param>
+    /// <param name="value">Text to write.</param>
     public void WriteLine(string value) => System.Console.WriteLine(value);
 
     /// <summary>
-    /// Lit une ligne depuis l'entree standard.
+    /// Reads a line from standard input.
     /// </summary>
-    /// <returns>Ligne lue ou null.</returns>
+    /// <returns>Read line or null.</returns>
     public string? ReadLine() => System.Console.ReadLine();
 
     /// <summary>
-    /// Lit une touche clavier.
+    /// Reads a keyboard key.
     /// </summary>
-    /// <param name="intercept">Indique si la touche est masquee.</param>
-    /// <returns>Infos de touche.</returns>
+    /// <param name="intercept">Whether the key is hidden.</param>
+    /// <returns>Key info.</returns>
     public ConsoleKeyInfo ReadKey(bool intercept) => System.Console.ReadKey(intercept);
 }
