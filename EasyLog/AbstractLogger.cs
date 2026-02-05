@@ -2,23 +2,7 @@ namespace EasyLog;
 
 public abstract class AbstractLogger<T>(string logDirectory, string extension)
 {
-    /// <summary>
-    /// Gets the directory where log files are written.
-    /// </summary>
-    protected string LogDirectory { get; } = logDirectory;
 
-    /// <summary>
-    /// Gets the log file extension (without dot).
-    /// </summary>
-    protected string Extension { get; } = extension;
-
-    /// <summary>
-    /// Builds the daily log file path for a given date.
-    /// </summary>
-    protected string GetLogFilePath(DateTime date)
-        => Path.Join(LogDirectory, date.ToString("yyyy-MM-dd") + "." + Extension);
-
- 
     /// <summary>
     /// Writes a log entry of type <typeparamref name="T"/> to a log file.
     /// </summary>
@@ -33,9 +17,9 @@ public abstract class AbstractLogger<T>(string logDirectory, string extension)
     {
         DateTime now = DateTime.Now;
         // Ensure the directory exists before reading/writing.
-        Directory.CreateDirectory(LogDirectory);
+        Directory.CreateDirectory(logDirectory);
         // Make us able to use the same name when writting the file.
-        var logFilePath = GetLogFilePath(now);
+        var logFilePath = Path.Join(logDirectory, now.ToString("yyyy-MM-dd") + "." + extension);
         // Write in the log file.
         File.AppendAllText(logFilePath, Serialize(log) + Environment.NewLine);
     }
