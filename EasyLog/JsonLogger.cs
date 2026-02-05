@@ -19,7 +19,7 @@ public class JsonLogger<T>(string logDirectory) : AbstractLogger<T>(logDirectory
     {
         return JsonSerializer.Serialize(log, _options);
     }
-    
+
     /// <summary>
     /// Logs the specified content of type <typeparamref name="T"/> by writing it to a log file.
     /// </summary>

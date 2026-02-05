@@ -50,7 +50,7 @@ public abstract class AbstractLogger<T>(string logDirectory, string extension)
     /// The implementation should define the specific serialization logic.
     /// </remarks>
     protected abstract string Serialize(T logs);
-    
+
     /// <summary>
     /// Logs the specified content of type <typeparamref name="T"/>.
     /// </summary>
