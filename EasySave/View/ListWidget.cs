@@ -2,20 +2,20 @@
 
 namespace EasySave.View;
 
-public static class ListWidget
+public class ListWidget
 {
-    public static void ShowList(List<Option> options)
-    {
-        ShowList(options, new SystemConsole());
-    }
+    private string _menuTitle = "";
+    private bool _close = false;
 
-    public static void ShowList(List<Option> options, IConsole console)
+    public void ShowList(List<Option> options, string menuTitle, IConsole console)
     {
+        _menuTitle = menuTitle;
         if (options == null) throw new ArgumentNullException(nameof(options));
         if (console == null) throw new ArgumentNullException(nameof(console));
         if (options.Count == 0) throw new ArgumentException("Options list cannot be empty.", nameof(options));
 
         int index = 0;
+        _close = false;
         ConsoleKeyInfo keyinfo;
         do
         {
@@ -34,20 +34,30 @@ public static class ListWidget
                     index = 0;
                     break;
             }
-        } while (keyinfo.Key != ConsoleKey.X);
+        } while (keyinfo.Key != ConsoleKey.X && _close == false);
+    }
+
+    public void Return()
+    {
+        _close = true;
     }
 
     /// <summary>
     /// Write the menu to the console.
     /// </summary>
-    private static void WriteMenu(IConsole console, List<Option> options, Option selectedOption)
+    private void WriteMenu(IConsole console, List<Option> options, Option selectedOption)
     {
         console.Clear();
-        console.WriteLine(Ressources.UserInterface.Menu_Header);
+        console.WriteLine(_menuTitle);
         foreach (Option option in options)
         {
+            if (option == selectedOption)
+            {
+                console.Selected();
+            }
             console.Write(option == selectedOption ? "> " : "  ");
             console.WriteLine(option.Description);
+            console.ResetColor();
         }
     }
 }

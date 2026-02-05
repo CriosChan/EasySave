@@ -120,4 +120,25 @@
     <data name="Path.TargetNotFound" xml:space="preserve">
         <value>Target directory does not exist. Please enter an existing directory.</value>
     </data>
+    <data name="Terminal.log.NoJobConfigured" xml:space="preserve">
+        <value>No backup job configured.</value>
+    </data>
+    <data name="Terminal.log.JobIdNotFound" xml:space="preserve">
+        <value>Job {0} not found.</value>
+    </data>
+    <data name="Terminal.log.JobSourceNotFound" xml:space="preserve">
+        <value>Job {0} skipped: source directory not found.</value>
+    </data>
+    <data name="Terminal.log.JobTargetNotFound" xml:space="preserve">
+        <value>Job {0} skipped: target directory not found.</value>
+    </data>
+    <data name="Terminal.log.Usage" xml:space="preserve">
+        <value>Usage:</value>
+    </data>
+    <data name="Menu.Quit" xml:space="preserve">
+        <value>Quit</value>
+    </data>
+    <data name="Menu.Lang" xml:space="preserve">
+        <value>Change language</value>
+    </data>
 </root>

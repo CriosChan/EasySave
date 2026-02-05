@@ -1,3 +1,5 @@
+using EasySave.View.Ressources;
+
 namespace EasySave.Controller.CommandLine;
 
 /// <summary>
@@ -7,7 +9,7 @@ internal static class CommandUsagePrinter
 {
     internal static void Print()
     {
-        Console.WriteLine("Usage:");
+        Console.WriteLine(UserInterface.Terminal_log_Usage);
         Console.WriteLine("  EasySave.exe 1-3");
         Console.WriteLine("  EasySave.exe 1;3");
         Console.WriteLine("  EasySave.exe 2");

@@ -29,12 +29,15 @@ internal sealed class MainMenuController
 
     public void Show()
     {
-        ListWidget.ShowList(
+        ListWidget widget = new ListWidget();
+        widget.ShowList(
         [
             new Option(Ressources.UserInterface.Menu_ListJobs, _jobList.Show),
             new Option(Ressources.UserInterface.Menu_AddBackup, _jobCreation.Show),
             new Option(Ressources.UserInterface.Menu_RemoveBackup, _jobRemoval.Show),
-            new Option(Ressources.UserInterface.Menu_LaunchBackupJob, _jobLaunch.Show)
-        ], _console);
+            new Option(Ressources.UserInterface.Menu_LaunchBackupJob, _jobLaunch.Show),
+            new Option(Ressources.UserInterface.Menu_Lang, new LanguageView(_console).Show),
+            new Option(Ressources.UserInterface.Menu_Quit, () => Environment.Exit(0))
+        ], Ressources.UserInterface.Menu_Header, _console);
     }
 }

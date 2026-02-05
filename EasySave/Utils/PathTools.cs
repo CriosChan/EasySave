@@ -29,7 +29,7 @@ public static class PathTools
     /// - strips wrapping quotes
     /// - expands environment variables (Windows/Linux)
     /// </summary>
-    public static string NormalizeUserPath(string path)
+    private static string NormalizeUserPath(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
             return path;

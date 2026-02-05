@@ -79,7 +79,6 @@ public sealed class BackupService
                 TargetPath = PathTools.ToFullUncLikePath(targetDir),
                 FileSizeBytes = 0,
                 TransferTimeMs = -1,
-                // Action and Error fields removed from LogEntry
             });
 
             return;
@@ -159,7 +158,6 @@ public sealed class BackupService
                     TargetPath = PathTools.ToFullUncLikePath(targetFileDir),
                     FileSizeBytes = 0,
                     TransferTimeMs = 0,
-                    // Action field removed from LogEntry
                 });
             }
 
@@ -198,7 +196,6 @@ public sealed class BackupService
                 TargetPath = PathTools.ToFullUncLikePath(targetFile),
                 FileSizeBytes = fileSize,
                 TransferTimeMs = elapsedMs,
-                // Action and Error fields removed from LogEntry
             });
 
             if (elapsedMs >= 0)
@@ -241,11 +238,6 @@ public sealed class BackupService
     /// - Differential: only files that are missing in the target or that differ
     ///   (size mismatch or source last write time is newer).
     /// </remarks>
-    private List<string> GetFilesToCopy(BackupJob job)
-    {
-        return GetFilesToCopy(job, job.SourceDirectory, job.TargetDirectory);
-    }
-
     private List<string> GetFilesToCopy(BackupJob job, string sourceDir, string targetDir)
     {
         IEnumerable<string> allFiles = Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories);
@@ -317,12 +309,12 @@ public sealed class BackupService
     /// <returns>Elapsed time in milliseconds.</returns>
     private static long CopyFileWithTiming(string sourceFile, string targetFile)
     {
-        const int BufferSize = 1024 * 1024; // 1 MiB
+        const int bufferSize = 1024 * 1024; // 1 MiB
         Stopwatch sw = Stopwatch.StartNew();
 
-        using FileStream source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, BufferSize, FileOptions.SequentialScan);
-        using FileStream target = new FileStream(targetFile, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, FileOptions.SequentialScan);
-        source.CopyTo(target, BufferSize);
+        using FileStream source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan);
+        using FileStream target = new FileStream(targetFile, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize, FileOptions.SequentialScan);
+        source.CopyTo(target, bufferSize);
 
         sw.Stop();
         return sw.ElapsedMilliseconds;

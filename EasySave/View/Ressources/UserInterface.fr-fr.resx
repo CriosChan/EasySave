@@ -113,4 +113,25 @@
     <data name="Path.TargetNotFound" xml:space="preserve">
         <value>Le répertoire cible n'existe pas. Veuillez saisir un répertoire existant.</value>
     </data>
+    <data name="Terminal.log.NoJobConfigured" xml:space="preserve">
+        <value>Aucun travail de sauvegarde configuré.</value>
+    </data>
+    <data name="Terminal.log.JobIdNotFound" xml:space="preserve">
+        <value>Le travail {0} n'a pas été trouvé.</value>
+    </data>
+    <data name="Terminal.log.JobSourceNotFound" xml:space="preserve">
+        <value>Le travail {0} a été ignoré: le dossier source est introuvable.</value>
+    </data>
+    <data name="Terminal.log.JobTargetNotFound" xml:space="preserve">
+        <value>Le travail {0} a été ignoré: le dossier destinataire est introuvable.</value>
+    </data>
+    <data name="Terminal.log.Usage" xml:space="preserve">
+        <value>Utilisation :</value>
+    </data>
+    <data name="Menu.Quit" xml:space="preserve">
+        <value>Quitter</value>
+    </data>
+    <data name="Menu.Lang" xml:space="preserve">
+        <value>Changer la langue</value>
+    </data>
 </root>
