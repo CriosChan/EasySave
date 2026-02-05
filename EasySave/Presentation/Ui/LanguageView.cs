@@ -35,13 +35,13 @@ public class LanguageView
         [
             new("Français", () =>
             {
-                _lang.SetLanguage("fr");
+                _lang.SetLanguage("fr-FR");
                 UserInterface.ShowMenu();
             }),
 
             new("English", () =>
             {
-                _lang.SetLanguage("en");
+                _lang.SetLanguage("en-US");
                 UserInterface.ShowMenu();
             }),
 
