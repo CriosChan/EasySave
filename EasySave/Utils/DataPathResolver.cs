@@ -28,9 +28,9 @@ public static class DataPathResolver
             return raw;
 
         // Otherwise treat it as a sub-path within the application's data directory.
-        string cleaned = raw.TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-        
-        if (string.IsNullOrWhiteSpace(cleaned) || cleaned.All(c => c == Path.DirectorySeparatorChar || c == Path.AltDirectorySeparatorChar))
+        string cleaned = raw.Trim(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+        if (string.IsNullOrWhiteSpace(cleaned))
             cleaned = defaultSubfolder;
 
         return Path.Combine(baseDir, cleaned);
