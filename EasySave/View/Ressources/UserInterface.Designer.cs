@@ -7,10 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EasySave.View.Ressources {
+namespace EasySave.View.Ressources
+{
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -21,40 +22,48 @@ namespace EasySave.View.Ressources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class UserInterface {
-        
+    internal class UserInterface
+    {
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal UserInterface() {
+        internal UserInterface()
+        {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        internal static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EasySave.View.Ressources.UserInterface", typeof(UserInterface).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
-            get {
+        internal static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
@@ -62,8 +71,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to Add a backup job.
         /// </summary>
-        internal static string Add_Header {
-            get {
+        internal static string Add_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.Header", resourceCulture);
             }
         }
@@ -71,8 +82,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to Backup name:.
         /// </summary>
-        internal static string Add_PromptName {
-            get {
+        internal static string Add_PromptName
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.PromptName", resourceCulture);
             }
         }
@@ -80,8 +93,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to Source directory:.
         /// </summary>
-        internal static string Add_PromptSource {
-            get {
+        internal static string Add_PromptSource
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.PromptSource", resourceCulture);
             }
         }
@@ -89,8 +104,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to Target directory:.
         /// </summary>
-        internal static string Add_PromptTarget {
-            get {
+        internal static string Add_PromptTarget
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.PromptTarget", resourceCulture);
             }
         }
@@ -98,8 +115,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to Backup type:.
         /// </summary>
-        internal static string Add_PromptType {
-            get {
+        internal static string Add_PromptType
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.PromptType", resourceCulture);
             }
         }
@@ -107,8 +126,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to 1) Complete   2) Differential.
         /// </summary>
-        internal static string Add_TypeOptions {
-            get {
+        internal static string Add_TypeOptions
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.TypeOptions", resourceCulture);
             }
         }
@@ -116,8 +137,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to Backup job created..
         /// </summary>
-        internal static string Add_Success {
-            get {
+        internal static string Add_Success
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.Success", resourceCulture);
             }
         }
@@ -125,8 +148,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to Unable to create the job:.
         /// </summary>
-        internal static string Add_Failed {
-            get {
+        internal static string Add_Failed
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.Failed", resourceCulture);
             }
         }
@@ -134,8 +159,10 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to Maximum number of jobs reached (5)..
         /// </summary>
-        internal static string Add_Error_MaxJobs {
-            get {
+        internal static string Add_Error_MaxJobs
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.Error.MaxJobs", resourceCulture);
             }
         }
@@ -143,53 +170,65 @@ namespace EasySave.View.Ressources {
         /// <summary>
         ///   Looks up a localized string similar to No free slot available (1..5)..
         /// </summary>
-        internal static string Add_Error_NoFreeSlot {
-            get {
+        internal static string Add_Error_NoFreeSlot
+        {
+            get
+            {
                 return ResourceManager.GetString("Add.Error.NoFreeSlot", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Add backup configuration.
         /// </summary>
-        internal static string Menu_AddBackup {
-            get {
+        internal static string Menu_AddBackup
+        {
+            get
+            {
                 return ResourceManager.GetString("Menu.AddBackup", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to === EasySave Menu ===.
         /// </summary>
-        internal static string Menu_Header {
-            get {
+        internal static string Menu_Header
+        {
+            get
+            {
                 return ResourceManager.GetString("Menu.Header", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Launch backup job.
         /// </summary>
-        internal static string Menu_LaunchBackupJob {
-            get {
+        internal static string Menu_LaunchBackupJob
+        {
+            get
+            {
                 return ResourceManager.GetString("Menu.LaunchBackupJob", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to List backup jobs.
         /// </summary>
-        internal static string Menu_ListJobs {
-            get {
+        internal static string Menu_ListJobs
+        {
+            get
+            {
                 return ResourceManager.GetString("Menu.ListJobs", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Remove backup configuration.
         /// </summary>
-        internal static string Menu_RemoveBackup {
-            get {
+        internal static string Menu_RemoveBackup
+        {
+            get
+            {
                 return ResourceManager.GetString("Menu.RemoveBackup", resourceCulture);
             }
         }
