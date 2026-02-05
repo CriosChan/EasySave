@@ -3,14 +3,23 @@ using EasyLog;
 
 namespace EasyLogTest;
 
+/// <summary>
+/// Tests unitaires pour la creation de logs JSON.
+/// </summary>
 public class Tests
 {
     private AbstractLogger<FakeLogObject> _logger = new JsonLogger<FakeLogObject>("./");
+    /// <summary>
+    /// Preparation commune des tests (vide ici).
+    /// </summary>
     [SetUp]
     public void Setup()
     {
     }
 
+    /// <summary>
+    /// Verifie que l'ecriture de logs cree bien un fichier et contient les entrees.
+    /// </summary>
     [Test]
     public void TestLogCreation()
     {
