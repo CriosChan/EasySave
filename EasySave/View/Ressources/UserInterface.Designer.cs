@@ -58,6 +58,96 @@ namespace EasySave.View.Ressources {
                 resourceCulture = value;
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Add a backup job.
+        /// </summary>
+        internal static string Add_Header {
+            get {
+                return ResourceManager.GetString("Add.Header", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Backup name:.
+        /// </summary>
+        internal static string Add_PromptName {
+            get {
+                return ResourceManager.GetString("Add.PromptName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Source directory:.
+        /// </summary>
+        internal static string Add_PromptSource {
+            get {
+                return ResourceManager.GetString("Add.PromptSource", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Target directory:.
+        /// </summary>
+        internal static string Add_PromptTarget {
+            get {
+                return ResourceManager.GetString("Add.PromptTarget", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Backup type:.
+        /// </summary>
+        internal static string Add_PromptType {
+            get {
+                return ResourceManager.GetString("Add.PromptType", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to 1) Complete   2) Differential.
+        /// </summary>
+        internal static string Add_TypeOptions {
+            get {
+                return ResourceManager.GetString("Add.TypeOptions", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Backup job created..
+        /// </summary>
+        internal static string Add_Success {
+            get {
+                return ResourceManager.GetString("Add.Success", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to create the job:.
+        /// </summary>
+        internal static string Add_Failed {
+            get {
+                return ResourceManager.GetString("Add.Failed", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum number of jobs reached (5)..
+        /// </summary>
+        internal static string Add_Error_MaxJobs {
+            get {
+                return ResourceManager.GetString("Add.Error.MaxJobs", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No free slot available (1..5)..
+        /// </summary>
+        internal static string Add_Error_NoFreeSlot {
+            get {
+                return ResourceManager.GetString("Add.Error.NoFreeSlot", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Add backup configuration.
@@ -101,6 +191,177 @@ namespace EasySave.View.Ressources {
         internal static string Menu_RemoveBackup {
             get {
                 return ResourceManager.GetString("Menu.RemoveBackup", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelled.
+        /// </summary>
+        internal static string Common_Cancelled {
+            get {
+                return ResourceManager.GetString("Common.Cancelled", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid input.
+        /// </summary>
+        internal static string Common_InvalidInput {
+            get {
+                return ResourceManager.GetString("Common.InvalidInput", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Press any key to return to the menu.
+        /// </summary>
+        internal static string Common_PressAnyKey {
+            get {
+                return ResourceManager.GetString("Common.PressAnyKey", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ID | Name | Type | Source -> Target.
+        /// </summary>
+        internal static string Jobs_Columns {
+            get {
+                return ResourceManager.GetString("Jobs.Columns", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Configured backup jobs.
+        /// </summary>
+        internal static string Jobs_Header {
+            get {
+                return ResourceManager.GetString("Jobs.Header", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No backup jobs configured.
+        /// </summary>
+        internal static string Jobs_None {
+            get {
+                return ResourceManager.GetString("Jobs.None", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        internal static string Launch_Done {
+            get {
+                return ResourceManager.GetString("Launch.Done", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Launch backup job.
+        /// </summary>
+        internal static string Launch_Header {
+            get {
+                return ResourceManager.GetString("Launch.Header", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid job id.
+        /// </summary>
+        internal static string Launch_Invalid {
+            get {
+                return ResourceManager.GetString("Launch.Invalid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Job not found.
+        /// </summary>
+        internal static string Launch_NotFound {
+            get {
+                return ResourceManager.GetString("Launch.NotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enter job id (0 for all):
+        /// </summary>
+        internal static string Launch_Prompt {
+            get {
+                return ResourceManager.GetString("Launch.Prompt", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Running all jobs...
+        /// </summary>
+        internal static string Launch_RunningAll {
+            get {
+                return ResourceManager.GetString("Launch.RunningAll", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Running job {0} - {1}...
+        /// </summary>
+        internal static string Launch_RunningOne {
+            get {
+                return ResourceManager.GetString("Launch.RunningOne", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Source directory does not exist. Please enter an existing directory.
+        /// </summary>
+        internal static string Path_SourceNotFound {
+            get {
+                return ResourceManager.GetString("Path.SourceNotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Target directory does not exist. Please enter an existing directory.
+        /// </summary>
+        internal static string Path_TargetNotFound {
+            get {
+                return ResourceManager.GetString("Path.TargetNotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove a backup job.
+        /// </summary>
+        internal static string Remove_Header {
+            get {
+                return ResourceManager.GetString("Remove.Header", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Job not found.
+        /// </summary>
+        internal static string Remove_NotFound {
+            get {
+                return ResourceManager.GetString("Remove.NotFound", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enter job id to remove:
+        /// </summary>
+        internal static string Remove_Prompt {
+            get {
+                return ResourceManager.GetString("Remove.Prompt", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Backup job removed.
+        /// </summary>
+        internal static string Remove_Success {
+            get {
+                return ResourceManager.GetString("Remove.Success", resourceCulture);
             }
         }
     }
