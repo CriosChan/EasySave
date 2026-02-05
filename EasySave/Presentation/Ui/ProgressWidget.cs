@@ -2,6 +2,9 @@ using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Presentation.Ui;
 
+/// <summary>
+/// Represents a console-based widget for displaying progress information.
+/// </summary>
 public class ProgressWidget
 {
     private int width;
@@ -9,6 +12,13 @@ public class ProgressWidget
     private string emptyChar;
     private IConsole _console;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProgressWidget"/> class.
+    /// </summary>
+    /// <param name="console">An instance of <see cref="IConsole"/> used for displaying output to the console.</param>
+    /// <param name="width">The width of the progress bar.</param>
+    /// <param name="progressChar">The character used to represent the filled part of the progress bar.</param>
+    /// <param name="emptyChar">The character used to represent the unfilled part of the progress bar.</param>
     public ProgressWidget(IConsole console, int width = 50, char progressChar = '#', char emptyChar = '-')
     {
         this.width = width;
@@ -17,6 +27,15 @@ public class ProgressWidget
         _console = console;
     }
 
+    /// <summary>
+    /// Updates the progress bar based on the provided percentage.
+    /// </summary>
+    /// <param name="percentage">A double value representing the completion percentage (0 to 100).</param>
+    /// <remarks>
+    /// This method ensures that the percentage is clamped within the range of 0 to 100.
+    /// It calculates the filled and empty widths of the progress bar and displays
+    /// the updated bar in the console.
+    /// </remarks>
     public void UpdateProgress(double percentage)
     {
         // Ensure the percentage is between 0 and 100
@@ -31,11 +50,5 @@ public class ProgressWidget
 
         // Move the cursor back to the previous line and overwrite
         _console.Write($"\r[{progressBar}] ({percentage:F2} %)");
-    }
-
-
-    public void Complete()
-    {
-        _console.WriteLine(string.Empty);
     }
 }

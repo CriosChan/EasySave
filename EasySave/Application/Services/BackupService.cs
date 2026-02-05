@@ -196,7 +196,6 @@ public sealed class BackupService : IBackupService
             _state.Update(jobState);
             progressWidget.UpdateProgress(percentage);
         }
-        progressWidget.Complete();
 
         jobState.State = hadError ? JobRunState.Failed : JobRunState.Completed;
         jobState.CurrentAction = hadError ? "completed_with_errors" : "completed";
