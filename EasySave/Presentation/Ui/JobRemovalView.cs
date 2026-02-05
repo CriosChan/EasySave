@@ -38,37 +38,32 @@ internal sealed class JobRemovalView
         List<BackupJob> jobs = _repository.Load();
 
         _console.Clear();
-        _console.WriteLine(Resources.UserInterface.Remove_Header);
-        _console.WriteLine(string.Empty);
 
         if (jobs.Count == 0)
         {
+            _console.WriteLine(Resources.UserInterface.Menu_Title_RemoveJob);
+            _console.WriteLine(string.Empty);
             _console.WriteLine(Resources.UserInterface.Jobs_None);
             _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
+            UserInterface.ShowMenu();
             return;
         }
 
-        _console.WriteLine(Resources.UserInterface.Remove_Prompt);
-        string? input = _console.ReadLine();
-        input = (input ?? string.Empty).Trim();
-
-        if (string.IsNullOrWhiteSpace(input))
+        List<Option> options = [];
+        foreach (var _job in jobs)
         {
-            _console.WriteLine(Resources.UserInterface.Common_Cancelled);
-            _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
-            return;
+            options.Add(new Option(String.Format(Resources.UserInterface.Jobs_Remove_ID, _job.Id, _job.Name),
+                () => RemoveJob(jobs, _job.Id.ToString())));
         }
 
-        bool removed = _repository.RemoveJob(jobs, input);
-        if (!removed)
-        {
-            _console.WriteLine(Resources.UserInterface.Remove_NotFound);
-            _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
-            return;
-        }
+        options.Add(new Option(Resources.UserInterface.Return, UserInterface.ShowMenu));
+        
+        ListWidget.ShowList(options, _console, Resources.UserInterface.Menu_Title_RemoveJob);
+    }
 
-        _stateSync.Refresh();
-        _console.WriteLine(Resources.UserInterface.Remove_Success);
-        _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
+    private void RemoveJob(List<BackupJob> jobs, string jobId)
+    {
+        _repository.RemoveJob(jobs, jobId);
+        Show();
     }
 }

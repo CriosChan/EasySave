@@ -1,5 +1,7 @@
 using EasySave.Application.Abstractions;
 using EasySave.Domain.Models;
+using EasySave.Presentation.Ui;
+using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Application.Services;
 
@@ -85,7 +87,6 @@ public sealed class BackupService : IBackupService
                 TargetPath = _paths.ToFullUncLikePath(targetDir),
                 FileSizeBytes = 0,
                 TransferTimeMs = -1,
-                // Action and Error fields removed from LogEntry
             });
 
             return;
@@ -146,6 +147,7 @@ public sealed class BackupService : IBackupService
         bool hadError = false;
         long transferredBytes = 0;
 
+        ProgressWidget progressWidget = new ProgressWidget(new SystemConsole());
         foreach (string sourceFile in filesToCopy)
         {
             string relative = _paths.GetRelativePath(sourceDir, sourceFile);
@@ -188,9 +190,11 @@ public sealed class BackupService : IBackupService
 
             jobState.RemainingFiles = Math.Max(0, jobState.RemainingFiles - 1);
             jobState.RemainingSizeBytes = Math.Max(0, totalSize - transferredBytes);
-            jobState.ProgressPercent = totalSize <= 0 ? 100 : Math.Min(100, (double)transferredBytes / totalSize * 100d);
+            var percentage = totalSize <= 0 ? 100 : Math.Min(100, (double)transferredBytes / totalSize * 100d);
+            jobState.ProgressPercent = percentage;
             jobState.LastActionTimestamp = DateTime.Now;
             _state.Update(jobState);
+            progressWidget.UpdateProgress(percentage);
         }
 
         jobState.State = hadError ? JobRunState.Failed : JobRunState.Completed;

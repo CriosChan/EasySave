@@ -16,14 +16,14 @@ public sealed class FileCopier : IFileCopier
     /// <returns>Copy duration in ms.</returns>
     public long Copy(string sourceFile, string targetFile)
     {
-        const int BufferSize = 1024 * 1024; // 1 MiB
+        const int bufferSize = 1024 * 1024; // 1 MiB
         FileInfo fi = new FileInfo(sourceFile);
         Stopwatch sw = Stopwatch.StartNew();
 
-        using (FileStream source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, BufferSize, FileOptions.SequentialScan))
-        using (FileStream target = new FileStream(targetFile, FileMode.Create, FileAccess.Write, FileShare.None, BufferSize, FileOptions.SequentialScan))
+        using (FileStream source = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
+        using (FileStream target = new FileStream(targetFile, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize, FileOptions.SequentialScan))
         {
-            source.CopyTo(target, BufferSize);
+            source.CopyTo(target, bufferSize);
         }
 
         sw.Stop();

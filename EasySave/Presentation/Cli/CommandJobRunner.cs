@@ -1,5 +1,6 @@
 using EasySave.Application.Abstractions;
 using EasySave.Domain.Models;
+using EasySave.Presentation.Resources;
 
 namespace EasySave.Presentation.Cli;
 
@@ -42,7 +43,7 @@ internal sealed class CommandJobRunner
         List<BackupJob> jobs = _repository.Load().OrderBy(j => j.Id).ToList();
         if (jobs.Count == 0)
         {
-            Console.WriteLine("No backup job configured.");
+            Console.WriteLine(UserInterface.Terminal_log_NoJobConfigured);
             return 1;
         }
 
@@ -54,7 +55,7 @@ internal sealed class CommandJobRunner
             BackupJob? job = jobs.FirstOrDefault(j => j.Id == id);
             if (job == null)
             {
-                Console.WriteLine($"Job {id} not found.");
+                Console.WriteLine(UserInterface.Terminal_log_JobIdNotFound, id);
                 continue;
             }
 
@@ -64,7 +65,7 @@ internal sealed class CommandJobRunner
                 continue;
             }
 
-            Console.WriteLine($"Running job {job.Id} - {job.Name}...");
+            Console.WriteLine(UserInterface.Launch_RunningOne, job.Id, job.Name);
             _backupService.RunJob(job);
         }
 
@@ -82,13 +83,13 @@ internal sealed class CommandJobRunner
         // Validate directories before reporting a run.
         if (!_paths.TryNormalizeExistingDirectory(job.SourceDirectory, out _))
         {
-            message = $"Job {job.Id} skipped: source directory not found.";
+            message = string.Format(UserInterface.Terminal_log_JobSourceNotFound, job.Id);
             return false;
         }
 
         if (!_paths.TryNormalizeExistingDirectory(job.TargetDirectory, out _))
         {
-            message = $"Job {job.Id} skipped: target directory not found.";
+            message = string.Format(UserInterface.Terminal_log_JobTargetNotFound, job.Id);
             return false;
         }
 

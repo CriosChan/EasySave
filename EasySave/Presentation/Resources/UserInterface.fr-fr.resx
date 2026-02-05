@@ -23,7 +23,7 @@
     <data name="Menu.ListJobs" xml:space="preserve">
         <value>Lister les travaux de sauvegarde</value>
     </data>
-    <data name="Menu.Header" xml:space="preserve">
+    <data name="Menu.Title.Main" xml:space="preserve">
         <value>=== Menu EasySave ===</value>
     </data>
     <data name="Common.PressAnyKey" xml:space="preserve">
@@ -112,5 +112,47 @@
     </data>
     <data name="Path.TargetNotFound" xml:space="preserve">
         <value>Le répertoire cible n'existe pas. Veuillez saisir un répertoire existant.</value>
+    </data>
+    <data name="Terminal.log.NoJobConfigured" xml:space="preserve">
+        <value>Aucun travail de sauvegarde configuré.</value>
+    </data>
+    <data name="Terminal.log.JobIdNotFound" xml:space="preserve">
+        <value>Le travail {0} n'a pas été trouvé.</value>
+    </data>
+    <data name="Terminal.log.JobSourceNotFound" xml:space="preserve">
+        <value>Le travail {0} a été ignoré: le dossier source est introuvable.</value>
+    </data>
+    <data name="Terminal.log.JobTargetNotFound" xml:space="preserve">
+        <value>Le travail {0} a été ignoré: le dossier destinataire est introuvable.</value>
+    </data>
+    <data name="Terminal.log.Usage" xml:space="preserve">
+        <value>Utilisation :</value>
+    </data>
+    <data name="Menu.Quit" xml:space="preserve">
+        <value>Quitter</value>
+    </data>
+    <data name="Menu.Lang" xml:space="preserve">
+        <value>Changer la langue</value>
+    </data>
+    <data name="Jobs.Execute.All" xml:space="preserve">
+        <value>Exécuter tous les travaux</value>
+    </data>
+    <data name="Jobs.Execute.ID" xml:space="preserve">
+        <value>Exécuter le job - {0} - {1}</value>
+    </data>
+    <data name="Return" xml:space="preserve">
+        <value>Retourner au menu</value>
+    </data>
+    <data name="Menu.Title.Lang" xml:space="preserve">
+        <value>=== Change la langue ===</value>
+    </data>
+    <data name="Menu.Title.StartJob" xml:space="preserve">
+        <value>=== Lancer une sauvegarde ===</value>
+    </data>
+    <data name="Menu.Title.RemoveJob" xml:space="preserve">
+        <value>=== Supprimer un travail de sauvegarde ===</value>
+    </data>
+    <data name="Jobs.Remove.ID" xml:space="preserve">
+        <value>Supprimer le travail de sauvegarde {0} - {1}</value>
     </data>
 </root>

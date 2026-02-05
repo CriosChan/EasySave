@@ -14,7 +14,7 @@ public static class ListWidget
     /// <param name="options">Options to display.</param>
     public static void ShowList(List<Option> options)
     {
-        ShowList(options, new SystemConsole());
+        ShowList(options, new SystemConsole(), "");
     }
 
     /// <summary>
@@ -22,7 +22,7 @@ public static class ListWidget
     /// </summary>
     /// <param name="options">Options to display.</param>
     /// <param name="console">Target console.</param>
-    public static void ShowList(List<Option> options, IConsole console)
+    public static void ShowList(List<Option> options, IConsole console, string menuTitle)
     {
         if (options == null) throw new ArgumentNullException(nameof(options));
         if (console == null) throw new ArgumentNullException(nameof(console));
@@ -32,7 +32,7 @@ public static class ListWidget
         ConsoleKeyInfo keyinfo;
         do
         {
-            WriteMenu(console, options, options[index]);
+            WriteMenu(console, options, options[index], menuTitle);
             keyinfo = console.ReadKey(intercept: true);
             switch (keyinfo.Key)
             {
@@ -56,14 +56,20 @@ public static class ListWidget
     /// <param name="console">Target console.</param>
     /// <param name="options">Options to display.</param>
     /// <param name="selectedOption">Active option.</param>
-    private static void WriteMenu(IConsole console, List<Option> options, Option selectedOption)
+    /// <param name="menuTitle">Menu title</param>
+    private static void WriteMenu(IConsole console, List<Option> options, Option selectedOption, string menuTitle)
     {
         console.Clear();
-        console.WriteLine(Resources.UserInterface.Menu_Header);
+        console.WriteLine(menuTitle);
         foreach (Option option in options)
         {
+            if (option == selectedOption)
+            {
+                console.Selected();
+            }
             console.Write(option == selectedOption ? "> " : "  ");
             console.WriteLine(option.Description);
+            console.ResetColor();
         }
     }
 }
