@@ -1,6 +1,7 @@
 using EasySave.Models;
 using EasySave.Services;
 using EasySave.Utils;
+using EasySave.Controller.CommandLine;
 
 namespace EasySave.Controller;
 
@@ -38,89 +39,17 @@ public static class CommandController
             return 1;
         }
 
-        List<BackupJob> jobs = repository.Load().OrderBy(j => j.Id).ToList();
-        if (jobs.Count == 0)
-        {
-            Console.WriteLine("No backup job configured.");
-            return 1;
-        }
-
-        // Ensure the state file contains all configured jobs before running.
-        stateService.Initialize(jobs);
-
-        foreach (int id in ids)
-        {
-            BackupJob? job = jobs.FirstOrDefault(j => j.Id == id);
-            if (job == null)
-            {
-                Console.WriteLine($"Job {id} not found.");
-                continue;
-            }
-
-            // Validate directories before reporting a run.
-            if (!PathTools.TryNormalizeExistingDirectory(job.SourceDirectory, out _))
-            {
-                Console.WriteLine($"Job {job.Id} skipped: source directory not found.");
-                continue;
-            }
-            if (!PathTools.TryNormalizeExistingDirectory(job.TargetDirectory, out _))
-            {
-                Console.WriteLine($"Job {job.Id} skipped: target directory not found.");
-                continue;
-            }
-
-            Console.WriteLine($"Running job {job.Id} - {job.Name}...");
-            backupService.RunJob(job);
-        }
-
-        return 0;
+        var runner = new CommandJobRunner(repository, backupService, stateService);
+        return runner.RunJobs(ids);
     }
 
     private static void PrintUsage()
     {
-        Console.WriteLine("Usage:");
-        Console.WriteLine("  EasySave.exe 1-3");
-        Console.WriteLine("  EasySave.exe 1;3");
-        Console.WriteLine("  EasySave.exe 2");
+        CommandUsagePrinter.Print();
     }
 
     private static List<int> ParseArguments(string arg)
     {
-        var result = new List<int>();
-        string normalized = arg.Replace(" ", string.Empty);
-
-        if (normalized.Contains('-'))
-        {
-            var parts = normalized.Split('-', StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length != 2)
-                throw new FormatException();
-
-            int start = int.Parse(parts[0]);
-            int end = int.Parse(parts[1]);
-            if (start <= 0 || end <= 0)
-                throw new FormatException();
-
-            if (end < start)
-            {
-                (start, end) = (end, start);
-            }
-
-            for (int i = start; i <= end; i++)
-                result.Add(i);
-        }
-        else if (normalized.Contains(';'))
-        {
-            result = normalized
-                .Split(';', StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .ToList();
-        }
-        else
-        {
-            result.Add(int.Parse(normalized));
-        }
-
-        // Avoid duplicates while keeping the initial order.
-        return result.Distinct().ToList();
+        return CommandLineArgumentParser.Parse(arg);
     }
 }

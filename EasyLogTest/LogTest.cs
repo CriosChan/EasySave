@@ -23,10 +23,10 @@ public class Tests
             FileTarget = "./Test1.txt",
             Time = DateTime.Now
         };
-        
+
         string logPath = Path.Join("./", DateTime.Now.ToString("yyyy-MM-dd") + ".json");
         // If the file already exists remove it.
-        if(File.Exists(logPath))
+        if (File.Exists(logPath))
             File.Delete(logPath);
         // Log the objet
         _logger.Log(log);
@@ -39,7 +39,7 @@ public class Tests
         FakeLogObject readedLog = JsonSerializer.Deserialize<FakeLogObject>(lines.ElementAt(0));
         // Check if the first one is equal to the object we gave
         Assert.That(readedLog, Is.EqualTo(log));
-        
+
         // Change some values 
         log.Name = "Test2";
         log.FileSource = "./Test2.txt";
