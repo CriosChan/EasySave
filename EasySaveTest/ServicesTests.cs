@@ -1,18 +1,26 @@
 using NUnit.Framework;
-using EasySave.Services;
-using EasySave.Models;
-using EasySave.Utils;
+using EasySave.Application.Services;
+using EasySave.Domain.Models;
+using EasySave.Infrastructure.IO;
+using EasySave.Infrastructure.Logging;
+using EasySave.Infrastructure.Persistence;
 using System.IO;
 using System.Collections.Generic;
 using System;
 
 namespace EasySaveTest;
 
+/// <summary>
+/// Tests for the backup job repository.
+/// </summary>
 public class JobRepositoryTests
 {
     private string _tempDir = null!;
     private JobRepository _repo = null!;
 
+    /// <summary>
+    /// Prepares a temporary folder and a job repository.
+    /// </summary>
     [SetUp]
     public void Setup()
     {
@@ -21,6 +29,9 @@ public class JobRepositoryTests
         _repo = new JobRepository(_tempDir);
     }
 
+    /// <summary>
+    /// Cleans up temporary resources.
+    /// </summary>
     [TearDown]
     public void TearDown()
     {
@@ -35,6 +46,9 @@ public class JobRepositoryTests
         }
     }
 
+    /// <summary>
+    /// Verifies loading an empty repository returns an empty list.
+    /// </summary>
     [Test]
     public void Load_EmptyRepository_ReturnsEmptyList()
     {
@@ -43,6 +57,9 @@ public class JobRepositoryTests
         Assert.That(jobs.Count, Is.EqualTo(0));
     }
 
+    /// <summary>
+    /// Verifies saving persists jobs to the file.
+    /// </summary>
     [Test]
     public void Save_PersistsJobsToFile()
     {
@@ -58,6 +75,9 @@ public class JobRepositoryTests
         Assert.That(loaded[0].Name, Is.EqualTo("job1"));
     }
 
+    /// <summary>
+    /// Verifies an ID is assigned when a slot is available.
+    /// </summary>
     [Test]
     public void AddJob_AssignsId_WhenSlotAvailable()
     {
@@ -70,6 +90,9 @@ public class JobRepositoryTests
         Assert.That(job.Id, Is.EqualTo(1));
     }
 
+    /// <summary>
+    /// Verifies the next available ID is assigned.
+    /// </summary>
     [Test]
     public void AddJob_AssignsNextAvailableId()
     {
@@ -86,6 +109,9 @@ public class JobRepositoryTests
         Assert.That(job.Id, Is.EqualTo(3));
     }
 
+    /// <summary>
+    /// Verifies an error is returned when the job limit is reached.
+    /// </summary>
     [Test]
     public void AddJob_ReturnsError_WhenMaxJobsReached()
     {
@@ -105,6 +131,9 @@ public class JobRepositoryTests
         Assert.That(err, Is.EqualTo("Error.MaxJobs"));
     }
 
+    /// <summary>
+    /// Verifies removal of a job by ID.
+    /// </summary>
     [Test]
     public void RemoveJob_ById_RemovesJob()
     {
@@ -121,6 +150,9 @@ public class JobRepositoryTests
         Assert.That(jobs[0].Id, Is.EqualTo(2));
     }
 
+    /// <summary>
+    /// Verifies removal of a job by name.
+    /// </summary>
     [Test]
     public void RemoveJob_ByName_RemovesJob()
     {
@@ -137,6 +169,9 @@ public class JobRepositoryTests
         Assert.That(jobs[0].Name, Is.EqualTo("backup_two"));
     }
 
+    /// <summary>
+    /// Verifies a non-existent job cannot be removed.
+    /// </summary>
     [Test]
     public void RemoveJob_NonExistent_ReturnsFalse()
     {
@@ -151,6 +186,9 @@ public class JobRepositoryTests
         Assert.That(jobs.Count, Is.EqualTo(1));
     }
 
+    /// <summary>
+    /// Verifies name-based removal is case-insensitive.
+    /// </summary>
     [Test]
     public void RemoveJob_ByName_CaseInsensitive()
     {
@@ -165,11 +203,17 @@ public class JobRepositoryTests
     }
 }
 
+/// <summary>
+/// Tests for the state file service.
+/// </summary>
 public class StateFileServiceTests
 {
     private string _tempDir = null!;
     private StateFileService _stateService = null!;
 
+    /// <summary>
+    /// Prepares a temporary folder and the state service.
+    /// </summary>
     [SetUp]
     public void Setup()
     {
@@ -178,6 +222,9 @@ public class StateFileServiceTests
         _stateService = new StateFileService(_tempDir);
     }
 
+    /// <summary>
+    /// Cleans up temporary resources.
+    /// </summary>
     [TearDown]
     public void TearDown()
     {
@@ -191,6 +238,9 @@ public class StateFileServiceTests
         }
     }
 
+    /// <summary>
+    /// Verifies initialization creates the state file.
+    /// </summary>
     [Test]
     public void Initialize_CreatesStateFile()
     {
@@ -206,6 +256,9 @@ public class StateFileServiceTests
         Assert.That(File.Exists(statePath), Is.True);
     }
 
+    /// <summary>
+    /// Verifies jobs are initialized in the Inactive state.
+    /// </summary>
     [Test]
     public void Initialize_SetsJobsToInactive()
     {
@@ -221,6 +274,9 @@ public class StateFileServiceTests
         Assert.That(state.BackupName, Is.EqualTo("job1"));
     }
 
+    /// <summary>
+    /// Verifies GetOrCreate returns the existing state.
+    /// </summary>
     [Test]
     public void GetOrCreate_ReturnsExisting_WhenStateExists()
     {
@@ -233,6 +289,9 @@ public class StateFileServiceTests
         Assert.That(state1.JobId, Is.EqualTo(state2.JobId));
     }
 
+    /// <summary>
+    /// Verifies GetOrCreate creates a state when missing.
+    /// </summary>
     [Test]
     public void GetOrCreate_CreatesNewState_WhenMissing()
     {
@@ -244,6 +303,9 @@ public class StateFileServiceTests
         Assert.That(state.BackupName, Is.EqualTo("newJob"));
     }
 
+    /// <summary>
+    /// Verifies state updates and file writes.
+    /// </summary>
     [Test]
     public void Update_ModifiesState_AndWritesFile()
     {
@@ -260,6 +322,9 @@ public class StateFileServiceTests
         Assert.That(updated.ProgressPercent, Is.EqualTo(50.0));
     }
 
+    /// <summary>
+    /// Verifies states are ordered by ID.
+    /// </summary>
     [Test]
     public void Update_OrdersStatesByJobId()
     {
@@ -282,6 +347,9 @@ public class StateFileServiceTests
     }
 }
 
+/// <summary>
+/// Tests for the backup execution service.
+/// </summary>
 public class BackupServiceTests
 {
     private string _tempDir = null!;
@@ -291,6 +359,9 @@ public class BackupServiceTests
     private string _logDir = null!;
     private BackupService _backupService = null!;
 
+    /// <summary>
+    /// Prepares temporary folders and the backup service.
+    /// </summary>
     [SetUp]
     public void Setup()
     {
@@ -304,9 +375,19 @@ public class BackupServiceTests
         Directory.CreateDirectory(_logDir);
 
         _stateService = new StateFileService(Path.Combine(_tempDir, "state"));
-        _backupService = new BackupService(_logDir, _stateService);
+
+        var paths = new PathService();
+        var logWriter = new JsonLogWriter<LogEntry>(_logDir);
+        var fileSelector = new BackupFileSelector(paths);
+        var directoryPreparer = new BackupDirectoryPreparer(logWriter, paths);
+        var fileCopier = new FileCopier();
+
+        _backupService = new BackupService(logWriter, _stateService, paths, fileSelector, directoryPreparer, fileCopier);
     }
 
+    /// <summary>
+    /// Cleans up temporary resources.
+    /// </summary>
     [TearDown]
     public void TearDown()
     {
@@ -320,6 +401,9 @@ public class BackupServiceTests
         }
     }
 
+    /// <summary>
+    /// Verifies files are copied in a complete backup.
+    /// </summary>
     [Test]
     public void RunJob_CopiesFiles_InCompleteBackup()
     {
@@ -341,6 +425,9 @@ public class BackupServiceTests
         Assert.That(File.Exists(Path.Combine(_targetDir, "file2.txt")), Is.True);
     }
 
+    /// <summary>
+    /// Verifies subdirectories are created in the target.
+    /// </summary>
     [Test]
     public void RunJob_CreatesSubdirectories()
     {
@@ -363,6 +450,9 @@ public class BackupServiceTests
         Assert.That(File.Exists(targetNested), Is.True);
     }
 
+    /// <summary>
+    /// Verifies an empty directory backup completes correctly.
+    /// </summary>
     [Test]
     public void RunJob_HandlesEmptyDirectory()
     {
@@ -381,6 +471,9 @@ public class BackupServiceTests
         Assert.That(state.State, Is.EqualTo(JobRunState.Completed));
     }
 
+    /// <summary>
+    /// Verifies transfers are properly logged.
+    /// </summary>
     [Test]
     [Category("GHABlacklist")]
     public void RunJob_LogsFileTransfers()
@@ -408,6 +501,9 @@ public class BackupServiceTests
         Assert.That(logs[0].FileSizeBytes, Is.GreaterThanOrEqualTo(0));
     }
 
+    /// <summary>
+    /// Verifies failure when the source is missing.
+    /// </summary>
     [Test]
     public void RunJob_FailsWhenSourceMissing()
     {
@@ -426,6 +522,9 @@ public class BackupServiceTests
         Assert.That(state.State, Is.EqualTo(JobRunState.Failed));
     }
 
+    /// <summary>
+    /// Verifies file timestamps are preserved.
+    /// </summary>
     [Test]
     public void RunJob_PreservesFileTimestamps()
     {
@@ -451,6 +550,9 @@ public class BackupServiceTests
         Assert.That(targetTime, Is.EqualTo(originalTime).Within(TimeSpan.FromSeconds(1)));
     }
 
+    /// <summary>
+    /// Verifies sequential execution of multiple jobs.
+    /// </summary>
     [Test]
     public void RunJobsSequential_RunsMultipleJobs_InOrder()
     {
@@ -479,6 +581,9 @@ public class BackupServiceTests
         Assert.That(File.Exists(Path.Combine(targetDir2, "file2.txt")), Is.True);
     }
 
+    /// <summary>
+    /// Verifies differential backup behavior.
+    /// </summary>
     [Test]
     public void RunJob_DifferentialBackup_OnlyUpdatesDifferentFiles()
     {

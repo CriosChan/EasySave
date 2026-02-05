@@ -2,6 +2,9 @@ using System.Text.Json;
 
 namespace EasyLog;
 
+/// <summary>
+/// Logger that serializes entries to JSON.
+/// </summary>
 public class JsonLogger<T>(string logDirectory) : AbstractLogger<T>(logDirectory, "json")
 {
     private readonly JsonSerializerOptions _options = new() { WriteIndented = false };

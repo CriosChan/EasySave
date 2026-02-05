@@ -1,5 +1,8 @@
 namespace EasyLogTest;
 
+/// <summary>
+/// Fake log object used for tests.
+/// </summary>
 public struct FakeLogObject(
     String name,
     String fileSource,

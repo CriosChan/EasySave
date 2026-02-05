@@ -3,22 +3,39 @@
 
 [English version](#ENGLISH)
 
-EasySave est un outil de sauvegarde automatisé.
+EasySave est un outil de sauvegarde automatise.
 
 ## Installation
-Téléchargez le fichier zip disponible dans la partie Releases
+Telechargez le fichier zip disponible dans la partie Releases.
 
 ## Utilisation
 ```bash
 EasySave.exe 1-3
 EasySave.exe 1;3
 ```
-EasySave comporte aussi une interface console si aucun argument n'est donné
+EasySave propose aussi une interface console si aucun argument n'est donne.
+
+## Architecture
+Le code est organise en couches:
+- Bootstrap: point d'entree et composition des dependances.
+- Presentation: CLI et UI console.
+- Application: orchestration des cas d'usage et services metier.
+- Domain: modeles et enums.
+- Infrastructure: configuration, IO, persistence, logging.
+
+## Diagramme UML
+Le diagramme complet est disponible ici: `docs/uml/EasySave-full.puml`
+
+Pour regenerer le diagramme:
+```bash
+dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -c Debug
+```
+
 ## Contribution
 Voir le fichier [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
-Tout droits réservés par l'entreprise ProSoft©[^1].
+Tous droits reserves par l'entreprise ProSoft[^1].
 
 # ENGLISH
 
@@ -35,10 +52,26 @@ EasySave.exe 1;3
 ```
 EasySave also have a Textual User Interface if no arguments are provided.
 
+## Architecture
+The codebase is layered:
+- Bootstrap: entry point and dependency composition.
+- Presentation: CLI and console UI.
+- Application: use case orchestration and services.
+- Domain: models and enums.
+- Infrastructure: configuration, IO, persistence, logging.
+
+## UML Diagram
+Full diagram: `docs/uml/EasySave-full.puml`
+
+To regenerate:
+```bash
+dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -c Debug
+```
+
 ## Contribution
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
-All rght reserved by the Prosoft©[^1] company.
+All rights reserved by the Prosoft[^1] company.
 
 [^1]: Prosoft est une entreprise FICTIVE. / Prosoft is a FICTIVE company.

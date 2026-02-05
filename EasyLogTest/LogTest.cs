@@ -3,14 +3,23 @@ using EasyLog;
 
 namespace EasyLogTest;
 
+/// <summary>
+/// Unit tests for JSON log creation.
+/// </summary>
 public class Tests
 {
     private AbstractLogger<FakeLogObject> _logger = new JsonLogger<FakeLogObject>("./");
+    /// <summary>
+    /// Shared test setup (empty for now).
+    /// </summary>
     [SetUp]
     public void Setup()
     {
     }
 
+    /// <summary>
+    /// Verifies that logging creates a file and contains entries.
+    /// </summary>
     [Test]
     public void TestLogCreation()
     {
@@ -28,7 +37,7 @@ public class Tests
         // If the file already exists remove it.
         if (File.Exists(logPath))
             File.Delete(logPath);
-        // Log the objet
+        // Log the object
         _logger.Log(log);
         // Check if the log file exists
         Assert.That(File.Exists(logPath), Is.EqualTo(true));

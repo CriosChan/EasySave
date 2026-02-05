@@ -18,14 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="View\Ressources\UserInterface.resx">
+    <EmbeddedResource Update="Presentation\Resources\UserInterface.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="View\Ressources\UserInterface.Designer.cs">
+    <Compile Update="Presentation\Resources\UserInterface.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>UserInterface.resx</DependentUpon>

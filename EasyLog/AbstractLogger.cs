@@ -1,5 +1,8 @@
 namespace EasyLog;
 
+/// <summary>
+/// Abstract base for typed log writers.
+/// </summary>
 public abstract class AbstractLogger<T>(string logDirectory, string extension)
 {
 
@@ -45,3 +48,4 @@ public abstract class AbstractLogger<T>(string logDirectory, string extension)
     /// </remarks>
     public abstract void Log(T content);
 }
+
