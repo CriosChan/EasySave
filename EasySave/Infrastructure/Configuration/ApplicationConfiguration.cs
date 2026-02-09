@@ -26,47 +26,57 @@ public class ApplicationConfiguration
         }
     }
 
-    private string _logPath = "";
     public string LogPath
     {
-        get => _logPath;
+        get;
         set
         {
-            if (_logPath != value)
+            if (field != value)
             {
-                _logPath = value;
+                field = value;
                 Save(nameof(LogPath), value);
             }
         }
-    }
+    } = "./log";
 
-    private string _jobConfigPath = "";
     public string JobConfigPath
     {
-        get => _jobConfigPath;
+        get;
         set
         {
-            if (_jobConfigPath != value)
+            if (field != value)
             {
-                _jobConfigPath = value;
+                field = value;
                 Save(nameof(JobConfigPath), value);
             }
         }
-    }
+    } = "./config";
 
-    private string _localization = "";
     public string Localization
     {
-        get => _localization;
+        get;
         set
         {
-            if (_localization != value)
+            if (field != value)
             {
-                _localization = value;
+                field = value;
                 Save(nameof(Localization), value);
             }
         }
-    }
+    } = "";
+    
+    public string LogType
+    {
+        get;
+        set
+        {
+            if (field != value)
+            {
+                field = value;
+                Save(nameof(LogType), value);
+            }
+        }
+    } = "json";
 
     /// <summary>
     /// Initializes an empty configuration (used by the binder).

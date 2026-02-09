@@ -1,11 +1,10 @@
-using System.Globalization;
+using EasyLog;
 using EasySave.Application.Abstractions;
 using EasySave.Application.Services;
 using EasySave.Domain.Models;
 using EasySave.Infrastructure.Configuration;
 using EasySave.Infrastructure.IO;
 using EasySave.Infrastructure.Lang;
-using EasySave.Infrastructure.Logging;
 using EasySave.Infrastructure.Persistence;
 using EasySave.Presentation.Cli;
 using EasySave.Presentation.Ui;
@@ -43,7 +42,16 @@ internal sealed class EasySaveApplication : IApplication
         IJobRepository repository = new JobRepository(configDir);
         IStateService state = new StateFileService(configDir);
 
-        ILogWriter<LogEntry> logWriter = new JsonLogWriter<LogEntry>(logDir);
+        
+        AbstractLogger<LogEntry> logWriter;
+        if (cfg.LogType == "xml")
+        {
+            logWriter = new XmlLogger<LogEntry>(logDir);
+        }
+        else
+        {
+            logWriter = new JsonLogger<LogEntry>(logDir);
+        }
         IBackupFileSelector fileSelector = new BackupFileSelector(paths);
         IBackupDirectoryPreparer directoryPreparer = new BackupDirectoryPreparer(logWriter, paths);
         IFileCopier fileCopier = new FileCopier();

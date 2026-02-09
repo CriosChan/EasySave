@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using EasyLog;
 using EasySave.Application.Services;
 using EasySave.Domain.Models;
+using EasySave.Infrastructure.Configuration;
 using EasySave.Infrastructure.IO;
-using EasySave.Infrastructure.Logging;
+using EasySave.Infrastructure.Lang;
 using EasySave.Infrastructure.Persistence;
 using EasySave.Presentation.Cli;
-using NUnit.Framework;
 
 namespace EasySaveTest;
 
@@ -34,10 +36,13 @@ public class CommandControllerTests
     [SetUp]
     public void Setup()
     {
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+        
         _rootDir = Path.Combine(Path.GetTempPath(), "EasySave_CommandControllerTests_" + Path.GetRandomFileName());
         _configDir = Path.Combine(_rootDir, "config");
         _logDir = Path.Combine(_rootDir, "log");
-
+        
         Directory.CreateDirectory(_configDir);
         Directory.CreateDirectory(_logDir);
 
@@ -45,7 +50,7 @@ public class CommandControllerTests
         _state = new StateFileService(_configDir);
         _paths = new PathService();
 
-        var logWriter = new JsonLogWriter<LogEntry>(_logDir);
+        var logWriter = new JsonLogger<LogEntry>(_logDir);
         var fileSelector = new BackupFileSelector(_paths);
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, _paths);
         var fileCopier = new FileCopier();

@@ -48,6 +48,7 @@ internal sealed class MainMenuController
             new Option(Resources.UserInterface.Menu_RemoveBackup, _jobRemoval.Show),
             new Option(Resources.UserInterface.Menu_LaunchBackupJob, _jobLaunch.Show),
             new Option(Resources.UserInterface.Menu_Lang, new LanguageView(_console).Show),
+            new Option(Resources.UserInterface.Menu_Log, new LogTypeView(_console).Show),
             new Option(Resources.UserInterface.Menu_Quit, () => Environment.Exit(0))
         ], _console, Resources.UserInterface.Menu_Title_Main);
     }

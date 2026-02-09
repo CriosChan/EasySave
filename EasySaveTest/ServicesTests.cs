@@ -1,12 +1,8 @@
-using NUnit.Framework;
 using EasySave.Application.Services;
 using EasySave.Domain.Models;
 using EasySave.Infrastructure.IO;
-using EasySave.Infrastructure.Logging;
 using EasySave.Infrastructure.Persistence;
-using System.IO;
-using System.Collections.Generic;
-using System;
+using EasyLog;
 
 namespace EasySaveTest;
 
@@ -377,7 +373,7 @@ public class BackupServiceTests
         _stateService = new StateFileService(Path.Combine(_tempDir, "state"));
 
         var paths = new PathService();
-        var logWriter = new JsonLogWriter<LogEntry>(_logDir);
+        var logWriter = new JsonLogger<LogEntry>(_logDir);
         var fileSelector = new BackupFileSelector(paths);
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, paths);
         var fileCopier = new FileCopier();

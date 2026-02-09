@@ -155,4 +155,10 @@
     <data name="Jobs.Remove.ID" xml:space="preserve">
         <value>Supprimer le travail de sauvegarde {0} - {1}</value>
     </data>
+    <data name="Menu.Title.LogType" xml:space="preserve">
+        <value>=== Choisir un type de log ===</value>
+    </data>
+    <data name="Menu.Log" xml:space="preserve">
+        <value>Choisir un type de log</value>
+    </data>
 </root>
