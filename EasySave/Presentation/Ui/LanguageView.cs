@@ -45,7 +45,7 @@ public class LanguageView
                 UserInterface.ShowMenu();
             }),
 
-            new(Resources.UserInterface.Menu_Quit, UserInterface.ShowMenu)
+            new(Resources.UserInterface.Return, UserInterface.ShowMenu)
         ], _console, Resources.UserInterface.Menu_Title_Lang);
     }
 }

@@ -1,3 +1,4 @@
+using EasyLog;
 using EasySave.Application.Abstractions;
 using EasySave.Domain.Models;
 
@@ -8,10 +9,10 @@ namespace EasySave.Application.Services;
 /// </summary>
 public sealed class BackupDirectoryPreparer : IBackupDirectoryPreparer
 {
-    private readonly ILogWriter<LogEntry> _logger;
+    private readonly AbstractLogger<LogEntry> _logger;
     private readonly IPathService _paths;
 
-    public BackupDirectoryPreparer(ILogWriter<LogEntry> logger, IPathService paths)
+    public BackupDirectoryPreparer(AbstractLogger<LogEntry> logger, IPathService paths)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _paths = paths ?? throw new ArgumentNullException(nameof(paths));

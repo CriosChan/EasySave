@@ -22,18 +22,4 @@ public class JsonLogger<T>(string logDirectory) : AbstractLogger<T>(logDirectory
     {
         return JsonSerializer.Serialize(log, _options);
     }
-
-    /// <summary>
-    /// Logs the specified content of type <typeparamref name="T"/> by writing it to a log file.
-    /// </summary>
-    /// <param name="content">The content to log.</param>
-    /// <remarks>
-    /// This method overrides the base class implementation and calls the
-    /// <see cref="AbstractLogger{T}.WriteLogFile"/> method to handle the actual logging.
-    /// The content is passed to the <see cref="AbstractLogger{T}.WriteLogFile"/> method for processing.
-    /// </remarks>
-    public override void Log(T content)
-    {
-        WriteLogFile(content);
-    }
 }

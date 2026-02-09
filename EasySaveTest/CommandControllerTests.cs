@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using EasyLog;
 using EasySave.Application.Services;
 using EasySave.Domain.Models;
 using EasySave.Infrastructure.IO;
-using EasySave.Infrastructure.Logging;
 using EasySave.Infrastructure.Persistence;
 using EasySave.Presentation.Cli;
-using NUnit.Framework;
 
 namespace EasySaveTest;
 
@@ -45,7 +44,7 @@ public class CommandControllerTests
         _state = new StateFileService(_configDir);
         _paths = new PathService();
 
-        var logWriter = new JsonLogWriter<LogEntry>(_logDir);
+        var logWriter = new JsonLogger<LogEntry>(_logDir);
         var fileSelector = new BackupFileSelector(_paths);
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, _paths);
         var fileCopier = new FileCopier();

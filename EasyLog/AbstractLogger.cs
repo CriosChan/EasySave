@@ -39,13 +39,17 @@ public abstract class AbstractLogger<T>(string logDirectory, string extension)
     protected abstract string Serialize(T logs);
 
     /// <summary>
-    /// Logs the specified content of type <typeparamref name="T"/>.
+    /// Logs the specified content of type <typeparamref name="T"/> by writing it to a log file.
     /// </summary>
     /// <param name="content">The content to log.</param>
     /// <remarks>
-    /// This method is abstract and must be implemented in a derived class.
-    /// The implementation should define how the content is processed and recorded.
+    /// This method overrides the base class implementation and calls the
+    /// <see cref="AbstractLogger{T}.WriteLogFile"/> method to handle the actual logging.
+    /// The content is passed to the <see cref="AbstractLogger{T}.WriteLogFile"/> method for processing.
     /// </remarks>
-    public abstract void Log(T content);
+    public void Log(T content)
+    {
+        WriteLogFile(content);
+    }
 }
 

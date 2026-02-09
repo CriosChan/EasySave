@@ -1,3 +1,4 @@
+using EasyLog;
 using EasySave.Application.Abstractions;
 using EasySave.Domain.Models;
 using EasySave.Presentation.Ui;
@@ -16,7 +17,7 @@ namespace EasySave.Application.Services;
 /// </remarks>
 public sealed class BackupService : IBackupService
 {
-    private readonly ILogWriter<LogEntry> _logger;
+    private readonly AbstractLogger<LogEntry> _logger;
     private readonly IStateService _state;
     private readonly IPathService _paths;
     private readonly IBackupFileSelector _fileSelector;
@@ -33,7 +34,7 @@ public sealed class BackupService : IBackupService
     /// <param name="directoryPreparer">Target directory preparer.</param>
     /// <param name="fileCopier">File copier.</param>
     public BackupService(
-        ILogWriter<LogEntry> logger,
+        AbstractLogger<LogEntry> logger,
         IStateService state,
         IPathService paths,
         IBackupFileSelector fileSelector,

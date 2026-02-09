@@ -330,6 +330,15 @@ namespace EasySave.Presentation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a Log Type.
+        /// </summary>
+        internal static string Menu_Log {
+            get {
+                return ResourceManager.GetString("Menu.Log", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Quit.
         /// </summary>
         internal static string Menu_Quit {
@@ -353,6 +362,15 @@ namespace EasySave.Presentation.Resources {
         internal static string Menu_Title_Lang {
             get {
                 return ResourceManager.GetString("Menu.Title.Lang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to === Choose a Log Type ===.
+        /// </summary>
+        internal static string Menu_Title_LogType {
+            get {
+                return ResourceManager.GetString("Menu.Title.LogType", resourceCulture);
             }
         }
         

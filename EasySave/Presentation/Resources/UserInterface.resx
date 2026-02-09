@@ -162,4 +162,10 @@
     <data name="Jobs.Remove.ID" xml:space="preserve">
         <value>Remove job {0} - {1}</value>
     </data>
+    <data name="Menu.Title.LogType" xml:space="preserve">
+        <value>=== Choose a Log Type ===</value>
+    </data>
+    <data name="Menu.Log" xml:space="preserve">
+        <value>Choose a Log Type</value>
+    </data>
 </root>
