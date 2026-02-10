@@ -43,7 +43,7 @@ internal sealed class EasySaveApplication : IApplication
         IStateService state = new StateFileService(configDir);
 
         
-        ILogWriter<LogEntry> logWriter = new ConfigurableLogWriter<LogEntry>(logDir);
+        ConfigurableLogWriter<LogEntry> logWriter = new ConfigurableLogWriter<LogEntry>(logDir);
         IBackupFileSelector fileSelector = new BackupFileSelector(paths);
         IBackupDirectoryPreparer directoryPreparer = new BackupDirectoryPreparer(logWriter, paths);
         IFileCopier fileCopier = new FileCopier();

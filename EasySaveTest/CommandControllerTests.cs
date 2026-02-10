@@ -50,7 +50,7 @@ public class CommandControllerTests
         _state = new StateFileService(_configDir);
         _paths = new PathService();
 
-        var logWriter = new JsonLogger<LogEntry>(_logDir);
+        var logWriter = new ConfigurableLogWriter<LogEntry>(_logDir);
         var fileSelector = new BackupFileSelector(_paths);
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, _paths);
         var fileCopier = new FileCopier();

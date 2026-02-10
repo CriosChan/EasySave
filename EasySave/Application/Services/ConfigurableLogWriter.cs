@@ -6,7 +6,7 @@ namespace EasySave.Application.Services;
 /// <summary>
 /// Log writer that resolves the concrete logger based on current configuration.
 /// </summary>
-public sealed class ConfigurableLogWriter<T> : ILogWriter<T>
+public sealed class ConfigurableLogWriter<T>
 {
     private readonly string _logDirectory;
     private readonly object _sync = new();
@@ -26,7 +26,7 @@ public sealed class ConfigurableLogWriter<T> : ILogWriter<T>
         ResolveLogger().Log(content);
     }
 
-    private ILogWriter<T> ResolveLogger()
+    private AbstractLogger<T> ResolveLogger()
     {
         string logType = NormalizeLogType(ApplicationConfiguration.Instance.LogType);
 

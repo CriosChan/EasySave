@@ -9,10 +9,10 @@ namespace EasySave.Application.Services;
 /// </summary>
 public sealed class BackupDirectoryPreparer : IBackupDirectoryPreparer
 {
-    private readonly ILogWriter<LogEntry> _logger;
+    private readonly ConfigurableLogWriter<LogEntry> _logger;
     private readonly IPathService _paths;
 
-    public BackupDirectoryPreparer(ILogWriter<LogEntry> logger, IPathService paths)
+    public BackupDirectoryPreparer(ConfigurableLogWriter<LogEntry> logger, IPathService paths)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _paths = paths ?? throw new ArgumentNullException(nameof(paths));
