@@ -1,21 +1,20 @@
-using EasySave.Presentation.Resources;
 using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Builds and displays the main interactive menu.
+///     Builds and displays the main interactive menu.
 /// </summary>
 internal sealed class MainMenuController
 {
     private readonly IConsole _console;
-    private readonly JobListView _jobList;
     private readonly JobCreationView _jobCreation;
-    private readonly JobRemovalView _jobRemoval;
     private readonly JobLaunchView _jobLaunch;
+    private readonly JobListView _jobList;
+    private readonly JobRemovalView _jobRemoval;
 
     /// <summary>
-    /// Builds the main menu controller.
+    ///     Builds the main menu controller.
     /// </summary>
     /// <param name="console">Target console.</param>
     /// <param name="jobList">Job list view.</param>
@@ -37,7 +36,7 @@ internal sealed class MainMenuController
     }
 
     /// <summary>
-    /// Displays the main menu and handles navigation.
+    ///     Displays the main menu and handles navigation.
     /// </summary>
     public void Show()
     {
@@ -48,8 +47,8 @@ internal sealed class MainMenuController
             new Option(Resources.UserInterface.Menu_RemoveBackup, _jobRemoval.Show),
             new Option(Resources.UserInterface.Menu_LaunchBackupJob, _jobLaunch.Show),
             new Option(Resources.UserInterface.Menu_Lang, new LanguageView(_console).Show),
+            new Option(Resources.UserInterface.Menu_Log, new LogTypeView(_console).Show),
             new Option(Resources.UserInterface.Menu_Quit, () => Environment.Exit(0))
         ], _console, Resources.UserInterface.Menu_Title_Main);
     }
 }
-

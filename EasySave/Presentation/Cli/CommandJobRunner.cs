@@ -5,17 +5,17 @@ using EasySave.Presentation.Resources;
 namespace EasySave.Presentation.Cli;
 
 /// <summary>
-/// Executes a sequence of backup jobs specified by their IDs.
+///     Executes a sequence of backup jobs specified by their IDs.
 /// </summary>
 internal sealed class CommandJobRunner
 {
-    private readonly IJobRepository _repository;
     private readonly IBackupService _backupService;
-    private readonly IStateService _stateService;
     private readonly IPathService _paths;
+    private readonly IJobRepository _repository;
+    private readonly IStateService _stateService;
 
     /// <summary>
-    /// Builds the CLI runner with its dependencies.
+    ///     Builds the CLI runner with its dependencies.
     /// </summary>
     /// <param name="repository">Job repository.</param>
     /// <param name="backupService">Backup service.</param>
@@ -34,13 +34,13 @@ internal sealed class CommandJobRunner
     }
 
     /// <summary>
-    /// Executes a list of job IDs in CLI mode.
+    ///     Executes a list of job IDs in CLI mode.
     /// </summary>
     /// <param name="ids">IDs to execute.</param>
     /// <returns>Exit code.</returns>
     public int RunJobs(IEnumerable<int> ids)
     {
-        List<BackupJob> jobs = _repository.Load().OrderBy(j => j.Id).ToList();
+        var jobs = _repository.Load().OrderBy(j => j.Id).ToList();
         if (jobs.Count == 0)
         {
             Console.WriteLine(UserInterface.Terminal_log_NoJobConfigured);
@@ -50,16 +50,16 @@ internal sealed class CommandJobRunner
         // Ensure the state file contains all configured jobs before running.
         _stateService.Initialize(jobs);
 
-        foreach (int id in ids)
+        foreach (var id in ids)
         {
-            BackupJob? job = jobs.FirstOrDefault(j => j.Id == id);
+            var job = jobs.FirstOrDefault(j => j.Id == id);
             if (job == null)
             {
                 Console.WriteLine(UserInterface.Terminal_log_JobIdNotFound, id);
                 continue;
             }
 
-            if (!IsJobRunnable(job, out string? reason))
+            if (!IsJobRunnable(job, out var reason))
             {
                 Console.WriteLine(reason);
                 continue;
@@ -73,7 +73,7 @@ internal sealed class CommandJobRunner
     }
 
     /// <summary>
-    /// Verifies a job can run (valid source/target directories).
+    ///     Verifies a job can run (valid source/target directories).
     /// </summary>
     /// <param name="job">Target job.</param>
     /// <param name="message">Error message if not runnable.</param>

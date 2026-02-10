@@ -1,11 +1,11 @@
-using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.Configuration;
 
 namespace EasySave.Infrastructure.Configuration;
 
 /// <summary>
-/// Loads and exposes application configuration.
+///     Loads and exposes application configuration.
 /// </summary>
 public class ApplicationConfiguration
 {
@@ -14,7 +14,14 @@ public class ApplicationConfiguration
     private string _configFile = "appsettings.json";
 
     /// <summary>
-    /// Loaded configuration instance.
+    ///     Initializes an empty configuration (used by the binder).
+    /// </summary>
+    public ApplicationConfiguration()
+    {
+    }
+
+    /// <summary>
+    ///     Loaded configuration instance.
     /// </summary>
     public static ApplicationConfiguration Instance
     {
@@ -26,55 +33,60 @@ public class ApplicationConfiguration
         }
     }
 
-    private string _logPath = "";
     public string LogPath
     {
-        get => _logPath;
+        get;
         set
         {
-            if (_logPath != value)
+            if (field != value)
             {
-                _logPath = value;
+                field = value;
                 Save(nameof(LogPath), value);
             }
         }
-    }
+    } = "./log";
 
-    private string _jobConfigPath = "";
     public string JobConfigPath
     {
-        get => _jobConfigPath;
+        get;
         set
         {
-            if (_jobConfigPath != value)
+            if (field != value)
             {
-                _jobConfigPath = value;
+                field = value;
                 Save(nameof(JobConfigPath), value);
             }
         }
-    }
+    } = "./config";
 
-    private string _localization = "";
     public string Localization
     {
-        get => _localization;
+        get;
         set
         {
-            if (_localization != value)
+            if (field != value)
             {
-                _localization = value;
+                field = value;
                 Save(nameof(Localization), value);
             }
         }
-    }
+    } = "";
+
+    public string LogType
+    {
+        get;
+        set
+        {
+            if (field != value)
+            {
+                field = value;
+                Save(nameof(LogType), value);
+            }
+        }
+    } = "json";
 
     /// <summary>
-    /// Initializes an empty configuration (used by the binder).
-    /// </summary>
-    public ApplicationConfiguration() { }
-
-    /// <summary>
-    /// Loads configuration from a JSON file.
+    ///     Loads configuration from a JSON file.
     /// </summary>
     /// <param name="configFile">Configuration file name.</param>
     public static void Load(string configFile = "appsettings.json")
@@ -87,7 +99,7 @@ public class ApplicationConfiguration
                     // Use the executable directory so the config is found even if the app is started
                     // from a different working directory.
                     .SetBasePath(AppContext.BaseDirectory)
-                    .AddJsonFile(configFile, optional: false, reloadOnChange: true)
+                    .AddJsonFile(configFile, false, true)
                     .Build();
 
                 _instance = configuration.Get<ApplicationConfiguration>()!;

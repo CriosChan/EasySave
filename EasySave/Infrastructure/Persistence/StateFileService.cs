@@ -5,12 +5,12 @@ using EasySave.Infrastructure.IO;
 namespace EasySave.Infrastructure.Persistence;
 
 /// <summary>
-/// Writes the real-time backup state file (<c>state.json</c>).
+///     Writes the real-time backup state file (<c>state.json</c>).
 /// </summary>
 /// <remarks>
-/// v1.0/v1.1 execute jobs sequentially in a single thread.
-/// Therefore we do not need locking primitives; we just keep an in-memory list and
-/// rewrite the state file atomically each time the state changes.
+///     v1.0/v1.1 execute jobs sequentially in a single thread.
+///     Therefore we do not need locking primitives; we just keep an in-memory list and
+///     rewrite the state file atomically each time the state changes.
 /// </remarks>
 public sealed class StateFileService : IStateService
 {
@@ -18,7 +18,7 @@ public sealed class StateFileService : IStateService
     private List<BackupJobState> _states = new();
 
     /// <summary>
-    /// Creates the service and computes the state file location.
+    ///     Creates the service and computes the state file location.
     /// </summary>
     /// <param name="stateDirectory">Directory where state.json is written.</param>
     public StateFileService(string stateDirectory)
@@ -27,7 +27,7 @@ public sealed class StateFileService : IStateService
     }
 
     /// <summary>
-    /// Initializes the state file with all jobs as "Inactive".
+    ///     Initializes the state file with all jobs as "Inactive".
     /// </summary>
     public void Initialize(IEnumerable<BackupJob> jobs)
     {
@@ -54,11 +54,11 @@ public sealed class StateFileService : IStateService
     }
 
     /// <summary>
-    /// Updates the in-memory state for a job and rewrites state.json.
+    ///     Updates the in-memory state for a job and rewrites state.json.
     /// </summary>
     public void Update(BackupJobState updated)
     {
-        int idx = _states.FindIndex(s => s.JobId == updated.JobId);
+        var idx = _states.FindIndex(s => s.JobId == updated.JobId);
         if (idx >= 0)
             _states[idx] = updated;
         else
@@ -69,11 +69,11 @@ public sealed class StateFileService : IStateService
     }
 
     /// <summary>
-    /// Returns the existing state for a job, or creates it if missing.
+    ///     Returns the existing state for a job, or creates it if missing.
     /// </summary>
     public BackupJobState GetOrCreate(BackupJob job)
     {
-        BackupJobState? existing = _states.FirstOrDefault(s => s.JobId == job.Id);
+        var existing = _states.FirstOrDefault(s => s.JobId == job.Id);
         if (existing != null)
             return existing;
 

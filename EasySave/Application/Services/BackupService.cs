@@ -6,25 +6,25 @@ using EasySave.Presentation.Ui.Console;
 namespace EasySave.Application.Services;
 
 /// <summary>
-/// Executes backup jobs (complete or differential) and writes both log and state files.
+///     Executes backup jobs (complete or differential) and writes both log and state files.
 /// </summary>
 /// <remarks>
-/// Version 1.0/1.1 requirement:
-/// - Jobs can be executed individually or sequentially (no parallel/multi-thread execution).
-/// - Every file transfer and directory creation must be logged in a daily JSON file.
-/// - A "state" JSON file must be updated in real-time to show progress.
+///     Version 1.0/1.1 requirement:
+///     - Jobs can be executed individually or sequentially (no parallel/multi-thread execution).
+///     - Every file transfer and directory creation must be logged in a daily JSON file.
+///     - A "state" JSON file must be updated in real-time to show progress.
 /// </remarks>
 public sealed class BackupService : IBackupService
 {
-    private readonly ILogWriter<LogEntry> _logger;
-    private readonly IStateService _state;
-    private readonly IPathService _paths;
-    private readonly IBackupFileSelector _fileSelector;
     private readonly IBackupDirectoryPreparer _directoryPreparer;
     private readonly IFileCopier _fileCopier;
+    private readonly IBackupFileSelector _fileSelector;
+    private readonly ConfigurableLogWriter<LogEntry> _logger;
+    private readonly IPathService _paths;
+    private readonly IStateService _state;
 
     /// <summary>
-    /// Builds the backup orchestrator.
+    ///     Builds the backup orchestrator.
     /// </summary>
     /// <param name="logger">Log writer.</param>
     /// <param name="state">State management service.</param>
@@ -33,7 +33,7 @@ public sealed class BackupService : IBackupService
     /// <param name="directoryPreparer">Target directory preparer.</param>
     /// <param name="fileCopier">File copier.</param>
     public BackupService(
-        ILogWriter<LogEntry> logger,
+        ConfigurableLogWriter<LogEntry> logger,
         IStateService state,
         IPathService paths,
         IBackupFileSelector fileSelector,
@@ -49,28 +49,28 @@ public sealed class BackupService : IBackupService
     }
 
     /// <summary>
-    /// Runs multiple jobs sequentially, ordered by id.
+    ///     Runs multiple jobs sequentially, ordered by id.
     /// </summary>
     /// <param name="jobs">Jobs to run.</param>
     public void RunJobsSequential(IEnumerable<BackupJob> jobs)
     {
-        foreach (BackupJob job in jobs.OrderBy(j => j.Id))
+        foreach (var job in jobs.OrderBy(j => j.Id))
             RunJob(job);
     }
 
     /// <summary>
-    /// Runs a single job (complete or differential).
+    ///     Runs a single job (complete or differential).
     /// </summary>
     /// <param name="job">Job to execute.</param>
     public void RunJob(BackupJob job)
     {
-        BackupJobState jobState = _state.GetOrCreate(job);
+        var jobState = _state.GetOrCreate(job);
         jobState.BackupName = job.Name;
         jobState.LastActionTimestamp = DateTime.Now;
 
         // Normalize user-provided paths (trim, strip quotes, expand env vars) and validate existence.
-        bool sourceOk = _paths.TryNormalizeExistingDirectory(job.SourceDirectory, out string sourceDir);
-        bool targetOk = _paths.TryNormalizeExistingDirectory(job.TargetDirectory, out string targetDir);
+        var sourceOk = _paths.TryNormalizeExistingDirectory(job.SourceDirectory, out var sourceDir);
+        var targetOk = _paths.TryNormalizeExistingDirectory(job.TargetDirectory, out var targetDir);
 
         // Validate source directory.
         if (!sourceOk)
@@ -86,7 +86,7 @@ public sealed class BackupService : IBackupService
                 SourcePath = _paths.ToFullUncLikePath(sourceDir),
                 TargetPath = _paths.ToFullUncLikePath(targetDir),
                 FileSizeBytes = 0,
-                TransferTimeMs = -1,
+                TransferTimeMs = -1
             });
 
             return;
@@ -107,7 +107,7 @@ public sealed class BackupService : IBackupService
                 SourcePath = _paths.ToFullUncLikePath(sourceDir),
                 TargetPath = _paths.ToFullUncLikePath(targetDir),
                 FileSizeBytes = 0,
-                TransferTimeMs = -1,
+                TransferTimeMs = -1
             });
 
             return;
@@ -122,15 +122,15 @@ public sealed class BackupService : IBackupService
             SourcePath = _paths.ToFullUncLikePath(sourceDir),
             TargetPath = _paths.ToFullUncLikePath(targetDir),
             FileSizeBytes = 0,
-            TransferTimeMs = 0,
+            TransferTimeMs = 0
         });
 
         // Mirror the directory structure (including empty directories).
         // This matches the requirement: all subdirectories must be preserved.
         _directoryPreparer.EnsureTargetDirectories(job, sourceDir, targetDir);
 
-        List<string> filesToCopy = _fileSelector.GetFilesToCopy(job, sourceDir, targetDir);
-        long totalSize = filesToCopy.Sum(f => new FileInfo(f).Length);
+        var filesToCopy = _fileSelector.GetFilesToCopy(job, sourceDir, targetDir);
+        var totalSize = filesToCopy.Sum(f => new FileInfo(f).Length);
 
         jobState.State = JobRunState.Active;
         jobState.TotalFiles = filesToCopy.Count;
@@ -144,14 +144,14 @@ public sealed class BackupService : IBackupService
         jobState.LastActionTimestamp = DateTime.Now;
         _state.Update(jobState);
 
-        bool hadError = false;
+        var hadError = false;
         long transferredBytes = 0;
 
-        ProgressWidget progressWidget = new ProgressWidget(new SystemConsole());
-        foreach (string sourceFile in filesToCopy)
+        var progressWidget = new ProgressWidget(new SystemConsole());
+        foreach (var sourceFile in filesToCopy)
         {
-            string relative = _paths.GetRelativePath(sourceDir, sourceFile);
-            string targetFile = Path.Combine(targetDir, relative);
+            var relative = _paths.GetRelativePath(sourceDir, sourceFile);
+            var targetFile = Path.Combine(targetDir, relative);
 
             _directoryPreparer.EnsureTargetDirectoryForFile(job, sourceFile, targetFile);
 
@@ -165,7 +165,7 @@ public sealed class BackupService : IBackupService
             long elapsedMs;
             try
             {
-                FileInfo fi = new FileInfo(sourceFile);
+                var fi = new FileInfo(sourceFile);
                 fileSize = fi.Length;
                 elapsedMs = _fileCopier.Copy(sourceFile, targetFile);
             }
@@ -182,7 +182,7 @@ public sealed class BackupService : IBackupService
                 SourcePath = _paths.ToFullUncLikePath(sourceFile),
                 TargetPath = _paths.ToFullUncLikePath(targetFile),
                 FileSizeBytes = fileSize,
-                TransferTimeMs = elapsedMs,
+                TransferTimeMs = elapsedMs
             });
 
             if (elapsedMs >= 0)
@@ -215,8 +215,7 @@ public sealed class BackupService : IBackupService
             SourcePath = _paths.ToFullUncLikePath(sourceDir),
             TargetPath = _paths.ToFullUncLikePath(targetDir),
             FileSizeBytes = 0,
-            TransferTimeMs = hadError ? -1 : 0,
+            TransferTimeMs = hadError ? -1 : 0
         });
     }
-
 }

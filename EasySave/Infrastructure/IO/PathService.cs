@@ -3,12 +3,12 @@ using EasySave.Application.Abstractions;
 namespace EasySave.Infrastructure.IO;
 
 /// <summary>
-/// Implementation of path normalization and conversion operations.
+///     Implementation of path normalization and conversion operations.
 /// </summary>
 public sealed class PathService : IPathService
 {
     /// <summary>
-    /// Normalizes a path and verifies the directory exists.
+    ///     Normalizes a path and verifies the directory exists.
     /// </summary>
     /// <param name="rawPath">Raw path.</param>
     /// <param name="normalizedPath">Normalized path.</param>
@@ -30,7 +30,7 @@ public sealed class PathService : IPathService
     }
 
     /// <summary>
-    /// Converts a path to an absolute path while respecting UNC paths.
+    ///     Converts a path to an absolute path while respecting UNC paths.
     /// </summary>
     /// <param name="path">Path to convert.</param>
     /// <returns>Absolute path.</returns>
@@ -39,14 +39,14 @@ public sealed class PathService : IPathService
         if (string.IsNullOrWhiteSpace(path))
             return path;
 
-        string cleaned = NormalizeUserPath(path);
+        var cleaned = NormalizeUserPath(path);
 
         if (OperatingSystem.IsWindows() && cleaned.StartsWith("\\\\"))
             return cleaned;
 
         try
         {
-            string full = Path.GetFullPath(cleaned);
+            var full = Path.GetFullPath(cleaned);
             if (OperatingSystem.IsWindows())
                 full = full.Replace('/', '\\');
 
@@ -59,7 +59,7 @@ public sealed class PathService : IPathService
     }
 
     /// <summary>
-    /// Computes a relative path between two paths.
+    ///     Computes a relative path between two paths.
     /// </summary>
     /// <param name="basePath">Base path.</param>
     /// <param name="fullPath">Full path.</param>
@@ -68,19 +68,25 @@ public sealed class PathService : IPathService
     {
         try
         {
-            string b = NormalizeUserPath(basePath);
-            string f = NormalizeUserPath(fullPath);
+            var b = NormalizeUserPath(basePath);
+            var f = NormalizeUserPath(fullPath);
             return Path.GetRelativePath(b, f);
         }
         catch
         {
-            try { return Path.GetFileName(NormalizeUserPath(fullPath)); }
-            catch { return fullPath; }
+            try
+            {
+                return Path.GetFileName(NormalizeUserPath(fullPath));
+            }
+            catch
+            {
+                return fullPath;
+            }
         }
     }
 
     /// <summary>
-    /// Cleans a user-provided path (spaces, quotes, env vars).
+    ///     Cleans a user-provided path (spaces, quotes, env vars).
     /// </summary>
     /// <param name="path">Raw path.</param>
     /// <returns>Cleaned path.</returns>
@@ -89,7 +95,7 @@ public sealed class PathService : IPathService
         if (string.IsNullOrWhiteSpace(path))
             return path;
 
-        string cleaned = StripWrappingQuotes(path);
+        var cleaned = StripWrappingQuotes(path);
         try
         {
             cleaned = Environment.ExpandEnvironmentVariables(cleaned);
@@ -103,7 +109,7 @@ public sealed class PathService : IPathService
     }
 
     /// <summary>
-    /// Removes wrapping quotes if present.
+    ///     Removes wrapping quotes if present.
     /// </summary>
     /// <param name="path">Raw path.</param>
     /// <returns>Path without wrapping quotes.</returns>
@@ -112,11 +118,11 @@ public sealed class PathService : IPathService
         if (string.IsNullOrWhiteSpace(path))
             return path;
 
-        string trimmed = path.Trim();
+        var trimmed = path.Trim();
         if (trimmed.Length >= 2)
         {
-            char first = trimmed[0];
-            char last = trimmed[^1];
+            var first = trimmed[0];
+            var last = trimmed[^1];
             if ((first == '"' && last == '"') || (first == '\'' && last == '\''))
                 return trimmed[1..^1].Trim();
         }
@@ -124,4 +130,3 @@ public sealed class PathService : IPathService
         return trimmed;
     }
 }
-

@@ -1,39 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Globalization;
 using System.Text.Json;
 using EasySave.Application.Services;
 using EasySave.Domain.Models;
 using EasySave.Infrastructure.IO;
-using EasySave.Infrastructure.Logging;
 using EasySave.Infrastructure.Persistence;
 using EasySave.Presentation.Cli;
-using NUnit.Framework;
 
 namespace EasySaveTest;
 
 /// <summary>
-/// Integration tests for the command-line controller.
+///     Integration tests for the command-line controller.
 /// </summary>
 [TestFixture]
 public class CommandControllerTests
 {
-    private string _rootDir = null!;
-    private string _configDir = null!;
-    private string _logDir = null!;
-
-    private JobRepository _repo = null!;
-    private StateFileService _state = null!;
-    private BackupService _backup = null!;
-    private PathService _paths = null!;
-
     /// <summary>
-    /// Prepares the temporary test environment.
+    ///     Prepares the temporary test environment.
     /// </summary>
     [SetUp]
     public void Setup()
     {
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
         _rootDir = Path.Combine(Path.GetTempPath(), "EasySave_CommandControllerTests_" + Path.GetRandomFileName());
         _configDir = Path.Combine(_rootDir, "config");
         _logDir = Path.Combine(_rootDir, "log");
@@ -45,7 +34,7 @@ public class CommandControllerTests
         _state = new StateFileService(_configDir);
         _paths = new PathService();
 
-        var logWriter = new JsonLogWriter<LogEntry>(_logDir);
+        var logWriter = new ConfigurableLogWriter<LogEntry>(_logDir);
         var fileSelector = new BackupFileSelector(_paths);
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, _paths);
         var fileCopier = new FileCopier();
@@ -54,7 +43,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Cleans up the temporary test environment.
+    ///     Cleans up the temporary test environment.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -70,26 +59,38 @@ public class CommandControllerTests
         }
     }
 
-    /// <summary>
-    /// Saves a list of jobs in the repository.
-    /// </summary>
-    /// <param name="jobs">Jobs to save.</param>
-    private void SaveJobs(params BackupJob[] jobs) => _repo.Save(jobs.ToList());
+    private string _rootDir = null!;
+    private string _configDir = null!;
+    private string _logDir = null!;
+
+    private JobRepository _repo = null!;
+    private StateFileService _state = null!;
+    private BackupService _backup = null!;
+    private PathService _paths = null!;
 
     /// <summary>
-    /// Executes the controller while capturing console output.
+    ///     Saves a list of jobs in the repository.
+    /// </summary>
+    /// <param name="jobs">Jobs to save.</param>
+    private void SaveJobs(params BackupJob[] jobs)
+    {
+        _repo.Save(jobs.ToList());
+    }
+
+    /// <summary>
+    ///     Executes the controller while capturing console output.
     /// </summary>
     /// <param name="args">CLI arguments.</param>
     /// <returns>Exit code and captured output.</returns>
     private (int exitCode, string output) RunWithOutput(params string[] args)
     {
-        TextWriter originalOut = Console.Out;
+        var originalOut = Console.Out;
         var sw = new StringWriter();
         Console.SetOut(sw);
 
         try
         {
-            int code = CommandController.Run(args, _repo, _backup, _state, _paths);
+            var code = CommandController.Run(args, _repo, _backup, _state, _paths);
             return (code, sw.ToString());
         }
         finally
@@ -99,18 +100,18 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Reads and deserializes the state file.
+    ///     Reads and deserializes the state file.
     /// </summary>
     /// <returns>List of states.</returns>
     private List<BackupJobState> ReadStateFile()
     {
-        string statePath = Path.Combine(_configDir, "state.json");
-        string json = File.ReadAllText(statePath);
+        var statePath = Path.Combine(_configDir, "state.json");
+        var json = File.ReadAllText(statePath);
         return JsonSerializer.Deserialize<List<BackupJobState>>(json, JsonFile.Options) ?? new List<BackupJobState>();
     }
 
     /// <summary>
-    /// Reads all available JSON log entries.
+    ///     Reads all available JSON log entries.
     /// </summary>
     /// <returns>List of log entries.</returns>
     private List<LogEntry> ReadAllLogEntries()
@@ -119,23 +120,21 @@ public class CommandControllerTests
             return new List<LogEntry>();
 
         var entries = new List<LogEntry>();
-        foreach (string file in Directory.GetFiles(_logDir, "*.json"))
+        foreach (var file in Directory.GetFiles(_logDir, "*.json"))
+        foreach (var line in File.ReadAllLines(file))
         {
-            foreach (string line in File.ReadAllLines(file))
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                    continue;
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
 
-                try
-                {
-                    LogEntry? entry = JsonSerializer.Deserialize<LogEntry>(line);
-                    if (entry != null)
-                        entries.Add(entry);
-                }
-                catch
-                {
-                    // Ignore malformed lines so we can still assert on what we did parse.
-                }
+            try
+            {
+                var entry = JsonSerializer.Deserialize<LogEntry>(line);
+                if (entry != null)
+                    entries.Add(entry);
+            }
+            catch
+            {
+                // Ignore malformed lines so we can still assert on what we did parse.
             }
         }
 
@@ -143,12 +142,12 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Counts occurrences of a value within a text.
+    ///     Counts occurrences of a value within a text.
     /// </summary>
     private static int CountOccurrences(string text, string value)
     {
-        int count = 0;
-        int idx = 0;
+        var count = 0;
+        var idx = 0;
 
         while (true)
         {
@@ -164,18 +163,22 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Creates a backup job for tests.
+    ///     Creates a backup job for tests.
     /// </summary>
-    private static BackupJob MakeJob(int id, string name, string sourceDir, string targetDir, BackupType type = BackupType.Complete)
-        => new() { Id = id, Name = name, SourceDirectory = sourceDir, TargetDirectory = targetDir, Type = type };
+    private static BackupJob MakeJob(int id, string name, string sourceDir, string targetDir,
+        BackupType type = BackupType.Complete)
+    {
+        return new BackupJob
+            { Id = id, Name = name, SourceDirectory = sourceDir, TargetDirectory = targetDir, Type = type };
+    }
 
     /// <summary>
-    /// Verifies usage is printed when no argument is provided.
+    ///     Verifies usage is printed when no argument is provided.
     /// </summary>
     [Test]
     public void Run_NoArgs_PrintsUsageAndReturns1()
     {
-        var (code, output) = RunWithOutput(Array.Empty<string>());
+        var (code, output) = RunWithOutput();
 
         Assert.That(code, Is.EqualTo(1));
         Assert.That(output, Does.Contain("Usage:"));
@@ -185,7 +188,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifies usage is printed for invalid arguments.
+    ///     Verifies usage is printed for invalid arguments.
     /// </summary>
     [Test]
     public void Run_InvalidArgs_PrintsUsageAndReturns1()
@@ -197,7 +200,7 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifies that no configured job returns 1 and does not create state.json.
+    ///     Verifies that no configured job returns 1 and does not create state.json.
     /// </summary>
     [Test]
     public void Run_NoJobsConfigured_Returns1_AndDoesNotCreateStateFile()
@@ -211,13 +214,13 @@ public class CommandControllerTests
     }
 
     /// <summary>
-    /// Verifies running a single job updates state and writes logs.
+    ///     Verifies running a single job updates state and writes logs.
     /// </summary>
     [Test]
     public void Run_SingleId_RunsJob_UpdatesState_AndWritesLogs()
     {
-        string src = Path.Combine(_rootDir, "src1");
-        string dst = Path.Combine(_rootDir, "dst1");
+        var src = Path.Combine(_rootDir, "src1");
+        var dst = Path.Combine(_rootDir, "dst1");
         Directory.CreateDirectory(src);
         Directory.CreateDirectory(dst);
 
@@ -228,26 +231,26 @@ public class CommandControllerTests
         Assert.That(code, Is.EqualTo(0));
         Assert.That(output, Does.Contain("Running job 1 - job1..."));
 
-        List<BackupJobState> states = ReadStateFile();
-        BackupJobState s1 = states.Single(s => s.JobId == 1);
+        var states = ReadStateFile();
+        var s1 = states.Single(s => s.JobId == 1);
         Assert.That(s1.State, Is.EqualTo(JobRunState.Completed));
 
-        List<LogEntry> logs = ReadAllLogEntries();
+        var logs = ReadAllLogEntries();
         Assert.That(logs.Count(e => e.BackupName == "job1"), Is.GreaterThanOrEqualTo(2));
     }
 
     /// <summary>
-    /// Verifies running a range of IDs in order.
+    ///     Verifies running a range of IDs in order.
     /// </summary>
     [Test]
     public void Run_Range_RunsAllJobsInIncreasingOrder()
     {
-        string src1 = Path.Combine(_rootDir, "src1");
-        string dst1 = Path.Combine(_rootDir, "dst1");
-        string src2 = Path.Combine(_rootDir, "src2");
-        string dst2 = Path.Combine(_rootDir, "dst2");
-        string src3 = Path.Combine(_rootDir, "src3");
-        string dst3 = Path.Combine(_rootDir, "dst3");
+        var src1 = Path.Combine(_rootDir, "src1");
+        var dst1 = Path.Combine(_rootDir, "dst1");
+        var src2 = Path.Combine(_rootDir, "src2");
+        var dst2 = Path.Combine(_rootDir, "dst2");
+        var src3 = Path.Combine(_rootDir, "src3");
+        var dst3 = Path.Combine(_rootDir, "dst3");
 
         Directory.CreateDirectory(src1);
         Directory.CreateDirectory(dst1);
@@ -266,9 +269,9 @@ public class CommandControllerTests
 
         Assert.That(code, Is.EqualTo(0));
 
-        int i1 = output.IndexOf("Running job 1 - job1...", StringComparison.Ordinal);
-        int i2 = output.IndexOf("Running job 2 - job2...", StringComparison.Ordinal);
-        int i3 = output.IndexOf("Running job 3 - job3...", StringComparison.Ordinal);
+        var i1 = output.IndexOf("Running job 1 - job1...", StringComparison.Ordinal);
+        var i2 = output.IndexOf("Running job 2 - job2...", StringComparison.Ordinal);
+        var i3 = output.IndexOf("Running job 3 - job3...", StringComparison.Ordinal);
 
         Assert.That(i1, Is.GreaterThanOrEqualTo(0));
         Assert.That(i2, Is.GreaterThanOrEqualTo(0));
@@ -276,24 +279,24 @@ public class CommandControllerTests
         Assert.That(i1, Is.LessThan(i2));
         Assert.That(i2, Is.LessThan(i3));
 
-        List<BackupJobState> states = ReadStateFile();
+        var states = ReadStateFile();
         Assert.That(states.Single(s => s.JobId == 1).State, Is.EqualTo(JobRunState.Completed));
         Assert.That(states.Single(s => s.JobId == 2).State, Is.EqualTo(JobRunState.Completed));
         Assert.That(states.Single(s => s.JobId == 3).State, Is.EqualTo(JobRunState.Completed));
     }
 
     /// <summary>
-    /// Verifies running a list separated by semicolons.
+    ///     Verifies running a list separated by semicolons.
     /// </summary>
     [Test]
     public void Run_SemicolonList_RunsOnlySpecifiedJobs()
     {
-        string src1 = Path.Combine(_rootDir, "src1");
-        string dst1 = Path.Combine(_rootDir, "dst1");
-        string src2 = Path.Combine(_rootDir, "src2");
-        string dst2 = Path.Combine(_rootDir, "dst2");
-        string src3 = Path.Combine(_rootDir, "src3");
-        string dst3 = Path.Combine(_rootDir, "dst3");
+        var src1 = Path.Combine(_rootDir, "src1");
+        var dst1 = Path.Combine(_rootDir, "dst1");
+        var src2 = Path.Combine(_rootDir, "src2");
+        var dst2 = Path.Combine(_rootDir, "dst2");
+        var src3 = Path.Combine(_rootDir, "src3");
+        var dst3 = Path.Combine(_rootDir, "dst3");
 
         Directory.CreateDirectory(src1);
         Directory.CreateDirectory(dst1);
@@ -315,22 +318,22 @@ public class CommandControllerTests
         Assert.That(output, Does.Not.Contain("Running job 2 - job2..."));
         Assert.That(output, Does.Contain("Running job 3 - job3..."));
 
-        List<BackupJobState> states = ReadStateFile();
+        var states = ReadStateFile();
         Assert.That(states.Single(s => s.JobId == 1).State, Is.EqualTo(JobRunState.Completed));
         Assert.That(states.Single(s => s.JobId == 2).State, Is.EqualTo(JobRunState.Inactive));
         Assert.That(states.Single(s => s.JobId == 3).State, Is.EqualTo(JobRunState.Completed));
     }
 
     /// <summary>
-    /// Verifies deduplication of input IDs.
+    ///     Verifies deduplication of input IDs.
     /// </summary>
     [Test]
     public void Run_DeduplicatesIds_AndDoesNotRunSameJobTwice()
     {
-        string src1 = Path.Combine(_rootDir, "src1");
-        string dst1 = Path.Combine(_rootDir, "dst1");
-        string src2 = Path.Combine(_rootDir, "src2");
-        string dst2 = Path.Combine(_rootDir, "dst2");
+        var src1 = Path.Combine(_rootDir, "src1");
+        var dst1 = Path.Combine(_rootDir, "dst1");
+        var src2 = Path.Combine(_rootDir, "src2");
+        var dst2 = Path.Combine(_rootDir, "dst2");
 
         Directory.CreateDirectory(src1);
         Directory.CreateDirectory(dst1);
@@ -348,19 +351,19 @@ public class CommandControllerTests
         Assert.That(CountOccurrences(output, "Running job 1 - job1..."), Is.EqualTo(1));
         Assert.That(CountOccurrences(output, "Running job 2 - job2..."), Is.EqualTo(1));
 
-        List<BackupJobState> states = ReadStateFile();
+        var states = ReadStateFile();
         Assert.That(states.Single(s => s.JobId == 1).State, Is.EqualTo(JobRunState.Completed));
         Assert.That(states.Single(s => s.JobId == 2).State, Is.EqualTo(JobRunState.Completed));
     }
 
     /// <summary>
-    /// Verifies behavior for an unknown job ID.
+    ///     Verifies behavior for an unknown job ID.
     /// </summary>
     [Test]
     public void Run_UnknownJobId_PrintsNotFound_AndKeepsStateInactive()
     {
-        string src1 = Path.Combine(_rootDir, "src1");
-        string dst1 = Path.Combine(_rootDir, "dst1");
+        var src1 = Path.Combine(_rootDir, "src1");
+        var dst1 = Path.Combine(_rootDir, "dst1");
         Directory.CreateDirectory(src1);
         Directory.CreateDirectory(dst1);
 
@@ -372,19 +375,19 @@ public class CommandControllerTests
         Assert.That(output, Does.Contain("Job 99 not found."));
         Assert.That(output, Does.Not.Contain("Running job 99"));
 
-        List<BackupJobState> states = ReadStateFile();
+        var states = ReadStateFile();
         Assert.That(states.Single(s => s.JobId == 1).State, Is.EqualTo(JobRunState.Inactive));
     }
 
     /// <summary>
-    /// Verifies a job is skipped when the source folder is missing.
+    ///     Verifies a job is skipped when the source folder is missing.
     /// </summary>
     [Test]
     public void Run_SkipsJob_WhenSourceDirectoryIsMissing()
     {
         // Source does not exist; target does.
-        string src = Path.Combine(_rootDir, "missing_src");
-        string dst = Path.Combine(_rootDir, "dst1");
+        var src = Path.Combine(_rootDir, "missing_src");
+        var dst = Path.Combine(_rootDir, "dst1");
         Directory.CreateDirectory(dst);
 
         SaveJobs(MakeJob(1, "job1", src, dst));
@@ -399,21 +402,21 @@ public class CommandControllerTests
         Assert.That(Directory.GetFiles(_logDir, "*.json").Length, Is.EqualTo(0));
 
         // State is initialized but job was not executed -> still Inactive.
-        List<BackupJobState> states = ReadStateFile();
+        var states = ReadStateFile();
         Assert.That(states.Single(s => s.JobId == 1).State, Is.EqualTo(JobRunState.Inactive));
     }
 
     /// <summary>
-    /// Verifies support for arguments split by the shell.
+    ///     Verifies support for arguments split by the shell.
     /// </summary>
     [Test]
     public void Run_SupportsSplitArgumentsLikeShellWouldProvide()
     {
         // The controller joins args together, so passing ["1", ";", "3"] should work.
-        string src1 = Path.Combine(_rootDir, "src1");
-        string dst1 = Path.Combine(_rootDir, "dst1");
-        string src3 = Path.Combine(_rootDir, "src3");
-        string dst3 = Path.Combine(_rootDir, "dst3");
+        var src1 = Path.Combine(_rootDir, "src1");
+        var dst1 = Path.Combine(_rootDir, "dst1");
+        var src3 = Path.Combine(_rootDir, "src3");
+        var dst3 = Path.Combine(_rootDir, "dst3");
         Directory.CreateDirectory(src1);
         Directory.CreateDirectory(dst1);
         Directory.CreateDirectory(src3);

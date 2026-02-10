@@ -3,17 +3,16 @@ using EasySave.Application.Abstractions;
 namespace EasySave.Presentation.Cli;
 
 /// <summary>
-/// Handles execution of backup jobs via command line arguments.
+///     Handles execution of backup jobs via command line arguments.
 /// </summary>
 public static class CommandController
 {
     /// <summary>
-    /// Entry point for command-line execution.
-    ///
-    /// Supported formats:
-    /// - "1-3"  -> backups 1, 2, 3
-    /// - "1;3"  -> backups 1 and 3
-    /// - "2"    -> backup 2 only
+    ///     Entry point for command-line execution.
+    ///     Supported formats:
+    ///     - "1-3"  -> backups 1, 2, 3
+    ///     - "1;3"  -> backups 1 and 3
+    ///     - "2"    -> backup 2 only
     /// </summary>
     /// <returns>Process exit code.</returns>
     public static int Run(
@@ -23,7 +22,7 @@ public static class CommandController
         IStateService stateService,
         IPathService paths)
     {
-        string raw = string.Join(string.Empty, args).Trim();
+        var raw = string.Join(string.Empty, args).Trim();
         if (string.IsNullOrWhiteSpace(raw))
         {
             PrintUsage();
@@ -46,7 +45,7 @@ public static class CommandController
     }
 
     /// <summary>
-    /// Prints usage syntax.
+    ///     Prints usage syntax.
     /// </summary>
     private static void PrintUsage()
     {
@@ -54,7 +53,7 @@ public static class CommandController
     }
 
     /// <summary>
-    /// Parses raw arguments into a list of ids.
+    ///     Parses raw arguments into a list of ids.
     /// </summary>
     /// <param name="arg">Raw argument string.</param>
     /// <returns>List of ids.</returns>
@@ -63,5 +62,3 @@ public static class CommandController
         return CommandLineArgumentParser.Parse(arg);
     }
 }
-
-

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace EasySave.Infrastructure.IO;
 
 /// <summary>
-/// JSON read/write helpers with error tolerance.
+///     JSON read/write helpers with error tolerance.
 /// </summary>
 public static class JsonFile
 {
@@ -17,7 +17,7 @@ public static class JsonFile
     };
 
     /// <summary>
-    /// Reads a JSON file or returns a default value if missing/invalid.
+    ///     Reads a JSON file or returns a default value if missing/invalid.
     /// </summary>
     /// <typeparam name="T">Deserialization type.</typeparam>
     /// <param name="path">File path.</param>
@@ -30,7 +30,7 @@ public static class JsonFile
 
         try
         {
-            string json = File.ReadAllText(path);
+            var json = File.ReadAllText(path);
             return JsonSerializer.Deserialize<T>(json, Options) ?? defaultValue;
         }
         catch
@@ -46,7 +46,7 @@ public static class JsonFile
                     return defaultValue;
 
                 // Convert JSONL to JSON array
-                string jsonArray = "[" + string.Join(",", lines) + "]";
+                var jsonArray = "[" + string.Join(",", lines) + "]";
                 return JsonSerializer.Deserialize<T>(jsonArray, Options) ?? defaultValue;
             }
             catch
@@ -57,7 +57,7 @@ public static class JsonFile
     }
 
     /// <summary>
-    /// Writes a JSON file atomically (tmp + rename).
+    ///     Writes a JSON file atomically (tmp + rename).
     /// </summary>
     /// <typeparam name="T">Type to serialize.</typeparam>
     /// <param name="path">File path.</param>
@@ -65,8 +65,8 @@ public static class JsonFile
     public static void WriteAtomic<T>(string path, T value)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(path) ?? ".");
-        string tmp = path + ".tmp";
-        string json = JsonSerializer.Serialize(value, Options);
+        var tmp = path + ".tmp";
+        var json = JsonSerializer.Serialize(value, Options);
         File.WriteAllText(tmp, json);
 
         if (File.Exists(path))
@@ -75,4 +75,3 @@ public static class JsonFile
         File.Move(tmp, path);
     }
 }
-

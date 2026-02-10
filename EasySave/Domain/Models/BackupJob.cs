@@ -1,7 +1,7 @@
 namespace EasySave.Domain.Models;
 
 /// <summary>
-/// Describes a backup job.
+///     Describes a backup job.
 /// </summary>
 public sealed class BackupJob
 {

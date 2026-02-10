@@ -5,7 +5,7 @@ namespace EasySave.Infrastructure.Lang;
 public static class LangUtil
 {
     /// <summary>
-    /// Applies UI/thread culture if it is valid.
+    ///     Applies UI/thread culture if it is valid.
     /// </summary>
     /// <param name="cultureName">Culture name (e.g., fr-FR).</param>
     public static void TryApplyCulture(string cultureName)
@@ -15,7 +15,7 @@ public static class LangUtil
 
         try
         {
-            CultureInfo culture = new CultureInfo(cultureName);
+            var culture = new CultureInfo(cultureName);
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
         }
