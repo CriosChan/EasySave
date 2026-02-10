@@ -43,15 +43,7 @@ internal sealed class EasySaveApplication : IApplication
         IStateService state = new StateFileService(configDir);
 
         
-        AbstractLogger<LogEntry> logWriter;
-        if (cfg.LogType == "xml")
-        {
-            logWriter = new XmlLogger<LogEntry>(logDir);
-        }
-        else
-        {
-            logWriter = new JsonLogger<LogEntry>(logDir);
-        }
+        ILogWriter<LogEntry> logWriter = new ConfigurableLogWriter<LogEntry>(logDir);
         IBackupFileSelector fileSelector = new BackupFileSelector(paths);
         IBackupDirectoryPreparer directoryPreparer = new BackupDirectoryPreparer(logWriter, paths);
         IFileCopier fileCopier = new FileCopier();

@@ -1,5 +1,4 @@
 using EasySave.Application.Services;
-using EasySave.Bootstrap;
 using EasySave.Infrastructure.Configuration;
 using EasySave.Presentation.Ui.Console;
 
@@ -39,13 +38,13 @@ public class LogTypeView
             new("JSON" + (cfg.LogType == "json" ? " (Selected)" : ""), () =>
             {
                 _loggerService.SetLogger("json");
-                new EasySaveApplication().Run([]);
+                UserInterface.ShowMenu();
             }),
 
             new("XML" + (cfg.LogType == "xml" ? " (Selected)" : ""), () =>
             {
                 _loggerService.SetLogger("xml");
-                new EasySaveApplication().Run([]);
+                UserInterface.ShowMenu();
             }),
 
             new(Resources.UserInterface.Return, UserInterface.ShowMenu)
