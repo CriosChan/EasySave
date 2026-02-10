@@ -5,13 +5,13 @@ using EasySave.Infrastructure.IO;
 namespace EasySave.Infrastructure.Persistence;
 
 /// <summary>
-/// Persists the list of backup jobs to a JSON file (jobs.json).
+///     Persists the list of backup jobs to a JSON file (jobs.json).
 /// </summary>
 /// <remarks>
-/// Requirements for v1.x:
-/// - At most 5 jobs are supported.
-/// - Jobs are stored in a human-readable JSON file.
-/// - Writes are performed atomically to reduce corruption risk.
+///     Requirements for v1.x:
+///     - At most 5 jobs are supported.
+///     - Jobs are stored in a human-readable JSON file.
+///     - Writes are performed atomically to reduce corruption risk.
 /// </remarks>
 public sealed class JobRepository : IJobRepository
 {
@@ -19,7 +19,7 @@ public sealed class JobRepository : IJobRepository
     private readonly string _jobsPath;
 
     /// <summary>
-    /// Creates a repository that stores jobs under the given configuration directory.
+    ///     Creates a repository that stores jobs under the given configuration directory.
     /// </summary>
     /// <param name="configDirectory">Absolute directory where jobs.json will be stored.</param>
     public JobRepository(string configDirectory)
@@ -28,7 +28,7 @@ public sealed class JobRepository : IJobRepository
     }
 
     /// <summary>
-    /// Loads jobs from disk.
+    ///     Loads jobs from disk.
     /// </summary>
     public List<BackupJob> Load()
     {
@@ -36,7 +36,7 @@ public sealed class JobRepository : IJobRepository
     }
 
     /// <summary>
-    /// Saves jobs to disk.
+    ///     Saves jobs to disk.
     /// </summary>
     /// <param name="jobs">Job list to write.</param>
     public void Save(List<BackupJob> jobs)
@@ -45,7 +45,7 @@ public sealed class JobRepository : IJobRepository
     }
 
     /// <summary>
-    /// Adds a job and assigns an available id in range 1..5.
+    ///     Adds a job and assigns an available id in range 1..5.
     /// </summary>
     /// <param name="jobs">Existing jobs loaded in memory.</param>
     /// <param name="job">Job to add (id will be assigned).</param>
@@ -55,7 +55,7 @@ public sealed class JobRepository : IJobRepository
         if (jobs.Count >= MaxJobs)
             return (false, "Error.MaxJobs");
 
-        int id = GetNextFreeId(jobs);
+        var id = GetNextFreeId(jobs);
         if (id == -1)
             return (false, "Error.NoFreeSlot");
 
@@ -66,7 +66,7 @@ public sealed class JobRepository : IJobRepository
     }
 
     /// <summary>
-    /// Removes a job by id or by name.
+    ///     Removes a job by id or by name.
     /// </summary>
     /// <param name="jobs">Existing jobs loaded in memory.</param>
     /// <param name="idOrName">Id ("1") or job name.</param>
@@ -74,14 +74,10 @@ public sealed class JobRepository : IJobRepository
     public bool RemoveJob(List<BackupJob> jobs, string idOrName)
     {
         BackupJob? toRemove = null;
-        if (int.TryParse(idOrName, out int id))
-        {
+        if (int.TryParse(idOrName, out var id))
             toRemove = jobs.FirstOrDefault(j => j.Id == id);
-        }
         else
-        {
             toRemove = jobs.FirstOrDefault(j => string.Equals(j.Name, idOrName, StringComparison.OrdinalIgnoreCase));
-        }
 
         if (toRemove == null)
             return false;
@@ -92,15 +88,13 @@ public sealed class JobRepository : IJobRepository
     }
 
     /// <summary>
-    /// Finds the next available slot in 1..5.
+    ///     Finds the next available slot in 1..5.
     /// </summary>
     private static int GetNextFreeId(IReadOnlyCollection<BackupJob> jobs)
     {
-        for (int i = 1; i <= MaxJobs; i++)
-        {
+        for (var i = 1; i <= MaxJobs; i++)
             if (jobs.All(j => j.Id != i))
                 return i;
-        }
 
         return -1;
     }

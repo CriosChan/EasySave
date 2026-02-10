@@ -5,20 +5,20 @@ using System.Xml.Serialization;
 namespace EasyLog;
 
 /// <summary>
-/// Logger that serializes entries to XML.
+///     Logger that serializes entries to XML.
 /// </summary>
 public class XmlLogger<T>(string logDirectory) : AbstractLogger<T>(logDirectory, "xml")
 {
     private readonly XmlWriterSettings _options = new() { Indent = false, OmitXmlDeclaration = true };
 
     /// <summary>
-    /// Serializes the specified log entry of type <typeparamref name="T"/> into a XML string.
+    ///     Serializes the specified log entry of type <typeparamref name="T" /> into a XML string.
     /// </summary>
     /// <param name="log">The log entry to serialize.</param>
     /// <returns>A XML string representation of the log entry.</returns>
     /// <remarks>
-    /// This method overrides a base class implementation to provide XML serialization
-    /// using the <see cref="XmlSerializer"/> class with specific serialization options.
+    ///     This method overrides a base class implementation to provide XML serialization
+    ///     using the <see cref="XmlSerializer" /> class with specific serialization options.
     /// </remarks>
     protected override string Serialize(T log)
     {
@@ -28,10 +28,10 @@ public class XmlLogger<T>(string logDirectory) : AbstractLogger<T>(logDirectory,
         {
             using (var xmlWriter = XmlWriter.Create(stringWriter, _options))
             {
-
                 xmlSerializer.Serialize(xmlWriter, log);
             }
         }
+
         return stringBuilder.ToString();
     }
 }

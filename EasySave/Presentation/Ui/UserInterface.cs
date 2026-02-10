@@ -4,14 +4,14 @@ using EasySave.Presentation.Ui.Console;
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Public entry-point for the interactive console UI.
+///     Public entry-point for the interactive console UI.
 /// </summary>
 public static class UserInterface
 {
     private static MainMenuController? _menu;
 
     /// <summary>
-    /// Initializes UI components with the required services.
+    ///     Initializes UI components with the required services.
     /// </summary>
     /// <param name="repository">Job repository.</param>
     /// <param name="backupService">Backup service.</param>
@@ -32,19 +32,19 @@ public static class UserInterface
         if (paths == null) throw new ArgumentNullException(nameof(paths));
 
         IConsole console = new SystemConsole();
-        ConsolePrompter prompter = new ConsolePrompter(console, paths);
-        JobRepositoryErrorTranslator errorTranslator = new JobRepositoryErrorTranslator();
+        var prompter = new ConsolePrompter(console, paths);
+        var errorTranslator = new JobRepositoryErrorTranslator();
 
-        JobListView listView = new JobListView(console, repository, prompter);
-        JobCreationView creationView = new JobCreationView(console, repository, stateSynchronizer, prompter, errorTranslator);
-        JobRemovalView removalView = new JobRemovalView(console, repository, stateSynchronizer, prompter);
-        JobLaunchView launchView = new JobLaunchView(console, repository, backupService, stateService, prompter, paths);
+        var listView = new JobListView(console, repository, prompter);
+        var creationView = new JobCreationView(console, repository, stateSynchronizer, prompter, errorTranslator);
+        var removalView = new JobRemovalView(console, repository, stateSynchronizer, prompter);
+        var launchView = new JobLaunchView(console, repository, backupService, stateService, prompter, paths);
 
         _menu = new MainMenuController(console, listView, creationView, removalView, launchView);
     }
 
     /// <summary>
-    /// Show the main menu to the user.
+    ///     Show the main menu to the user.
     /// </summary>
     public static void ShowMenu()
     {
@@ -53,7 +53,7 @@ public static class UserInterface
     }
 
     /// <summary>
-    /// Ensures the UI has been initialized.
+    ///     Ensures the UI has been initialized.
     /// </summary>
     private static void EnsureInitialized()
     {

@@ -4,7 +4,7 @@ using EasySave.Domain.Models;
 namespace EasySave.Application.Services;
 
 /// <summary>
-/// Selects files eligible for copying based on the backup type.
+///     Selects files eligible for copying based on the backup type.
 /// </summary>
 public sealed class BackupFileSelector : IBackupFileSelector
 {
@@ -16,7 +16,7 @@ public sealed class BackupFileSelector : IBackupFileSelector
     }
 
     /// <summary>
-    /// Determines the list of files to copy for a job.
+    ///     Determines the list of files to copy for a job.
     /// </summary>
     /// <param name="job">Backup job.</param>
     /// <param name="sourceDir">Normalized source directory.</param>
@@ -24,27 +24,27 @@ public sealed class BackupFileSelector : IBackupFileSelector
     /// <returns>List of files to copy.</returns>
     public List<string> GetFilesToCopy(BackupJob job, string sourceDir, string targetDir)
     {
-        IEnumerable<string> allFiles = Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories);
+        var allFiles = Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories);
 
         if (job.Type == BackupType.Complete)
             return allFiles.ToList();
 
         // Differential: copy files that do not exist in target, or that are older/different.
         List<string> differential = new();
-        foreach (string sourceFile in allFiles)
+        foreach (var sourceFile in allFiles)
         {
-            string rel = _paths.GetRelativePath(sourceDir, sourceFile);
-            string targetFile = Path.Combine(targetDir, rel);
+            var rel = _paths.GetRelativePath(sourceDir, sourceFile);
+            var targetFile = Path.Combine(targetDir, rel);
             if (!File.Exists(targetFile))
             {
                 differential.Add(sourceFile);
                 continue;
             }
 
-            FileInfo src = new FileInfo(sourceFile);
-            FileInfo dst = new FileInfo(targetFile);
+            var src = new FileInfo(sourceFile);
+            var dst = new FileInfo(targetFile);
 
-            bool isDifferent = src.Length != dst.Length || src.LastWriteTimeUtc > dst.LastWriteTimeUtc;
+            var isDifferent = src.Length != dst.Length || src.LastWriteTimeUtc > dst.LastWriteTimeUtc;
             if (isDifferent)
                 differential.Add(sourceFile);
         }

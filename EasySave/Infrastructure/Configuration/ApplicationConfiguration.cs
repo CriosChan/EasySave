@@ -1,11 +1,11 @@
-using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.Configuration;
 
 namespace EasySave.Infrastructure.Configuration;
 
 /// <summary>
-/// Loads and exposes application configuration.
+///     Loads and exposes application configuration.
 /// </summary>
 public class ApplicationConfiguration
 {
@@ -14,7 +14,14 @@ public class ApplicationConfiguration
     private string _configFile = "appsettings.json";
 
     /// <summary>
-    /// Loaded configuration instance.
+    ///     Initializes an empty configuration (used by the binder).
+    /// </summary>
+    public ApplicationConfiguration()
+    {
+    }
+
+    /// <summary>
+    ///     Loaded configuration instance.
     /// </summary>
     public static ApplicationConfiguration Instance
     {
@@ -64,7 +71,7 @@ public class ApplicationConfiguration
             }
         }
     } = "";
-    
+
     public string LogType
     {
         get;
@@ -79,12 +86,7 @@ public class ApplicationConfiguration
     } = "json";
 
     /// <summary>
-    /// Initializes an empty configuration (used by the binder).
-    /// </summary>
-    public ApplicationConfiguration() { }
-
-    /// <summary>
-    /// Loads configuration from a JSON file.
+    ///     Loads configuration from a JSON file.
     /// </summary>
     /// <param name="configFile">Configuration file name.</param>
     public static void Load(string configFile = "appsettings.json")
@@ -97,7 +99,7 @@ public class ApplicationConfiguration
                     // Use the executable directory so the config is found even if the app is started
                     // from a different working directory.
                     .SetBasePath(AppContext.BaseDirectory)
-                    .AddJsonFile(configFile, optional: false, reloadOnChange: true)
+                    .AddJsonFile(configFile, false, true)
                     .Build();
 
                 _instance = configuration.Get<ApplicationConfiguration>()!;

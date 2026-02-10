@@ -1,7 +1,7 @@
 namespace EasySave.Domain.Models;
 
 /// <summary>
-/// Describes the execution state of a backup job.
+///     Describes the execution state of a backup job.
 /// </summary>
 public sealed class BackupJobState
 {

@@ -1,11 +1,10 @@
 using EasySave.Application.Abstractions;
 using EasySave.Domain.Models;
-using EasySave.Presentation.Resources;
 
 namespace EasySave.Presentation.Ui.Console;
 
 /// <summary>
-/// Handles basic user input loops (non-empty strings, directory validation, choice selection).
+///     Handles basic user input loops (non-empty strings, directory validation, choice selection).
 /// </summary>
 internal sealed class ConsolePrompter
 {
@@ -13,7 +12,7 @@ internal sealed class ConsolePrompter
     private readonly IPathService _paths;
 
     /// <summary>
-    /// Builds the prompter with its dependencies.
+    ///     Builds the prompter with its dependencies.
     /// </summary>
     /// <param name="console">Target console.</param>
     /// <param name="paths">Path service.</param>
@@ -24,7 +23,7 @@ internal sealed class ConsolePrompter
     }
 
     /// <summary>
-    /// Reads a non-empty value.
+    ///     Reads a non-empty value.
     /// </summary>
     /// <param name="prompt">Prompt message.</param>
     /// <returns>Non-empty value.</returns>
@@ -33,7 +32,7 @@ internal sealed class ConsolePrompter
         while (true)
         {
             _console.WriteLine(prompt);
-            string? raw = _console.ReadLine();
+            var raw = _console.ReadLine();
             raw = (raw ?? string.Empty).Trim();
             if (!string.IsNullOrWhiteSpace(raw))
                 return raw;
@@ -43,7 +42,7 @@ internal sealed class ConsolePrompter
     }
 
     /// <summary>
-    /// Reads an existing directory path.
+    ///     Reads an existing directory path.
     /// </summary>
     /// <param name="prompt">Prompt message.</param>
     /// <param name="notFoundMessage">Error message if not found.</param>
@@ -52,8 +51,8 @@ internal sealed class ConsolePrompter
     {
         while (true)
         {
-            string raw = ReadNonEmpty(prompt);
-            if (_paths.TryNormalizeExistingDirectory(raw, out string normalized))
+            var raw = ReadNonEmpty(prompt);
+            if (_paths.TryNormalizeExistingDirectory(raw, out var normalized))
                 return normalized;
 
             _console.WriteLine(notFoundMessage);
@@ -61,7 +60,7 @@ internal sealed class ConsolePrompter
     }
 
     /// <summary>
-    /// Reads the backup type from a user choice.
+    ///     Reads the backup type from a user choice.
     /// </summary>
     /// <param name="prompt">Prompt message.</param>
     /// <param name="options">Displayed options.</param>
@@ -73,7 +72,7 @@ internal sealed class ConsolePrompter
         {
             _console.WriteLine(prompt);
             _console.WriteLine(options);
-            string? raw = _console.ReadLine();
+            var raw = _console.ReadLine();
             raw = (raw ?? string.Empty).Trim();
 
             if (raw == "1")
@@ -86,13 +85,13 @@ internal sealed class ConsolePrompter
     }
 
     /// <summary>
-    /// Pauses the UI until a key is pressed.
+    ///     Pauses the UI until a key is pressed.
     /// </summary>
     /// <param name="pressAnyKeyMessage">Displayed message.</param>
     public void Pause(string pressAnyKeyMessage)
     {
         _console.WriteLine(string.Empty);
         _console.WriteLine(pressAnyKeyMessage);
-        _console.ReadKey(intercept: true);
+        _console.ReadKey(true);
     }
 }

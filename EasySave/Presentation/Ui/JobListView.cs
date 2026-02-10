@@ -1,21 +1,19 @@
 using EasySave.Application.Abstractions;
-using EasySave.Domain.Models;
-using EasySave.Presentation.Resources;
 using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// View for listing backup jobs.
+///     View for listing backup jobs.
 /// </summary>
 internal sealed class JobListView
 {
     private readonly IConsole _console;
-    private readonly IJobRepository _repository;
     private readonly ConsolePrompter _prompter;
+    private readonly IJobRepository _repository;
 
     /// <summary>
-    /// Builds the list view.
+    ///     Builds the list view.
     /// </summary>
     /// <param name="console">Target console.</param>
     /// <param name="repository">Job repository.</param>
@@ -28,11 +26,11 @@ internal sealed class JobListView
     }
 
     /// <summary>
-    /// Displays the list of available jobs.
+    ///     Displays the list of available jobs.
     /// </summary>
     public void Show()
     {
-        List<BackupJob> jobs = _repository.Load().OrderBy(j => j.Id).ToList();
+        var jobs = _repository.Load().OrderBy(j => j.Id).ToList();
 
         _console.Clear();
         _console.WriteLine(Resources.UserInterface.Jobs_Header);
@@ -48,8 +46,9 @@ internal sealed class JobListView
         _console.WriteLine(Resources.UserInterface.Jobs_Columns);
         _console.WriteLine(new string('-', 80));
 
-        foreach (BackupJob job in jobs)
-            _console.WriteLine($"{job.Id,2} | {job.Name,-20} | {job.Type,-12} | {job.SourceDirectory} -> {job.TargetDirectory}");
+        foreach (var job in jobs)
+            _console.WriteLine(
+                $"{job.Id,2} | {job.Name,-20} | {job.Type,-12} | {job.SourceDirectory} -> {job.TargetDirectory}");
 
         _prompter.Pause(Resources.UserInterface.Common_PressAnyKey);
     }

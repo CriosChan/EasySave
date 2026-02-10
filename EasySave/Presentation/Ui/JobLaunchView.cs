@@ -1,24 +1,23 @@
 using EasySave.Application.Abstractions;
 using EasySave.Domain.Models;
-using EasySave.Presentation.Resources;
 using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// View for launching a backup job.
+///     View for launching a backup job.
 /// </summary>
 internal sealed class JobLaunchView
 {
-    private readonly IConsole _console;
-    private readonly IJobRepository _repository;
     private readonly IBackupService _backupService;
-    private readonly IStateService _stateService;
-    private readonly ConsolePrompter _prompter;
+    private readonly IConsole _console;
     private readonly IPathService _paths;
+    private readonly ConsolePrompter _prompter;
+    private readonly IJobRepository _repository;
+    private readonly IStateService _stateService;
 
     /// <summary>
-    /// Builds the launch view.
+    ///     Builds the launch view.
     /// </summary>
     /// <param name="console">Target console.</param>
     /// <param name="repository">Job repository.</param>
@@ -43,14 +42,14 @@ internal sealed class JobLaunchView
     }
 
     /// <summary>
-    /// Displays the launch screen and executes the selected job(s).
+    ///     Displays the launch screen and executes the selected job(s).
     /// </summary>
     public void Show()
     {
-        List<BackupJob> jobs = _repository.Load().OrderBy(j => j.Id).ToList();
+        var jobs = _repository.Load().OrderBy(j => j.Id).ToList();
 
         _console.Clear();
-        
+
         if (jobs.Count == 0)
         {
             _console.WriteLine(Resources.UserInterface.Menu_Title_StartJob);
@@ -65,31 +64,30 @@ internal sealed class JobLaunchView
             new(Resources.UserInterface.Jobs_Execute_All, () => RunAll(jobs))
         ];
         foreach (var _job in jobs)
-        {
-            options.Add(new Option(String.Format(Resources.UserInterface.Jobs_Execute_ID, _job.Id, _job.Name),
+            options.Add(new Option(string.Format(Resources.UserInterface.Jobs_Execute_ID, _job.Id, _job.Name),
                 () => RunOne(_job)));
-        }
 
         options.Add(new Option(Resources.UserInterface.Return, UserInterface.ShowMenu));
-        
+
         ListWidget.ShowList(options, _console, Resources.UserInterface.Menu_Title_StartJob);
     }
 
     /// <summary>
-    /// Executes all valid jobs.
+    ///     Executes all valid jobs.
     /// </summary>
     /// <param name="jobs">Job list.</param>
     private void RunAll(List<BackupJob> jobs)
     {
         _console.WriteLine(Resources.UserInterface.Launch_RunningAll);
 
-        foreach (BackupJob j in jobs.OrderBy(j => j.Id))
+        foreach (var j in jobs.OrderBy(j => j.Id))
         {
             if (!_paths.TryNormalizeExistingDirectory(j.SourceDirectory, out _))
             {
                 _console.WriteLine($"[{j.Id}] {Resources.UserInterface.Path_SourceNotFound}");
                 continue;
             }
+
             if (!_paths.TryNormalizeExistingDirectory(j.TargetDirectory, out _))
             {
                 _console.WriteLine($"[{j.Id}] {Resources.UserInterface.Path_TargetNotFound}");
@@ -103,7 +101,7 @@ internal sealed class JobLaunchView
     }
 
     /// <summary>
-    /// Executes a specific job.
+    ///     Executes a specific job.
     /// </summary>
     /// <param name="job">Job to run.</param>
     private void RunOne(BackupJob job)
@@ -116,6 +114,7 @@ internal sealed class JobLaunchView
             _console.WriteLine(Resources.UserInterface.Path_SourceNotFound);
             return;
         }
+
         if (!_paths.TryNormalizeExistingDirectory(job.TargetDirectory, out _))
         {
             _console.WriteLine(Resources.UserInterface.Path_TargetNotFound);

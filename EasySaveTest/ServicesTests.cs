@@ -2,20 +2,19 @@ using EasySave.Application.Services;
 using EasySave.Domain.Models;
 using EasySave.Infrastructure.IO;
 using EasySave.Infrastructure.Persistence;
-using EasyLog;
 
 namespace EasySaveTest;
 
 /// <summary>
-/// Tests for the backup job repository.
+///     Tests for the backup job repository.
 /// </summary>
 public class JobRepositoryTests
 {
-    private string _tempDir = null!;
     private JobRepository _repo = null!;
+    private string _tempDir = null!;
 
     /// <summary>
-    /// Prepares a temporary folder and a job repository.
+    ///     Prepares a temporary folder and a job repository.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -26,7 +25,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Cleans up temporary resources.
+    ///     Cleans up temporary resources.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -43,7 +42,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifies loading an empty repository returns an empty list.
+    ///     Verifies loading an empty repository returns an empty list.
     /// </summary>
     [Test]
     public void Load_EmptyRepository_ReturnsEmptyList()
@@ -54,14 +53,14 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifies saving persists jobs to the file.
+    ///     Verifies saving persists jobs to the file.
     /// </summary>
     [Test]
     public void Save_PersistsJobsToFile()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "job1", SourceDirectory = "/src1", TargetDirectory = "/dst1" }
+            new() { Id = 1, Name = "job1", SourceDirectory = "/src1", TargetDirectory = "/dst1" }
         };
 
         _repo.Save(jobs);
@@ -72,7 +71,7 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifies an ID is assigned when a slot is available.
+    ///     Verifies an ID is assigned when a slot is available.
     /// </summary>
     [Test]
     public void AddJob_AssignsId_WhenSlotAvailable()
@@ -87,15 +86,15 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifies the next available ID is assigned.
+    ///     Verifies the next available ID is assigned.
     /// </summary>
     [Test]
     public void AddJob_AssignsNextAvailableId()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "j1" },
-            new BackupJob { Id = 2, Name = "j2" }
+            new() { Id = 1, Name = "j1" },
+            new() { Id = 2, Name = "j2" }
         };
         var job = new BackupJob { Name = "j3", SourceDirectory = "/src", TargetDirectory = "/dst" };
 
@@ -106,18 +105,18 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifies an error is returned when the job limit is reached.
+    ///     Verifies an error is returned when the job limit is reached.
     /// </summary>
     [Test]
     public void AddJob_ReturnsError_WhenMaxJobsReached()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "j1" },
-            new BackupJob { Id = 2, Name = "j2" },
-            new BackupJob { Id = 3, Name = "j3" },
-            new BackupJob { Id = 4, Name = "j4" },
-            new BackupJob { Id = 5, Name = "j5" }
+            new() { Id = 1, Name = "j1" },
+            new() { Id = 2, Name = "j2" },
+            new() { Id = 3, Name = "j3" },
+            new() { Id = 4, Name = "j4" },
+            new() { Id = 5, Name = "j5" }
         };
         var job = new BackupJob { Name = "j6", SourceDirectory = "/src", TargetDirectory = "/dst" };
 
@@ -128,18 +127,18 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifies removal of a job by ID.
+    ///     Verifies removal of a job by ID.
     /// </summary>
     [Test]
     public void RemoveJob_ById_RemovesJob()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "job1" },
-            new BackupJob { Id = 2, Name = "job2" }
+            new() { Id = 1, Name = "job1" },
+            new() { Id = 2, Name = "job2" }
         };
 
-        bool removed = _repo.RemoveJob(jobs, "1");
+        var removed = _repo.RemoveJob(jobs, "1");
 
         Assert.That(removed, Is.True);
         Assert.That(jobs.Count, Is.EqualTo(1));
@@ -147,18 +146,18 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifies removal of a job by name.
+    ///     Verifies removal of a job by name.
     /// </summary>
     [Test]
     public void RemoveJob_ByName_RemovesJob()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "backup_one" },
-            new BackupJob { Id = 2, Name = "backup_two" }
+            new() { Id = 1, Name = "backup_one" },
+            new() { Id = 2, Name = "backup_two" }
         };
 
-        bool removed = _repo.RemoveJob(jobs, "backup_one");
+        var removed = _repo.RemoveJob(jobs, "backup_one");
 
         Assert.That(removed, Is.True);
         Assert.That(jobs.Count, Is.EqualTo(1));
@@ -166,49 +165,49 @@ public class JobRepositoryTests
     }
 
     /// <summary>
-    /// Verifies a non-existent job cannot be removed.
+    ///     Verifies a non-existent job cannot be removed.
     /// </summary>
     [Test]
     public void RemoveJob_NonExistent_ReturnsFalse()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "job1" }
+            new() { Id = 1, Name = "job1" }
         };
 
-        bool removed = _repo.RemoveJob(jobs, "999");
+        var removed = _repo.RemoveJob(jobs, "999");
 
         Assert.That(removed, Is.False);
         Assert.That(jobs.Count, Is.EqualTo(1));
     }
 
     /// <summary>
-    /// Verifies name-based removal is case-insensitive.
+    ///     Verifies name-based removal is case-insensitive.
     /// </summary>
     [Test]
     public void RemoveJob_ByName_CaseInsensitive()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "MyBackup" }
+            new() { Id = 1, Name = "MyBackup" }
         };
 
-        bool removed = _repo.RemoveJob(jobs, "mybackup");
+        var removed = _repo.RemoveJob(jobs, "mybackup");
 
         Assert.That(removed, Is.True);
     }
 }
 
 /// <summary>
-/// Tests for the state file service.
+///     Tests for the state file service.
 /// </summary>
 public class StateFileServiceTests
 {
-    private string _tempDir = null!;
     private StateFileService _stateService = null!;
+    private string _tempDir = null!;
 
     /// <summary>
-    /// Prepares a temporary folder and the state service.
+    ///     Prepares a temporary folder and the state service.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -219,7 +218,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Cleans up temporary resources.
+    ///     Cleans up temporary resources.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -235,32 +234,32 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifies initialization creates the state file.
+    ///     Verifies initialization creates the state file.
     /// </summary>
     [Test]
     public void Initialize_CreatesStateFile()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "job1" },
-            new BackupJob { Id = 2, Name = "job2" }
+            new() { Id = 1, Name = "job1" },
+            new() { Id = 2, Name = "job2" }
         };
 
         _stateService.Initialize(jobs);
 
-        string statePath = Path.Combine(_tempDir, "state.json");
+        var statePath = Path.Combine(_tempDir, "state.json");
         Assert.That(File.Exists(statePath), Is.True);
     }
 
     /// <summary>
-    /// Verifies jobs are initialized in the Inactive state.
+    ///     Verifies jobs are initialized in the Inactive state.
     /// </summary>
     [Test]
     public void Initialize_SetsJobsToInactive()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 1, Name = "job1" }
+            new() { Id = 1, Name = "job1" }
         };
 
         _stateService.Initialize(jobs);
@@ -271,7 +270,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifies GetOrCreate returns the existing state.
+    ///     Verifies GetOrCreate returns the existing state.
     /// </summary>
     [Test]
     public void GetOrCreate_ReturnsExisting_WhenStateExists()
@@ -286,7 +285,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifies GetOrCreate creates a state when missing.
+    ///     Verifies GetOrCreate creates a state when missing.
     /// </summary>
     [Test]
     public void GetOrCreate_CreatesNewState_WhenMissing()
@@ -300,7 +299,7 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifies state updates and file writes.
+    ///     Verifies state updates and file writes.
     /// </summary>
     [Test]
     public void Update_ModifiesState_AndWritesFile()
@@ -319,16 +318,16 @@ public class StateFileServiceTests
     }
 
     /// <summary>
-    /// Verifies states are ordered by ID.
+    ///     Verifies states are ordered by ID.
     /// </summary>
     [Test]
     public void Update_OrdersStatesByJobId()
     {
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 3, Name = "job3" },
-            new BackupJob { Id = 1, Name = "job1" },
-            new BackupJob { Id = 2, Name = "job2" }
+            new() { Id = 3, Name = "job3" },
+            new() { Id = 1, Name = "job1" },
+            new() { Id = 2, Name = "job2" }
         };
         _stateService.Initialize(jobs);
 
@@ -344,19 +343,19 @@ public class StateFileServiceTests
 }
 
 /// <summary>
-/// Tests for the backup execution service.
+///     Tests for the backup execution service.
 /// </summary>
 public class BackupServiceTests
 {
-    private string _tempDir = null!;
-    private string _sourceDir = null!;
-    private string _targetDir = null!;
-    private StateFileService _stateService = null!;
-    private string _logDir = null!;
     private BackupService _backupService = null!;
+    private string _logDir = null!;
+    private string _sourceDir = null!;
+    private StateFileService _stateService = null!;
+    private string _targetDir = null!;
+    private string _tempDir = null!;
 
     /// <summary>
-    /// Prepares temporary folders and the backup service.
+    ///     Prepares temporary folders and the backup service.
     /// </summary>
     [SetUp]
     public void Setup()
@@ -373,16 +372,17 @@ public class BackupServiceTests
         _stateService = new StateFileService(Path.Combine(_tempDir, "state"));
 
         var paths = new PathService();
-        var logWriter = new JsonLogger<LogEntry>(_logDir);
+        var logWriter = new ConfigurableLogWriter<LogEntry>(_logDir);
         var fileSelector = new BackupFileSelector(paths);
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, paths);
         var fileCopier = new FileCopier();
 
-        _backupService = new BackupService(logWriter, _stateService, paths, fileSelector, directoryPreparer, fileCopier);
+        _backupService =
+            new BackupService(logWriter, _stateService, paths, fileSelector, directoryPreparer, fileCopier);
     }
 
     /// <summary>
-    /// Cleans up temporary resources.
+    ///     Cleans up temporary resources.
     /// </summary>
     [TearDown]
     public void TearDown()
@@ -398,7 +398,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifies files are copied in a complete backup.
+    ///     Verifies files are copied in a complete backup.
     /// </summary>
     [Test]
     public void RunJob_CopiesFiles_InCompleteBackup()
@@ -422,12 +422,12 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifies subdirectories are created in the target.
+    ///     Verifies subdirectories are created in the target.
     /// </summary>
     [Test]
     public void RunJob_CreatesSubdirectories()
     {
-        string subDir = Path.Combine(_sourceDir, "subdir");
+        var subDir = Path.Combine(_sourceDir, "subdir");
         Directory.CreateDirectory(subDir);
         File.WriteAllText(Path.Combine(subDir, "nested.txt"), "content");
 
@@ -442,12 +442,12 @@ public class BackupServiceTests
 
         _backupService.RunJob(job);
 
-        string targetNested = Path.Combine(_targetDir, "subdir", "nested.txt");
+        var targetNested = Path.Combine(_targetDir, "subdir", "nested.txt");
         Assert.That(File.Exists(targetNested), Is.True);
     }
 
     /// <summary>
-    /// Verifies an empty directory backup completes correctly.
+    ///     Verifies an empty directory backup completes correctly.
     /// </summary>
     [Test]
     public void RunJob_HandlesEmptyDirectory()
@@ -468,7 +468,7 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifies transfers are properly logged.
+    ///     Verifies transfers are properly logged.
     /// </summary>
     [Test]
     [Category("GHABlacklist")]
@@ -476,7 +476,7 @@ public class BackupServiceTests
     {
         File.WriteAllText(Path.Combine(_sourceDir, "file.txt"), "test");
 
-        string day = DateTime.Now.ToString("yyyy-MM-dd");
+        var day = DateTime.Now.ToString("yyyy-MM-dd");
 
         var job = new BackupJob
         {
@@ -489,16 +489,16 @@ public class BackupServiceTests
 
         _backupService.RunJob(job);
 
-        string logPath = Path.Combine(_logDir, day + ".json");
+        var logPath = Path.Combine(_logDir, day + ".json");
         var logs = JsonFile.ReadOrDefault(logPath, new List<LogEntry>());
-        
+
         Assert.That(logs.Count, Is.GreaterThan(0));
         Assert.That(logs[0].BackupName, Is.EqualTo("loggedBackup"));
         Assert.That(logs[0].FileSizeBytes, Is.GreaterThanOrEqualTo(0));
     }
 
     /// <summary>
-    /// Verifies failure when the source is missing.
+    ///     Verifies failure when the source is missing.
     /// </summary>
     [Test]
     public void RunJob_FailsWhenSourceMissing()
@@ -519,12 +519,12 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifies file timestamps are preserved.
+    ///     Verifies file timestamps are preserved.
     /// </summary>
     [Test]
     public void RunJob_PreservesFileTimestamps()
     {
-        string sourceFile = Path.Combine(_sourceDir, "timestamped.txt");
+        var sourceFile = Path.Combine(_sourceDir, "timestamped.txt");
         File.WriteAllText(sourceFile, "content");
         var originalTime = new DateTime(2020, 1, 1, 12, 0, 0);
         File.SetLastWriteTimeUtc(sourceFile, originalTime);
@@ -540,14 +540,14 @@ public class BackupServiceTests
 
         _backupService.RunJob(job);
 
-        string targetFile = Path.Combine(_targetDir, "timestamped.txt");
+        var targetFile = Path.Combine(_targetDir, "timestamped.txt");
         var targetTime = File.GetLastWriteTimeUtc(targetFile);
-        
+
         Assert.That(targetTime, Is.EqualTo(originalTime).Within(TimeSpan.FromSeconds(1)));
     }
 
     /// <summary>
-    /// Verifies sequential execution of multiple jobs.
+    ///     Verifies sequential execution of multiple jobs.
     /// </summary>
     [Test]
     public void RunJobsSequential_RunsMultipleJobs_InOrder()
@@ -567,8 +567,16 @@ public class BackupServiceTests
 
         var jobs = new List<BackupJob>
         {
-            new BackupJob { Id = 2, Name = "job2", SourceDirectory = sourceDir2, TargetDirectory = targetDir2, Type = BackupType.Complete },
-            new BackupJob { Id = 1, Name = "job1", SourceDirectory = sourceDir1, TargetDirectory = targetDir1, Type = BackupType.Complete }
+            new()
+            {
+                Id = 2, Name = "job2", SourceDirectory = sourceDir2, TargetDirectory = targetDir2,
+                Type = BackupType.Complete
+            },
+            new()
+            {
+                Id = 1, Name = "job1", SourceDirectory = sourceDir1, TargetDirectory = targetDir1,
+                Type = BackupType.Complete
+            }
         };
 
         _backupService.RunJobsSequential(jobs);
@@ -578,14 +586,14 @@ public class BackupServiceTests
     }
 
     /// <summary>
-    /// Verifies differential backup behavior.
+    ///     Verifies differential backup behavior.
     /// </summary>
     [Test]
     public void RunJob_DifferentialBackup_OnlyUpdatesDifferentFiles()
     {
         // Create initial complete backup
-        string file1 = Path.Combine(_sourceDir, "file1.txt");
-        string file2 = Path.Combine(_sourceDir, "file2.txt");
+        var file1 = Path.Combine(_sourceDir, "file1.txt");
+        var file2 = Path.Combine(_sourceDir, "file2.txt");
         File.WriteAllText(file1, "content1");
         File.WriteAllText(file2, "content2");
 

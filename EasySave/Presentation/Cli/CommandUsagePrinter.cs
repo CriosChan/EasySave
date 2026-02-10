@@ -3,12 +3,12 @@ using EasySave.Presentation.Resources;
 namespace EasySave.Presentation.Cli;
 
 /// <summary>
-/// Centralizes user-facing usage messages for the command-line entrypoint.
+///     Centralizes user-facing usage messages for the command-line entrypoint.
 /// </summary>
 internal static class CommandUsagePrinter
 {
     /// <summary>
-    /// Prints command-line usage help.
+    ///     Prints command-line usage help.
     /// </summary>
     internal static void Print()
     {

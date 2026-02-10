@@ -1,17 +1,16 @@
 using EasySave.Infrastructure.Configuration;
-using Microsoft.Extensions.Configuration;
 
 namespace EasySaveTest;
 
 /// <summary>
-/// Tests for application configuration loading.
+///     Tests for application configuration loading.
 /// </summary>
 public class AppConfigTest
 {
     private ApplicationConfiguration _appSettings = null!;
 
     /// <summary>
-    /// Loads configuration once for the rest of the tests.
+    ///     Loads configuration once for the rest of the tests.
     /// </summary>
     [OneTimeSetUp]
     public void Setup()
@@ -21,32 +20,38 @@ public class AppConfigTest
     }
 
     /// <summary>
-    /// Verifies that the loaded configuration is not null.
+    ///     Verifies that the loaded configuration is not null.
     /// </summary>
     [Test]
     public void ConfigIsNotNull()
-        => Assert.That(_appSettings, Is.Not.Null);
+    {
+        Assert.That(_appSettings, Is.Not.Null);
+    }
 
     /// <summary>
-    /// Verifies the configured job config path.
+    ///     Verifies the configured job config path.
     /// </summary>
     [Test]
     public void ConfigHasJobConfigPath()
-        => Assert.That(_appSettings.JobConfigPath, Is.EqualTo("./config"));
+    {
+        Assert.That(_appSettings.JobConfigPath, Is.EqualTo("./config"));
+    }
 
     /// <summary>
-    /// Verifies the configured culture.
+    ///     Verifies the configured culture.
     /// </summary>
     [Test]
     public void ConfigHasLocalization()
-        => Assert.That(_appSettings.Localization, Is.EqualTo("fr-FR"));
+    {
+        Assert.That(_appSettings.Localization, Is.EqualTo("fr-FR"));
+    }
 
     /// <summary>
-    /// Verifies the configured log path.
+    ///     Verifies the configured log path.
     /// </summary>
     [Test]
     public void ConfigHasLogPath()
-        => Assert.That(_appSettings.LogPath, Is.EqualTo("./log"));
+    {
+        Assert.That(_appSettings.LogPath, Is.EqualTo("./log"));
+    }
 }
-
-
