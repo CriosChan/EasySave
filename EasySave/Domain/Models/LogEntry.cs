@@ -1,7 +1,7 @@
 namespace EasySave.Domain.Models;
 
 /// <summary>
-/// Log entry for a backup operation.
+///     Log entry for a backup operation.
 /// </summary>
 public sealed class LogEntry
 {

@@ -1,10 +1,9 @@
 using EasySave.Application.Abstractions;
-using EasySave.Domain.Models;
 
 namespace EasySave.Application.Services;
 
 /// <summary>
-/// Synchronizes execution state with the current configuration.
+///     Synchronizes execution state with the current configuration.
 /// </summary>
 public sealed class StateSynchronizer : IStateSynchronizer
 {
@@ -18,11 +17,11 @@ public sealed class StateSynchronizer : IStateSynchronizer
     }
 
     /// <summary>
-    /// Reloads jobs from the repository and reinitializes state.
+    ///     Reloads jobs from the repository and reinitializes state.
     /// </summary>
     public void Refresh()
     {
-        List<BackupJob> jobs = _repository.Load().OrderBy(j => j.Id).ToList();
+        var jobs = _repository.Load().OrderBy(j => j.Id).ToList();
         _state.Initialize(jobs);
     }
 }

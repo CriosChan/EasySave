@@ -1,19 +1,19 @@
 namespace EasyLogTest;
 
 /// <summary>
-/// Fake log object used for tests.
+///     Fake log object used for tests.
 /// </summary>
 public struct FakeLogObject(
-    String name,
-    String fileSource,
-    String fileTarget,
+    string name,
+    string fileSource,
+    string fileTarget,
     int fileSize,
     int fileTransferTime,
     DateTime time)
 {
-    public String Name { get; set; } = name;
-    public String FileSource { get; set; } = fileSource;
-    public String FileTarget { get; set; } = fileTarget;
+    public string Name { get; set; } = name;
+    public string FileSource { get; set; } = fileSource;
+    public string FileTarget { get; set; } = fileTarget;
     public int FileSize { get; set; } = fileSize;
     public int FileTransferTime { get; set; } = fileTransferTime;
     public DateTime Time { get; set; } = time;

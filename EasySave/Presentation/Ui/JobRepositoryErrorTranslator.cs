@@ -1,14 +1,12 @@
-using EasySave.Presentation.Resources;
-
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Translates repository error codes to localized user messages.
+///     Translates repository error codes to localized user messages.
 /// </summary>
 internal sealed class JobRepositoryErrorTranslator
 {
     /// <summary>
-    /// Translates an error code into a localized message.
+    ///     Translates an error code into a localized message.
     /// </summary>
     /// <param name="errorCode">Error code.</param>
     /// <returns>User-facing message.</returns>

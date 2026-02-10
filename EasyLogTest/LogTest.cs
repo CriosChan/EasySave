@@ -5,12 +5,12 @@ using EasyLog;
 namespace EasyLogTest;
 
 /// <summary>
-/// Unit tests for JSON log creation.
+///     Unit tests for JSON log creation.
 /// </summary>
 public class Tests
 {
     /// <summary>
-    /// Shared test setup (empty for now).
+    ///     Shared test setup (empty for now).
     /// </summary>
     [SetUp]
     public void Setup()
@@ -18,15 +18,15 @@ public class Tests
     }
 
     /// <summary>
-    /// Verifies that logging creates a file and contains entries.
+    ///     Verifies that logging creates a file and contains entries.
     /// </summary>
     [Test]
     public void TestLogCreation()
     {
         AbstractLogger<FakeLogObject> logger = new JsonLogger<FakeLogObject>("./");
-        
+
         // Fake log object
-        FakeLogObject log = new FakeLogObject
+        var log = new FakeLogObject
         {
             Name = "Test1",
             FileSize = 999,
@@ -35,7 +35,7 @@ public class Tests
             Time = DateTime.Now
         };
 
-        string logPath = Path.Join("./", DateTime.Now.ToString("yyyy-MM-dd") + ".json");
+        var logPath = Path.Join("./", DateTime.Now.ToString("yyyy-MM-dd") + ".json");
         // If the file already exists remove it.
         if (File.Exists(logPath))
             File.Delete(logPath);
@@ -44,10 +44,10 @@ public class Tests
         // Check if the log file exists
         Assert.That(File.Exists(logPath), Is.EqualTo(true));
         // Get the file content
-        IEnumerable<string> lines = File.ReadLines(logPath);
+        var lines = File.ReadLines(logPath);
         Assert.That(lines.Count(), Is.Not.EqualTo(0));
         // Deserialize it
-        FakeLogObject readedLog = JsonSerializer.Deserialize<FakeLogObject>(lines.ElementAt(0));
+        var readedLog = JsonSerializer.Deserialize<FakeLogObject>(lines.ElementAt(0));
         // Check if the first one is equal to the object we gave
         Assert.That(readedLog, Is.EqualTo(log));
 
@@ -64,9 +64,9 @@ public class Tests
         readedLog = JsonSerializer.Deserialize<FakeLogObject>(lines.ElementAt(1));
         Assert.That(readedLog, Is.EqualTo(log));
     }
-    
+
     /// <summary>
-    /// Verifies that logging creates a file and contains entries.
+    ///     Verifies that logging creates a file and contains entries.
     /// </summary>
     [Test]
     public void TestLogCreationXml()
@@ -74,7 +74,7 @@ public class Tests
         AbstractLogger<FakeLogObject> logger = new XmlLogger<FakeLogObject>("./");
 
         // Fake log object
-        FakeLogObject log = new FakeLogObject
+        var log = new FakeLogObject
         {
             Name = "Test1",
             FileSize = 999,
@@ -83,7 +83,7 @@ public class Tests
             Time = DateTime.Now
         };
 
-        string logPath = Path.Join("./", DateTime.Now.ToString("yyyy-MM-dd") + ".xml");
+        var logPath = Path.Join("./", DateTime.Now.ToString("yyyy-MM-dd") + ".xml");
         // If the file already exists remove it.
         if (File.Exists(logPath))
             File.Delete(logPath);
@@ -92,7 +92,7 @@ public class Tests
         // Check if the log file exists
         Assert.That(File.Exists(logPath), Is.EqualTo(true));
         // Get the file content
-        IEnumerable<string> lines = File.ReadLines(logPath);
+        var lines = File.ReadLines(logPath);
         Assert.That(lines.Count(), Is.Not.EqualTo(0));
         // Deserialize it
         var serializer = new XmlSerializer(typeof(FakeLogObject));
@@ -102,6 +102,7 @@ public class Tests
         {
             readedLog = (FakeLogObject)serializer.Deserialize(reader);
         }
+
         // Check if the first one is equal to the object we gave
         Assert.That(readedLog, Is.EqualTo(log));
 
@@ -119,6 +120,7 @@ public class Tests
         {
             readedLog = (FakeLogObject)serializer.Deserialize(reader);
         }
+
         Assert.That(readedLog, Is.EqualTo(log));
     }
 }

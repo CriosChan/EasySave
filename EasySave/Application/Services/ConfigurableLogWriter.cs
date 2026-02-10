@@ -4,7 +4,7 @@ using EasySave.Infrastructure.Configuration;
 namespace EasySave.Application.Services;
 
 /// <summary>
-/// Log writer that resolves the concrete logger based on current configuration.
+///     Log writer that resolves the concrete logger based on current configuration.
 /// </summary>
 public sealed class ConfigurableLogWriter<T>
 {
@@ -28,7 +28,7 @@ public sealed class ConfigurableLogWriter<T>
 
     private AbstractLogger<T> ResolveLogger()
     {
-        string logType = NormalizeLogType(ApplicationConfiguration.Instance.LogType);
+        var logType = NormalizeLogType(ApplicationConfiguration.Instance.LogType);
 
         lock (_sync)
         {
@@ -44,7 +44,7 @@ public sealed class ConfigurableLogWriter<T>
         if (string.IsNullOrWhiteSpace(logType))
             return "json";
 
-        string normalized = logType.Trim().ToLowerInvariant();
+        var normalized = logType.Trim().ToLowerInvariant();
         return normalized == "xml" ? "xml" : "json";
     }
 }

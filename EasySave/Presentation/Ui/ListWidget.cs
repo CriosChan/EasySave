@@ -1,15 +1,14 @@
-using EasySave.Presentation.Resources;
 using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Presentation.Ui;
 
 /// <summary>
-/// Component for displaying keyboard-navigable menus.
+///     Component for displaying keyboard-navigable menus.
 /// </summary>
 public static class ListWidget
 {
     /// <summary>
-    /// Displays a menu in a new system console.
+    ///     Displays a menu in a new system console.
     /// </summary>
     /// <param name="options">Options to display.</param>
     public static void ShowList(List<Option> options)
@@ -18,7 +17,7 @@ public static class ListWidget
     }
 
     /// <summary>
-    /// Displays a menu in a provided console.
+    ///     Displays a menu in a provided console.
     /// </summary>
     /// <param name="options">Options to display.</param>
     /// <param name="console">Target console.</param>
@@ -28,12 +27,12 @@ public static class ListWidget
         if (console == null) throw new ArgumentNullException(nameof(console));
         if (options.Count == 0) throw new ArgumentException("Options list cannot be empty.", nameof(options));
 
-        int index = 0;
+        var index = 0;
         ConsoleKeyInfo keyinfo;
         do
         {
             WriteMenu(console, options, options[index], menuTitle);
-            keyinfo = console.ReadKey(intercept: true);
+            keyinfo = console.ReadKey(true);
             switch (keyinfo.Key)
             {
                 case ConsoleKey.DownArrow:
@@ -51,7 +50,7 @@ public static class ListWidget
     }
 
     /// <summary>
-    /// Writes the menu and highlights the selected option.
+    ///     Writes the menu and highlights the selected option.
     /// </summary>
     /// <param name="console">Target console.</param>
     /// <param name="options">Options to display.</param>
@@ -61,12 +60,9 @@ public static class ListWidget
     {
         console.Clear();
         console.WriteLine(menuTitle);
-        foreach (Option option in options)
+        foreach (var option in options)
         {
-            if (option == selectedOption)
-            {
-                console.Selected();
-            }
+            if (option == selectedOption) console.Selected();
             console.Write(option == selectedOption ? "> " : "  ");
             console.WriteLine(option.Description);
             console.ResetColor();

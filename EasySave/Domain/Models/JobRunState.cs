@@ -1,24 +1,27 @@
 namespace EasySave.Domain.Models;
 
 /// <summary>
-/// Possible states for a running job.
+///     Possible states for a running job.
 /// </summary>
 public enum JobRunState
 {
     /// <summary>
-    /// Job is inactive.
+    ///     Job is inactive.
     /// </summary>
     Inactive,
+
     /// <summary>
-    /// Job is active.
+    ///     Job is active.
     /// </summary>
     Active,
+
     /// <summary>
-    /// Job completed successfully.
+    ///     Job completed successfully.
     /// </summary>
     Completed,
+
     /// <summary>
-    /// Job completed with errors.
+    ///     Job completed with errors.
     /// </summary>
     Failed
 }
