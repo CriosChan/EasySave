@@ -10,7 +10,21 @@ internal sealed class SystemConsole : IConsole
     /// </summary>
     public void Clear()
     {
-        System.Console.Clear();
+        if (System.Console.IsOutputRedirected)
+            return;
+
+        try
+        {
+            System.Console.Clear();
+        }
+        catch (IOException)
+        {
+            // No interactive console available (e.g., redirected output).
+        }
+        catch (InvalidOperationException)
+        {
+            // Console not available.
+        }
     }
 
     /// <summary>
@@ -47,17 +61,48 @@ internal sealed class SystemConsole : IConsole
     /// <returns>Key info.</returns>
     public ConsoleKeyInfo ReadKey(bool intercept)
     {
+        if (System.Console.IsInputRedirected)
+            throw new InvalidOperationException("Interactive console is not available. Run the app in a real terminal.");
+
         return System.Console.ReadKey(intercept);
     }
 
     public void Selected()
     {
-        System.Console.BackgroundColor = ConsoleColor.White;
-        System.Console.ForegroundColor = ConsoleColor.Black;
+        if (System.Console.IsOutputRedirected)
+            return;
+
+        try
+        {
+            System.Console.BackgroundColor = ConsoleColor.White;
+            System.Console.ForegroundColor = ConsoleColor.Black;
+        }
+        catch (IOException)
+        {
+            // Ignore color changes when console is unavailable.
+        }
+        catch (InvalidOperationException)
+        {
+            // Ignore color changes when console is unavailable.
+        }
     }
 
     public void ResetColor()
     {
-        System.Console.ResetColor();
+        if (System.Console.IsOutputRedirected)
+            return;
+
+        try
+        {
+            System.Console.ResetColor();
+        }
+        catch (IOException)
+        {
+            // Ignore color changes when console is unavailable.
+        }
+        catch (InvalidOperationException)
+        {
+            // Ignore color changes when console is unavailable.
+        }
     }
 }
