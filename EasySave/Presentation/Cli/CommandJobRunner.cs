@@ -51,6 +51,7 @@ internal sealed class CommandJobRunner
         // Ensure the state file contains all configured jobs before running.
         _stateService.Initialize(jobs);
 
+        var runnableJobs = new List<BackupJob>();
         foreach (var id in ids)
         {
             var job = jobs.FirstOrDefault(j => j.Id == id);
@@ -67,8 +68,11 @@ internal sealed class CommandJobRunner
             }
 
             Console.WriteLine(UserInterface.Launch_RunningOne, job.Id, job.Name);
-            _backupService.RunJob(job);
+            runnableJobs.Add(job);
         }
+
+        if (runnableJobs.Count > 0)
+            _backupService.RunJobsSequential(runnableJobs);
 
         return 0;
     }

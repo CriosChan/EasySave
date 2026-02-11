@@ -22,4 +22,5 @@ public sealed class BackupJobState
     public string? CurrentSourcePath { get; set; }
     public string? CurrentTargetPath { get; set; }
     public string? CurrentAction { get; set; }
+    public string? LastError { get; set; }
 }

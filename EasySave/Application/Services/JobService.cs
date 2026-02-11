@@ -8,7 +8,6 @@ namespace EasySave.Application.Services;
 /// </summary>
 public sealed class JobService : IJobService
 {
-    private const int MaxJobs = 5;
     private readonly IJobRepository _repository;
 
     public JobService(IJobRepository repository)
@@ -30,13 +29,7 @@ public sealed class JobService : IJobService
             throw new InvalidOperationException("New jobs must not have an id assigned.");
 
         var jobs = _repository.GetAll().ToList();
-
-        if (jobs.Count >= MaxJobs)
-            return (false, "Error.MaxJobs");
-
         var id = GetNextFreeId(jobs);
-        if (id == -1)
-            return (false, "Error.NoFreeSlot");
 
         job.AssignId(id);
         jobs.Add(job);
@@ -67,10 +60,6 @@ public sealed class JobService : IJobService
 
     private static int GetNextFreeId(IReadOnlyCollection<BackupJob> jobs)
     {
-        for (var i = 1; i <= MaxJobs; i++)
-            if (jobs.All(j => j.Id != i))
-                return i;
-
-        return -1;
+        return jobs.Count == 0 ? 1 : jobs.Max(j => j.Id) + 1;
     }
 }

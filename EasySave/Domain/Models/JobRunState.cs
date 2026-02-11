@@ -23,5 +23,15 @@ public enum JobRunState
     /// <summary>
     ///     Job completed with errors.
     /// </summary>
-    Failed
+    Failed,
+
+    /// <summary>
+    ///     Job is paused.
+    /// </summary>
+    Paused,
+
+    /// <summary>
+    ///     Job was stopped by user.
+    /// </summary>
+    Stopped
 }

@@ -1,0 +1,119 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:EasySave.ViewModels"
+        mc:Ignorable="d"
+        x:Class="EasySave.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="1360"
+        Height="840"
+        MinWidth="1080"
+        MinHeight="700"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="EasySave 3.0 - Avalonia MVVM">
+
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="2*,1*">
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="12" Padding="12" CornerRadius="8" BorderThickness="1">
+            <Grid ColumnDefinitions="*,*,*,160,130" ColumnSpacing="8">
+                <TextBox Grid.Column="0"
+                         Watermark="Backup name"
+                         Text="{Binding NewBackupName}"/>
+                <TextBox Grid.Column="1"
+                         Watermark="Source directory"
+                         Text="{Binding NewSourceDirectory}"/>
+                <TextBox Grid.Column="2"
+                         Watermark="Target directory"
+                         Text="{Binding NewTargetDirectory}"/>
+                <ComboBox Grid.Column="3"
+                          ItemsSource="{Binding BackupTypeOptions}"
+                          SelectedItem="{Binding NewType}"/>
+                <Button Grid.Column="4"
+                        Command="{Binding AddJobCommand}"
+                        Content="Add Job"/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="Auto,*,Auto" Margin="12" RowSpacing="8">
+            <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Text="Backup Jobs"/>
+            <ListBox Grid.Row="1"
+                     ItemsSource="{Binding Jobs}"
+                     SelectedItem="{Binding SelectedJob}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:JobItemViewModel">
+                        <Border Margin="0,0,0,6" Padding="10" CornerRadius="6" BorderThickness="1">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{Binding Summary}" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding SourceDirectory}" Opacity="0.85"/>
+                                <TextBlock Text="{Binding TargetDirectory}" Opacity="0.85"/>
+                                <TextBlock Text="{Binding CurrentAction}" Opacity="0.85"/>
+                                <ProgressBar Minimum="0" Maximum="100" Value="{Binding ProgressPercent}" Height="12"/>
+                                <TextBlock Text="{Binding LastError}" Foreground="Tomato"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <WrapPanel Grid.Row="2" ItemHeight="30" ItemWidth="130" Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Content="Run Selected" Command="{Binding RunSelectedCommand}"/>
+                <Button Content="Pause Selected" Command="{Binding PauseSelectedCommand}"/>
+                <Button Content="Resume Selected" Command="{Binding ResumeSelectedCommand}"/>
+                <Button Content="Stop Selected" Command="{Binding StopSelectedCommand}"/>
+                <Button Content="Run All" Command="{Binding RunAllCommand}"/>
+                <Button Content="Pause All" Command="{Binding PauseAllCommand}"/>
+                <Button Content="Resume All" Command="{Binding ResumeAllCommand}"/>
+                <Button Content="Stop All" Command="{Binding StopAllCommand}"/>
+                <Button Content="Reload" Command="{Binding ReloadJobsCommand}"/>
+                <Button Content="Remove" Command="{Binding RemoveSelectedJobCommand}"/>
+            </WrapPanel>
+        </Grid>
+
+        <Border Grid.Row="1" Grid.Column="1" Margin="12" Padding="12" CornerRadius="8" BorderThickness="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Spacing="8">
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="General Settings"/>
+
+                    <TextBlock Text="Language"/>
+                    <ComboBox ItemsSource="{Binding LanguageOptions}" SelectedItem="{Binding SelectedLanguage}"/>
+
+                    <TextBlock Text="Log Format"/>
+                    <ComboBox ItemsSource="{Binding LogTypeOptions}" SelectedItem="{Binding SelectedLogType}"/>
+
+                    <TextBlock Text="Log Mode"/>
+                    <ComboBox ItemsSource="{Binding LogModeOptions}" SelectedItem="{Binding SelectedLogMode}"/>
+
+                    <TextBlock Text="Central Log Endpoint"/>
+                    <TextBox Watermark="http://localhost:5000/logs" Text="{Binding CentralLogEndpoint}"/>
+
+                    <TextBlock Text="Priority Extensions (; separated)"/>
+                    <TextBox Text="{Binding PriorityExtensions}"/>
+
+                    <TextBlock Text="Crypto Extensions (; separated)"/>
+                    <TextBox Text="{Binding CryptoExtensions}"/>
+
+                    <TextBlock Text="Large File Threshold (KB)"/>
+                    <TextBox Text="{Binding LargeFileThresholdKb}"/>
+
+                    <TextBlock Text="Business Process Name"/>
+                    <TextBox Text="{Binding BusinessProcessName}"/>
+
+                    <CheckBox Content="Enable Business Process Monitor"
+                              IsChecked="{Binding EnableBusinessProcessMonitor}"/>
+
+                    <TextBlock Text="CryptoSoft Path"/>
+                    <TextBox Text="{Binding CryptoSoftPath}"/>
+
+                    <TextBlock Text="CryptoSoft Arguments (use {0} for file path)"/>
+                    <TextBox Text="{Binding CryptoSoftArguments}"/>
+
+                    <Button Content="Save Settings" Command="{Binding SaveSettingsCommand}" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="2" Margin="12,0,12,12" Padding="10" CornerRadius="6" BorderThickness="1">
+            <TextBlock Text="{Binding StatusMessage}"/>
+        </Border>
+    </Grid>
+</Window>

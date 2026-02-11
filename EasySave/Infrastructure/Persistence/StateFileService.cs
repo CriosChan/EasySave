@@ -14,6 +14,7 @@ namespace EasySave.Infrastructure.Persistence;
 /// </remarks>
 public sealed class StateFileService : IStateService
 {
+    private readonly object _sync = new();
     private readonly string _statePath;
     private List<BackupJobState> _states = new();
 
@@ -31,26 +32,30 @@ public sealed class StateFileService : IStateService
     /// </summary>
     public void Initialize(IEnumerable<BackupJob> jobs)
     {
-        _states = jobs
-            .OrderBy(j => j.Id)
-            .Select(j => new BackupJobState
-            {
-                JobId = j.Id,
-                BackupName = j.Name,
-                LastActionTimestamp = DateTime.Now,
-                State = JobRunState.Inactive,
-                TotalFiles = 0,
-                TotalSizeBytes = 0,
-                ProgressPercent = 0,
-                RemainingFiles = 0,
-                RemainingSizeBytes = 0,
-                CurrentAction = null,
-                CurrentSourcePath = null,
-                CurrentTargetPath = null
-            })
-            .ToList();
+        lock (_sync)
+        {
+            _states = jobs
+                .OrderBy(j => j.Id)
+                .Select(j => new BackupJobState
+                {
+                    JobId = j.Id,
+                    BackupName = j.Name,
+                    LastActionTimestamp = DateTime.Now,
+                    State = JobRunState.Inactive,
+                    TotalFiles = 0,
+                    TotalSizeBytes = 0,
+                    ProgressPercent = 0,
+                    RemainingFiles = 0,
+                    RemainingSizeBytes = 0,
+                    CurrentAction = null,
+                    CurrentSourcePath = null,
+                    CurrentTargetPath = null,
+                    LastError = null
+                })
+                .ToList();
 
-        JsonFile.WriteAtomic(_statePath, _states);
+            JsonFile.WriteAtomic(_statePath, _states);
+        }
     }
 
     /// <summary>
@@ -58,14 +63,17 @@ public sealed class StateFileService : IStateService
     /// </summary>
     public void Update(BackupJobState updated)
     {
-        var idx = _states.FindIndex(s => s.JobId == updated.JobId);
-        if (idx >= 0)
-            _states[idx] = updated;
-        else
-            _states.Add(updated);
+        lock (_sync)
+        {
+            var idx = _states.FindIndex(s => s.JobId == updated.JobId);
+            if (idx >= 0)
+                _states[idx] = updated;
+            else
+                _states.Add(updated);
 
-        _states = _states.OrderBy(s => s.JobId).ToList();
-        JsonFile.WriteAtomic(_statePath, _states);
+            _states = _states.OrderBy(s => s.JobId).ToList();
+            JsonFile.WriteAtomic(_statePath, _states);
+        }
     }
 
     /// <summary>
@@ -73,20 +81,24 @@ public sealed class StateFileService : IStateService
     /// </summary>
     public BackupJobState GetOrCreate(BackupJob job)
     {
-        var existing = _states.FirstOrDefault(s => s.JobId == job.Id);
-        if (existing != null)
-            return existing;
-
-        existing = new BackupJobState
+        lock (_sync)
         {
-            JobId = job.Id,
-            BackupName = job.Name,
-            LastActionTimestamp = DateTime.Now,
-            State = JobRunState.Inactive
-        };
+            var existing = _states.FirstOrDefault(s => s.JobId == job.Id);
+            if (existing != null)
+                return existing;
 
-        _states.Add(existing);
-        JsonFile.WriteAtomic(_statePath, _states);
-        return existing;
+            existing = new BackupJobState
+            {
+                JobId = job.Id,
+                BackupName = job.Name,
+                LastActionTimestamp = DateTime.Now,
+                State = JobRunState.Inactive
+            };
+
+            _states.Add(existing);
+            _states = _states.OrderBy(s => s.JobId).ToList();
+            JsonFile.WriteAtomic(_statePath, _states);
+            return existing;
+        }
     }
 }

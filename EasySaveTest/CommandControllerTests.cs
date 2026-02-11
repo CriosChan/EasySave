@@ -2,7 +2,10 @@
 using System.Text.Json;
 using EasySave.Application.Services;
 using EasySave.Domain.Models;
+using EasySave.Infrastructure.Configuration;
 using EasySave.Infrastructure.IO;
+using EasySave.Infrastructure.Security;
+using EasySave.Infrastructure.System;
 using EasySave.Infrastructure.Logging;
 using EasySave.Infrastructure.Persistence;
 using EasySave.Presentation.Cli;
@@ -41,6 +44,9 @@ public class CommandControllerTests
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, _paths);
         var fileCopier = new FileCopier();
         _validator = new JobValidator(_paths);
+        var settings = new GeneralSettingsStore(_configDir);
+        var businessDetector = new BusinessSoftwareDetector();
+        var encryption = new CryptoSoftEncryptionService(settings);
 
         _backup = new BackupService(
             logWriter,
@@ -50,7 +56,10 @@ public class CommandControllerTests
             directoryPreparer,
             fileCopier,
             _validator,
-            new NullProgressReporter());
+            new NullProgressReporter(),
+            settings,
+            businessDetector,
+            encryption);
     }
 
     /// <summary>
@@ -61,6 +70,7 @@ public class CommandControllerTests
     {
         try
         {
+            _backup.Dispose();
             Directory.Delete(_rootDir, true);
         }
         catch (Exception ex)
@@ -446,3 +456,4 @@ public class CommandControllerTests
         Assert.That(output, Does.Contain("Running job 3 - job3..."));
     }
 }
+

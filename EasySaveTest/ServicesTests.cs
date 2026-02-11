@@ -1,8 +1,11 @@
 using EasySave.Application.Services;
 using EasySave.Domain.Models;
+using EasySave.Infrastructure.Configuration;
 using EasySave.Infrastructure.IO;
 using EasySave.Infrastructure.Logging;
 using EasySave.Infrastructure.Persistence;
+using EasySave.Infrastructure.Security;
+using EasySave.Infrastructure.System;
 
 namespace EasySaveTest;
 
@@ -131,7 +134,7 @@ public class JobServiceTests
     }
 
     [Test]
-    public void AddJob_ReturnsError_WhenMaxJobsReached()
+    public void AddJob_AllowsMoreThanFiveJobs()
     {
         SaveJobs(
             new BackupJob(1, "j1", "/src", "/dst", BackupType.Complete),
@@ -145,8 +148,9 @@ public class JobServiceTests
 
         var (ok, err) = _service.AddJob(job);
 
-        Assert.That(ok, Is.False);
-        Assert.That(err, Is.EqualTo("Error.MaxJobs"));
+        Assert.That(ok, Is.True);
+        Assert.That(err, Is.EqualTo(string.Empty));
+        Assert.That(job.Id, Is.EqualTo(6));
     }
 
     [Test]
@@ -376,6 +380,8 @@ public class BackupServiceTests
         Directory.CreateDirectory(_sourceDir);
         Directory.CreateDirectory(_targetDir);
         Directory.CreateDirectory(_logDir);
+        var configDir = Path.Combine(_tempDir, "config");
+        Directory.CreateDirectory(configDir);
 
         _stateService = new StateFileService(Path.Combine(_tempDir, "state"));
 
@@ -384,6 +390,9 @@ public class BackupServiceTests
         var fileSelector = new BackupFileSelector(paths);
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, paths);
         var fileCopier = new FileCopier();
+        var settings = new GeneralSettingsStore(configDir);
+        var businessDetector = new BusinessSoftwareDetector();
+        var encryption = new CryptoSoftEncryptionService(settings);
 
         _backupService =
             new BackupService(
@@ -394,7 +403,10 @@ public class BackupServiceTests
                 directoryPreparer,
                 fileCopier,
                 new JobValidator(paths),
-                new NullProgressReporter());
+                new NullProgressReporter(),
+                settings,
+                businessDetector,
+                encryption);
     }
 
     /// <summary>
@@ -405,6 +417,7 @@ public class BackupServiceTests
     {
         try
         {
+            _backupService.Dispose();
             Directory.Delete(_tempDir, true);
         }
         catch (Exception ex)
