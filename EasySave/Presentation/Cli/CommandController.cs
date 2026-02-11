@@ -17,10 +17,10 @@ public static class CommandController
     /// <returns>Process exit code.</returns>
     public static int Run(
         string[] args,
-        IJobRepository repository,
+        IJobService jobService,
         IBackupService backupService,
         IStateService stateService,
-        IPathService paths)
+        IJobValidator validator)
     {
         var raw = string.Join(string.Empty, args).Trim();
         if (string.IsNullOrWhiteSpace(raw))
@@ -40,7 +40,7 @@ public static class CommandController
             return 1;
         }
 
-        var runner = new CommandJobRunner(repository, backupService, stateService, paths);
+        var runner = new CommandJobRunner(jobService, backupService, stateService, validator);
         return runner.RunJobs(ids);
     }
 

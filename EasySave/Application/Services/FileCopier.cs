@@ -1,12 +1,11 @@
 using System.Diagnostics;
-using EasySave.Application.Abstractions;
 
 namespace EasySave.Application.Services;
 
 /// <summary>
 ///     Copies files while measuring time and preserving timestamps.
 /// </summary>
-public sealed class FileCopier : IFileCopier
+public sealed class FileCopier
 {
     /// <summary>
     ///     Copies a file and returns the transfer duration in milliseconds.

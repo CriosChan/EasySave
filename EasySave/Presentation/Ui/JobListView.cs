@@ -10,18 +10,18 @@ internal sealed class JobListView
 {
     private readonly IConsole _console;
     private readonly ConsolePrompter _prompter;
-    private readonly IJobRepository _repository;
+    private readonly IJobService _jobService;
 
     /// <summary>
     ///     Builds the list view.
     /// </summary>
     /// <param name="console">Target console.</param>
-    /// <param name="repository">Job repository.</param>
+    /// <param name="jobService">Job service.</param>
     /// <param name="prompter">Input prompter.</param>
-    public JobListView(IConsole console, IJobRepository repository, ConsolePrompter prompter)
+    public JobListView(IConsole console, IJobService jobService, ConsolePrompter prompter)
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
         _prompter = prompter ?? throw new ArgumentNullException(nameof(prompter));
     }
 
@@ -30,7 +30,7 @@ internal sealed class JobListView
     /// </summary>
     public void Show()
     {
-        var jobs = _repository.Load().OrderBy(j => j.Id).ToList();
+        var jobs = _jobService.GetAll().OrderBy(j => j.Id).ToList();
 
         _console.Clear();
         _console.WriteLine(Resources.UserInterface.Jobs_Header);

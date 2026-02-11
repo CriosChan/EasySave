@@ -12,6 +12,8 @@ internal sealed class MainMenuController
     private readonly JobLaunchView _jobLaunch;
     private readonly JobListView _jobList;
     private readonly JobRemovalView _jobRemoval;
+    private readonly LanguageView _languageView;
+    private readonly LogTypeView _logTypeView;
 
     /// <summary>
     ///     Builds the main menu controller.
@@ -21,18 +23,24 @@ internal sealed class MainMenuController
     /// <param name="jobCreation">Job creation view.</param>
     /// <param name="jobRemoval">Job removal view.</param>
     /// <param name="jobLaunch">Job launch view.</param>
+    /// <param name="languageView">Language view.</param>
+    /// <param name="logTypeView">Log type view.</param>
     public MainMenuController(
         IConsole console,
         JobListView jobList,
         JobCreationView jobCreation,
         JobRemovalView jobRemoval,
-        JobLaunchView jobLaunch)
+        JobLaunchView jobLaunch,
+        LanguageView languageView,
+        LogTypeView logTypeView)
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
         _jobList = jobList ?? throw new ArgumentNullException(nameof(jobList));
         _jobCreation = jobCreation ?? throw new ArgumentNullException(nameof(jobCreation));
         _jobRemoval = jobRemoval ?? throw new ArgumentNullException(nameof(jobRemoval));
         _jobLaunch = jobLaunch ?? throw new ArgumentNullException(nameof(jobLaunch));
+        _languageView = languageView ?? throw new ArgumentNullException(nameof(languageView));
+        _logTypeView = logTypeView ?? throw new ArgumentNullException(nameof(logTypeView));
     }
 
     /// <summary>
@@ -46,8 +54,8 @@ internal sealed class MainMenuController
             new Option(Resources.UserInterface.Menu_AddBackup, _jobCreation.Show),
             new Option(Resources.UserInterface.Menu_RemoveBackup, _jobRemoval.Show),
             new Option(Resources.UserInterface.Menu_LaunchBackupJob, _jobLaunch.Show),
-            new Option(Resources.UserInterface.Menu_Lang, new LanguageView(_console).Show),
-            new Option(Resources.UserInterface.Menu_Log, new LogTypeView(_console).Show),
+            new Option(Resources.UserInterface.Menu_Lang, _languageView.Show),
+            new Option(Resources.UserInterface.Menu_Log, _logTypeView.Show),
             new Option(Resources.UserInterface.Menu_Quit, () => Environment.Exit(0))
         ], _console, Resources.UserInterface.Menu_Title_Main);
     }

@@ -3,19 +3,17 @@ using EasySave.Infrastructure.Configuration;
 namespace EasySaveTest;
 
 /// <summary>
-///     Verifies behavior before configuration is loaded.
+///     Verifies configuration can be loaded without global state.
 /// </summary>
 public class AppConfigInitTest
 {
     /// <summary>
-    ///     Ensures accessing Instance before Load throws an exception.
+    ///     Ensures Load returns a configuration instance.
     /// </summary>
     [Test]
-    public void AppConfigThrowExceptionIfInstanceCalledBeforeLoading()
+    public void AppConfigLoad_ReturnsInstance()
     {
-        Assert.Throws<InvalidOperationException>(() =>
-        {
-            var instance = ApplicationConfiguration.Instance;
-        });
+        var instance = ApplicationConfiguration.Load();
+        Assert.That(instance, Is.Not.Null);
     }
 }

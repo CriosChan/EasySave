@@ -17,6 +17,6 @@ public sealed class LogEntry
     // Transfer time in ms, negative if error (per requirements)
     public long TransferTimeMs { get; set; }
 
-    // Optional additional information for support.
-    // (Action and Error fields removed per request)
+    // Optional error message when a transfer fails.
+    public string? ErrorMessage { get; set; }
 }

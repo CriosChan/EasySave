@@ -12,26 +12,26 @@ internal sealed class JobCreationView
     private readonly IConsole _console;
     private readonly JobRepositoryErrorTranslator _errorTranslator;
     private readonly ConsolePrompter _prompter;
-    private readonly IJobRepository _repository;
+    private readonly IJobService _jobService;
     private readonly IStateSynchronizer _stateSync;
 
     /// <summary>
     ///     Builds the creation view.
     /// </summary>
     /// <param name="console">Target console.</param>
-    /// <param name="repository">Job repository.</param>
+    /// <param name="jobService">Job service.</param>
     /// <param name="stateSync">State synchronizer.</param>
     /// <param name="prompter">Input prompter.</param>
     /// <param name="errorTranslator">Error translator.</param>
     public JobCreationView(
         IConsole console,
-        IJobRepository repository,
+        IJobService jobService,
         IStateSynchronizer stateSync,
         ConsolePrompter prompter,
         JobRepositoryErrorTranslator errorTranslator)
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
         _stateSync = stateSync ?? throw new ArgumentNullException(nameof(stateSync));
         _prompter = prompter ?? throw new ArgumentNullException(nameof(prompter));
         _errorTranslator = errorTranslator ?? throw new ArgumentNullException(nameof(errorTranslator));
@@ -42,8 +42,6 @@ internal sealed class JobCreationView
     /// </summary>
     public void Show()
     {
-        var jobs = _repository.Load();
-
         _console.Clear();
         _console.WriteLine(Resources.UserInterface.Add_Header);
         _console.WriteLine(string.Empty);
@@ -59,15 +57,8 @@ internal sealed class JobCreationView
             Resources.UserInterface.Add_TypeOptions,
             Resources.UserInterface.Common_InvalidInput);
 
-        var newJob = new BackupJob
-        {
-            Name = name,
-            SourceDirectory = source,
-            TargetDirectory = target,
-            Type = type
-        };
-
-        var (ok, error) = _repository.AddJob(jobs, newJob);
+        var newJob = new BackupJob(name, source, target, type);
+        var (ok, error) = _jobService.AddJob(newJob);
 
         if (!ok)
         {

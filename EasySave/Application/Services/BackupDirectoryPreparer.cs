@@ -6,12 +6,12 @@ namespace EasySave.Application.Services;
 /// <summary>
 ///     Prepares the target directory tree and logs directory creations.
 /// </summary>
-public sealed class BackupDirectoryPreparer : IBackupDirectoryPreparer
+public sealed class BackupDirectoryPreparer
 {
-    private readonly ConfigurableLogWriter<LogEntry> _logger;
+    private readonly ILogWriter<LogEntry> _logger;
     private readonly IPathService _paths;
 
-    public BackupDirectoryPreparer(ConfigurableLogWriter<LogEntry> logger, IPathService paths)
+    public BackupDirectoryPreparer(ILogWriter<LogEntry> logger, IPathService paths)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _paths = paths ?? throw new ArgumentNullException(nameof(paths));

@@ -21,7 +21,7 @@ public sealed class StateSynchronizer : IStateSynchronizer
     /// </summary>
     public void Refresh()
     {
-        var jobs = _repository.Load().OrderBy(j => j.Id).ToList();
+        var jobs = _repository.GetAll().OrderBy(j => j.Id).ToList();
         _state.Initialize(jobs);
     }
 }

@@ -1,134 +1,41 @@
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using Microsoft.Extensions.Configuration;
 
 namespace EasySave.Infrastructure.Configuration;
 
 /// <summary>
-///     Loads and exposes application configuration.
+///     Loads and exposes application configuration (read-only at runtime).
 /// </summary>
-public class ApplicationConfiguration
+public sealed class ApplicationConfiguration
 {
-    private static ApplicationConfiguration? _instance;
-    private static readonly object _lock = new();
-    private string _configFile = "appsettings.json";
+    /// <summary>
+    ///     Log directory configuration (can be relative).
+    /// </summary>
+    public string LogPath { get; init; } = "./log";
 
     /// <summary>
-    ///     Initializes an empty configuration (used by the binder).
+    ///     Job configuration directory (can be relative).
     /// </summary>
-    public ApplicationConfiguration()
-    {
-    }
+    public string JobConfigPath { get; init; } = "./config";
 
     /// <summary>
-    ///     Loaded configuration instance.
+    ///     Default localization (e.g., "fr-FR").
     /// </summary>
-    public static ApplicationConfiguration Instance
-    {
-        get
-        {
-            if (_instance == null)
-                throw new InvalidOperationException("ApplicationConfiguration has not been loaded.");
-            return _instance;
-        }
-    }
-
-    public string LogPath
-    {
-        get;
-        set
-        {
-            if (field != value)
-            {
-                field = value;
-                Save(nameof(LogPath), value);
-            }
-        }
-    } = "./log";
-
-    public string JobConfigPath
-    {
-        get;
-        set
-        {
-            if (field != value)
-            {
-                field = value;
-                Save(nameof(JobConfigPath), value);
-            }
-        }
-    } = "./config";
-
-    public string Localization
-    {
-        get;
-        set
-        {
-            if (field != value)
-            {
-                field = value;
-                Save(nameof(Localization), value);
-            }
-        }
-    } = "";
-
-    public string LogType
-    {
-        get;
-        set
-        {
-            if (field != value)
-            {
-                field = value;
-                Save(nameof(LogType), value);
-            }
-        }
-    } = "json";
+    public string Localization { get; init; } = "";
 
     /// <summary>
     ///     Loads configuration from a JSON file.
     /// </summary>
     /// <param name="configFile">Configuration file name.</param>
-    public static void Load(string configFile = "appsettings.json")
+    /// <returns>Loaded configuration.</returns>
+    public static ApplicationConfiguration Load(string configFile = "appsettings.json")
     {
-        lock (_lock)
-        {
-            if (_instance == null)
-            {
-                var configuration = new ConfigurationBuilder()
-                    // Use the executable directory so the config is found even if the app is started
-                    // from a different working directory.
-                    .SetBasePath(AppContext.BaseDirectory)
-                    .AddJsonFile(configFile, false, true)
-                    .Build();
+        var configuration = new ConfigurationBuilder()
+            // Use the executable directory so the config is found even if the app is started
+            // from a different working directory.
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile(configFile, false, true)
+            .Build();
 
-                _instance = configuration.Get<ApplicationConfiguration>()!;
-                _instance._configFile = configFile;
-            }
-        }
-    }
-
-    private void Save(string propertyName, string value)
-    {
-        lock (_lock)
-        {
-            var filePath = Path.Combine(AppContext.BaseDirectory, _configFile);
-            JsonNode? root;
-            if (File.Exists(filePath))
-            {
-                var json = File.ReadAllText(filePath);
-                root = JsonNode.Parse(json);
-                if (root == null)
-                    root = new JsonObject();
-            }
-            else
-            {
-                root = new JsonObject();
-            }
-
-            root[propertyName] = value;
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            File.WriteAllText(filePath, root.ToJsonString(options));
-        }
+        return configuration.Get<ApplicationConfiguration>() ?? new ApplicationConfiguration();
     }
 }

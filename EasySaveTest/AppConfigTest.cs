@@ -15,8 +15,7 @@ public class AppConfigTest
     [OneTimeSetUp]
     public void Setup()
     {
-        ApplicationConfiguration.Load();
-        _appSettings = ApplicationConfiguration.Instance;
+        _appSettings = ApplicationConfiguration.Load();
     }
 
     /// <summary>

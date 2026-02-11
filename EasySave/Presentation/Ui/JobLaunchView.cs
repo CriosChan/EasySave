@@ -1,4 +1,5 @@
 using EasySave.Application.Abstractions;
+using EasySave.Application.Models;
 using EasySave.Domain.Models;
 using EasySave.Presentation.Ui.Console;
 
@@ -11,34 +12,34 @@ internal sealed class JobLaunchView
 {
     private readonly IBackupService _backupService;
     private readonly IConsole _console;
-    private readonly IPathService _paths;
+    private readonly IJobValidator _validator;
+    private readonly IMenuNavigator _navigator;
     private readonly ConsolePrompter _prompter;
-    private readonly IJobRepository _repository;
-    private readonly IStateService _stateService;
+    private readonly IJobService _jobService;
 
     /// <summary>
     ///     Builds the launch view.
     /// </summary>
     /// <param name="console">Target console.</param>
-    /// <param name="repository">Job repository.</param>
+    /// <param name="jobService">Job service.</param>
     /// <param name="backupService">Backup service.</param>
-    /// <param name="stateService">State service.</param>
     /// <param name="prompter">Input prompter.</param>
-    /// <param name="paths">Path service.</param>
+    /// <param name="validator">Job validator.</param>
+    /// <param name="navigator">Menu navigator.</param>
     public JobLaunchView(
         IConsole console,
-        IJobRepository repository,
+        IJobService jobService,
         IBackupService backupService,
-        IStateService stateService,
         ConsolePrompter prompter,
-        IPathService paths)
+        IJobValidator validator,
+        IMenuNavigator navigator)
     {
         _console = console ?? throw new ArgumentNullException(nameof(console));
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
         _backupService = backupService ?? throw new ArgumentNullException(nameof(backupService));
-        _stateService = stateService ?? throw new ArgumentNullException(nameof(stateService));
         _prompter = prompter ?? throw new ArgumentNullException(nameof(prompter));
-        _paths = paths ?? throw new ArgumentNullException(nameof(paths));
+        _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+        _navigator = navigator ?? throw new ArgumentNullException(nameof(navigator));
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ internal sealed class JobLaunchView
     /// </summary>
     public void Show()
     {
-        var jobs = _repository.Load().OrderBy(j => j.Id).ToList();
+        var jobs = _jobService.GetAll().OrderBy(j => j.Id).ToList();
 
         _console.Clear();
 
@@ -67,7 +68,7 @@ internal sealed class JobLaunchView
             options.Add(new Option(string.Format(Resources.UserInterface.Jobs_Execute_ID, _job.Id, _job.Name),
                 () => RunOne(_job)));
 
-        options.Add(new Option(Resources.UserInterface.Return, UserInterface.ShowMenu));
+        options.Add(new Option(Resources.UserInterface.Return, _navigator.ShowMainMenu));
 
         ListWidget.ShowList(options, _console, Resources.UserInterface.Menu_Title_StartJob);
     }
@@ -82,15 +83,9 @@ internal sealed class JobLaunchView
 
         foreach (var j in jobs.OrderBy(j => j.Id))
         {
-            if (!_paths.TryNormalizeExistingDirectory(j.SourceDirectory, out _))
+            if (!IsJobRunnable(j, out var message))
             {
-                _console.WriteLine($"[{j.Id}] {Resources.UserInterface.Path_SourceNotFound}");
-                continue;
-            }
-
-            if (!_paths.TryNormalizeExistingDirectory(j.TargetDirectory, out _))
-            {
-                _console.WriteLine($"[{j.Id}] {Resources.UserInterface.Path_TargetNotFound}");
+                _console.WriteLine($"[{j.Id}] {message}");
                 continue;
             }
 
@@ -109,19 +104,32 @@ internal sealed class JobLaunchView
         _console.WriteLine(string.Format(Resources.UserInterface.Launch_RunningOne, job.Id, job.Name));
 
         // Validate directories before launching so the UI does not report a run for invalid paths.
-        if (!_paths.TryNormalizeExistingDirectory(job.SourceDirectory, out _))
+        if (!IsJobRunnable(job, out var message))
         {
-            _console.WriteLine(Resources.UserInterface.Path_SourceNotFound);
-            return;
-        }
-
-        if (!_paths.TryNormalizeExistingDirectory(job.TargetDirectory, out _))
-        {
-            _console.WriteLine(Resources.UserInterface.Path_TargetNotFound);
+            _console.WriteLine(message);
             return;
         }
 
         _backupService.RunJob(job);
         _console.WriteLine(Resources.UserInterface.Launch_Done);
+    }
+
+    private bool IsJobRunnable(BackupJob job, out string message)
+    {
+        var validation = _validator.Validate(job);
+        if (validation.IsValid)
+        {
+            message = string.Empty;
+            return true;
+        }
+
+        message = validation.Error switch
+        {
+            JobValidationError.SourceMissing => Resources.UserInterface.Path_SourceNotFound,
+            JobValidationError.TargetMissing => Resources.UserInterface.Path_TargetNotFound,
+            _ => Resources.UserInterface.Path_SourceNotFound
+        };
+
+        return false;
     }
 }

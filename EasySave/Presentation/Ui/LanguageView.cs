@@ -1,4 +1,4 @@
-using EasySave.Application.Services;
+using EasySave.Application.Abstractions;
 using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Presentation.Ui;
@@ -6,19 +6,24 @@ namespace EasySave.Presentation.Ui;
 /// <summary>
 ///     Represents a view for managing language settings in the application.
 /// </summary>
-public class LanguageView
+internal sealed class LanguageView
 {
     private readonly IConsole _console;
-    private readonly LanguageService _lang;
+    private readonly IUserPreferences _preferences;
+    private readonly ILocalizationApplier _localization;
+    private readonly IMenuNavigator _navigator;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="LanguageView" /> class.
     /// </summary>
     /// <param name="console">An instance of <see cref="IConsole" /> used for displaying output.</param>
-    public LanguageView(IConsole console)
+    public LanguageView(IConsole console, IUserPreferences preferences, ILocalizationApplier localization,
+        IMenuNavigator navigator)
     {
-        _console = console;
-        _lang = new LanguageService();
+        _console = console ?? throw new ArgumentNullException(nameof(console));
+        _preferences = preferences ?? throw new ArgumentNullException(nameof(preferences));
+        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
+        _navigator = navigator ?? throw new ArgumentNullException(nameof(navigator));
     }
 
     /// <summary>
@@ -27,7 +32,7 @@ public class LanguageView
     /// <remarks>
     ///     The method shows a list of available languages, allowing the user to select
     ///     their preferred language. Once a language is selected, it updates the language
-    ///     setting using the <see cref="LanguageService" /> and then returns to the main menu.
+    ///     setting and then returns to the main menu.
     /// </remarks>
     public void Show()
     {
@@ -35,17 +40,19 @@ public class LanguageView
         [
             new Option("Français", () =>
             {
-                _lang.SetLanguage("fr-FR");
-                UserInterface.ShowMenu();
+                _preferences.SetLocalization("fr-FR");
+                _localization.Apply("fr-FR");
+                _navigator.ShowMainMenu();
             }),
 
             new Option("English", () =>
             {
-                _lang.SetLanguage("en-US");
-                UserInterface.ShowMenu();
+                _preferences.SetLocalization("en-US");
+                _localization.Apply("en-US");
+                _navigator.ShowMainMenu();
             }),
 
-            new Option(Resources.UserInterface.Return, UserInterface.ShowMenu)
+            new Option(Resources.UserInterface.Return, _navigator.ShowMainMenu)
         ], _console, Resources.UserInterface.Menu_Title_Lang);
     }
 }

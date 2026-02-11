@@ -1,5 +1,4 @@
-using EasySave.Application.Services;
-using EasySave.Infrastructure.Configuration;
+using EasySave.Application.Abstractions;
 using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Presentation.Ui;
@@ -7,19 +6,21 @@ namespace EasySave.Presentation.Ui;
 /// <summary>
 ///     Represents a view for managing language settings in the application.
 /// </summary>
-public class LogTypeView
+internal sealed class LogTypeView
 {
     private readonly IConsole _console;
-    private readonly LoggerService _loggerService;
+    private readonly IMenuNavigator _navigator;
+    private readonly IUserPreferences _preferences;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="LogTypeView" /> class.
     /// </summary>
     /// <param name="console">An instance of <see cref="IConsole" /> used for displaying output.</param>
-    public LogTypeView(IConsole console)
+    public LogTypeView(IConsole console, IUserPreferences preferences, IMenuNavigator navigator)
     {
-        _console = console;
-        _loggerService = new LoggerService();
+        _console = console ?? throw new ArgumentNullException(nameof(console));
+        _preferences = preferences ?? throw new ArgumentNullException(nameof(preferences));
+        _navigator = navigator ?? throw new ArgumentNullException(nameof(navigator));
     }
 
     /// <summary>
@@ -28,26 +29,26 @@ public class LogTypeView
     /// <remarks>
     ///     The method shows a list of available log types, allowing the user to select
     ///     their preferred log type. Once a log type is selected, it updates the log type
-    ///     setting using the <see cref="LoggerService" /> and then returns to the main menu.
+    ///     setting and then returns to the main menu.
     /// </remarks>
     public void Show()
     {
-        var cfg = ApplicationConfiguration.Instance;
+        var logType = _preferences.LogType;
         ListWidget.ShowList(
         [
-            new Option("JSON" + (cfg.LogType == "json" ? " (Selected)" : ""), () =>
+            new Option("JSON" + (logType == "json" ? " (Selected)" : ""), () =>
             {
-                _loggerService.SetLogger("json");
-                UserInterface.ShowMenu();
+                _preferences.SetLogType("json");
+                _navigator.ShowMainMenu();
             }),
 
-            new Option("XML" + (cfg.LogType == "xml" ? " (Selected)" : ""), () =>
+            new Option("XML" + (logType == "xml" ? " (Selected)" : ""), () =>
             {
-                _loggerService.SetLogger("xml");
-                UserInterface.ShowMenu();
+                _preferences.SetLogType("xml");
+                _navigator.ShowMainMenu();
             }),
 
-            new Option(Resources.UserInterface.Return, UserInterface.ShowMenu)
+            new Option(Resources.UserInterface.Return, _navigator.ShowMainMenu)
         ], _console, Resources.UserInterface.Menu_Title_LogType);
     }
 }

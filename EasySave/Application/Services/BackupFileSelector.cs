@@ -6,7 +6,7 @@ namespace EasySave.Application.Services;
 /// <summary>
 ///     Selects files eligible for copying based on the backup type.
 /// </summary>
-public sealed class BackupFileSelector : IBackupFileSelector
+public sealed class BackupFileSelector
 {
     private readonly IPathService _paths;
 

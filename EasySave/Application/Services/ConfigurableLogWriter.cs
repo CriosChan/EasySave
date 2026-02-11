@@ -1,50 +1,32 @@
-using EasyLog;
-using EasySave.Infrastructure.Configuration;
+using EasySave.Application.Abstractions;
 
 namespace EasySave.Application.Services;
 
 /// <summary>
-///     Log writer that resolves the concrete logger based on current configuration.
+///     Log writer that routes entries based on current user preferences.
 /// </summary>
-public sealed class ConfigurableLogWriter<T>
+public sealed class ConfigurableLogWriter<T> : ILogWriter<T>
 {
-    private readonly string _logDirectory;
-    private readonly object _sync = new();
-    private JsonLogger<T>? _jsonLogger;
-    private XmlLogger<T>? _xmlLogger;
+    private readonly IUserPreferences _preferences;
+    private readonly ILogWriter<T> _jsonWriter;
+    private readonly ILogWriter<T> _xmlWriter;
 
-    public ConfigurableLogWriter(string logDirectory)
+    public ConfigurableLogWriter(IUserPreferences preferences, ILogWriter<T> jsonWriter, ILogWriter<T> xmlWriter)
     {
-        if (string.IsNullOrWhiteSpace(logDirectory))
-            throw new ArgumentException("Log directory cannot be empty.", nameof(logDirectory));
-
-        _logDirectory = logDirectory;
+        _preferences = preferences ?? throw new ArgumentNullException(nameof(preferences));
+        _jsonWriter = jsonWriter ?? throw new ArgumentNullException(nameof(jsonWriter));
+        _xmlWriter = xmlWriter ?? throw new ArgumentNullException(nameof(xmlWriter));
     }
 
-    public void Log(T content)
+    public void Log(T entry)
     {
-        ResolveLogger().Log(content);
-    }
-
-    private AbstractLogger<T> ResolveLogger()
-    {
-        var logType = NormalizeLogType(ApplicationConfiguration.Instance.LogType);
-
-        lock (_sync)
+        var logType = _preferences.LogType;
+        if (string.Equals(logType, "xml", StringComparison.OrdinalIgnoreCase))
         {
-            if (logType == "xml")
-                return _xmlLogger ??= new XmlLogger<T>(_logDirectory);
-
-            return _jsonLogger ??= new JsonLogger<T>(_logDirectory);
+            _xmlWriter.Log(entry);
+            return;
         }
-    }
 
-    private static string NormalizeLogType(string? logType)
-    {
-        if (string.IsNullOrWhiteSpace(logType))
-            return "json";
-
-        var normalized = logType.Trim().ToLowerInvariant();
-        return normalized == "xml" ? "xml" : "json";
+        _jsonWriter.Log(entry);
     }
 }

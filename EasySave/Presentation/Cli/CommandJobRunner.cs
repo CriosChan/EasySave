@@ -1,4 +1,5 @@
 using EasySave.Application.Abstractions;
+using EasySave.Application.Models;
 using EasySave.Domain.Models;
 using EasySave.Presentation.Resources;
 
@@ -10,27 +11,27 @@ namespace EasySave.Presentation.Cli;
 internal sealed class CommandJobRunner
 {
     private readonly IBackupService _backupService;
-    private readonly IPathService _paths;
-    private readonly IJobRepository _repository;
+    private readonly IJobService _jobService;
+    private readonly IJobValidator _validator;
     private readonly IStateService _stateService;
 
     /// <summary>
     ///     Builds the CLI runner with its dependencies.
     /// </summary>
-    /// <param name="repository">Job repository.</param>
+    /// <param name="jobService">Job service.</param>
     /// <param name="backupService">Backup service.</param>
     /// <param name="stateService">State service.</param>
-    /// <param name="paths">Path service.</param>
+    /// <param name="validator">Job validator.</param>
     public CommandJobRunner(
-        IJobRepository repository,
+        IJobService jobService,
         IBackupService backupService,
         IStateService stateService,
-        IPathService paths)
+        IJobValidator validator)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
         _backupService = backupService ?? throw new ArgumentNullException(nameof(backupService));
         _stateService = stateService ?? throw new ArgumentNullException(nameof(stateService));
-        _paths = paths ?? throw new ArgumentNullException(nameof(paths));
+        _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     }
 
     /// <summary>
@@ -40,7 +41,7 @@ internal sealed class CommandJobRunner
     /// <returns>Exit code.</returns>
     public int RunJobs(IEnumerable<int> ids)
     {
-        var jobs = _repository.Load().OrderBy(j => j.Id).ToList();
+        var jobs = _jobService.GetAll().OrderBy(j => j.Id).ToList();
         if (jobs.Count == 0)
         {
             Console.WriteLine(UserInterface.Terminal_log_NoJobConfigured);
@@ -80,20 +81,20 @@ internal sealed class CommandJobRunner
     /// <returns>True if the job is runnable.</returns>
     private bool IsJobRunnable(BackupJob job, out string? message)
     {
-        // Validate directories before reporting a run.
-        if (!_paths.TryNormalizeExistingDirectory(job.SourceDirectory, out _))
+        var validation = _validator.Validate(job);
+        if (validation.IsValid)
         {
-            message = string.Format(UserInterface.Terminal_log_JobSourceNotFound, job.Id);
-            return false;
+            message = null;
+            return true;
         }
 
-        if (!_paths.TryNormalizeExistingDirectory(job.TargetDirectory, out _))
+        message = validation.Error switch
         {
-            message = string.Format(UserInterface.Terminal_log_JobTargetNotFound, job.Id);
-            return false;
-        }
+            JobValidationError.SourceMissing => string.Format(UserInterface.Terminal_log_JobSourceNotFound, job.Id),
+            JobValidationError.TargetMissing => string.Format(UserInterface.Terminal_log_JobTargetNotFound, job.Id),
+            _ => string.Format(UserInterface.Terminal_log_JobSourceNotFound, job.Id)
+        };
 
-        message = null;
-        return true;
+        return false;
     }
 }

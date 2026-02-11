@@ -1,14 +1,14 @@
 using System.Globalization;
+using EasySave.Application.Abstractions;
 
 namespace EasySave.Infrastructure.Lang;
 
-public static class LangUtil
+/// <summary>
+///     Applies localization to the current process using CultureInfo.
+/// </summary>
+public sealed class LocalizationApplier : ILocalizationApplier
 {
-    /// <summary>
-    ///     Applies UI/thread culture if it is valid.
-    /// </summary>
-    /// <param name="cultureName">Culture name (e.g., fr-FR).</param>
-    public static void TryApplyCulture(string cultureName)
+    public void Apply(string cultureName)
     {
         if (string.IsNullOrWhiteSpace(cultureName))
             return;

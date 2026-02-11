@@ -1,7 +1,6 @@
 using EasySave.Application.Abstractions;
+using EasySave.Application.Models;
 using EasySave.Domain.Models;
-using EasySave.Presentation.Ui;
-using EasySave.Presentation.Ui.Console;
 
 namespace EasySave.Application.Services;
 
@@ -16,29 +15,24 @@ namespace EasySave.Application.Services;
 /// </remarks>
 public sealed class BackupService : IBackupService
 {
-    private readonly IBackupDirectoryPreparer _directoryPreparer;
-    private readonly IFileCopier _fileCopier;
-    private readonly IBackupFileSelector _fileSelector;
-    private readonly ConfigurableLogWriter<LogEntry> _logger;
+    private readonly BackupDirectoryPreparer _directoryPreparer;
+    private readonly FileCopier _fileCopier;
+    private readonly BackupFileSelector _fileSelector;
+    private readonly ILogWriter<LogEntry> _logger;
     private readonly IPathService _paths;
+    private readonly IProgressReporter _progress;
     private readonly IStateService _state;
+    private readonly IJobValidator _validator;
 
-    /// <summary>
-    ///     Builds the backup orchestrator.
-    /// </summary>
-    /// <param name="logger">Log writer.</param>
-    /// <param name="state">State management service.</param>
-    /// <param name="paths">Path service.</param>
-    /// <param name="fileSelector">File selector.</param>
-    /// <param name="directoryPreparer">Target directory preparer.</param>
-    /// <param name="fileCopier">File copier.</param>
     public BackupService(
-        ConfigurableLogWriter<LogEntry> logger,
+        ILogWriter<LogEntry> logger,
         IStateService state,
         IPathService paths,
-        IBackupFileSelector fileSelector,
-        IBackupDirectoryPreparer directoryPreparer,
-        IFileCopier fileCopier)
+        BackupFileSelector fileSelector,
+        BackupDirectoryPreparer directoryPreparer,
+        FileCopier fileCopier,
+        IJobValidator validator,
+        IProgressReporter progress)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _state = state ?? throw new ArgumentNullException(nameof(state));
@@ -46,6 +40,8 @@ public sealed class BackupService : IBackupService
         _fileSelector = fileSelector ?? throw new ArgumentNullException(nameof(fileSelector));
         _directoryPreparer = directoryPreparer ?? throw new ArgumentNullException(nameof(directoryPreparer));
         _fileCopier = fileCopier ?? throw new ArgumentNullException(nameof(fileCopier));
+        _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+        _progress = progress ?? throw new ArgumentNullException(nameof(progress));
     }
 
     /// <summary>
@@ -64,158 +60,211 @@ public sealed class BackupService : IBackupService
     /// <param name="job">Job to execute.</param>
     public void RunJob(BackupJob job)
     {
+        if (job == null)
+            throw new ArgumentNullException(nameof(job));
+
         var jobState = _state.GetOrCreate(job);
-        jobState.BackupName = job.Name;
-        jobState.LastActionTimestamp = DateTime.Now;
+        InitializeJobState(jobState, job);
 
-        // Normalize user-provided paths (trim, strip quotes, expand env vars) and validate existence.
-        var sourceOk = _paths.TryNormalizeExistingDirectory(job.SourceDirectory, out var sourceDir);
-        var targetOk = _paths.TryNormalizeExistingDirectory(job.TargetDirectory, out var targetDir);
-
-        // Validate source directory.
-        if (!sourceOk)
+        var validation = _validator.Validate(job);
+        if (!validation.IsValid)
         {
-            jobState.State = JobRunState.Failed;
-            jobState.CurrentAction = "source_missing";
-            _state.Update(jobState);
-
-            _logger.Log(new LogEntry
-            {
-                Timestamp = DateTime.Now,
-                BackupName = job.Name,
-                SourcePath = _paths.ToFullUncLikePath(sourceDir),
-                TargetPath = _paths.ToFullUncLikePath(targetDir),
-                FileSizeBytes = 0,
-                TransferTimeMs = -1
-            });
-
+            HandleValidationFailure(job, jobState, validation);
             return;
         }
 
-        // Validate target directory.
-        if (!targetOk)
-        {
-            jobState.State = JobRunState.Failed;
-            jobState.CurrentAction = "target_missing";
-            jobState.LastActionTimestamp = DateTime.Now;
-            _state.Update(jobState);
+        var sourceDir = validation.SourceDirectory;
+        var targetDir = validation.TargetDirectory;
 
-            _logger.Log(new LogEntry
-            {
-                Timestamp = DateTime.Now,
-                BackupName = job.Name,
-                SourcePath = _paths.ToFullUncLikePath(sourceDir),
-                TargetPath = _paths.ToFullUncLikePath(targetDir),
-                FileSizeBytes = 0,
-                TransferTimeMs = -1
-            });
+        LogJobStart(job, sourceDir, targetDir);
 
-            return;
-        }
-
-        // Always write at least one log entry when a job starts.
-        // This ensures the daily log file exists even if there are no eligible files to transfer.
-        _logger.Log(new LogEntry
-        {
-            Timestamp = DateTime.Now,
-            BackupName = job.Name,
-            SourcePath = _paths.ToFullUncLikePath(sourceDir),
-            TargetPath = _paths.ToFullUncLikePath(targetDir),
-            FileSizeBytes = 0,
-            TransferTimeMs = 0
-        });
-
-        // Mirror the directory structure (including empty directories).
-        // This matches the requirement: all subdirectories must be preserved.
         _directoryPreparer.EnsureTargetDirectories(job, sourceDir, targetDir);
 
         var filesToCopy = _fileSelector.GetFilesToCopy(job, sourceDir, targetDir);
-        var totalSize = filesToCopy.Sum(f => new FileInfo(f).Length);
+        var totalSize = ComputeTotalSize(filesToCopy);
 
-        jobState.State = JobRunState.Active;
-        jobState.TotalFiles = filesToCopy.Count;
-        jobState.TotalSizeBytes = totalSize;
-        jobState.ProgressPercent = 0;
-        jobState.RemainingFiles = filesToCopy.Count;
-        jobState.RemainingSizeBytes = totalSize;
-        jobState.CurrentAction = "start";
-        jobState.CurrentSourcePath = null;
-        jobState.CurrentTargetPath = null;
-        jobState.LastActionTimestamp = DateTime.Now;
-        _state.Update(jobState);
+        InitializeActiveState(jobState, filesToCopy.Count, totalSize);
 
+        var result = ExecuteTransfers(job, jobState, sourceDir, targetDir, filesToCopy, totalSize);
+
+        FinalizeState(jobState, result.HadError);
+        LogJobCompletion(job, sourceDir, targetDir, result.HadError);
+    }
+
+    private void InitializeJobState(BackupJobState state, BackupJob job)
+    {
+        UpdateState(state, s => { s.BackupName = job.Name; });
+    }
+
+    private void HandleValidationFailure(BackupJob job, BackupJobState state, JobValidationResult validation)
+    {
+        var action = validation.Error == JobValidationError.SourceMissing ? "source_missing" : "target_missing";
+        UpdateState(state, s =>
+        {
+            s.State = JobRunState.Failed;
+            s.CurrentAction = action;
+            s.CurrentSourcePath = null;
+            s.CurrentTargetPath = null;
+            s.ProgressPercent = 0;
+            s.RemainingFiles = 0;
+            s.RemainingSizeBytes = 0;
+        });
+
+        var errorMessage = validation.Error == JobValidationError.SourceMissing
+            ? "Source directory not found."
+            : "Target directory not found.";
+
+        WriteLog(job, validation.SourceDirectory, validation.TargetDirectory, 0, -1, errorMessage);
+    }
+
+    private void InitializeActiveState(BackupJobState state, int totalFiles, long totalSize)
+    {
+        UpdateState(state, s =>
+        {
+            s.State = JobRunState.Active;
+            s.TotalFiles = totalFiles;
+            s.TotalSizeBytes = totalSize;
+            s.ProgressPercent = 0;
+            s.RemainingFiles = totalFiles;
+            s.RemainingSizeBytes = totalSize;
+            s.CurrentAction = "start";
+            s.CurrentSourcePath = null;
+            s.CurrentTargetPath = null;
+        });
+
+        _progress.Report(0);
+    }
+
+    private TransferResult ExecuteTransfers(
+        BackupJob job,
+        BackupJobState state,
+        string sourceDir,
+        string targetDir,
+        IReadOnlyList<string> filesToCopy,
+        long totalSize)
+    {
         var hadError = false;
         long transferredBytes = 0;
 
-        var progressWidget = new ProgressWidget(new SystemConsole());
-        foreach (var sourceFile in filesToCopy)
+        for (var i = 0; i < filesToCopy.Count; i++)
         {
+            var sourceFile = filesToCopy[i];
             var relative = _paths.GetRelativePath(sourceDir, sourceFile);
             var targetFile = Path.Combine(targetDir, relative);
 
             _directoryPreparer.EnsureTargetDirectoryForFile(job, sourceFile, targetFile);
 
-            jobState.CurrentAction = "file_transfer";
-            jobState.CurrentSourcePath = _paths.ToFullUncLikePath(sourceFile);
-            jobState.CurrentTargetPath = _paths.ToFullUncLikePath(targetFile);
-            jobState.LastActionTimestamp = DateTime.Now;
-            _state.Update(jobState);
+            UpdateState(state, s =>
+            {
+                s.CurrentAction = "file_transfer";
+                s.CurrentSourcePath = _paths.ToFullUncLikePath(sourceFile);
+                s.CurrentTargetPath = _paths.ToFullUncLikePath(targetFile);
+            });
 
             long fileSize = 0;
             long elapsedMs;
+            string? errorMessage = null;
+
             try
             {
                 var fi = new FileInfo(sourceFile);
                 fileSize = fi.Length;
                 elapsedMs = _fileCopier.Copy(sourceFile, targetFile);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 hadError = true;
                 elapsedMs = -1;
+                errorMessage = $"{ex.GetType().Name}: {ex.Message}";
             }
 
-            _logger.Log(new LogEntry
-            {
-                Timestamp = DateTime.Now,
-                BackupName = job.Name,
-                SourcePath = _paths.ToFullUncLikePath(sourceFile),
-                TargetPath = _paths.ToFullUncLikePath(targetFile),
-                FileSizeBytes = fileSize,
-                TransferTimeMs = elapsedMs
-            });
+            WriteLog(job, sourceFile, targetFile, fileSize, elapsedMs, errorMessage);
 
             if (elapsedMs >= 0)
                 transferredBytes += fileSize;
 
-            jobState.RemainingFiles = Math.Max(0, jobState.RemainingFiles - 1);
-            jobState.RemainingSizeBytes = Math.Max(0, totalSize - transferredBytes);
+            var remainingFiles = Math.Max(0, filesToCopy.Count - (i + 1));
+            var remainingBytes = Math.Max(0, totalSize - transferredBytes);
             var percentage = totalSize <= 0 ? 100 : Math.Min(100, (double)transferredBytes / totalSize * 100d);
-            jobState.ProgressPercent = percentage;
-            jobState.LastActionTimestamp = DateTime.Now;
-            _state.Update(jobState);
-            progressWidget.UpdateProgress(percentage);
+
+            UpdateState(state, s =>
+            {
+                s.RemainingFiles = remainingFiles;
+                s.RemainingSizeBytes = remainingBytes;
+                s.ProgressPercent = percentage;
+            });
+
+            _progress.Report(percentage);
         }
 
-        jobState.State = hadError ? JobRunState.Failed : JobRunState.Completed;
-        jobState.CurrentAction = hadError ? "completed_with_errors" : "completed";
-        jobState.CurrentSourcePath = null;
-        jobState.CurrentTargetPath = null;
-        jobState.LastActionTimestamp = DateTime.Now;
-        jobState.ProgressPercent = 100;
-        jobState.RemainingFiles = 0;
-        jobState.RemainingSizeBytes = 0;
-        _state.Update(jobState);
+        return new TransferResult(hadError);
+    }
 
-        // Log job completion (keeps logs consistent and helps troubleshooting).
+    private void FinalizeState(BackupJobState state, bool hadError)
+    {
+        UpdateState(state, s =>
+        {
+            s.State = hadError ? JobRunState.Failed : JobRunState.Completed;
+            s.CurrentAction = hadError ? "completed_with_errors" : "completed";
+            s.CurrentSourcePath = null;
+            s.CurrentTargetPath = null;
+            s.ProgressPercent = 100;
+            s.RemainingFiles = 0;
+            s.RemainingSizeBytes = 0;
+        });
+
+        _progress.Report(100);
+    }
+
+    private void LogJobStart(BackupJob job, string sourceDir, string targetDir)
+    {
+        WriteLog(job, sourceDir, targetDir, 0, 0);
+    }
+
+    private void LogJobCompletion(BackupJob job, string sourceDir, string targetDir, bool hadError)
+    {
+        WriteLog(job, sourceDir, targetDir, 0, hadError ? -1 : 0);
+    }
+
+    private void WriteLog(BackupJob job, string sourcePath, string targetPath, long size, long elapsedMs,
+        string? errorMessage = null)
+    {
         _logger.Log(new LogEntry
         {
             Timestamp = DateTime.Now,
             BackupName = job.Name,
-            SourcePath = _paths.ToFullUncLikePath(sourceDir),
-            TargetPath = _paths.ToFullUncLikePath(targetDir),
-            FileSizeBytes = 0,
-            TransferTimeMs = hadError ? -1 : 0
+            SourcePath = _paths.ToFullUncLikePath(sourcePath),
+            TargetPath = _paths.ToFullUncLikePath(targetPath),
+            FileSizeBytes = size,
+            TransferTimeMs = elapsedMs,
+            ErrorMessage = errorMessage
         });
     }
+
+    private void UpdateState(BackupJobState state, Action<BackupJobState> apply)
+    {
+        apply(state);
+        state.LastActionTimestamp = DateTime.Now;
+        _state.Update(state);
+    }
+
+    private static long ComputeTotalSize(IEnumerable<string> files)
+    {
+        long total = 0;
+        foreach (var file in files)
+        {
+            try
+            {
+                total += new FileInfo(file).Length;
+            }
+            catch
+            {
+                // Ignore files we cannot read; they will fail during transfer and be logged.
+            }
+        }
+
+        return total;
+    }
+
+    private readonly record struct TransferResult(bool HadError);
 }
