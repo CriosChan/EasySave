@@ -11,5 +11,8 @@
         <SolidColorBrush x:Key="SecondaryBackground">#14000000</SolidColorBrush>
         <SolidColorBrush x:Key="BorderLine">#22000000</SolidColorBrush>
         <SolidColorBrush x:Key="ButtonSelected">#3e3e6e</SolidColorBrush>
+        <SolidColorBrush x:Key="JobItemBackground">#10000000</SolidColorBrush>
+        <SolidColorBrush x:Key="StatusBackground">#18003D7A</SolidColorBrush>
+        <SolidColorBrush x:Key="StatusBorder">#33003D7A</SolidColorBrush>
     </Application.Resources>
 </Application>
