@@ -70,3 +70,5 @@ Livrable 1 documentation.docx
 Projet EasySave de chez ProSoft.txt
 *.docx
 docs/markdown/
+*.pdf
+.vscode/*

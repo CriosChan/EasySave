@@ -1,10 +1,11 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text.Json;
-using EasySave.Application.Services;
-using EasySave.Domain.Models;
-using EasySave.Infrastructure.IO;
-using EasySave.Infrastructure.Persistence;
-using EasySave.Presentation.Cli;
+using EasySave.Services;
+using EasySave.Core.Models;
+using EasySave.Platform.IO;
+using EasySave.Data.Logging;
+using EasySave.Data.Persistence;
+using EasySave.Cli;
 
 namespace EasySaveTest;
 
@@ -31,15 +32,25 @@ public class CommandControllerTests
         Directory.CreateDirectory(_logDir);
 
         _repo = new JobRepository(_configDir);
+        _jobService = new JobService(_repo);
         _state = new StateFileService(_configDir);
         _paths = new PathService();
 
-        var logWriter = new ConfigurableLogWriter<LogEntry>(_logDir);
+        var logWriter = new JsonLogWriter<LogEntry>(_logDir);
         var fileSelector = new BackupFileSelector(_paths);
         var directoryPreparer = new BackupDirectoryPreparer(logWriter, _paths);
         var fileCopier = new FileCopier();
+        _validator = new JobValidator(_paths);
 
-        _backup = new BackupService(logWriter, _state, _paths, fileSelector, directoryPreparer, fileCopier);
+        _backup = new BackupService(
+            logWriter,
+            _state,
+            _paths,
+            fileSelector,
+            directoryPreparer,
+            fileCopier,
+            _validator,
+            new NullProgressReporter());
     }
 
     /// <summary>
@@ -64,9 +75,11 @@ public class CommandControllerTests
     private string _logDir = null!;
 
     private JobRepository _repo = null!;
+    private JobService _jobService = null!;
     private StateFileService _state = null!;
     private BackupService _backup = null!;
     private PathService _paths = null!;
+    private JobValidator _validator = null!;
 
     /// <summary>
     ///     Saves a list of jobs in the repository.
@@ -74,7 +87,7 @@ public class CommandControllerTests
     /// <param name="jobs">Jobs to save.</param>
     private void SaveJobs(params BackupJob[] jobs)
     {
-        _repo.Save(jobs.ToList());
+        _repo.SaveAll(jobs.ToList());
     }
 
     /// <summary>
@@ -90,7 +103,7 @@ public class CommandControllerTests
 
         try
         {
-            var code = CommandController.Run(args, _repo, _backup, _state, _paths);
+            var code = CommandController.Run(args, _jobService, _backup, _state, _validator);
             return (code, sw.ToString());
         }
         finally
@@ -168,8 +181,7 @@ public class CommandControllerTests
     private static BackupJob MakeJob(int id, string name, string sourceDir, string targetDir,
         BackupType type = BackupType.Complete)
     {
-        return new BackupJob
-            { Id = id, Name = name, SourceDirectory = sourceDir, TargetDirectory = targetDir, Type = type };
+        return new BackupJob(id, name, sourceDir, targetDir, type);
     }
 
     /// <summary>

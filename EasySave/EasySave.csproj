@@ -5,9 +5,20 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.11"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.11"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.11"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.11"/>
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.11">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.2"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.2"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.2"/>
@@ -18,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <AvaloniaResource Include="Assets\**"/>
         <EmbeddedResource Update="Presentation\Resources\UserInterface.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
