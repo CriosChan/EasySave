@@ -1,11 +1,11 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text.Json;
-using EasySave.Application.Services;
-using EasySave.Domain.Models;
-using EasySave.Infrastructure.IO;
-using EasySave.Infrastructure.Logging;
-using EasySave.Infrastructure.Persistence;
-using EasySave.Presentation.Cli;
+using EasySave.Services;
+using EasySave.Core.Models;
+using EasySave.Platform.IO;
+using EasySave.Data.Logging;
+using EasySave.Data.Persistence;
+using EasySave.Cli;
 
 namespace EasySaveTest;
 

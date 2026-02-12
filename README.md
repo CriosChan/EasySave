@@ -13,15 +13,17 @@ Telechargez le fichier zip disponible dans la partie Releases.
 EasySave.exe 1-3
 EasySave.exe 1;3
 ```
-EasySave propose aussi une interface console si aucun argument n'est donne.
+Sans argument, EasySave demarre une interface graphique Avalonia basee sur MVVM.
 
 ## Architecture
-Le code est organise en couches:
-- Bootstrap: point d'entree et composition des dependances.
-- Presentation: CLI et UI console.
-- Application: orchestration des cas d'usage et services metier.
-- Domain: modeles et enums.
-- Infrastructure: configuration, IO, persistence, logging.
+Le code est organise autour d'une architecture MVVM:
+- `Views`: interface graphique Avalonia.
+- `ViewModels`: commandes et etat de l'UI.
+- `Core`: modeles metier, contrats et validation.
+- `Services`: orchestration des cas d'usage.
+- `Data`: configuration, persistence et ecriture des logs.
+- `Platform`: services systeme (IO, localisation).
+- `Cli`: mode ligne de commande (compatible syntaxe existante).
 
 ## Diagramme UML
 Le diagramme complet est disponible ici: `docs/uml/EasySave-full.puml`
@@ -50,15 +52,17 @@ Download the zip file available in the Releases category.
 EasySave.exe 1-3
 EasySave.exe 1;3
 ```
-EasySave also have a Textual User Interface if no arguments are provided.
+Without arguments, EasySave starts an Avalonia GUI using MVVM.
 
 ## Architecture
-The codebase is layered:
-- Bootstrap: entry point and dependency composition.
-- Presentation: CLI and console UI.
-- Application: use case orchestration and services.
-- Domain: models and enums.
-- Infrastructure: configuration, IO, persistence, logging.
+The codebase now follows an MVVM architecture:
+- `Views`: Avalonia UI.
+- `ViewModels`: UI state and commands.
+- `Core`: domain models, contracts, and validation.
+- `Services`: use-case orchestration.
+- `Data`: configuration, persistence, and logging.
+- `Platform`: system adapters (IO, localization).
+- `Cli`: command-line mode (same syntax as before).
 
 ## UML Diagram
 Full diagram: `docs/uml/EasySave-full.puml`

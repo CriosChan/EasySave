@@ -1,8 +1,8 @@
-using EasySave.Application.Services;
-using EasySave.Domain.Models;
-using EasySave.Infrastructure.IO;
-using EasySave.Infrastructure.Logging;
-using EasySave.Infrastructure.Persistence;
+using EasySave.Services;
+using EasySave.Core.Models;
+using EasySave.Platform.IO;
+using EasySave.Data.Logging;
+using EasySave.Data.Persistence;
 
 namespace EasySaveTest;
 

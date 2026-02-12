@@ -1,4 +1,4 @@
-using EasySave.Infrastructure.Configuration;
+using EasySave.Data.Configuration;
 
 namespace EasySaveTest;
 
