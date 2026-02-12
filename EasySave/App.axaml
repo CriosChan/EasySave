@@ -4,5 +4,12 @@
              RequestedThemeVariant="Default">
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="Views/Styles/MainStyles.axaml"></StyleInclude>
     </Application.Styles>
+    <Application.Resources>
+        <SolidColorBrush x:Key="PrimaryBackground">#2e2e3e</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryBackground">#14000000</SolidColorBrush>
+        <SolidColorBrush x:Key="BorderLine">#22000000</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonSelected">#3e3e6e</SolidColorBrush>
+    </Application.Resources>
 </Application>
