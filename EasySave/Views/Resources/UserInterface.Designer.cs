@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EasySave.Presentation.Resources {
+namespace EasySave.Views.Resources {
     using System;
     
     
@@ -38,7 +38,7 @@ namespace EasySave.Presentation.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EasySave.Presentation.Resources.UserInterface", typeof(UserInterface).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EasySave.Views.Resources.UserInterface", typeof(UserInterface).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

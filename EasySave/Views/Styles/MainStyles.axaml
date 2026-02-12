@@ -36,6 +36,7 @@
         <Setter Property="Background" Value="{DynamicResource SecondaryBackground}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BoxShadow" Value="-4 0 16 0 #44000000"/>
     </Style>
 
     <!-- Style for item's job Border -->
