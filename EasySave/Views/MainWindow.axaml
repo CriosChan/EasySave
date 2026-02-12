@@ -1,3 +1,5 @@
+<!-- TODO -->
+
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:EasySave.ViewModels"
@@ -34,7 +36,7 @@
                     <Button Content="{Binding FrenchButtonLabel}"
                             Command="{Binding SetFrenchLanguageCommand}"
                             IsEnabled="{Binding IsNotBusy}"
-                            Margin="0,0,8,0" />
+                            Margin="0,0,8,0"/>
                     <Button Content="{Binding EnglishButtonLabel}"
                             Command="{Binding SetEnglishLanguageCommand}"
                             IsEnabled="{Binding IsNotBusy}"

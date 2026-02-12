@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using EasySave.Core.Contracts;
 using EasySave.Core.Models;
 using EasySave.Core.Validation;
-using EasySave.Presentation.Resources;
+using EasySave.Views.Resources;
 using EasySave.Services;
 
 namespace EasySave.ViewModels;

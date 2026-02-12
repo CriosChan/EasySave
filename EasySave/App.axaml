@@ -7,10 +7,10 @@
         <StyleInclude Source="Views/Styles/MainStyles.axaml"></StyleInclude>
     </Application.Styles>
     <Application.Resources>
-        <SolidColorBrush x:Key="PrimaryBackground">#2e2e3e</SolidColorBrush>
-        <SolidColorBrush x:Key="SecondaryBackground">#14000000</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryBackground">#222831</SolidColorBrush>
+        <SolidColorBrush x:Key="SecondaryBackground">#10FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="BorderLine">#22000000</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonSelected">#3e3e6e</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonSelected">#44FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="JobItemBackground">#10000000</SolidColorBrush>
         <SolidColorBrush x:Key="StatusBackground">#18003D7A</SolidColorBrush>
         <SolidColorBrush x:Key="StatusBorder">#33003D7A</SolidColorBrush>

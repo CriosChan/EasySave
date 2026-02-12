@@ -34,6 +34,10 @@
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
         </EmbeddedResource>
+        <EmbeddedResource Update="Views\Resources\UserInterface.resx">
+          <Generator>ResXFileCodeGenerator</Generator>
+          <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

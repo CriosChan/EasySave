@@ -1,7 +1,7 @@
 using EasySave.Core.Contracts;
 using EasySave.Core.Validation;
 using EasySave.Core.Models;
-using EasySave.Presentation.Resources;
+using EasySave.Views.Resources;
 
 namespace EasySave.Cli;
 
