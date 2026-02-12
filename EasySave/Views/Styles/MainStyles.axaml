@@ -6,7 +6,6 @@
             <Button Content="Test"></Button>
         </Border>
     </Design.PreviewWith>
-    
     <Style Selector="Button">
         <Setter Property="Background" Value="{DynamicResource SecondaryBackground}" />
         <Setter Property="Foreground" Value="White" />
@@ -17,106 +16,19 @@
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="CornerRadius" Value="4" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Transitions">
-            <Transitions>
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" />
-                <BrushTransition Property="Background" Duration="0:0:0.2" />
-            </Transitions>
-        </Setter>
     </Style>
-    
-    <Style Selector="Button:pointerover">
-        <Setter Property="RenderTransform" Value="scale(1.02)" />
-    </Style>
-    
     <Style Selector="Button:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource ButtonSelected}" />
         <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
     
-    <Style Selector="Button:pressed">
-        <Setter Property="RenderTransform" Value="scale(0.98)" />
-    </Style>
-
-    <!-- Style for generic Border -->
-    <Style Selector="Border.main-section">
-        <Setter Property="Padding" Value="12"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Background" Value="{DynamicResource SecondaryBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BoxShadow" Value="-4 0 16 0 #44000000"/>
-    </Style>
-
-    <!-- Style for item's job Border with hover effect -->
-    <Style Selector="Border.job-item">
-        <Setter Property="Padding" Value="8"/>
-        <Setter Property="Margin" Value="0,6,0,6"/>
-        <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="Background" Value="{DynamicResource JobItemBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Transitions">
-            <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.2" />
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" />
-            </Transitions>
-        </Setter>
-    </Style>
     
-    <Style Selector="Border.job-item:pointerover">
-        <Setter Property="Background" Value="{DynamicResource ButtonSelected}" />
-        <Setter Property="RenderTransform" Value="translateX(4px)" />
-    </Style>
-
-    <!-- Style for status bar Border with opacity transition -->
-    <Style Selector="Border.status-bar">
-        <Setter Property="Padding" Value="12"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Background" Value="{DynamicResource StatusBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource StatusBorder}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Transitions">
-            <Transitions>
-                <DoubleTransition Property="Opacity" Duration="0:0:0.5" />
-            </Transitions>
-        </Setter>
-    </Style>
     
-    <!-- Subtle opacity change when active (using transition instead of animation) -->
-    <Style Selector="Border.status-bar.active">
-        <Setter Property="Opacity" Value="0.85" />
-    </Style>
-
-    <!-- Style for ListBox -->
-    <Style Selector="ListBox">
-        <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-    </Style>
-
-    <!-- Style for TextBlock section title -->
-    <Style Selector="TextBlock.section-title">
-        <Setter Property="FontSize" Value="18"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-    </Style>
-
-    <!-- Style for ProgressBar with smooth transition -->
-    <Style Selector="ProgressBar">
-        <Setter Property="Height" Value="18"/>
-        <Setter Property="Transitions">
-            <Transitions>
-                <DoubleTransition Property="Value" Duration="0:0:0.3" Easing="CubicEaseInOut" />
-            </Transitions>
-        </Setter>
-    </Style>
-    
-    <!-- Animated indicator bar inside ProgressBar -->
-    <Style Selector="ProgressBar /template/ Border#PART_Indicator">
-        <Setter Property="Transitions">
-            <Transitions>
-                <DoubleTransition Property="Width" Duration="0:0:0.3" Easing="CubicEaseInOut" />
-            </Transitions>
-        </Setter>
-    </Style>
 </Styles>
