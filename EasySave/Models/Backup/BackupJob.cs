@@ -69,6 +69,17 @@ public class BackupJob
     [JsonIgnore] public long TotalSize;
     [JsonIgnore] public long TransferredSize;
 
+    /// <summary>
+    ///     Gets or sets the monitor used to detect business software activity.
+    ///     Exposed for testability and dependency inversion.
+    /// </summary>
+    [JsonIgnore] public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
+
+    /// <summary>
+    ///     Gets a value indicating whether the current job run was stopped because business software was detected.
+    /// </summary>
+    [JsonIgnore] public bool WasStoppedByBusinessSoftware { get; private set; }
+
     public event EventHandler ProgressChanged;
 
     /// <summary>
@@ -87,11 +98,19 @@ public class BackupJob
     /// </summary>
     public void StartBackup()
     {
+        WasStoppedByBusinessSoftware = false;
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
+        var businessSoftwareStopHandler = new BusinessSoftwareStopHandler(BusinessSoftwareMonitor, Name);
         if (!Check())
         {
             StateLogger.SetStateFailed(state);
+            return;
+        }
+
+        if (businessSoftwareStopHandler.ShouldStopBackup(state, null))
+        {
+            WasStoppedByBusinessSoftware = true;
             return;
         }
 
@@ -108,6 +127,12 @@ public class BackupJob
         StateLogger.SetStateActive(state, FilesCount, TotalSize);
         for (var i = 0; i < FilesCount; i++)
         {
+            if (i > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, Files[i]))
+            {
+                WasStoppedByBusinessSoftware = true;
+                break;
+            }
+
             var i1 = i;
             StateLogger.SetStateStartTransfer(state, Files[i1]);
             CurrentFileIndex = i1;
@@ -115,7 +140,7 @@ public class BackupJob
             {
                 Files[i1].Copy(); // Execute the file copy
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 hadError = true; // Log an error if the copy fails
             }
@@ -126,6 +151,9 @@ public class BackupJob
             // Log the end of the transfer for the current file
             StateLogger.SetStateEndTransfer(state, FilesCount, i1, TotalSize, TransferredSize, CurrentProgress);
         }
+
+        if (WasStoppedByBusinessSoftware)
+            return;
 
         // Finalize the backup job state
         StateLogger.SetStateEnd(state, hadError);

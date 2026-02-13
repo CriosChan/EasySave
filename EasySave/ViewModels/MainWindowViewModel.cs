@@ -426,6 +426,7 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             var totalJobs = Jobs.Count;
+            var stoppedByBusinessSoftware = false;
             for (int i = 0; i < totalJobs; i++)
             {
                 var jobViewModel = Jobs[i];
@@ -435,11 +436,19 @@ public partial class MainWindowViewModel : ViewModelBase
                 // Execute jobs sequentially to prevent resource conflicts
                 await Task.Run(() => jobViewModel.Job.StartBackup());
 
+                if (jobViewModel.Job.WasStoppedByBusinessSoftware)
+                {
+                    stoppedByBusinessSoftware = true;
+                    StatusMessage = $"Backup '{jobViewModel.Job.Name}' stopped: business software is running";
+                    break;
+                }
+
                 // Update overall progress
                 OverallProgress = ((i + 1) / (double)totalJobs) * 100;
             }
 
-            StatusMessage = UserInterface.Launch_Done;
+            if (!stoppedByBusinessSoftware)
+                StatusMessage = UserInterface.Launch_Done;
         }
         catch (Exception ex)
         {
@@ -467,6 +476,12 @@ public partial class MainWindowViewModel : ViewModelBase
             // Run backup on background thread
             job.ProgressChanged += OnProgressChanged;
             await Task.Run(job.StartBackup);
+
+            if (job.WasStoppedByBusinessSoftware)
+            {
+                StatusMessage = $"Backup '{job.Name}' stopped: business software is running";
+                return;
+            }
 
             // Update final status
             OverallProgress = 100;
