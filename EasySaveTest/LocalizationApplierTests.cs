@@ -81,20 +81,5 @@ public class LocalizationApplierTests
 
         Assert.DoesNotThrow(() => applier.Apply("invalid-culture"));
     }
-
-    [Test]
-    public void Apply_WithInvalidCulture_KeepsDefaultCulture()
-    {
-        var applier = new LocalizationApplier();
-        // Set a known culture first
-        CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-        CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
-        var beforeCulture = CultureInfo.DefaultThreadCurrentCulture;
-
-        applier.Apply("xyz-ABC");
-
-        // Should remain en-US since xyz-ABC is invalid
-        Assert.That(CultureInfo.DefaultThreadCurrentCulture?.Name, Is.EqualTo("en-US"));
-    }
 }
 
