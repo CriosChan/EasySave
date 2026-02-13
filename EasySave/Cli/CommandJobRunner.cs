@@ -1,7 +1,7 @@
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup;
 using EasySave.Models.State;
-using EasySave.Presentation.Resources;
+using EasySave.Views.Resources;
 
 namespace EasySave.Cli;
 
@@ -25,7 +25,7 @@ internal sealed class CommandJobRunner
         }
 
         // Ensure the state file contains all configured jobs before running.
-        StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath, jobs);
+        StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
 
         foreach (var id in ids)
         {

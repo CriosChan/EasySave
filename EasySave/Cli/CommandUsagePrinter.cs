@@ -1,4 +1,4 @@
-using EasySave.Presentation.Resources;
+using EasySave.Views.Resources;
 
 namespace EasySave.Cli;
 

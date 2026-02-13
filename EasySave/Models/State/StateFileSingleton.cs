@@ -38,10 +38,10 @@ public sealed class StateFileSingleton
     /// </summary>
     /// <param name="stateDirectory">Directory where state.json is written.</param>
     /// <param name="jobs">List of backup jobs to initialize state for.</param>
-    public void Initialize(string stateDirectory, IEnumerable<BackupJob> jobs)
+    public void Initialize(string stateDirectory)
     {
         _statePath = Path.Combine(stateDirectory, "state.json");
-        _states = jobs
+        _states = new JobService().GetAll()
             .OrderBy(j => j.Id)
             .Select(j => new BackupJobState
             {
