@@ -23,6 +23,7 @@ public sealed class ApplicationConfiguration
     public string Localization { get; init; } = ""; // Default localization setting
 
     public string LogType { get; init; } = "json"; // Default log type format
+    public List<string> ExtensionToCrypt { get; init; } = [];
 
     /// <summary>
     ///     Process names of business software that block backup execution when running.
