@@ -151,6 +151,9 @@ public partial class MainWindowViewModel : ViewModelBase
         // Load existing jobs
         RefreshJobs();
 
+        // Initialize business software management UI state
+        InitializeBusinessSoftwareManagement();
+
         // Set initial status
         StatusMessage = "Ready";
     }
@@ -195,6 +198,7 @@ public partial class MainWindowViewModel : ViewModelBase
         RemoveButtonLabel = "Remove Selected";
         RunSelectedButtonLabel = "Run Selected Job";
         RunAllButtonLabel = "Run All Jobs";
+        UpdateBusinessSoftwareUiText();
     }
 
     /// <summary>
