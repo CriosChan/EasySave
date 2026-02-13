@@ -31,12 +31,6 @@ public sealed class ApplicationConfiguration
     public string[] BusinessSoftwareProcessNames { get; init; } = [];
 
     /// <summary>
-    ///     Legacy single-value setting kept for backward compatibility.
-    ///     Supports one name or a list separated by ';' or ','.
-    /// </summary>
-    public string BusinessSoftwareProcessName { get; init; } = string.Empty;
-
-    /// <summary>
     ///     Loads configuration from a JSON file.
     /// </summary>
     /// <param name="configFile">Configuration file name.</param>
