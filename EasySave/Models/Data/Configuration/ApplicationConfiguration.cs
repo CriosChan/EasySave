@@ -25,6 +25,12 @@ public sealed class ApplicationConfiguration
     public string LogType { get; init; } = "json"; // Default log type format
 
     /// <summary>
+    ///     Process name of the business software that blocks backup execution when running.
+    ///     Example values: "CalculatorApp", "notepad", "notepad.exe".
+    /// </summary>
+    public string BusinessSoftwareProcessName { get; init; } = string.Empty;
+
+    /// <summary>
     ///     Loads configuration from a JSON file.
     /// </summary>
     /// <param name="configFile">Configuration file name.</param>

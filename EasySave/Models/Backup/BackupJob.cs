@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using EasySave.Core.Models;
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.Logger;
 using EasySave.Models.State;
 using EasySave.Models.Utils;
 
@@ -68,6 +69,8 @@ public class BackupJob
     } // Progress percentage of the backup job
     [JsonIgnore] public long TotalSize;
     [JsonIgnore] public long TransferredSize;
+    [JsonIgnore] public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
+    [JsonIgnore] public bool WasStoppedByBusinessSoftware { get; private set; }
 
     public event EventHandler ProgressChanged;
 
@@ -87,6 +90,7 @@ public class BackupJob
     /// </summary>
     public void StartBackup()
     {
+        WasStoppedByBusinessSoftware = false;
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
         if (!Check())
@@ -94,6 +98,9 @@ public class BackupJob
             StateLogger.SetStateFailed(state);
             return;
         }
+
+        if (ShouldStopBackup(state, null))
+            return;
 
         // Create the backup folder structure
         new BackupFolder(SourceDirectory, TargetDirectory, Name).MirrorFolder();
@@ -108,6 +115,9 @@ public class BackupJob
         StateLogger.SetStateActive(state, FilesCount, TotalSize);
         for (var i = 0; i < FilesCount; i++)
         {
+            if (i > 0 && ShouldStopBackup(state, Files[i]))
+                break;
+
             var i1 = i;
             StateLogger.SetStateStartTransfer(state, Files[i1]);
             CurrentFileIndex = i1;
@@ -115,7 +125,7 @@ public class BackupJob
             {
                 Files[i1].Copy(); // Execute the file copy
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 hadError = true; // Log an error if the copy fails
             }
@@ -127,9 +137,40 @@ public class BackupJob
             StateLogger.SetStateEndTransfer(state, FilesCount, i1, TotalSize, TransferredSize, CurrentProgress);
         }
 
+        if (WasStoppedByBusinessSoftware)
+            return;
+
         // Finalize the backup job state
         StateLogger.SetStateEnd(state, hadError);
         CurrentProgress = 100; // Set progress to 100% at completion
+    }
+
+    private bool ShouldStopBackup(BackupJobState state, IFile? blockedFile)
+    {
+        if (!BusinessSoftwareMonitor.IsBusinessSoftwareRunning())
+            return false;
+
+        WasStoppedByBusinessSoftware = true;
+        StateLogger.SetStateStoppedByBusinessSoftware(state);
+        LogBusinessSoftwareStop(blockedFile);
+        return true;
+    }
+
+    private void LogBusinessSoftwareStop(IFile? blockedFile)
+    {
+        var logger = new ConfigurableLogWriter<LogEntry>();
+        var softwareName = BusinessSoftwareMonitor.ConfiguredSoftwareName;
+        var softwareLabel = string.IsNullOrWhiteSpace(softwareName) ? "configured business software" : softwareName;
+
+        logger.Log(new LogEntry
+        {
+            BackupName = Name,
+            SourcePath = blockedFile == null ? string.Empty : PathService.ToFullUncLikePath(blockedFile.SourceFile),
+            TargetPath = blockedFile == null ? string.Empty : PathService.ToFullUncLikePath(blockedFile.TargetFile),
+            FileSizeBytes = 0,
+            TransferTimeMs = -1,
+            ErrorMessage = $"Backup stopped because '{softwareLabel}' is running."
+        });
     }
 
     protected virtual void OnProgressChanged()

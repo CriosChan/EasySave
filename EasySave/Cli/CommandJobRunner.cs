@@ -38,6 +38,8 @@ internal sealed class CommandJobRunner
 
             Console.WriteLine(UserInterface.Launch_RunningOne, job.Id, job.Name);
             job.StartBackup();
+            if (job.WasStoppedByBusinessSoftware)
+                break;
         }
 
         return 0;
