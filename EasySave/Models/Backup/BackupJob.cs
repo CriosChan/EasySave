@@ -2,7 +2,6 @@ using System.Text.Json.Serialization;
 using EasySave.Core.Models;
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
-using EasySave.Models.Logger;
 using EasySave.Models.State;
 using EasySave.Models.Utils;
 
@@ -102,14 +101,18 @@ public class BackupJob
         WasStoppedByBusinessSoftware = false;
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
+        var businessSoftwareStopHandler = new BusinessSoftwareStopHandler(BusinessSoftwareMonitor, Name);
         if (!Check())
         {
             StateLogger.SetStateFailed(state);
             return;
         }
 
-        if (ShouldStopBackup(state, null))
+        if (businessSoftwareStopHandler.ShouldStopBackup(state, null))
+        {
+            WasStoppedByBusinessSoftware = true;
             return;
+        }
 
         // Create the backup folder structure
         new BackupFolder(SourceDirectory, TargetDirectory, Name).MirrorFolder();
@@ -124,8 +127,11 @@ public class BackupJob
         StateLogger.SetStateActive(state, FilesCount, TotalSize);
         for (var i = 0; i < FilesCount; i++)
         {
-            if (i > 0 && ShouldStopBackup(state, Files[i]))
+            if (i > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, Files[i]))
+            {
+                WasStoppedByBusinessSoftware = true;
                 break;
+            }
 
             var i1 = i;
             StateLogger.SetStateStartTransfer(state, Files[i1]);
@@ -152,49 +158,6 @@ public class BackupJob
         // Finalize the backup job state
         StateLogger.SetStateEnd(state, hadError);
         CurrentProgress = 100; // Set progress to 100% at completion
-    }
-
-    /// <summary>
-    ///     Stops the current backup flow when business software is running and writes a stop log entry.
-    /// </summary>
-    /// <param name="state">Current job state to update.</param>
-    /// <param name="blockedFile">
-    ///     File that would have been processed next when the stop occurs.
-    ///     Null when the backup is blocked before starting file processing.
-    /// </param>
-    /// <returns>True if backup execution must stop; otherwise, false.</returns>
-    private bool ShouldStopBackup(BackupJobState state, IFile? blockedFile)
-    {
-        if (!BusinessSoftwareMonitor.IsBusinessSoftwareRunning())
-            return false;
-
-        WasStoppedByBusinessSoftware = true;
-        StateLogger.SetStateStoppedByBusinessSoftware(state);
-        LogBusinessSoftwareStop(blockedFile);
-        return true;
-    }
-
-    /// <summary>
-    ///     Logs a dedicated entry describing a stop caused by business software detection.
-    /// </summary>
-    /// <param name="blockedFile">
-    ///     File that was about to start when the stop was triggered, or null if blocked before file loop.
-    /// </param>
-    private void LogBusinessSoftwareStop(IFile? blockedFile)
-    {
-        var logger = new ConfigurableLogWriter<LogEntry>();
-        var softwareName = BusinessSoftwareMonitor.ConfiguredSoftwareName;
-        var softwareLabel = string.IsNullOrWhiteSpace(softwareName) ? "configured business software" : softwareName;
-
-        logger.Log(new LogEntry
-        {
-            BackupName = Name,
-            SourcePath = blockedFile == null ? string.Empty : PathService.ToFullUncLikePath(blockedFile.SourceFile),
-            TargetPath = blockedFile == null ? string.Empty : PathService.ToFullUncLikePath(blockedFile.TargetFile),
-            FileSizeBytes = 0,
-            TransferTimeMs = -1,
-            ErrorMessage = $"Backup stopped because '{softwareLabel}' is running."
-        });
     }
 
     protected virtual void OnProgressChanged()
