@@ -1,7 +1,7 @@
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup;
 using EasySave.Models.State;
-using EasySave.Presentation.Resources;
+using EasySave.Views.Resources;
 
 namespace EasySave.Cli;
 
