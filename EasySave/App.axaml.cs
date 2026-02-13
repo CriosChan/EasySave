@@ -1,16 +1,13 @@
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using EasySave.Composition;
 using EasySave.ViewModels;
 using EasySave.Views;
 
 namespace EasySave;
 
-public partial class App : Application
+public class App : Application
 {
     public override void Initialize()
     {
@@ -23,20 +20,9 @@ public partial class App : Application
         {
             DisableAvaloniaDataAnnotationValidation();
 
-            var services = AppRuntime.Services ?? AppServicesFactory.CreateForUi();
-            AppRuntime.Services ??= services;
-
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(
-                    services.JobService,
-                    services.BackupService,
-                    services.StateSynchronizer,
-                    services.JobValidator,
-                    services.UserPreferences,
-                    services.LocalizationApplier,
-                    services.PathService,
-                    services.UiProgressReporter)
+                DataContext = new MainWindowViewModel()
             };
         }
 
