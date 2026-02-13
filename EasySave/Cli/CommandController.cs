@@ -1,5 +1,3 @@
-using EasySave.Core.Contracts;
-
 namespace EasySave.Cli;
 
 /// <summary>
@@ -16,11 +14,7 @@ public static class CommandController
     /// </summary>
     /// <returns>Process exit code.</returns>
     public static int Run(
-        string[] args,
-        IJobService jobService,
-        IBackupService backupService,
-        IStateService stateService,
-        IJobValidator validator)
+        string[] args)
     {
         var raw = string.Join(string.Empty, args).Trim();
         if (string.IsNullOrWhiteSpace(raw))
@@ -40,7 +34,7 @@ public static class CommandController
             return 1;
         }
 
-        var runner = new CommandJobRunner(jobService, backupService, stateService, validator);
+        var runner = new CommandJobRunner();
         return runner.RunJobs(ids);
     }
 
