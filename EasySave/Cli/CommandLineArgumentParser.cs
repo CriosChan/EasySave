@@ -3,7 +3,7 @@ namespace EasySave.Cli;
 /// <summary>
 ///     Parses command-line arguments representing backup job IDs.
 /// </summary>
-internal static class CommandLineArgumentParser
+public static class CommandLineArgumentParser
 {
     /// <summary>
     ///     Supported formats:
@@ -11,7 +11,7 @@ internal static class CommandLineArgumentParser
     ///     - "1;3"  -> 1 and 3
     ///     - "2"    -> 2 only
     /// </summary>
-    internal static List<int> Parse(string arg)
+    public static List<int> Parse(string arg)
     {
         var result = new List<int>();
         var normalized = arg.Replace(" ", string.Empty);
