@@ -7,6 +7,7 @@ using EasySave.Models.Backup;
 using EasySave.Models.State;
 using EasySave.Models.Utils;
 using EasySave.Views.Resources;
+using Avalonia.Platform.Storage;
 
 namespace EasySave.ViewModels;
 
@@ -20,6 +21,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private readonly JobService _jobService;
     private readonly LocalizationApplier _localizationApplier;
+    private IStorageProvider? _storageProvider;
 
     #endregion
 
@@ -62,6 +64,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private string _newTargetDirectory = string.Empty;
+
+    [ObservableProperty]
+    private string _browseSourceLabel = "Browse...";
+
+    [ObservableProperty]
+    private string _browseTargetLabel = "Browse...";
 
     #endregion
 
@@ -187,6 +195,14 @@ public partial class MainWindowViewModel : ViewModelBase
         RemoveButtonLabel = "Remove Selected";
         RunSelectedButtonLabel = "Run Selected Job";
         RunAllButtonLabel = "Run All Jobs";
+    }
+
+    /// <summary>
+    ///     Sets the storage provider for folder picker dialogs.
+    /// </summary>
+    public void SetStorageProvider(IStorageProvider storageProvider)
+    {
+        _storageProvider = storageProvider;
     }
 
     #endregion
@@ -467,6 +483,50 @@ public partial class MainWindowViewModel : ViewModelBase
             // Reset progress after a delay
             await Task.Delay(2000);
             OverallProgress = 0;
+        }
+    }
+
+    #endregion
+
+    #region Commands - Folder Selection
+
+    /// <summary>
+    ///     Opens a folder picker dialog to select the source directory.
+    /// </summary>
+    [RelayCommand]
+    private async Task BrowseSourceDirectory()
+    {
+        if (_storageProvider == null) return;
+
+        var folders = await _storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            Title = "Select Source Directory",
+            AllowMultiple = false
+        });
+
+        if (folders.Count > 0)
+        {
+            NewSourceDirectory = folders[0].Path.LocalPath;
+        }
+    }
+
+    /// <summary>
+    ///     Opens a folder picker dialog to select the target directory.
+    /// </summary>
+    [RelayCommand]
+    private async Task BrowseTargetDirectory()
+    {
+        if (_storageProvider == null) return;
+
+        var folders = await _storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            Title = "Select Target Directory",
+            AllowMultiple = false
+        });
+
+        if (folders.Count > 0)
+        {
+            NewTargetDirectory = folders[0].Path.LocalPath;
         }
     }
 
