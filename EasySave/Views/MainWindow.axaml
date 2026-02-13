@@ -101,27 +101,50 @@
 
         <Border Grid.Row="1"
                 Grid.Column="1"
-                Padding="12"
-                CornerRadius="8"
-                Background="{DynamicResource SecondaryBackground}"
-                BorderBrush="{DynamicResource BorderLine}"
-                BorderThickness="1">
+                Classes="main-section">
             <StackPanel Spacing="8">
                 <TextBlock Text="{Binding AddSectionTitle}"
-                           FontSize="18"
-                           FontWeight="Bold" />
+                           Classes="section-title" />
 
                 <TextBlock Text="{Binding NameLabel}" />
                 <TextBox Text="{Binding NewJobName}"
                          IsEnabled="{Binding IsNotBusy}" />
 
                 <TextBlock Text="{Binding SourceLabel}" />
-                <TextBox Text="{Binding NewSourceDirectory}"
-                         IsEnabled="{Binding IsNotBusy}" />
+                <StackPanel Spacing="4">
+                    <Button Command="{Binding BrowseSourceDirectoryCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                                      Width="16" Height="16" />
+                            <TextBlock Text="{Binding BrowseSourceLabel}" />
+                        </StackPanel>
+                    </Button>
+                    <TextBlock Text="{Binding NewSourceDirectory}"
+                               TextWrapping="Wrap"
+                               Opacity="0.7"
+                               FontSize="12"
+                               IsVisible="{Binding NewSourceDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </StackPanel>
 
                 <TextBlock Text="{Binding TargetLabel}" />
-                <TextBox Text="{Binding NewTargetDirectory}"
-                         IsEnabled="{Binding IsNotBusy}" />
+                <StackPanel Spacing="4">
+                    <Button Command="{Binding BrowseTargetDirectoryCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                                      Width="16" Height="16" />
+                            <TextBlock Text="{Binding BrowseTargetLabel}" />
+                        </StackPanel>
+                    </Button>
+                    <TextBlock Text="{Binding NewTargetDirectory}"
+                               TextWrapping="Wrap"
+                               Opacity="0.7"
+                               FontSize="12"
+                               IsVisible="{Binding NewTargetDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </StackPanel>
 
                 <TextBlock Text="{Binding TypeLabel}" />
                 <ComboBox ItemsSource="{Binding BackupTypes}"
