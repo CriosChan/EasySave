@@ -262,6 +262,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     /// <summary>
     ///     Adds a new backup job using the input fields.
+    ///     Validates that all required fields are provided and that both source and target directories exist.
+    ///     Note: Both directories must exist before creating a job. The target directory is not automatically
+    ///     created to ensure the user has explicitly prepared the backup destination.
     /// </summary>
     [RelayCommand]
     private void AddJob()
@@ -285,6 +288,9 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
+        // Validate directory existence
+        // Both source and target must exist before job creation
+        // This ensures the backup destination is properly configured
         if (!Directory.Exists(NewSourceDirectory))
         {
             StatusMessage = "Error: Source directory does not exist";
@@ -383,6 +389,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     /// <summary>
     ///     Runs all backup jobs sequentially.
+    ///     Note: Jobs are executed one at a time to avoid resource contention and ensure
+    ///     predictable behavior. Parallel execution could cause conflicts if jobs access
+    ///     the same file system resources.
     /// </summary>
     [RelayCommand]
     private async Task RunAllJobs()
@@ -406,6 +415,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 StatusMessage = string.Format(UserInterface.Launch_RunningOne, 
                     jobViewModel.Job.Id, jobViewModel.Job.Name);
 
+                // Execute jobs sequentially to prevent resource conflicts
                 await Task.Run(() => jobViewModel.Job.StartBackup());
 
                 // Update overall progress
@@ -446,7 +456,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Error: {ex.Message}";
+            // Include job context in error message for better debugging
+            StatusMessage = $"Error executing job '{job.Name}' (ID: {job.Id}): {ex.Message}";
         }
         finally
         {
