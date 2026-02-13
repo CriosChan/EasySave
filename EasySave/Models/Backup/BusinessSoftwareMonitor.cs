@@ -17,10 +17,7 @@ public sealed class BusinessSoftwareMonitor : IBusinessSoftwareMonitor
     public BusinessSoftwareMonitor()
     {
         var config = ApplicationConfiguration.Load();
-        _normalizedProcessNames = BuildProcessNames(
-            config.BusinessSoftwareProcessNames,
-            config.BusinessSoftwareProcessName
-        );
+        _normalizedProcessNames = BuildProcessNames(config.BusinessSoftwareProcessNames);
     }
 
     /// <summary>
@@ -54,36 +51,22 @@ public sealed class BusinessSoftwareMonitor : IBusinessSoftwareMonitor
     }
 
     /// <summary>
-    ///     Builds the final normalized process name list from the new list-based setting and legacy single-value setting.
+    ///     Builds the final normalized process name list from the list-based setting.
     /// </summary>
     /// <param name="configuredNames">Configured process names from the list-based setting.</param>
-    /// <param name="legacyConfiguredName">Configured process names from the legacy single-value setting.</param>
     /// <returns>Distinct normalized process names used for detection.</returns>
-    private static string[] BuildProcessNames(IReadOnlyList<string>? configuredNames, string legacyConfiguredName)
+    private static string[] BuildProcessNames(IReadOnlyList<string>? configuredNames)
     {
         var rawNames = new List<string>();
 
         if (configuredNames != null)
             rawNames.AddRange(configuredNames);
 
-        if (!string.IsNullOrWhiteSpace(legacyConfiguredName))
-            rawNames.AddRange(SplitConfiguredNames(legacyConfiguredName));
-
         return rawNames
             .Select(NormalizeProcessName)
             .Where(name => !string.IsNullOrWhiteSpace(name))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
-    }
-
-    /// <summary>
-    ///     Splits a raw process configuration value into individual names.
-    /// </summary>
-    /// <param name="configuredNames">Raw configured names separated by ';' or ','.</param>
-    /// <returns>Individual configured process names.</returns>
-    private static IEnumerable<string> SplitConfiguredNames(string configuredNames)
-    {
-        return configuredNames.Split([';', ','], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
     /// <summary>
