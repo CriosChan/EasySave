@@ -55,7 +55,21 @@ public class BackupJob
 
     [JsonIgnore] public List<IFile> Files { get; private set; } = []; // List of files to backup
     [JsonIgnore] public int CurrentFileIndex { get; private set; } // Index of the currently processed file
-    [JsonIgnore] public double CurrentProgress { get; private set; } // Progress percentage of the backup job
+    [JsonIgnore] public int FilesCount { get; private set; }
+    [JsonIgnore]
+    public double CurrentProgress
+    {
+        get;
+        private set
+        {
+            field = value;
+            OnProgressChanged();
+        }
+    } // Progress percentage of the backup job
+    [JsonIgnore] public long TotalSize;
+    [JsonIgnore] public long TransferredSize;
+
+    public event EventHandler ProgressChanged;
 
     /// <summary>
     ///     Checks if the source and target directories exist.
@@ -85,14 +99,14 @@ public class BackupJob
         new BackupFolder(SourceDirectory, TargetDirectory, Name).MirrorFolder();
         var selector = TypeSelectorHelper.GetSelector(Type, SourceDirectory, TargetDirectory, Name);
         Files = selector.GetFilesToBackup();
-        var totalSize = Files.GetAllSize();
-        long transferredSize = 0;
-        var filesCount = Files.Count();
+        TotalSize = Files.GetAllSize();
+        TransferredSize = 0;
+        FilesCount = Files.Count();
         var hadError = false;
 
         // Set the state of the backup as active
-        StateLogger.SetStateActive(state, filesCount, totalSize);
-        for (var i = 0; i < filesCount; i++)
+        StateLogger.SetStateActive(state, FilesCount, TotalSize);
+        for (var i = 0; i < FilesCount; i++)
         {
             var i1 = i;
             StateLogger.SetStateStartTransfer(state, Files[i1]);
@@ -106,15 +120,20 @@ public class BackupJob
                 hadError = true; // Log an error if the copy fails
             }
 
-            transferredSize += Files[i1].GetSize();
-            CurrentProgress = MathUtil.Percentage(transferredSize, totalSize);
+            TransferredSize += Files[i1].GetSize();
+            CurrentProgress = MathUtil.Percentage(TransferredSize, TotalSize);
 
             // Log the end of the transfer for the current file
-            StateLogger.SetStateEndTransfer(state, filesCount, i1, totalSize, transferredSize, CurrentProgress);
+            StateLogger.SetStateEndTransfer(state, FilesCount, i1, TotalSize, TransferredSize, CurrentProgress);
         }
 
         // Finalize the backup job state
         StateLogger.SetStateEnd(state, hadError);
         CurrentProgress = 100; // Set progress to 100% at completion
+    }
+
+    protected virtual void OnProgressChanged()
+    {
+        ProgressChanged?.Invoke(this, EventArgs.Empty);
     }
 }

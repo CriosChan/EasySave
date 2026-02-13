@@ -449,7 +449,8 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             // Run backup on background thread
-            await Task.Run(() => job.StartBackup());
+            job.ProgressChanged += OnProgressChanged;
+            await Task.Run(job.StartBackup);
 
             // Update final status
             OverallProgress = 100;
@@ -468,6 +469,13 @@ public partial class MainWindowViewModel : ViewModelBase
             await Task.Delay(2000);
             OverallProgress = 0;
         }
+    }
+    
+    private void OnProgressChanged(object sender, EventArgs e)
+    {
+        BackupJob job = (BackupJob)sender;
+        StatusMessage = $"{string.Format(UserInterface.Launch_RunningOne, job.Id, job.Name)} ({job.CurrentFileIndex} / {job.FilesCount} files) - ({Math.Round(job.TransferredSize / 1048576.0)} / {Math.Round(job.TotalSize / 1048576.0)} MB))";
+        OverallProgress = job.CurrentProgress;
     }
 
     #endregion
