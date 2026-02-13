@@ -5,45 +5,85 @@ using EasySave.Models.Backup.Interfaces;
 namespace EasySave.Models.Backup;
 
 /// <summary>
-///     Detects configured business software process from application settings.
+///     Detects configured business software processes from application settings.
 /// </summary>
 public sealed class BusinessSoftwareMonitor : IBusinessSoftwareMonitor
 {
-    private readonly string _normalizedProcessName;
+    private readonly string[] _normalizedProcessNames;
 
     /// <summary>
-    ///     Initializes a new monitor using the configured business software process name.
+    ///     Initializes a new monitor using configured business software process names.
     /// </summary>
     public BusinessSoftwareMonitor()
     {
-        var configuredName = ApplicationConfiguration.Load().BusinessSoftwareProcessName;
-        _normalizedProcessName = NormalizeProcessName(configuredName);
+        var config = ApplicationConfiguration.Load();
+        _normalizedProcessNames = BuildProcessNames(
+            config.BusinessSoftwareProcessNames,
+            config.BusinessSoftwareProcessName
+        );
     }
 
     /// <summary>
-    ///     Gets the normalized configured software process name.
+    ///     Gets the normalized configured software process names.
     /// </summary>
-    public string ConfiguredSoftwareName => _normalizedProcessName;
+    public IReadOnlyList<string> ConfiguredSoftwareNames => _normalizedProcessNames;
 
     /// <summary>
-    ///     Determines whether the configured business software process is currently running.
+    ///     Determines whether at least one configured business software process is currently running.
     /// </summary>
     /// <returns>
-    ///     True when at least one process with the configured name is detected; otherwise, false.
+    ///     True when at least one process with a configured name is detected; otherwise, false.
     /// </returns>
     public bool IsBusinessSoftwareRunning()
     {
-        if (string.IsNullOrWhiteSpace(_normalizedProcessName))
+        if (_normalizedProcessNames.Length == 0)
             return false;
 
         try
         {
-            return Process.GetProcessesByName(_normalizedProcessName).Length > 0;
+            foreach (var processName in _normalizedProcessNames)
+                if (Process.GetProcessesByName(processName).Length > 0)
+                    return true;
+
+            return false;
         }
         catch
         {
             return false;
         }
+    }
+
+    /// <summary>
+    ///     Builds the final normalized process name list from the new list-based setting and legacy single-value setting.
+    /// </summary>
+    /// <param name="configuredNames">Configured process names from the list-based setting.</param>
+    /// <param name="legacyConfiguredName">Configured process names from the legacy single-value setting.</param>
+    /// <returns>Distinct normalized process names used for detection.</returns>
+    private static string[] BuildProcessNames(IReadOnlyList<string>? configuredNames, string legacyConfiguredName)
+    {
+        var rawNames = new List<string>();
+
+        if (configuredNames != null)
+            rawNames.AddRange(configuredNames);
+
+        if (!string.IsNullOrWhiteSpace(legacyConfiguredName))
+            rawNames.AddRange(SplitConfiguredNames(legacyConfiguredName));
+
+        return rawNames
+            .Select(NormalizeProcessName)
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+    }
+
+    /// <summary>
+    ///     Splits a raw process configuration value into individual names.
+    /// </summary>
+    /// <param name="configuredNames">Raw configured names separated by ';' or ','.</param>
+    /// <returns>Individual configured process names.</returns>
+    private static IEnumerable<string> SplitConfiguredNames(string configuredNames)
+    {
+        return configuredNames.Split([';', ','], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
     /// <summary>

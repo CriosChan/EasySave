@@ -6,12 +6,12 @@ namespace EasySave.Models.Backup.Interfaces;
 public interface IBusinessSoftwareMonitor
 {
     /// <summary>
-    ///     Gets the configured software name used for detection.
+    ///     Gets the configured software names used for detection.
     /// </summary>
-    string ConfiguredSoftwareName { get; }
+    IReadOnlyList<string> ConfiguredSoftwareNames { get; }
 
     /// <summary>
-    ///     Returns true when the configured business software is running.
+    ///     Returns true when at least one configured business software process is running.
     /// </summary>
     bool IsBusinessSoftwareRunning();
 }

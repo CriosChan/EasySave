@@ -53,8 +53,10 @@ public sealed class BusinessSoftwareStopHandler
     private void LogBusinessSoftwareStop(IFile? blockedFile)
     {
         var logger = new ConfigurableLogWriter<LogEntry>();
-        var softwareName = _businessSoftwareMonitor.ConfiguredSoftwareName;
-        var softwareLabel = string.IsNullOrWhiteSpace(softwareName) ? "configured business software" : softwareName;
+        var configuredSoftwareNames = _businessSoftwareMonitor.ConfiguredSoftwareNames;
+        var softwareLabel = configuredSoftwareNames.Count == 0
+            ? "configured business software"
+            : string.Join(", ", configuredSoftwareNames);
 
         logger.Log(new LogEntry
         {
@@ -63,7 +65,7 @@ public sealed class BusinessSoftwareStopHandler
             TargetPath = blockedFile == null ? string.Empty : PathService.ToFullUncLikePath(blockedFile.TargetFile),
             FileSizeBytes = 0,
             TransferTimeMs = -1,
-            ErrorMessage = $"Backup stopped because '{softwareLabel}' is running."
+            ErrorMessage = $"Backup stopped because one of these business software processes is running: '{softwareLabel}'."
         });
     }
 }

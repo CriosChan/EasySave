@@ -84,9 +84,9 @@ public class BusinessSoftwareBlockingTest
         private bool _last;
 
         /// <summary>
-        ///     Gets the configured software name used for assertions and logs.
+        ///     Gets the configured software names used for assertions and logs.
         /// </summary>
-        public string ConfiguredSoftwareName => "CalculatorApp";
+        public IReadOnlyList<string> ConfiguredSoftwareNames { get; } = ["CalculatorApp"];
 
         /// <summary>
         ///     Returns the next configured value, then repeats the last known value.
