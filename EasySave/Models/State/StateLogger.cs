@@ -50,6 +50,21 @@ public static class StateLogger
     }
 
     /// <summary>
+    ///     Sets the state of the backup job to failed because a business software process is running.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    public static void SetStateStoppedByBusinessSoftware(BackupJobState state)
+    {
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.Failed;
+            s.CurrentAction = "Stopped: business software running";
+            s.CurrentSourcePath = null;
+            s.CurrentTargetPath = null;
+        });
+    }
+
+    /// <summary>
     ///     Sets the state of the backup job to completed, based on if an error occurred.
     /// </summary>
     /// <param name="state">The current state of the backup job.</param>

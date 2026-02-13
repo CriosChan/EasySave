@@ -26,6 +26,12 @@ public sealed class ApplicationConfiguration
     public List<string> ExtensionToCrypt { get; init; } = [];
 
     /// <summary>
+    ///     Process names of business software that block backup execution when running.
+    ///     Example values: ["CalculatorApp", "notepad", "notepad.exe"].
+    /// </summary>
+    public string[] BusinessSoftwareProcessNames { get; init; } = [];
+
+    /// <summary>
     ///     Loads configuration from a JSON file.
     /// </summary>
     /// <param name="configFile">Configuration file name.</param>

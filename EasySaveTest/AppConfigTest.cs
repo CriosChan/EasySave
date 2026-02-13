@@ -53,4 +53,14 @@ public class AppConfigTest
     {
         Assert.That(_appSettings.LogPath, Is.EqualTo("./log"));
     }
+
+    /// <summary>
+    ///     Verifies the configured business software process names list.
+    /// </summary>
+    [Test]
+    public void ConfigHasBusinessSoftwareProcessNames()
+    {
+        Assert.That(_appSettings.BusinessSoftwareProcessNames, Is.Not.Null);
+        Assert.That(_appSettings.BusinessSoftwareProcessNames.Length, Is.EqualTo(0));
+    }
 }
