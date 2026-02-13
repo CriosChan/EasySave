@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using EasySave.Core.Models;
+using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
 using EasySave.Models.State;
 using EasySave.Models.Utils;
@@ -72,6 +73,7 @@ public class BackupJob
     /// </summary>
     public void StartBackup()
     {
+        StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
         if (!Check())
         {

@@ -25,7 +25,7 @@ internal sealed class CommandJobRunner
         }
 
         // Ensure the state file contains all configured jobs before running.
-        StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath, jobs);
+        StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
 
         foreach (var id in ids)
         {
