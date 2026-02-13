@@ -133,7 +133,8 @@
 
         <Border Grid.Row="3"
                 Grid.ColumnSpan="2"
-                Classes="status-bar">
+                Classes="status-bar"
+                Classes.active="{Binding IsBusy}">
             <StackPanel Spacing="8">
                 <TextBlock Text="{Binding StatusMessage}"
                            TextWrapping="Wrap" />
