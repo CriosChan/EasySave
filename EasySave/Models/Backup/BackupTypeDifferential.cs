@@ -1,3 +1,4 @@
+using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
 
 namespace EasySave.Models.Backup;
@@ -39,7 +40,14 @@ public class BackupTypeDifferential : IBackupTypeSelector
             // Add the file if it does not exist in the target directory
             if (!File.Exists(targetPath))
             {
-                filesToBackup.Add(new NormalFile(file, targetPath, _backupName));
+                if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file)))
+                {
+                    filesToBackup.Add(new CryptedFile(file, targetPath, _backupName));
+                }
+                else
+                { 
+                    filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Create a NormalFile instance
+                }
                 continue;
             }
 
@@ -49,7 +57,16 @@ public class BackupTypeDifferential : IBackupTypeSelector
             // Check if the files are different based on size or last write time
             var isDifferent = src.Length != dst.Length || src.LastWriteTimeUtc > dst.LastWriteTimeUtc;
             if (isDifferent)
-                filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Add file if different
+            {
+                if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file)))
+                {
+                    filesToBackup.Add(new CryptedFile(file, targetPath, _backupName));
+                }
+                else
+                { 
+                    filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Create a NormalFile instance
+                }
+            }
         }
 
         return filesToBackup; // Return the list of files to be backed up based on differential criteria
