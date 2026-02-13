@@ -69,7 +69,16 @@ public class BackupJob
     } // Progress percentage of the backup job
     [JsonIgnore] public long TotalSize;
     [JsonIgnore] public long TransferredSize;
+
+    /// <summary>
+    ///     Gets or sets the monitor used to detect business software activity.
+    ///     Exposed for testability and dependency inversion.
+    /// </summary>
     [JsonIgnore] public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
+
+    /// <summary>
+    ///     Gets a value indicating whether the current job run was stopped because business software was detected.
+    /// </summary>
     [JsonIgnore] public bool WasStoppedByBusinessSoftware { get; private set; }
 
     public event EventHandler ProgressChanged;
@@ -145,6 +154,15 @@ public class BackupJob
         CurrentProgress = 100; // Set progress to 100% at completion
     }
 
+    /// <summary>
+    ///     Stops the current backup flow when business software is running and writes a stop log entry.
+    /// </summary>
+    /// <param name="state">Current job state to update.</param>
+    /// <param name="blockedFile">
+    ///     File that would have been processed next when the stop occurs.
+    ///     Null when the backup is blocked before starting file processing.
+    /// </param>
+    /// <returns>True if backup execution must stop; otherwise, false.</returns>
     private bool ShouldStopBackup(BackupJobState state, IFile? blockedFile)
     {
         if (!BusinessSoftwareMonitor.IsBusinessSoftwareRunning())
@@ -156,6 +174,12 @@ public class BackupJob
         return true;
     }
 
+    /// <summary>
+    ///     Logs a dedicated entry describing a stop caused by business software detection.
+    /// </summary>
+    /// <param name="blockedFile">
+    ///     File that was about to start when the stop was triggered, or null if blocked before file loop.
+    /// </param>
     private void LogBusinessSoftwareStop(IFile? blockedFile)
     {
         var logger = new ConfigurableLogWriter<LogEntry>();
