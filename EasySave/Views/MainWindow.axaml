@@ -20,52 +20,11 @@
 
     <Grid Margin="16">
         <Grid IsVisible="{Binding IsMainScreen}"
-              RowDefinitions="Auto,*,Auto,Auto"
+              RowDefinitions="*,Auto,Auto"
               ColumnDefinitions="2*,1*"
               RowSpacing="12"
               ColumnSpacing="12">
-
             <Border Grid.Row="0"
-                    Grid.ColumnSpan="2"
-                    Padding="12"
-                    CornerRadius="8"
-                    Background="{DynamicResource SecondaryBackground}"
-                    BorderBrush="{DynamicResource BorderLine}"
-                    BorderThickness="1">
-                <StackPanel Spacing="8">
-                    <Menu HorizontalAlignment="Left">
-                        <MenuItem Header="{Binding FeaturesMenuLabel}">
-                            <MenuItem Header="{Binding ManageBusinessSoftwareMenuItemLabel}"
-                                      Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
-                        </MenuItem>
-                    </Menu>
-
-                    <TextBlock Text="{Binding CurrentSettingsLabel}"
-                               FontWeight="SemiBold" />
-
-                    <WrapPanel VerticalAlignment="Center">
-                        <Button Content="{Binding FrenchButtonLabel}"
-                                Command="{Binding SetFrenchLanguageCommand}"
-                                IsEnabled="{Binding IsNotBusy}"
-                                Margin="0,0,8,0"/>
-                        <Button Content="{Binding EnglishButtonLabel}"
-                                Command="{Binding SetEnglishLanguageCommand}"
-                                IsEnabled="{Binding IsNotBusy}"
-                                Margin="0,0,24,0" />
-
-                        <Button Content="{Binding JsonButtonLabel}"
-                                Command="{Binding SetJsonLogTypeCommand}"
-                                IsEnabled="{Binding IsNotBusy}"
-                                Margin="0,0,8,0" />
-                        <Button Content="{Binding XmlButtonLabel}"
-                                Command="{Binding SetXmlLogTypeCommand}"
-                                IsEnabled="{Binding IsNotBusy}"
-                                Margin="0,0,24,0" />
-                    </WrapPanel>
-                </StackPanel>
-            </Border>
-
-            <Border Grid.Row="1"
                     Grid.Column="0"
                     Padding="12"
                     CornerRadius="8"
@@ -105,10 +64,21 @@
                 </StackPanel>
             </Border>
 
-            <Border Grid.Row="1"
+            <Border Grid.Row="0"
                     Grid.Column="1"
                     Classes="main-section">
                 <StackPanel Spacing="8">
+                    <Menu HorizontalAlignment="Left">
+                        <MenuItem Header="{Binding MenuLabel}">
+                            <MenuItem Header="{Binding MenuSettingsItemLabel}"
+                                      Command="{Binding OpenSettingsCommand}" />
+                            <MenuItem Header="{Binding ManageBusinessSoftwareMenuItemLabel}"
+                                      Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
+                        </MenuItem>
+                    </Menu>
+
+                    <Separator Margin="0,8,0,8" />
+
                     <TextBlock Text="{Binding AddSectionTitle}"
                                Classes="section-title" />
 
@@ -170,7 +140,7 @@
                 </StackPanel>
             </Border>
 
-            <Border Grid.Row="2"
+            <Border Grid.Row="1"
                     Grid.ColumnSpan="2"
                     Padding="12"
                     CornerRadius="8"
@@ -188,7 +158,7 @@
                 </WrapPanel>
             </Border>
 
-            <Border Grid.Row="3"
+            <Border Grid.Row="2"
                     Grid.ColumnSpan="2"
                     Padding="12"
                     CornerRadius="8"
@@ -205,6 +175,71 @@
                                  Height="18" />
                 </StackPanel>
             </Border>
+        </Grid>
+
+        <Grid IsVisible="{Binding IsSettingsScreen}"
+              RowDefinitions="Auto,*"
+              RowSpacing="12">
+            <Border Grid.Row="0"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <Grid ColumnDefinitions="Auto,*"
+                      ColumnSpacing="12">
+                    <Button Grid.Column="0"
+                            Content="{Binding BackButtonLabel}"
+                            Command="{Binding BackFromSettingsCommand}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding SettingsScreenTitle}"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <StackPanel Spacing="12">
+                    <Border Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{Binding SettingsLanguageSectionTitle}"
+                                       Classes="section-title" />
+                            <WrapPanel>
+                                <Button Content="{Binding FrenchButtonLabel}"
+                                        Command="{Binding SetFrenchLanguageCommand}"
+                                        IsEnabled="{Binding IsNotBusy}"
+                                        Margin="0,0,8,0" />
+                                <Button Content="{Binding EnglishButtonLabel}"
+                                        Command="{Binding SetEnglishLanguageCommand}"
+                                        IsEnabled="{Binding IsNotBusy}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{Binding SettingsLogTypeSectionTitle}"
+                                       Classes="section-title" />
+                            <WrapPanel>
+                                <Button Content="{Binding JsonButtonLabel}"
+                                        Command="{Binding SetJsonLogTypeCommand}"
+                                        IsEnabled="{Binding IsNotBusy}"
+                                        Margin="0,0,8,0" />
+                                <Button Content="{Binding XmlButtonLabel}"
+                                        Command="{Binding SetXmlLogTypeCommand}"
+                                        IsEnabled="{Binding IsNotBusy}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
         </Grid>
 
         <Grid IsVisible="{Binding IsSoftwareCatalogScreen}"

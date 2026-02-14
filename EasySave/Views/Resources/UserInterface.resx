@@ -180,6 +180,18 @@
     <data name="Gui.Settings.Label" xml:space="preserve">
         <value>Settings</value>
     </data>
+    <data name="Gui.Settings.Screen.Title" xml:space="preserve">
+        <value>Application Settings</value>
+    </data>
+    <data name="Gui.Settings.Section.Language" xml:space="preserve">
+        <value>Language</value>
+    </data>
+    <data name="Gui.Settings.Section.LogType" xml:space="preserve">
+        <value>Log Type</value>
+    </data>
+    <data name="Gui.Settings.Hint.FutureExtension" xml:space="preserve">
+        <value>This settings screen is ready for future parameters.</value>
+    </data>
     <data name="Gui.Button.French" xml:space="preserve">
         <value>Français</value>
     </data>
@@ -216,8 +228,20 @@
     <data name="Gui.Status.LanguageChangedEn" xml:space="preserve">
         <value>Language changed to English</value>
     </data>
+    <data name="Gui.Status.LogTypeJsonSet" xml:space="preserve">
+        <value>Log type set to JSON</value>
+    </data>
+    <data name="Gui.Status.LogTypeXmlSet" xml:space="preserve">
+        <value>Log type set to XML</value>
+    </data>
     <data name="Gui.Status.BackupStoppedByBusinessSoftware" xml:space="preserve">
         <value>Backup '{0}' stopped: business software is running</value>
+    </data>
+    <data name="Gui.Menu.Root" xml:space="preserve">
+        <value>Menu</value>
+    </data>
+    <data name="Gui.Menu.Settings" xml:space="preserve">
+        <value>Settings</value>
     </data>
     <data name="Gui.Menu.Features" xml:space="preserve">
         <value>Features</value>

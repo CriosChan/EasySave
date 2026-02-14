@@ -171,6 +171,18 @@
     <data name="Gui.Settings.Label" xml:space="preserve">
         <value>Paramètres</value>
     </data>
+    <data name="Gui.Settings.Screen.Title" xml:space="preserve">
+        <value>Paramètres de l'application</value>
+    </data>
+    <data name="Gui.Settings.Section.Language" xml:space="preserve">
+        <value>Langue</value>
+    </data>
+    <data name="Gui.Settings.Section.LogType" xml:space="preserve">
+        <value>Type de log</value>
+    </data>
+    <data name="Gui.Settings.Hint.FutureExtension" xml:space="preserve">
+        <value>Cet écran de paramètres est prêt à accueillir de nouveaux réglages.</value>
+    </data>
     <data name="Gui.Button.French" xml:space="preserve">
         <value>Français</value>
     </data>
@@ -207,8 +219,20 @@
     <data name="Gui.Status.LanguageChangedEn" xml:space="preserve">
         <value>Langue changée en Anglais</value>
     </data>
+    <data name="Gui.Status.LogTypeJsonSet" xml:space="preserve">
+        <value>Type de log défini sur JSON</value>
+    </data>
+    <data name="Gui.Status.LogTypeXmlSet" xml:space="preserve">
+        <value>Type de log défini sur XML</value>
+    </data>
     <data name="Gui.Status.BackupStoppedByBusinessSoftware" xml:space="preserve">
         <value>Sauvegarde '{0}' arrêtée : un logiciel métier est en cours d'exécution</value>
+    </data>
+    <data name="Gui.Menu.Root" xml:space="preserve">
+        <value>Menu</value>
+    </data>
+    <data name="Gui.Menu.Settings" xml:space="preserve">
+        <value>Paramètres</value>
     </data>
     <data name="Gui.Menu.Features" xml:space="preserve">
         <value>Fonctionnalités</value>
