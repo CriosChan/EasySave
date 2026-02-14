@@ -174,4 +174,85 @@
     <data name="Menu.Log" xml:space="preserve">
         <value>Choose a Log Type</value>
     </data>
+    <data name="Gui.Window.Title" xml:space="preserve">
+        <value>EasySave - Backup Manager</value>
+    </data>
+    <data name="Gui.Settings.Label" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="Gui.Button.French" xml:space="preserve">
+        <value>Français</value>
+    </data>
+    <data name="Gui.Button.English" xml:space="preserve">
+        <value>English</value>
+    </data>
+    <data name="Gui.Button.Json" xml:space="preserve">
+        <value>JSON</value>
+    </data>
+    <data name="Gui.Button.Xml" xml:space="preserve">
+        <value>XML</value>
+    </data>
+    <data name="Gui.Button.AddJob" xml:space="preserve">
+        <value>Add Job</value>
+    </data>
+    <data name="Gui.Button.RemoveSelected" xml:space="preserve">
+        <value>Remove Selected</value>
+    </data>
+    <data name="Gui.Button.RunSelectedJob" xml:space="preserve">
+        <value>Run Selected Job</value>
+    </data>
+    <data name="Gui.Button.RunAllJobs" xml:space="preserve">
+        <value>Run All Jobs</value>
+    </data>
+    <data name="Gui.Button.BrowseSource" xml:space="preserve">
+        <value>Browse source...</value>
+    </data>
+    <data name="Gui.Button.BrowseTarget" xml:space="preserve">
+        <value>Browse target...</value>
+    </data>
+    <data name="Gui.Status.LanguageChangedFr" xml:space="preserve">
+        <value>Language changed to French</value>
+    </data>
+    <data name="Gui.Status.LanguageChangedEn" xml:space="preserve">
+        <value>Language changed to English</value>
+    </data>
+    <data name="Gui.Status.BackupStoppedByBusinessSoftware" xml:space="preserve">
+        <value>Backup '{0}' stopped: business software is running</value>
+    </data>
+    <data name="Gui.Menu.Features" xml:space="preserve">
+        <value>Features</value>
+    </data>
+    <data name="Gui.Menu.ManageBusinessSoftware" xml:space="preserve">
+        <value>Manage Business Software</value>
+    </data>
+    <data name="Gui.Navigation.Back" xml:space="preserve">
+        <value>Back</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Catalog.Title" xml:space="preserve">
+        <value>Select Business Software</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Added.Title" xml:space="preserve">
+        <value>Added Business Software</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Search.Label" xml:space="preserve">
+        <value>Search software</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Search.Placeholder" xml:space="preserve">
+        <value>Type to filter software</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Button.AddSelected" xml:space="preserve">
+        <value>Add Selected</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Button.ViewAdded" xml:space="preserve">
+        <value>View Added Software</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Button.RemoveSelected" xml:space="preserve">
+        <value>Remove Selected</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Status.Updated" xml:space="preserve">
+        <value>Business software list updated.</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Status.Removed" xml:space="preserve">
+        <value>Business software removed from blocker list.</value>
+    </data>
 </root>

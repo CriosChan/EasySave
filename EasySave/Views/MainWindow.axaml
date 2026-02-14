@@ -33,10 +33,17 @@
                     BorderBrush="{DynamicResource BorderLine}"
                     BorderThickness="1">
                 <StackPanel Spacing="8">
+                    <Menu HorizontalAlignment="Left">
+                        <MenuItem Header="{Binding FeaturesMenuLabel}">
+                            <MenuItem Header="{Binding ManageBusinessSoftwareMenuItemLabel}"
+                                      Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
+                        </MenuItem>
+                    </Menu>
+
                     <TextBlock Text="{Binding CurrentSettingsLabel}"
                                FontWeight="SemiBold" />
 
-                    <WrapPanel ItemHeight="32" ItemWidth="190" VerticalAlignment="Center">
+                    <WrapPanel VerticalAlignment="Center">
                         <Button Content="{Binding FrenchButtonLabel}"
                                 Command="{Binding SetFrenchLanguageCommand}"
                                 IsEnabled="{Binding IsNotBusy}"
@@ -54,10 +61,6 @@
                                 Command="{Binding SetXmlLogTypeCommand}"
                                 IsEnabled="{Binding IsNotBusy}"
                                 Margin="0,0,24,0" />
-
-                        <Button Content="{Binding BusinessSoftwareScreenButtonLabel}"
-                                Command="{Binding OpenBusinessSoftwareCatalogCommand}"
-                                IsEnabled="{Binding IsNotBusy}" />
                     </WrapPanel>
                 </StackPanel>
             </Border>

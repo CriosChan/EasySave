@@ -182,23 +182,35 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     private void UpdateUIText()
     {
-        WindowTitle = "EasySave - Backup Manager";
-        CurrentSettingsLabel = "Settings";
+        WindowTitle = UiText("Gui.Window.Title", "EasySave - Backup Manager");
+        CurrentSettingsLabel = UiText("Gui.Settings.Label", "Settings");
         JobsSectionTitle = UserInterface.Jobs_Header;
         AddSectionTitle = UserInterface.Add_Header;
         NameLabel = UserInterface.Add_PromptName;
         SourceLabel = UserInterface.Add_PromptSource;
         TargetLabel = UserInterface.Add_PromptTarget;
         TypeLabel = UserInterface.Add_PromptType;
-        FrenchButtonLabel = "Français";
-        EnglishButtonLabel = "English";
-        JsonButtonLabel = "JSON";
-        XmlButtonLabel = "XML";
-        AddButtonLabel = "Add Job";
-        RemoveButtonLabel = "Remove Selected";
-        RunSelectedButtonLabel = "Run Selected Job";
-        RunAllButtonLabel = "Run All Jobs";
+        FrenchButtonLabel = UiText("Gui.Button.French", "Francais");
+        EnglishButtonLabel = UiText("Gui.Button.English", "English");
+        JsonButtonLabel = UiText("Gui.Button.Json", "JSON");
+        XmlButtonLabel = UiText("Gui.Button.Xml", "XML");
+        AddButtonLabel = UiText("Gui.Button.AddJob", "Add Job");
+        RemoveButtonLabel = UiText("Gui.Button.RemoveSelected", "Remove Selected");
+        RunSelectedButtonLabel = UiText("Gui.Button.RunSelectedJob", "Run Selected Job");
+        RunAllButtonLabel = UiText("Gui.Button.RunAllJobs", "Run All Jobs");
+        BrowseSourceLabel = UiText("Gui.Button.BrowseSource", "Browse source...");
+        BrowseTargetLabel = UiText("Gui.Button.BrowseTarget", "Browse target...");
         UpdateBusinessSoftwareUiText();
+    }
+    /// <summary>
+    ///     Reads a localized value from UI resources and falls back to a default value when missing.
+    /// </summary>
+    /// <param name="resourceKey">Resource key.</param>
+    /// <param name="fallback">Fallback value if key is not found.</param>
+    /// <returns>Localized text or fallback value.</returns>
+    private static string UiText(string resourceKey, string fallback)
+    {
+        return UserInterface.ResourceManager.GetString(resourceKey, UserInterface.Culture) ?? fallback;
     }
 
     /// <summary>
@@ -239,7 +251,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _localizationApplier.Apply("fr-FR");
         UpdateUIText();
-        StatusMessage = "Langue changée en Français";
+        StatusMessage = UiText("Gui.Status.LanguageChangedFr", "Langue changee en Francais");
     }
 
     /// <summary>
@@ -250,7 +262,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _localizationApplier.Apply("en-US");
         UpdateUIText();
-        StatusMessage = "Language changed to English";
+        StatusMessage = UiText("Gui.Status.LanguageChangedEn", "Language changed to English");
     }
 
     #endregion
@@ -443,7 +455,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 if (jobViewModel.Job.WasStoppedByBusinessSoftware)
                 {
                     stoppedByBusinessSoftware = true;
-                    StatusMessage = $"Backup '{jobViewModel.Job.Name}' stopped: business software is running";
+                    StatusMessage = string.Format(UiText("Gui.Status.BackupStoppedByBusinessSoftware", "Backup '{0}' stopped: business software is running"), jobViewModel.Job.Name);
                     break;
                 }
 
@@ -483,7 +495,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
             if (job.WasStoppedByBusinessSoftware)
             {
-                StatusMessage = $"Backup '{job.Name}' stopped: business software is running";
+                StatusMessage = string.Format(UiText("Gui.Status.BackupStoppedByBusinessSoftware", "Backup '{0}' stopped: business software is running"), job.Name);
                 return;
             }
 
@@ -559,3 +571,4 @@ public partial class MainWindowViewModel : ViewModelBase
 
     #endregion
 }
+

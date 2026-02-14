@@ -19,7 +19,8 @@ public partial class MainWindowViewModel
     [ObservableProperty] private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _addedBusinessSoftware = [];
     [ObservableProperty] private string _businessSoftwareSearchText = string.Empty;
 
-    [ObservableProperty] private string _businessSoftwareScreenButtonLabel = "Manage Business Software";
+    [ObservableProperty] private string _featuresMenuLabel = "Features";
+    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = "Manage Business Software";
     [ObservableProperty] private string _backButtonLabel = "Back";
     [ObservableProperty] private string _availableBusinessSoftwareTitle = "Select Business Software";
     [ObservableProperty] private string _addedBusinessSoftwareTitle = "Added Business Software";
@@ -69,15 +70,22 @@ public partial class MainWindowViewModel
     /// </summary>
     private void UpdateBusinessSoftwareUiText()
     {
-        BusinessSoftwareScreenButtonLabel = "Manage Business Software";
-        BackButtonLabel = "Back";
-        AvailableBusinessSoftwareTitle = "Select Business Software";
-        AddedBusinessSoftwareTitle = "Added Business Software";
-        BusinessSoftwareSearchLabel = "Search software";
-        BusinessSoftwareSearchPlaceholder = "Type to filter software";
-        AddSelectedBusinessSoftwareButtonLabel = "Add Selected";
-        ViewAddedBusinessSoftwareButtonLabel = "View Added Software";
-        RemoveAddedBusinessSoftwareButtonLabel = "Remove Selected";
+        FeaturesMenuLabel = UiText("Gui.Menu.Features", "Features");
+        ManageBusinessSoftwareMenuItemLabel =
+            UiText("Gui.Menu.ManageBusinessSoftware", "Manage Business Software");
+        BackButtonLabel = UiText("Gui.Navigation.Back", "Back");
+        AvailableBusinessSoftwareTitle =
+            UiText("Gui.BusinessSoftware.Catalog.Title", "Select Business Software");
+        AddedBusinessSoftwareTitle = UiText("Gui.BusinessSoftware.Added.Title", "Added Business Software");
+        BusinessSoftwareSearchLabel = UiText("Gui.BusinessSoftware.Search.Label", "Search software");
+        BusinessSoftwareSearchPlaceholder =
+            UiText("Gui.BusinessSoftware.Search.Placeholder", "Type to filter software");
+        AddSelectedBusinessSoftwareButtonLabel =
+            UiText("Gui.BusinessSoftware.Button.AddSelected", "Add Selected");
+        ViewAddedBusinessSoftwareButtonLabel =
+            UiText("Gui.BusinessSoftware.Button.ViewAdded", "View Added Software");
+        RemoveAddedBusinessSoftwareButtonLabel =
+            UiText("Gui.BusinessSoftware.Button.RemoveSelected", "Remove Selected");
     }
 
     /// <summary>
@@ -152,7 +160,7 @@ public partial class MainWindowViewModel
         PersistAddedBusinessSoftware();
         _previousScreen = ViewScreen.SoftwareCatalog;
         SetCurrentScreen(ViewScreen.AddedSoftware);
-        StatusMessage = "Business software list updated.";
+        StatusMessage = UiText("Gui.BusinessSoftware.Status.Updated", "Business software list updated.");
         OnPropertyChanged(nameof(CanAddSelectedBusinessSoftware));
     }
 
@@ -173,7 +181,8 @@ public partial class MainWindowViewModel
         }
 
         PersistAddedBusinessSoftware();
-        StatusMessage = "Business software removed from blocker list.";
+        StatusMessage = UiText("Gui.BusinessSoftware.Status.Removed",
+            "Business software removed from blocker list.");
         OnPropertyChanged(nameof(CanRemoveAddedBusinessSoftware));
     }
 

@@ -15,12 +15,14 @@ public sealed class BusinessSoftwareCatalogService : IBusinessSoftwareCatalogSer
     /// <returns>Read-only list of software candidates.</returns>
     public IReadOnlyList<BusinessSoftwareCatalogItem> GetAvailableSoftware()
     {
-        var items = OperatingSystem.IsWindows()
-            ? ReadFromRegistry()
-            : new List<BusinessSoftwareCatalogItem>();
+        var items = new List<BusinessSoftwareCatalogItem>();
+        if (OperatingSystem.IsWindows())
+        {
+            items.AddRange(ReadFromRegistry());
+            items.AddRange(ReadFromWindowsSystemApplications());
+        }
 
-        if (items.Count == 0)
-            items = ReadFromRunningProcesses();
+        items.AddRange(ReadFromRunningProcesses());
 
         return items
             .GroupBy(item => item.ProcessName, StringComparer.OrdinalIgnoreCase)
@@ -102,6 +104,44 @@ public sealed class BusinessSoftwareCatalogService : IBusinessSoftwareCatalogSer
     }
 
     /// <summary>
+    ///     Reads built-in Windows software and executable candidates from system directories.
+    /// </summary>
+    /// <returns>List of system software candidates.</returns>
+    [SupportedOSPlatform("windows")]
+    private static List<BusinessSoftwareCatalogItem> ReadFromWindowsSystemApplications()
+    {
+        var items = new List<BusinessSoftwareCatalogItem>();
+        var windowsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+        var systemDirectory = Environment.GetFolderPath(Environment.SpecialFolder.System);
+        var systemAppsDirectory = Path.Combine(windowsDirectory, "SystemApps");
+
+        var folders = new (string path, bool recursive)[]
+        {
+            (windowsDirectory, false),
+            (systemDirectory, false),
+            (systemAppsDirectory, true)
+        };
+
+        foreach (var folder in folders)
+        {
+            foreach (var executablePath in EnumerateExecutableFiles(folder.path, folder.recursive))
+            {
+                var processName = Path.GetFileNameWithoutExtension(executablePath).Trim();
+                if (string.IsNullOrWhiteSpace(processName))
+                    continue;
+
+                if (IsInstallerOrUninstallProcess(processName))
+                    continue;
+
+                var displayName = processName;
+                items.Add(new BusinessSoftwareCatalogItem(displayName, processName));
+            }
+        }
+
+        return items;
+    }
+
+    /// <summary>
     ///     Reads software candidates from running processes as a fallback.
     /// </summary>
     /// <returns>List of running-process candidates.</returns>
@@ -119,6 +159,73 @@ public sealed class BusinessSoftwareCatalogService : IBusinessSoftwareCatalogSer
         catch
         {
             return [];
+        }
+    }
+
+    /// <summary>
+    ///     Enumerates executable files from a directory with robust access error handling.
+    /// </summary>
+    /// <param name="rootPath">Root path to scan.</param>
+    /// <param name="recursive">True to include subdirectories; otherwise, only top-level files.</param>
+    /// <returns>Executable file paths.</returns>
+    private static IEnumerable<string> EnumerateExecutableFiles(string rootPath, bool recursive)
+    {
+        if (string.IsNullOrWhiteSpace(rootPath))
+            yield break;
+
+        if (!Directory.Exists(rootPath))
+            yield break;
+
+        if (!recursive)
+        {
+            IEnumerable<string> topFiles;
+            try
+            {
+                topFiles = Directory.EnumerateFiles(rootPath, "*.exe", SearchOption.TopDirectoryOnly);
+            }
+            catch
+            {
+                yield break;
+            }
+
+            foreach (var file in topFiles)
+                yield return file;
+
+            yield break;
+        }
+
+        var queue = new Queue<string>();
+        queue.Enqueue(rootPath);
+
+        while (queue.Count > 0)
+        {
+            var currentPath = queue.Dequeue();
+
+            IEnumerable<string> files;
+            try
+            {
+                files = Directory.EnumerateFiles(currentPath, "*.exe", SearchOption.TopDirectoryOnly);
+            }
+            catch
+            {
+                continue;
+            }
+
+            foreach (var file in files)
+                yield return file;
+
+            IEnumerable<string> directories;
+            try
+            {
+                directories = Directory.EnumerateDirectories(currentPath, "*", SearchOption.TopDirectoryOnly);
+            }
+            catch
+            {
+                continue;
+            }
+
+            foreach (var directory in directories)
+                queue.Enqueue(directory);
         }
     }
 
