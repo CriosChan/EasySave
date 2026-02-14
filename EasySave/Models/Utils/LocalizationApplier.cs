@@ -5,7 +5,7 @@ namespace EasySave.Models.Utils;
 /// <summary>
 ///     Applies localization to the current process using CultureInfo.
 /// </summary>
-public sealed class LocalizationApplier
+public sealed class LocalizationApplier : ILocalizationApplier
 {
     public void Apply(string cultureName)
     {
