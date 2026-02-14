@@ -1,55 +1,43 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using EasySave.Models.Backup;
 using EasySave.Models.BusinessSoftware;
+using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
 
-public partial class MainWindowViewModel
+/// <summary>
+///     Handles business software catalog/search/add/remove workflow.
+/// </summary>
+public partial class BusinessSoftwareViewModel : ViewModelBase
 {
-    private readonly IBusinessSoftwareCatalogService _businessSoftwareCatalogService = new BusinessSoftwareCatalogService();
-    private readonly IBusinessSoftwareSettingsService _businessSoftwareSettingsService = new BusinessSoftwareSettingsService();
+    private readonly IBusinessSoftwareCatalogService _businessSoftwareCatalogService;
+    private readonly IBusinessSoftwareSettingsService _businessSoftwareSettingsService;
+    private readonly IUiTextService _uiTextService;
+    private readonly StatusBarViewModel _statusBar;
 
-    private ViewScreen _previousScreen = ViewScreen.Main;
-
-    [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
     [ObservableProperty] private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _allAvailableBusinessSoftware = [];
     [ObservableProperty] private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _filteredBusinessSoftware = [];
     [ObservableProperty] private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _addedBusinessSoftware = [];
     [ObservableProperty] private string _businessSoftwareSearchText = string.Empty;
 
-    [ObservableProperty] private string _menuLabel = "Menu";
-    [ObservableProperty] private string _menuSettingsItemLabel = "Settings";
-    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = "Manage Business Software";
-    [ObservableProperty] private string _backButtonLabel = "Back";
-    [ObservableProperty] private string _availableBusinessSoftwareTitle = "Select Business Software";
-    [ObservableProperty] private string _addedBusinessSoftwareTitle = "Added Business Software";
-    [ObservableProperty] private string _businessSoftwareSearchLabel = "Search software";
-    [ObservableProperty] private string _businessSoftwareSearchPlaceholder = "Type to filter software";
-    [ObservableProperty] private string _addSelectedBusinessSoftwareButtonLabel = "Add Selected";
-    [ObservableProperty] private string _viewAddedBusinessSoftwareButtonLabel = "View Added Software";
-    [ObservableProperty] private string _removeAddedBusinessSoftwareButtonLabel = "Remove Selected";
+    [ObservableProperty] private string _availableBusinessSoftwareTitle = string.Empty;
+    [ObservableProperty] private string _addedBusinessSoftwareTitle = string.Empty;
+    [ObservableProperty] private string _businessSoftwareSearchLabel = string.Empty;
+    [ObservableProperty] private string _businessSoftwareSearchPlaceholder = string.Empty;
+    [ObservableProperty] private string _addSelectedBusinessSoftwareButtonLabel = string.Empty;
+    [ObservableProperty] private string _viewAddedBusinessSoftwareButtonLabel = string.Empty;
+    [ObservableProperty] private string _removeAddedBusinessSoftwareButtonLabel = string.Empty;
 
     /// <summary>
-    ///     Gets a value indicating whether the main backup manager screen is visible.
+    ///     Raised when configured process names were persisted.
     /// </summary>
-    public bool IsMainScreen => CurrentScreen == ViewScreen.Main;
+    public event EventHandler? ConfiguredProcessNamesChanged;
 
     /// <summary>
-    ///     Gets a value indicating whether the software catalog screen is visible.
+    ///     Raised when UI should navigate to the added software screen.
     /// </summary>
-    public bool IsSoftwareCatalogScreen => CurrentScreen == ViewScreen.SoftwareCatalog;
-
-    /// <summary>
-    ///     Gets a value indicating whether the added software screen is visible.
-    /// </summary>
-    public bool IsAddedSoftwareScreen => CurrentScreen == ViewScreen.AddedSoftware;
-
-    /// <summary>
-    ///     Gets a value indicating whether the settings screen is visible.
-    /// </summary>
-    public bool IsSettingsScreen => CurrentScreen == ViewScreen.Settings;
+    public event EventHandler? OpenAddedSoftwareRequested;
 
     /// <summary>
     ///     Gets a value indicating whether at least one available software item is selected.
@@ -62,82 +50,73 @@ public partial class MainWindowViewModel
     public bool CanRemoveAddedBusinessSoftware => AddedBusinessSoftware.Any(item => item.IsSelected);
 
     /// <summary>
-    ///     Initializes business software management state.
+    ///     Initializes a new instance of the <see cref="BusinessSoftwareViewModel" /> class.
     /// </summary>
-    private void InitializeBusinessSoftwareManagement()
+    /// <param name="businessSoftwareCatalogService">Software catalog service.</param>
+    /// <param name="businessSoftwareSettingsService">Configured software settings service.</param>
+    /// <param name="uiTextService">Localized text service.</param>
+    /// <param name="statusBar">Shared status bar state.</param>
+    public BusinessSoftwareViewModel(
+        IBusinessSoftwareCatalogService businessSoftwareCatalogService,
+        IBusinessSoftwareSettingsService businessSoftwareSettingsService,
+        IUiTextService uiTextService,
+        StatusBarViewModel statusBar)
     {
-        CurrentScreen = ViewScreen.Main;
+        _businessSoftwareCatalogService =
+            businessSoftwareCatalogService ?? throw new ArgumentNullException(nameof(businessSoftwareCatalogService));
+        _businessSoftwareSettingsService =
+            businessSoftwareSettingsService ?? throw new ArgumentNullException(nameof(businessSoftwareSettingsService));
+        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
+        _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
+    }
+
+    /// <summary>
+    ///     Initializes business software state used by UI.
+    /// </summary>
+    public void Initialize()
+    {
         LoadAddedBusinessSoftware();
         ApplyBusinessSoftwareFilter();
+        UpdateUiText();
     }
 
     /// <summary>
-    ///     Updates business software screen labels.
+    ///     Updates business software labels from localization resources.
     /// </summary>
-    private void UpdateBusinessSoftwareUiText()
+    public void UpdateUiText()
     {
-        MenuLabel = UiText("Gui.Menu.Root", "Menu");
-        MenuSettingsItemLabel = UiText("Gui.Menu.Settings", "Settings");
-        ManageBusinessSoftwareMenuItemLabel =
-            UiText("Gui.Menu.ManageBusinessSoftware", "Manage Business Software");
-        BackButtonLabel = UiText("Gui.Navigation.Back", "Back");
-        AvailableBusinessSoftwareTitle =
-            UiText("Gui.BusinessSoftware.Catalog.Title", "Select Business Software");
-        AddedBusinessSoftwareTitle = UiText("Gui.BusinessSoftware.Added.Title", "Added Business Software");
-        BusinessSoftwareSearchLabel = UiText("Gui.BusinessSoftware.Search.Label", "Search software");
+        AvailableBusinessSoftwareTitle = _uiTextService.Get("Gui.BusinessSoftware.Catalog.Title", "Select Business Software");
+        AddedBusinessSoftwareTitle = _uiTextService.Get("Gui.BusinessSoftware.Added.Title", "Added Business Software");
+        BusinessSoftwareSearchLabel = _uiTextService.Get("Gui.BusinessSoftware.Search.Label", "Search software");
         BusinessSoftwareSearchPlaceholder =
-            UiText("Gui.BusinessSoftware.Search.Placeholder", "Type to filter software");
-        AddSelectedBusinessSoftwareButtonLabel =
-            UiText("Gui.BusinessSoftware.Button.AddSelected", "Add Selected");
+            _uiTextService.Get("Gui.BusinessSoftware.Search.Placeholder", "Type to filter software");
+        AddSelectedBusinessSoftwareButtonLabel = _uiTextService.Get("Gui.BusinessSoftware.Button.AddSelected", "Add Selected");
         ViewAddedBusinessSoftwareButtonLabel =
-            UiText("Gui.BusinessSoftware.Button.ViewAdded", "View Added Software");
+            _uiTextService.Get("Gui.BusinessSoftware.Button.ViewAdded", "View Added Software");
         RemoveAddedBusinessSoftwareButtonLabel =
-            UiText("Gui.BusinessSoftware.Button.RemoveSelected", "Remove Selected");
+            _uiTextService.Get("Gui.BusinessSoftware.Button.RemoveSelected", "Remove Selected");
     }
 
     /// <summary>
-    ///     Opens the business software catalog screen.
+    ///     Prepares available and added lists when opening software catalog screen.
     /// </summary>
-    [RelayCommand]
-    private void OpenBusinessSoftwareCatalog()
+    public void OpenCatalog()
     {
         LoadAvailableBusinessSoftware();
         LoadAddedBusinessSoftware();
         BusinessSoftwareSearchText = string.Empty;
-        SetCurrentScreen(ViewScreen.SoftwareCatalog);
     }
 
     /// <summary>
-    ///     Opens the screen that lists already configured software blockers.
+    ///     Prepares configured list when opening added software screen.
     /// </summary>
-    [RelayCommand]
-    private void OpenAddedBusinessSoftware()
+    public void OpenAddedSoftware()
     {
         LoadAddedBusinessSoftware();
-        _previousScreen = CurrentScreen;
-        SetCurrentScreen(ViewScreen.AddedSoftware);
     }
 
     /// <summary>
-    ///     Returns from the software catalog screen to the main screen.
-    /// </summary>
-    [RelayCommand]
-    private void BackFromSoftwareCatalog()
-    {
-        SetCurrentScreen(ViewScreen.Main);
-    }
-
-    /// <summary>
-    ///     Returns from the added software screen to the previous screen.
-    /// </summary>
-    [RelayCommand]
-    private void BackFromAddedSoftware()
-    {
-        SetCurrentScreen(_previousScreen);
-    }
-
-    /// <summary>
-    ///     Adds selected available software items to the configured blocker list.
+    ///     Adds selected software candidates to the configured blocker list.
     /// </summary>
     [RelayCommand]
     private void AddSelectedBusinessSoftware()
@@ -165,14 +144,13 @@ public partial class MainWindowViewModel
             selectedItem.IsSelected = false;
 
         PersistAddedBusinessSoftware();
-        _previousScreen = ViewScreen.SoftwareCatalog;
-        SetCurrentScreen(ViewScreen.AddedSoftware);
-        StatusMessage = UiText("Gui.BusinessSoftware.Status.Updated", "Business software list updated.");
+        _statusBar.StatusMessage = _uiTextService.Get("Gui.BusinessSoftware.Status.Updated", "Business software list updated.");
         OnPropertyChanged(nameof(CanAddSelectedBusinessSoftware));
+        OpenAddedSoftwareRequested?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
-    ///     Removes selected items from the configured blocker list.
+    ///     Removes selected software from the configured blocker list.
     /// </summary>
     [RelayCommand]
     private void RemoveSelectedAddedBusinessSoftware()
@@ -188,7 +166,7 @@ public partial class MainWindowViewModel
         }
 
         PersistAddedBusinessSoftware();
-        StatusMessage = UiText("Gui.BusinessSoftware.Status.Removed",
+        _statusBar.StatusMessage = _uiTextService.Get("Gui.BusinessSoftware.Status.Removed",
             "Business software removed from blocker list.");
         OnPropertyChanged(nameof(CanRemoveAddedBusinessSoftware));
     }
@@ -198,16 +176,8 @@ public partial class MainWindowViewModel
         ApplyBusinessSoftwareFilter();
     }
 
-    partial void OnCurrentScreenChanged(ViewScreen value)
-    {
-        OnPropertyChanged(nameof(IsMainScreen));
-        OnPropertyChanged(nameof(IsSoftwareCatalogScreen));
-        OnPropertyChanged(nameof(IsAddedSoftwareScreen));
-        OnPropertyChanged(nameof(IsSettingsScreen));
-    }
-
     /// <summary>
-    ///     Loads available software from the catalog service.
+    ///     Loads available software candidates.
     /// </summary>
     private void LoadAvailableBusinessSoftware()
     {
@@ -255,7 +225,7 @@ public partial class MainWindowViewModel
     }
 
     /// <summary>
-    ///     Applies search filtering on available software list.
+    ///     Applies current search text filter on available software list.
     /// </summary>
     private void ApplyBusinessSoftwareFilter()
     {
@@ -280,28 +250,18 @@ public partial class MainWindowViewModel
     }
 
     /// <summary>
-    ///     Persists configured software blockers and refreshes runtime monitors used by existing jobs.
+    ///     Persists configured blockers and notifies listeners.
     /// </summary>
     private void PersistAddedBusinessSoftware()
     {
         _businessSoftwareSettingsService.SaveConfiguredProcessNames(
             AddedBusinessSoftware.Select(item => item.ProcessName));
 
-        foreach (var job in Jobs)
-            job.Job.BusinessSoftwareMonitor = new BusinessSoftwareMonitor();
+        ConfiguredProcessNamesChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
-    ///     Sets the current screen for in-window navigation.
-    /// </summary>
-    /// <param name="screen">Target screen.</param>
-    private void SetCurrentScreen(ViewScreen screen)
-    {
-        CurrentScreen = screen;
-    }
-
-    /// <summary>
-    ///     Handles selection updates from available software list.
+    ///     Handles available list selection updates.
     /// </summary>
     private void OnAvailableSoftwareSelectionChanged(object? sender, EventArgs e)
     {
@@ -309,18 +269,10 @@ public partial class MainWindowViewModel
     }
 
     /// <summary>
-    ///     Handles selection updates from added software list.
+    ///     Handles configured list selection updates.
     /// </summary>
     private void OnAddedSoftwareSelectionChanged(object? sender, EventArgs e)
     {
         OnPropertyChanged(nameof(CanRemoveAddedBusinessSoftware));
-    }
-
-    public enum ViewScreen
-    {
-        Main,
-        Settings,
-        SoftwareCatalog,
-        AddedSoftware
     }
 }

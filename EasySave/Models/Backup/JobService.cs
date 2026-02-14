@@ -1,11 +1,12 @@
 using EasySave.Models.Data.Persistence;
+using EasySave.Models.Backup.Interfaces;
 
 namespace EasySave.Models.Backup;
 
 /// <summary>
 ///     Manages backup jobs and enforces business rules.
 /// </summary>
-public sealed class JobService
+public sealed class JobService : IJobService
 {
     // Repository to handle backup job data persistence
     private readonly JobRepository _repository = new();

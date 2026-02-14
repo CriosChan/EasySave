@@ -6,7 +6,7 @@ namespace EasySave.Data.Configuration;
 /// <summary>
 ///     Persists mutable application settings in appsettings.json.
 /// </summary>
-public sealed class ApplicationSettingsService
+public sealed class ApplicationSettingsService : IApplicationSettingsService
 {
     private readonly string _appSettingsPath;
 

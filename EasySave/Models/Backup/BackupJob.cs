@@ -80,7 +80,7 @@ public class BackupJob
     /// </summary>
     [JsonIgnore] public bool WasStoppedByBusinessSoftware { get; private set; }
 
-    public event EventHandler ProgressChanged;
+    public event EventHandler? ProgressChanged;
 
     /// <summary>
     ///     Checks if the source and target directories exist.
