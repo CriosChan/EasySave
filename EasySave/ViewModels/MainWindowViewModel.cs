@@ -21,6 +21,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private readonly JobService _jobService;
     private readonly LocalizationApplier _localizationApplier;
+    private readonly ApplicationSettingsService _applicationSettingsService;
     private IStorageProvider? _storageProvider;
 
     #endregion
@@ -79,9 +80,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private string _windowTitle = string.Empty;
 
     [ObservableProperty]
-    private string _currentSettingsLabel = string.Empty;
-
-    [ObservableProperty]
     private string _jobsSectionTitle = string.Empty;
 
     [ObservableProperty]
@@ -134,6 +132,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _jobService = new JobService();
         _localizationApplier = new LocalizationApplier();
+        _applicationSettingsService = new ApplicationSettingsService();
 
         // Load configuration and apply localization
         var config = ApplicationConfiguration.Load();
@@ -183,7 +182,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private void UpdateUIText()
     {
         WindowTitle = UiText("Gui.Window.Title", "EasySave - Backup Manager");
-        CurrentSettingsLabel = UiText("Gui.Settings.Label", "Settings");
         JobsSectionTitle = UserInterface.Jobs_Header;
         AddSectionTitle = UserInterface.Add_Header;
         NameLabel = UserInterface.Add_PromptName;
@@ -201,6 +199,7 @@ public partial class MainWindowViewModel : ViewModelBase
         BrowseSourceLabel = UiText("Gui.Button.BrowseSource", "Browse source...");
         BrowseTargetLabel = UiText("Gui.Button.BrowseTarget", "Browse target...");
         UpdateBusinessSoftwareUiText();
+        UpdateSettingsUiText();
     }
     /// <summary>
     ///     Reads a localized value from UI resources and falls back to a default value when missing.
@@ -249,6 +248,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SetFrenchLanguage()
     {
+        _applicationSettingsService.SetLocalization("fr-FR");
         _localizationApplier.Apply("fr-FR");
         UpdateUIText();
         StatusMessage = UiText("Gui.Status.LanguageChangedFr", "Langue changee en Francais");
@@ -260,6 +260,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SetEnglishLanguage()
     {
+        _applicationSettingsService.SetLocalization("en-US");
         _localizationApplier.Apply("en-US");
         UpdateUIText();
         StatusMessage = UiText("Gui.Status.LanguageChangedEn", "Language changed to English");
@@ -275,8 +276,8 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SetJsonLogType()
     {
-        // Log type configuration would be persisted here if supported
-        StatusMessage = "Log type set to JSON";
+        _applicationSettingsService.SetLogType("json");
+        StatusMessage = UiText("Gui.Status.LogTypeJsonSet", "Log type set to JSON");
     }
 
     /// <summary>
@@ -285,8 +286,8 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void SetXmlLogType()
     {
-        // Log type configuration would be persisted here if supported
-        StatusMessage = "Log type set to XML";
+        _applicationSettingsService.SetLogType("xml");
+        StatusMessage = UiText("Gui.Status.LogTypeXmlSet", "Log type set to XML");
     }
 
     #endregion

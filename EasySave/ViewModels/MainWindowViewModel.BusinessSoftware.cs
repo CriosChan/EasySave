@@ -19,7 +19,8 @@ public partial class MainWindowViewModel
     [ObservableProperty] private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _addedBusinessSoftware = [];
     [ObservableProperty] private string _businessSoftwareSearchText = string.Empty;
 
-    [ObservableProperty] private string _featuresMenuLabel = "Features";
+    [ObservableProperty] private string _menuLabel = "Menu";
+    [ObservableProperty] private string _menuSettingsItemLabel = "Settings";
     [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = "Manage Business Software";
     [ObservableProperty] private string _backButtonLabel = "Back";
     [ObservableProperty] private string _availableBusinessSoftwareTitle = "Select Business Software";
@@ -46,6 +47,11 @@ public partial class MainWindowViewModel
     public bool IsAddedSoftwareScreen => CurrentScreen == ViewScreen.AddedSoftware;
 
     /// <summary>
+    ///     Gets a value indicating whether the settings screen is visible.
+    /// </summary>
+    public bool IsSettingsScreen => CurrentScreen == ViewScreen.Settings;
+
+    /// <summary>
     ///     Gets a value indicating whether at least one available software item is selected.
     /// </summary>
     public bool CanAddSelectedBusinessSoftware => AllAvailableBusinessSoftware.Any(item => item.IsSelected);
@@ -70,7 +76,8 @@ public partial class MainWindowViewModel
     /// </summary>
     private void UpdateBusinessSoftwareUiText()
     {
-        FeaturesMenuLabel = UiText("Gui.Menu.Features", "Features");
+        MenuLabel = UiText("Gui.Menu.Root", "Menu");
+        MenuSettingsItemLabel = UiText("Gui.Menu.Settings", "Settings");
         ManageBusinessSoftwareMenuItemLabel =
             UiText("Gui.Menu.ManageBusinessSoftware", "Manage Business Software");
         BackButtonLabel = UiText("Gui.Navigation.Back", "Back");
@@ -196,6 +203,7 @@ public partial class MainWindowViewModel
         OnPropertyChanged(nameof(IsMainScreen));
         OnPropertyChanged(nameof(IsSoftwareCatalogScreen));
         OnPropertyChanged(nameof(IsAddedSoftwareScreen));
+        OnPropertyChanged(nameof(IsSettingsScreen));
     }
 
     /// <summary>
@@ -311,6 +319,7 @@ public partial class MainWindowViewModel
     public enum ViewScreen
     {
         Main,
+        Settings,
         SoftwareCatalog,
         AddedSoftware
     }
