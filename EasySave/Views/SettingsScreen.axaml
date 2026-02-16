@@ -77,6 +77,29 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
+                
+                <Border Classes="main-section">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Extension à chiffrer"
+                                   Classes="section-title" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}" HorizontalContentAlignment="Stretch"></TextBox>
+                            <Button Content="Ajouter l'extension à la liste" Command="{Binding Settings.AddExtensionToCryptoSoftCommand}"></Button>
+                        </StackPanel>
+                        <ItemsControl ItemsSource="{Binding Settings.CryptoSoftExtensions}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:CompileBindings="False">
+                                    <Button Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtension}" CommandParameter="{Binding}" IsEnabled="True"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
 

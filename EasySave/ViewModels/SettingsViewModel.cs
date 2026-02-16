@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
@@ -25,6 +26,8 @@ public partial class SettingsViewModel : ViewModelBase
 
     [ObservableProperty] private string _settingsScreenTitle = string.Empty;
     [ObservableProperty] private string _xmlButtonLabel = string.Empty;
+    [ObservableProperty] private ObservableCollection<string> _cryptoSoftExtensions = new(ApplicationConfiguration.Load().ExtensionToCrypt);
+    [ObservableProperty] private string _newExtensionContent = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
@@ -95,10 +98,30 @@ public partial class SettingsViewModel : ViewModelBase
         ApplicationConfiguration.Load().LogType = "xml";
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LogTypeXmlSet", "Log type set to XML");
     }
-    
+
+    [RelayCommand]
+    private void AddExtensionToCryptoSoft()
+    {
+        var value = NewExtensionContent.Replace(".", "").Trim();
+        if (value == string.Empty || CryptoSoftExtensions.Contains(value))
+        {
+            return;
+        }
+        
+        CryptoSoftExtensions.Add(value);
+        ApplicationConfiguration.Load().ExtensionToCrypt = CryptoSoftExtensions.ToList();
+        NewExtensionContent = string.Empty;
+    }
+
+    [RelayCommand]
+    private void RemoveExtension(string ext)
+    {
+        CryptoSoftExtensions.Remove(ext);
+        ApplicationConfiguration.Load().ExtensionToCrypt = CryptoSoftExtensions.ToList();
+    }
+
     partial void OnCryptoSoftKeyChanged(string value)
     {
         CryptoSoftConfiguration.Load().Key = value;
     }
-
 }
