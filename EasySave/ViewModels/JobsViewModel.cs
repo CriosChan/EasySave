@@ -338,9 +338,11 @@ public partial class JobsViewModel : ViewModelBase
             await Task.Run(job.StartBackup);
 
             if (!job.WasStoppedByBusinessSoftware)
-                _uiTextService.Format("Gui.Status.BackupAsFinished",
+            {
+                _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupAsFinished",
                     "Backup '{0}' finished.", job.Name);
                 return false;
+            }
 
             _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupStoppedByBusinessSoftware",
                 "Backup '{0}' stopped: business software is running", job.Name);
@@ -362,15 +364,13 @@ public partial class JobsViewModel : ViewModelBase
         if (sender is not BackupJob job)
             return;
 
-        Dispatcher.UIThread.Post(() =>
-        {
-            _statusBar.StatusMessage =
-                $"{_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id, job.Name)} " +
-                $"({job.CurrentFileIndex} / {job.FilesCount} files) - " +
-                $"({Math.Round(job.TransferredSize / 1048576.0)} / {Math.Round(job.TotalSize / 1048576.0)} MB)";
 
-            _statusBar.OverallProgress = job.CurrentProgress;
-        });
+        _statusBar.StatusMessage =
+            $"{_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id, job.Name)} " +
+            $"({job.CurrentFileIndex} / {job.FilesCount} files) - " +
+            $"({Math.Round(job.TransferredSize / 1048576.0)} / {Math.Round(job.TotalSize / 1048576.0)} MB)";
+
+        _statusBar.OverallProgress = job.CurrentProgress;
     }
 
     /// <summary>
