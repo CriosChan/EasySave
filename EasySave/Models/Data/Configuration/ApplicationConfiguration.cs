@@ -44,6 +44,8 @@ namespace EasySave.Data.Configuration
                 Save(); // Automatically save when BusinessSoftwareProcessNames is set
             }
         } = Array.Empty<string>();
+        public string LogType { get; init; } = "json"; // Default log type format
+        public List<string> ExtensionToCrypt { get; init; } = [];
 
         // Property to hold the configuration file path but not serialized
         [JsonIgnore] // Ensure to ignore this property
