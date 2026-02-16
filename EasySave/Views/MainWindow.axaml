@@ -19,183 +19,380 @@
         Background="{DynamicResource PrimaryBackground}">
 
     <Grid Margin="16"
-          RowDefinitions="Auto,*,Auto,Auto"
-          ColumnDefinitions="2*,1*"
-          RowSpacing="12"
-          ColumnSpacing="12"
-          >
+          RowDefinitions="*,Auto"
+          RowSpacing="12">
+        <Grid Grid.Row="0"
+              IsVisible="{Binding IsMainScreen}"
+              RowDefinitions="*,Auto"
+              ColumnDefinitions="2*,1*"
+              RowSpacing="12"
+              ColumnSpacing="12">
+            <Border Grid.Row="0"
+                    Grid.Column="0"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="{Binding Jobs.JobsSectionTitle}"
+                               FontSize="18"
+                               FontWeight="Bold" />
 
-        <Border Grid.Row="0"
-                Grid.ColumnSpan="2"
-                Padding="12"
-                CornerRadius="8"
-                Background="{DynamicResource SecondaryBackground}"
-                BorderBrush="{DynamicResource BorderLine}"
-                BorderThickness="1">
-            <!-- SETTINGS -->
-            <StackPanel Spacing="8">
-                <TextBlock Text="{Binding CurrentSettingsLabel}"
-                           FontWeight="SemiBold" />
+                    <ListBox ItemsSource="{Binding Jobs.Jobs}"
+                             SelectedItem="{Binding Jobs.SelectedJob}"
+                             CornerRadius="6"
+                             BorderBrush="{DynamicResource BorderLine}"
+                             BorderThickness="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:BackupJobItemViewModel">
+                                <Border Padding="8"
+                                        Margin="0,6,0,6"
+                                        CornerRadius="6"
+                                        Background="#10000000"
+                                        BorderBrush="{DynamicResource BorderLine}"
+                                        BorderThickness="1">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="{Binding DisplayName}"
+                                                   FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Type}" Opacity="0.8" />
+                                        <TextBlock Text="{Binding DisplayPath}"
+                                                   TextWrapping="Wrap"
+                                                   Opacity="0.8" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
 
-                <WrapPanel ItemHeight="32" ItemWidth="150" VerticalAlignment="Center">
-                    <Button Content="{Binding FrenchButtonLabel}"
-                            Command="{Binding SetFrenchLanguageCommand}"
-                            IsEnabled="{Binding IsNotBusy}"
-                            Margin="0,0,8,0"/>
-                    <Button Content="{Binding EnglishButtonLabel}"
-                            Command="{Binding SetEnglishLanguageCommand}"
-                            IsEnabled="{Binding IsNotBusy}"
-                            Margin="0,0,24,0" />
+            <Border Grid.Row="0"
+                    Grid.Column="1"
+                    Classes="main-section">
+                <StackPanel Spacing="8">
+                    <Menu HorizontalAlignment="Left">
+                        <MenuItem Header="{Binding MenuLabel}">
+                            <MenuItem Header="{Binding MenuSettingsItemLabel}"
+                                      Command="{Binding OpenSettingsCommand}" />
+                            <MenuItem Header="{Binding ManageBusinessSoftwareMenuItemLabel}"
+                                      Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
+                        </MenuItem>
+                    </Menu>
 
-                    <Button Content="{Binding JsonButtonLabel}"
-                            Command="{Binding SetJsonLogTypeCommand}"
-                            IsEnabled="{Binding IsNotBusy}"
+                    <Separator Margin="0,8,0,8" />
+
+                    <TextBlock Text="{Binding Jobs.AddSectionTitle}"
+                               Classes="section-title" />
+
+                    <TextBlock Text="{Binding Jobs.NameLabel}" />
+                    <TextBox Text="{Binding Jobs.NewJobName}"
+                             IsEnabled="{Binding StatusBar.IsNotBusy}" />
+
+                    <TextBlock Text="{Binding Jobs.SourceLabel}" />
+                    <StackPanel Spacing="4">
+                        <Button Command="{Binding Jobs.BrowseSourceDirectoryCommand}"
+                                IsEnabled="{Binding StatusBar.IsNotBusy}"
+                                HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <PathIcon Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                                          Width="16" Height="16" />
+                                <TextBlock Text="{Binding Jobs.BrowseSourceLabel}" />
+                            </StackPanel>
+                        </Button>
+                        <TextBlock Text="{Binding Jobs.NewSourceDirectory}"
+                                   TextWrapping="Wrap"
+                                   Opacity="0.7"
+                                   FontSize="12"
+                                   IsVisible="{Binding Jobs.NewSourceDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding Jobs.TargetLabel}" />
+                    <StackPanel Spacing="4">
+                        <Button Command="{Binding Jobs.BrowseTargetDirectoryCommand}"
+                                IsEnabled="{Binding StatusBar.IsNotBusy}"
+                                HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <PathIcon Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                                          Width="16" Height="16" />
+                                <TextBlock Text="{Binding Jobs.BrowseTargetLabel}" />
+                            </StackPanel>
+                        </Button>
+                        <TextBlock Text="{Binding Jobs.NewTargetDirectory}"
+                                   TextWrapping="Wrap"
+                                   Opacity="0.7"
+                                   FontSize="12"
+                                   IsVisible="{Binding Jobs.NewTargetDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding Jobs.TypeLabel}" />
+                    <ComboBox ItemsSource="{Binding Jobs.BackupTypes}"
+                              SelectedItem="{Binding Jobs.SelectedBackupType}"
+                              IsEnabled="{Binding StatusBar.IsNotBusy}" />
+
+                    <Button Content="{Binding Jobs.AddButtonLabel}"
+                            Command="{Binding Jobs.AddJobCommand}"
+                            IsEnabled="{Binding StatusBar.IsNotBusy}"
+                            Margin="0,4,0,0" />
+
+                    <Separator Margin="0,8,0,8" />
+
+                    <Button Content="{Binding Jobs.RemoveButtonLabel}"
+                            Command="{Binding Jobs.RemoveSelectedJobCommand}"
+                            IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <WrapPanel ItemHeight="32" VerticalAlignment="Center">
+                    <Button Content="{Binding Jobs.RunSelectedButtonLabel}"
+                            Command="{Binding Jobs.RunSelectedJobCommand}"
+                            IsEnabled="{Binding StatusBar.IsNotBusy}"
                             Margin="0,0,8,0" />
-                    <Button Content="{Binding XmlButtonLabel}"
-                            Command="{Binding SetXmlLogTypeCommand}"
-                            IsEnabled="{Binding IsNotBusy}" />
+                    <Button Content="{Binding Jobs.RunAllButtonLabel}"
+                            Command="{Binding Jobs.RunAllJobsCommand}"
+                            IsEnabled="{Binding StatusBar.IsNotBusy}" />
                 </WrapPanel>
-            </StackPanel>
-        </Border>
+            </Border>
 
-        <Border Grid.Row="1"
-                Grid.Column="0"
-                Padding="12"
-                CornerRadius="8"
-                Background="{DynamicResource SecondaryBackground}"
-                BorderBrush="{DynamicResource BorderLine}"
-                BorderThickness="1">
-            <StackPanel Spacing="8">
-                <TextBlock Text="{Binding JobsSectionTitle}"
-                           FontSize="18"
-                           FontWeight="Bold" />
+        </Grid>
 
-                <ListBox ItemsSource="{Binding Jobs}"
-                         SelectedItem="{Binding SelectedJob}"
-                         CornerRadius="6"
-                         BorderBrush="{DynamicResource BorderLine}"
-                         BorderThickness="1"
-                         >
+        <Grid Grid.Row="0"
+              IsVisible="{Binding IsSettingsScreen}"
+              RowDefinitions="Auto,*"
+              RowSpacing="12">
+            <Border Grid.Row="0"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <Grid ColumnDefinitions="Auto,*"
+                      ColumnSpacing="12">
+                    <Button Grid.Column="0"
+                            Content="{Binding BackButtonLabel}"
+                            Command="{Binding BackFromSettingsCommand}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Settings.SettingsScreenTitle}"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <StackPanel Spacing="12">
+                    <Border Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{Binding Settings.SettingsLanguageSectionTitle}"
+                                       Classes="section-title" />
+                            <WrapPanel>
+                                <Button Content="{Binding Settings.FrenchButtonLabel}"
+                                        Command="{Binding Settings.SetFrenchLanguageCommand}"
+                                        IsEnabled="{Binding StatusBar.IsNotBusy}"
+                                        Margin="0,0,8,0" />
+                                <Button Content="{Binding Settings.EnglishButtonLabel}"
+                                        Command="{Binding Settings.SetEnglishLanguageCommand}"
+                                        IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{Binding Settings.SettingsLogTypeSectionTitle}"
+                                       Classes="section-title" />
+                            <WrapPanel>
+                                <Button Content="{Binding Settings.JsonButtonLabel}"
+                                        Command="{Binding Settings.SetJsonLogTypeCommand}"
+                                        IsEnabled="{Binding StatusBar.IsNotBusy}"
+                                        Margin="0,0,8,0" />
+                                <Button Content="{Binding Settings.XmlButtonLabel}"
+                                        Command="{Binding Settings.SetXmlLogTypeCommand}"
+                                        IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+        <Grid Grid.Row="0"
+              IsVisible="{Binding IsSoftwareCatalogScreen}"
+              RowDefinitions="Auto,Auto,*,Auto"
+              RowSpacing="12">
+            <Border Grid.Row="0"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <Grid ColumnDefinitions="Auto,*,Auto"
+                      ColumnSpacing="12">
+                    <Button Grid.Column="0"
+                            Content="{Binding BackButtonLabel}"
+                            Command="{Binding BackFromSoftwareCatalogCommand}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding BusinessSoftware.AvailableBusinessSoftwareTitle}"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
+                    <Button Grid.Column="2"
+                            Content="{Binding BusinessSoftware.ViewAddedBusinessSoftwareButtonLabel}"
+                            Command="{Binding OpenAddedBusinessSoftwareCommand}" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="{Binding BusinessSoftware.BusinessSoftwareSearchLabel}" />
+                    <TextBox Text="{Binding BusinessSoftware.BusinessSoftwareSearchText}"
+                             Watermark="{Binding BusinessSoftware.BusinessSoftwareSearchPlaceholder}" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <ListBox ItemsSource="{Binding BusinessSoftware.FilteredBusinessSoftware}">
                     <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="vm:BackupJobItemViewModel">
+                        <DataTemplate x:DataType="vm:SelectableBusinessSoftwareItemViewModel">
                             <Border Padding="8"
-                                    Margin="0,6,0,6"
+                                    Margin="0,4,0,4"
                                     CornerRadius="6"
                                     Background="#10000000"
                                     BorderBrush="{DynamicResource BorderLine}"
                                     BorderThickness="1">
-                                <StackPanel Spacing="2">
-                                    <TextBlock Text="{Binding DisplayName}"
-                                               FontWeight="SemiBold" />
-                                    <TextBlock Text="{Binding Type}" Opacity="0.8" />
-                                    <TextBlock Text="{Binding DisplayPath}"
-                                               TextWrapping="Wrap"
-                                               Opacity="0.8" />
-                                </StackPanel>
+                                <CheckBox IsChecked="{Binding IsSelected}">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="{Binding DisplayName}"
+                                                   FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding ProcessName}"
+                                                   Opacity="0.75" />
+                                    </StackPanel>
+                                </CheckBox>
                             </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
-        </Border>
+            </Border>
+
+            <Border Grid.Row="3"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="8">
+                    <Button Content="{Binding BusinessSoftware.AddSelectedBusinessSoftwareButtonLabel}"
+                            Command="{Binding BusinessSoftware.AddSelectedBusinessSoftwareCommand}"
+                            IsVisible="{Binding BusinessSoftware.CanAddSelectedBusinessSoftware}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="0"
+              IsVisible="{Binding IsAddedSoftwareScreen}"
+              RowDefinitions="Auto,*,Auto"
+              RowSpacing="12">
+            <Border Grid.Row="0"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <Grid ColumnDefinitions="Auto,*"
+                      ColumnSpacing="12">
+                    <Button Grid.Column="0"
+                            Content="{Binding BackButtonLabel}"
+                            Command="{Binding BackFromAddedSoftwareCommand}" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding BusinessSoftware.AddedBusinessSoftwareTitle}"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <ListBox ItemsSource="{Binding BusinessSoftware.AddedBusinessSoftware}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SelectableBusinessSoftwareItemViewModel">
+                            <Border Padding="8"
+                                    Margin="0,4,0,4"
+                                    CornerRadius="6"
+                                    Background="#10000000"
+                                    BorderBrush="{DynamicResource BorderLine}"
+                                    BorderThickness="1">
+                                <CheckBox IsChecked="{Binding IsSelected}">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="{Binding DisplayName}"
+                                                   FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding ProcessName}"
+                                                   Opacity="0.75" />
+                                    </StackPanel>
+                                </CheckBox>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Padding="12"
+                    CornerRadius="8"
+                    Background="{DynamicResource SecondaryBackground}"
+                    BorderBrush="{DynamicResource BorderLine}"
+                    BorderThickness="1">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="8">
+                    <Button Content="{Binding BusinessSoftware.RemoveAddedBusinessSoftwareButtonLabel}"
+                            Command="{Binding BusinessSoftware.RemoveSelectedAddedBusinessSoftwareCommand}"
+                            IsVisible="{Binding BusinessSoftware.CanRemoveAddedBusinessSoftware}" />
+                </StackPanel>
+            </Border>
+        </Grid>
 
         <Border Grid.Row="1"
-                Grid.Column="1"
-                Classes="main-section">
-            <StackPanel Spacing="8">
-                <TextBlock Text="{Binding AddSectionTitle}"
-                           Classes="section-title" />
-
-                <TextBlock Text="{Binding NameLabel}" />
-                <TextBox Text="{Binding NewJobName}"
-                         IsEnabled="{Binding IsNotBusy}" />
-
-                <TextBlock Text="{Binding SourceLabel}" />
-                <StackPanel Spacing="4">
-                    <Button Command="{Binding BrowseSourceDirectoryCommand}"
-                            IsEnabled="{Binding IsNotBusy}"
-                            HorizontalAlignment="Left">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <PathIcon Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
-                                      Width="16" Height="16" />
-                            <TextBlock Text="{Binding BrowseSourceLabel}" />
-                        </StackPanel>
-                    </Button>
-                    <TextBlock Text="{Binding NewSourceDirectory}"
-                               TextWrapping="Wrap"
-                               Opacity="0.7"
-                               FontSize="12"
-                               IsVisible="{Binding NewSourceDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                </StackPanel>
-
-                <TextBlock Text="{Binding TargetLabel}" />
-                <StackPanel Spacing="4">
-                    <Button Command="{Binding BrowseTargetDirectoryCommand}"
-                            IsEnabled="{Binding IsNotBusy}"
-                            HorizontalAlignment="Left">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <PathIcon Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
-                                      Width="16" Height="16" />
-                            <TextBlock Text="{Binding BrowseTargetLabel}" />
-                        </StackPanel>
-                    </Button>
-                    <TextBlock Text="{Binding NewTargetDirectory}"
-                               TextWrapping="Wrap"
-                               Opacity="0.7"
-                               FontSize="12"
-                               IsVisible="{Binding NewTargetDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                </StackPanel>
-
-                <TextBlock Text="{Binding TypeLabel}" />
-                <ComboBox ItemsSource="{Binding BackupTypes}"
-                          SelectedItem="{Binding SelectedBackupType}"
-                          IsEnabled="{Binding IsNotBusy}" />
-
-                <Button Content="{Binding AddButtonLabel}"
-                        Command="{Binding AddJobCommand}"
-                        IsEnabled="{Binding IsNotBusy}"
-                        Margin="0,4,0,0" />
-
-                <Separator Margin="0,8,0,8" />
-
-                <Button Content="{Binding RemoveButtonLabel}"
-                        Command="{Binding RemoveSelectedJobCommand}"
-                        IsEnabled="{Binding IsNotBusy}" />
-            </StackPanel>
-        </Border>
-
-        <Border Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Padding="12"
-                CornerRadius="8"
-                Background="{DynamicResource SecondaryBackground}"
-                BorderBrush="{DynamicResource BorderLine}"
-                BorderThickness="1">
-            <WrapPanel ItemHeight="32" VerticalAlignment="Center">
-                <Button Content="{Binding RunSelectedButtonLabel}"
-                        Command="{Binding RunSelectedJobCommand}"
-                        IsEnabled="{Binding IsNotBusy}"
-                        Margin="0,0,8,0" />
-                <Button Content="{Binding RunAllButtonLabel}"
-                        Command="{Binding RunAllJobsCommand}"
-                        IsEnabled="{Binding IsNotBusy}" />
-            </WrapPanel>
-        </Border>
-
-        <Border Grid.Row="3"
-                Grid.ColumnSpan="2"
                 Padding="12"
                 CornerRadius="8"
                 Background="#18003D7A"
                 BorderBrush="#33003D7A"
                 BorderThickness="1">
             <StackPanel Spacing="8">
-                <TextBlock Text="{Binding StatusMessage}"
+                <TextBlock Text="{Binding StatusBar.StatusMessage}"
                            TextWrapping="Wrap" />
 
                 <ProgressBar Minimum="0"
                              Maximum="100"
-                             Value="{Binding OverallProgress}"
+                             Value="{Binding StatusBar.OverallProgress}"
                              Height="18" />
             </StackPanel>
         </Border>

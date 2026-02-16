@@ -1,557 +1,234 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using EasySave.Core.Models;
-using EasySave.Data.Configuration;
-using EasySave.Models.Backup;
-using EasySave.Models.State;
-using EasySave.Models.Utils;
-using EasySave.Views.Resources;
 using Avalonia.Platform.Storage;
+using EasySave.Data.Configuration;
+using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.BusinessSoftware;
+using EasySave.Models.Utils;
+using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
 
 /// <summary>
-///     Main window ViewModel for the EasySave backup manager application.
-///     Handles all UI interactions, commands, and state management following MVVM pattern.
+///     Main window orchestrator ViewModel.
+///     Coordinates screen navigation and composes specialized child ViewModels.
 /// </summary>
 public partial class MainWindowViewModel : ViewModelBase
 {
-    #region Fields
+    private readonly IUiTextService _uiTextService;
+    private ViewScreen _previousScreen = ViewScreen.Main;
 
-    private readonly JobService _jobService;
-    private readonly LocalizationApplier _localizationApplier;
-    private IStorageProvider? _storageProvider;
-
-    #endregion
-
-    #region Observable Properties - UI State
-
-    [ObservableProperty]
-    private bool _isNotBusy = true;
-
-    [ObservableProperty]
-    private double _overallProgress;
-
-    [ObservableProperty]
-    private string _statusMessage = string.Empty;
-
-    #endregion
-
-    #region Observable Properties - Collections
-
-    [ObservableProperty]
-    private ObservableCollection<BackupJobItemViewModel> _jobs = [];
-
-    [ObservableProperty]
-    private BackupJobItemViewModel? _selectedJob;
-
-    [ObservableProperty]
-    private ObservableCollection<string> _backupTypes = [];
-
-    [ObservableProperty]
-    private string _selectedBackupType = string.Empty;
-
-    #endregion
-
-    #region Observable Properties - Input Fields
-
-    [ObservableProperty]
-    private string _newJobName = string.Empty;
-
-    [ObservableProperty]
-    private string _newSourceDirectory = string.Empty;
-
-    [ObservableProperty]
-    private string _newTargetDirectory = string.Empty;
-
-    [ObservableProperty]
-    private string _browseSourceLabel = "Browse...";
-
-    [ObservableProperty]
-    private string _browseTargetLabel = "Browse...";
-
-    #endregion
-
-    #region Observable Properties - Localized Labels
-
-    [ObservableProperty]
-    private string _windowTitle = string.Empty;
-
-    [ObservableProperty]
-    private string _currentSettingsLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _jobsSectionTitle = string.Empty;
-
-    [ObservableProperty]
-    private string _addSectionTitle = string.Empty;
-
-    [ObservableProperty]
-    private string _nameLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _sourceLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _targetLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _typeLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _frenchButtonLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _englishButtonLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _jsonButtonLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _xmlButtonLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _addButtonLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _removeButtonLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _runSelectedButtonLabel = string.Empty;
-
-    [ObservableProperty]
-    private string _runAllButtonLabel = string.Empty;
-
-    #endregion
-
-    #region Constructor
+    [ObservableProperty] private string _windowTitle = string.Empty;
+    [ObservableProperty] private string _menuLabel = string.Empty;
+    [ObservableProperty] private string _menuSettingsItemLabel = string.Empty;
+    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = string.Empty;
+    [ObservableProperty] private string _backButtonLabel = string.Empty;
+    [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
 
     /// <summary>
-    ///     Initializes a new instance of the MainWindowViewModel class.
+    ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
     /// </summary>
     public MainWindowViewModel()
     {
-        _jobService = new JobService();
-        _localizationApplier = new LocalizationApplier();
+        _uiTextService = new ResxUiTextService();
 
-        // Load configuration and apply localization
-        var config = ApplicationConfiguration.Load();
-        if (!string.IsNullOrEmpty(config.Localization))
-        {
-            _localizationApplier.Apply(config.Localization);
-        }
+        StatusBar = new StatusBarViewModel();
+        Jobs = new JobsViewModel(StatusBar);
+        Settings = new SettingsViewModel(StatusBar,
+            RefreshLocalizedUi);
+        BusinessSoftware = new BusinessSoftwareViewModel(
+            StatusBar);
 
-        // Initialize backup types
-        InitializeBackupTypes();
+        BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
+        BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
 
-        // Load UI text resources
-        UpdateUIText();
-
-        // Load existing jobs
-        RefreshJobs();
-
-        // Set initial status
-        StatusMessage = "Ready";
-    }
-
-    #endregion
-
-    #region Initialization Methods
-
-    /// <summary>
-    ///     Initializes the backup types collection from the BackupType enum.
-    /// </summary>
-    private void InitializeBackupTypes()
-    {
-        BackupTypes = new ObservableCollection<string>(
-            Enum.GetNames(typeof(BackupType))
-        );
-        
-        if (BackupTypes.Count > 0)
-        {
-            SelectedBackupType = BackupTypes[0];
-        }
+        ApplyConfiguredLocalization();
+        RefreshLocalizedUi();
+        BusinessSoftware.Initialize();
+        StatusBar.StatusMessage = _uiTextService.Get("Gui.Status.Ready", "Ready");
     }
 
     /// <summary>
-    ///     Updates all UI text from resource files based on current culture.
+    ///     Gets the jobs section ViewModel.
     /// </summary>
-    private void UpdateUIText()
-    {
-        WindowTitle = "EasySave - Backup Manager";
-        CurrentSettingsLabel = "Settings";
-        JobsSectionTitle = UserInterface.Jobs_Header;
-        AddSectionTitle = UserInterface.Add_Header;
-        NameLabel = UserInterface.Add_PromptName;
-        SourceLabel = UserInterface.Add_PromptSource;
-        TargetLabel = UserInterface.Add_PromptTarget;
-        TypeLabel = UserInterface.Add_PromptType;
-        FrenchButtonLabel = "Français";
-        EnglishButtonLabel = "English";
-        JsonButtonLabel = "JSON";
-        XmlButtonLabel = "XML";
-        AddButtonLabel = "Add Job";
-        RemoveButtonLabel = "Remove Selected";
-        RunSelectedButtonLabel = "Run Selected Job";
-        RunAllButtonLabel = "Run All Jobs";
-    }
+    public JobsViewModel Jobs { get; }
 
     /// <summary>
-    ///     Sets the storage provider for folder picker dialogs.
+    ///     Gets the settings section ViewModel.
     /// </summary>
+    public SettingsViewModel Settings { get; }
+
+    /// <summary>
+    ///     Gets the business software section ViewModel.
+    /// </summary>
+    public BusinessSoftwareViewModel BusinessSoftware { get; }
+
+    /// <summary>
+    ///     Gets the global status bar ViewModel.
+    /// </summary>
+    public StatusBarViewModel StatusBar { get; }
+
+    /// <summary>
+    ///     Gets a value indicating whether the main screen is visible.
+    /// </summary>
+    public bool IsMainScreen => CurrentScreen == ViewScreen.Main;
+
+    /// <summary>
+    ///     Gets a value indicating whether the settings screen is visible.
+    /// </summary>
+    public bool IsSettingsScreen => CurrentScreen == ViewScreen.Settings;
+
+    /// <summary>
+    ///     Gets a value indicating whether the software catalog screen is visible.
+    /// </summary>
+    public bool IsSoftwareCatalogScreen => CurrentScreen == ViewScreen.SoftwareCatalog;
+
+    /// <summary>
+    ///     Gets a value indicating whether the added software screen is visible.
+    /// </summary>
+    public bool IsAddedSoftwareScreen => CurrentScreen == ViewScreen.AddedSoftware;
+
+    /// <summary>
+    ///     Forwards the storage provider to the jobs ViewModel.
+    /// </summary>
+    /// <param name="storageProvider">Window storage provider.</param>
     public void SetStorageProvider(IStorageProvider storageProvider)
     {
-        _storageProvider = storageProvider;
+        Jobs.SetStorageProvider(storageProvider);
     }
 
-    #endregion
-
-    #region Job Management Methods
-
     /// <summary>
-    ///     Refreshes the jobs collection from the repository.
-    /// </summary>
-    private void RefreshJobs()
-    {
-        var jobModels = _jobService.GetAll();
-        Jobs.Clear();
-        
-        foreach (var job in jobModels)
-        {
-            Jobs.Add(new BackupJobItemViewModel(job));
-        }
-    }
-
-    #endregion
-
-    #region Commands - Language Selection
-
-    /// <summary>
-    ///     Sets the application language to French.
+    ///     Opens the settings screen in the current window.
     /// </summary>
     [RelayCommand]
-    private void SetFrenchLanguage()
+    private void OpenSettings()
     {
-        _localizationApplier.Apply("fr-FR");
-        UpdateUIText();
-        StatusMessage = "Langue changée en Français";
+        _previousScreen = CurrentScreen;
+        SetCurrentScreen(ViewScreen.Settings);
     }
 
     /// <summary>
-    ///     Sets the application language to English.
+    ///     Returns from settings screen to previous screen.
     /// </summary>
     [RelayCommand]
-    private void SetEnglishLanguage()
+    private void BackFromSettings()
     {
-        _localizationApplier.Apply("en-US");
-        UpdateUIText();
-        StatusMessage = "Language changed to English";
+        var target = _previousScreen == ViewScreen.Settings ? ViewScreen.Main : _previousScreen;
+        SetCurrentScreen(target);
     }
 
-    #endregion
-
-    #region Commands - Log Type Selection
-
     /// <summary>
-    ///     Sets the log format to JSON.
+    ///     Opens the business software catalog screen.
     /// </summary>
     [RelayCommand]
-    private void SetJsonLogType()
+    private void OpenBusinessSoftwareCatalog()
     {
-        // Log type configuration would be persisted here if supported
-        StatusMessage = "Log type set to JSON";
+        BusinessSoftware.OpenCatalog();
+        SetCurrentScreen(ViewScreen.SoftwareCatalog);
     }
 
     /// <summary>
-    ///     Sets the log format to XML.
+    ///     Opens the configured business software list screen.
     /// </summary>
     [RelayCommand]
-    private void SetXmlLogType()
+    private void OpenAddedBusinessSoftware()
     {
-        // Log type configuration would be persisted here if supported
-        StatusMessage = "Log type set to XML";
+        BusinessSoftware.OpenAddedSoftware();
+        _previousScreen = CurrentScreen;
+        SetCurrentScreen(ViewScreen.AddedSoftware);
     }
 
-    #endregion
-
-    #region Commands - Job Management
-
     /// <summary>
-    ///     Adds a new backup job using the input fields.
-    ///     Validates that all required fields are provided and that both source and target directories exist.
-    ///     Note: Both directories must exist before creating a job. The target directory is not automatically
-    ///     created to ensure the user has explicitly prepared the backup destination.
+    ///     Returns from software catalog to main screen.
     /// </summary>
     [RelayCommand]
-    private void AddJob()
+    private void BackFromSoftwareCatalog()
     {
-        // Validate input
-        if (string.IsNullOrWhiteSpace(NewJobName))
-        {
-            StatusMessage = "Error: Job name is required";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(NewSourceDirectory))
-        {
-            StatusMessage = "Error: Source directory is required";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(NewTargetDirectory))
-        {
-            StatusMessage = "Error: Target directory is required";
-            return;
-        }
-
-        // Validate directory existence
-        // Both source and target must exist before job creation
-        // This ensures the backup destination is properly configured
-        if (!Directory.Exists(NewSourceDirectory))
-        {
-            StatusMessage = "Error: Source directory does not exist";
-            return;
-        }
-
-        if (!Directory.Exists(NewTargetDirectory))
-        {
-            StatusMessage = "Error: Target directory does not exist";
-            return;
-        }
-
-        // Parse backup type
-        if (!Enum.TryParse<BackupType>(SelectedBackupType, out var backupType))
-        {
-            StatusMessage = "Error: Invalid backup type";
-            return;
-        }
-
-        // Create and add job
-        var newJob = new BackupJob(NewJobName, NewSourceDirectory, NewTargetDirectory, backupType);
-        var (ok, error) = _jobService.AddJob(newJob);
-
-        if (ok)
-        {
-            StatusMessage = UserInterface.Add_Success;
-            RefreshJobs();
-            ClearInputFields();
-        }
-        else
-        {
-            // Map error key to localized message
-            StatusMessage = error switch
-            {
-                "Error.NoFreeSlot" => UserInterface.Add_Error_NoFreeSlot,
-                _ => $"{UserInterface.Add_Failed} {error}"
-            };
-        }
+        SetCurrentScreen(ViewScreen.Main);
     }
 
     /// <summary>
-    ///     Removes the currently selected backup job.
+    ///     Returns from added software screen to previous screen.
     /// </summary>
     [RelayCommand]
-    private void RemoveSelectedJob()
+    private void BackFromAddedSoftware()
     {
-        if (SelectedJob == null)
-        {
-            StatusMessage = "Error: No job selected";
-            return;
-        }
+        SetCurrentScreen(_previousScreen);
+    }
 
-        var jobId = SelectedJob.Job.Id.ToString();
-        var removed = _jobService.RemoveJob(jobId);
-
-        if (removed)
-        {
-            StatusMessage = $"Job '{SelectedJob.Job.Name}' removed successfully";
-            RefreshJobs();
-            SelectedJob = null;
-        }
-        else
-        {
-            StatusMessage = "Error: Failed to remove job";
-        }
+    partial void OnCurrentScreenChanged(ViewScreen value)
+    {
+        OnPropertyChanged(nameof(IsMainScreen));
+        OnPropertyChanged(nameof(IsSettingsScreen));
+        OnPropertyChanged(nameof(IsSoftwareCatalogScreen));
+        OnPropertyChanged(nameof(IsAddedSoftwareScreen));
     }
 
     /// <summary>
-    ///     Clears the input fields after successful job creation.
+    ///     Applies localization from persisted configuration at startup.
     /// </summary>
-    private void ClearInputFields()
+    private void ApplyConfiguredLocalization()
     {
-        NewJobName = string.Empty;
-        NewSourceDirectory = string.Empty;
-        NewTargetDirectory = string.Empty;
-    }
-
-    #endregion
-
-    #region Commands - Job Execution
-
-    /// <summary>
-    ///     Runs the selected backup job asynchronously.
-    /// </summary>
-    [RelayCommand]
-    private async Task RunSelectedJob()
-    {
-        if (SelectedJob == null)
-        {
-            StatusMessage = "Error: No job selected";
-            return;
-        }
-
-        await ExecuteJobAsync(SelectedJob.Job);
+        var config = ApplicationConfiguration.Load();
+        if (!string.IsNullOrWhiteSpace(config.Localization))
+            LocalizationApplier.Apply(config.Localization);
     }
 
     /// <summary>
-    ///     Runs all backup jobs sequentially.
-    ///     Note: Jobs are executed one at a time to avoid resource contention and ensure
-    ///     predictable behavior. Parallel execution could cause conflicts if jobs access
-    ///     the same file system resources.
+    ///     Refreshes localized labels for this ViewModel and all child ViewModels.
     /// </summary>
-    [RelayCommand]
-    private async Task RunAllJobs()
+    private void RefreshLocalizedUi()
     {
-        if (Jobs.Count == 0)
-        {
-            StatusMessage = UserInterface.Jobs_None;
-            return;
-        }
+        WindowTitle = _uiTextService.Get("Gui.Window.Title", "EasySave - Backup Manager");
+        MenuLabel = _uiTextService.Get("Gui.Menu.Root", "Menu");
+        MenuSettingsItemLabel = _uiTextService.Get("Gui.Menu.Settings", "Settings");
+        ManageBusinessSoftwareMenuItemLabel =
+            _uiTextService.Get("Gui.Menu.ManageBusinessSoftware", "Manage Business Software");
+        BackButtonLabel = _uiTextService.Get("Gui.Navigation.Back", "Back");
 
-        StatusMessage = UserInterface.Launch_RunningAll;
-        IsNotBusy = false;
-        OverallProgress = 0;
-
-        try
-        {
-            var totalJobs = Jobs.Count;
-            var stoppedByBusinessSoftware = false;
-            for (int i = 0; i < totalJobs; i++)
-            {
-                var jobViewModel = Jobs[i];
-                StatusMessage = string.Format(UserInterface.Launch_RunningOne, 
-                    jobViewModel.Job.Id, jobViewModel.Job.Name);
-
-                // Execute jobs sequentially to prevent resource conflicts
-                await Task.Run(() => jobViewModel.Job.StartBackup());
-
-                if (jobViewModel.Job.WasStoppedByBusinessSoftware)
-                {
-                    stoppedByBusinessSoftware = true;
-                    StatusMessage = $"Backup '{jobViewModel.Job.Name}' stopped: business software is running";
-                    break;
-                }
-
-                // Update overall progress
-                OverallProgress = ((i + 1) / (double)totalJobs) * 100;
-            }
-
-            if (!stoppedByBusinessSoftware)
-                StatusMessage = UserInterface.Launch_Done;
-        }
-        catch (Exception ex)
-        {
-            StatusMessage = $"Error during execution: {ex.Message}";
-        }
-        finally
-        {
-            IsNotBusy = true;
-            OverallProgress = 0;
-        }
+        Jobs.UpdateUiText();
+        Settings.UpdateUiText();
+        BusinessSoftware.UpdateUiText();
     }
 
     /// <summary>
-    ///     Executes a single backup job and tracks its progress.
+    ///     Handles configured process name changes and refreshes job monitor instances.
     /// </summary>
-    /// <param name="job">The backup job to execute.</param>
-    private async Task ExecuteJobAsync(BackupJob job)
+    /// <param name="sender">Event sender.</param>
+    /// <param name="e">Event args.</param>
+    private void OnConfiguredProcessNamesChanged(object? sender, EventArgs e)
     {
-        IsNotBusy = false;
-        OverallProgress = 0;
-        StatusMessage = string.Format(UserInterface.Launch_RunningOne, job.Id, job.Name);
-
-        try
-        {
-            // Run backup on background thread
-            job.ProgressChanged += OnProgressChanged;
-            await Task.Run(job.StartBackup);
-
-            if (job.WasStoppedByBusinessSoftware)
-            {
-                StatusMessage = $"Backup '{job.Name}' stopped: business software is running";
-                return;
-            }
-
-            // Update final status
-            OverallProgress = 100;
-            StatusMessage = UserInterface.Launch_Done;
-        }
-        catch (Exception ex)
-        {
-            // Include job context in error message for better debugging
-            StatusMessage = $"Error executing job '{job.Name}' (ID: {job.Id}): {ex.Message}";
-        }
-        finally
-        {
-            IsNotBusy = true;
-            
-            // Reset progress after a delay
-            await Task.Delay(2000);
-            OverallProgress = 0;
-        }
-    }
-    
-    private void OnProgressChanged(object sender, EventArgs e)
-    {
-        BackupJob job = (BackupJob)sender;
-        StatusMessage = $"{string.Format(UserInterface.Launch_RunningOne, job.Id, job.Name)} ({job.CurrentFileIndex} / {job.FilesCount} files) - ({Math.Round(job.TransferredSize / 1048576.0)} / {Math.Round(job.TotalSize / 1048576.0)} MB))";
-        OverallProgress = job.CurrentProgress;
-    }
-
-    #endregion
-
-    #region Commands - Folder Selection
-
-    /// <summary>
-    ///     Opens a folder picker dialog to select the source directory.
-    /// </summary>
-    [RelayCommand]
-    private async Task BrowseSourceDirectory()
-    {
-        if (_storageProvider == null) return;
-
-        var folders = await _storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-        {
-            Title = "Select Source Directory",
-            AllowMultiple = false
-        });
-
-        if (folders.Count > 0)
-        {
-            NewSourceDirectory = folders[0].Path.LocalPath;
-        }
+        Jobs.RefreshBusinessSoftwareMonitors();
     }
 
     /// <summary>
-    ///     Opens a folder picker dialog to select the target directory.
+    ///     Handles navigation requests emitted after adding business software.
     /// </summary>
-    [RelayCommand]
-    private async Task BrowseTargetDirectory()
+    /// <param name="sender">Event sender.</param>
+    /// <param name="e">Event args.</param>
+    private void OnOpenAddedSoftwareRequested(object? sender, EventArgs e)
     {
-        if (_storageProvider == null) return;
-
-        var folders = await _storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-        {
-            Title = "Select Target Directory",
-            AllowMultiple = false
-        });
-
-        if (folders.Count > 0)
-        {
-            NewTargetDirectory = folders[0].Path.LocalPath;
-        }
+        _previousScreen = ViewScreen.SoftwareCatalog;
+        SetCurrentScreen(ViewScreen.AddedSoftware);
     }
 
-    #endregion
+    /// <summary>
+    ///     Sets the currently visible screen.
+    /// </summary>
+    /// <param name="screen">Target screen value.</param>
+    private void SetCurrentScreen(ViewScreen screen)
+    {
+        CurrentScreen = screen;
+    }
+
+    /// <summary>
+    ///     Supported in-window screens.
+    /// </summary>
+    public enum ViewScreen
+    {
+        Main,
+        Settings,
+        SoftwareCatalog,
+        AddedSoftware
+    }
 }

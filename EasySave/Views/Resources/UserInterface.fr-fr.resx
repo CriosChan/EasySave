@@ -165,4 +165,109 @@
     <data name="Menu.Log" xml:space="preserve">
         <value>Choisir un type de log</value>
     </data>
+    <data name="Gui.Window.Title" xml:space="preserve">
+        <value>EasySave - Gestionnaire de sauvegarde</value>
+    </data>
+    <data name="Gui.Settings.Label" xml:space="preserve">
+        <value>Paramètres</value>
+    </data>
+    <data name="Gui.Settings.Screen.Title" xml:space="preserve">
+        <value>Paramètres de l'application</value>
+    </data>
+    <data name="Gui.Settings.Section.Language" xml:space="preserve">
+        <value>Langue</value>
+    </data>
+    <data name="Gui.Settings.Section.LogType" xml:space="preserve">
+        <value>Type de log</value>
+    </data>
+    <data name="Gui.Settings.Hint.FutureExtension" xml:space="preserve">
+        <value>Cet écran de paramètres est prêt à accueillir de nouveaux réglages.</value>
+    </data>
+    <data name="Gui.Button.French" xml:space="preserve">
+        <value>Français</value>
+    </data>
+    <data name="Gui.Button.English" xml:space="preserve">
+        <value>Anglais</value>
+    </data>
+    <data name="Gui.Button.Json" xml:space="preserve">
+        <value>JSON</value>
+    </data>
+    <data name="Gui.Button.Xml" xml:space="preserve">
+        <value>XML</value>
+    </data>
+    <data name="Gui.Button.AddJob" xml:space="preserve">
+        <value>Ajouter un job</value>
+    </data>
+    <data name="Gui.Button.RemoveSelected" xml:space="preserve">
+        <value>Supprimer la sélection</value>
+    </data>
+    <data name="Gui.Button.RunSelectedJob" xml:space="preserve">
+        <value>Lancer le job sélectionné</value>
+    </data>
+    <data name="Gui.Button.RunAllJobs" xml:space="preserve">
+        <value>Lancer tous les jobs</value>
+    </data>
+    <data name="Gui.Button.BrowseSource" xml:space="preserve">
+        <value>Parcourir la source...</value>
+    </data>
+    <data name="Gui.Button.BrowseTarget" xml:space="preserve">
+        <value>Parcourir la cible...</value>
+    </data>
+    <data name="Gui.Status.LanguageChangedFr" xml:space="preserve">
+        <value>Langue changée en Français</value>
+    </data>
+    <data name="Gui.Status.LanguageChangedEn" xml:space="preserve">
+        <value>Langue changée en Anglais</value>
+    </data>
+    <data name="Gui.Status.LogTypeJsonSet" xml:space="preserve">
+        <value>Type de log défini sur JSON</value>
+    </data>
+    <data name="Gui.Status.LogTypeXmlSet" xml:space="preserve">
+        <value>Type de log défini sur XML</value>
+    </data>
+    <data name="Gui.Status.BackupStoppedByBusinessSoftware" xml:space="preserve">
+        <value>Sauvegarde '{0}' arrêtée : un logiciel métier est en cours d'exécution</value>
+    </data>
+    <data name="Gui.Menu.Root" xml:space="preserve">
+        <value>Menu</value>
+    </data>
+    <data name="Gui.Menu.Settings" xml:space="preserve">
+        <value>Paramètres</value>
+    </data>
+    <data name="Gui.Menu.Features" xml:space="preserve">
+        <value>Fonctionnalités</value>
+    </data>
+    <data name="Gui.Menu.ManageBusinessSoftware" xml:space="preserve">
+        <value>Gérer les logiciels métier</value>
+    </data>
+    <data name="Gui.Navigation.Back" xml:space="preserve">
+        <value>Retour</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Catalog.Title" xml:space="preserve">
+        <value>Sélectionner les logiciels métier</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Added.Title" xml:space="preserve">
+        <value>Logiciels métier ajoutés</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Search.Label" xml:space="preserve">
+        <value>Rechercher un logiciel</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Search.Placeholder" xml:space="preserve">
+        <value>Saisissez un nom pour filtrer</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Button.AddSelected" xml:space="preserve">
+        <value>Ajouter la sélection</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Button.ViewAdded" xml:space="preserve">
+        <value>Voir les logiciels ajoutés</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Button.RemoveSelected" xml:space="preserve">
+        <value>Supprimer la sélection</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Status.Updated" xml:space="preserve">
+        <value>Liste des logiciels métier mise à jour.</value>
+    </data>
+    <data name="Gui.BusinessSoftware.Status.Removed" xml:space="preserve">
+        <value>Logiciel métier supprimé de la liste de blocage.</value>
+    </data>
 </root>
