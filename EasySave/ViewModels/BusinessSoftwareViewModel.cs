@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using EasySave.Data.Configuration;
 using EasySave.Models.BusinessSoftware;
 using EasySave.ViewModels.Services;
 
@@ -12,7 +13,6 @@ namespace EasySave.ViewModels;
 public partial class BusinessSoftwareViewModel : ViewModelBase
 {
     private readonly IBusinessSoftwareCatalogService _businessSoftwareCatalogService;
-    private readonly IBusinessSoftwareSettingsService _businessSoftwareSettingsService;
     private readonly IUiTextService _uiTextService;
     private readonly StatusBarViewModel _statusBar;
 
@@ -52,21 +52,12 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
     /// <summary>
     ///     Initializes a new instance of the <see cref="BusinessSoftwareViewModel" /> class.
     /// </summary>
-    /// <param name="businessSoftwareCatalogService">Software catalog service.</param>
-    /// <param name="businessSoftwareSettingsService">Configured software settings service.</param>
-    /// <param name="uiTextService">Localized text service.</param>
     /// <param name="statusBar">Shared status bar state.</param>
     public BusinessSoftwareViewModel(
-        IBusinessSoftwareCatalogService businessSoftwareCatalogService,
-        IBusinessSoftwareSettingsService businessSoftwareSettingsService,
-        IUiTextService uiTextService,
         StatusBarViewModel statusBar)
     {
-        _businessSoftwareCatalogService =
-            businessSoftwareCatalogService ?? throw new ArgumentNullException(nameof(businessSoftwareCatalogService));
-        _businessSoftwareSettingsService =
-            businessSoftwareSettingsService ?? throw new ArgumentNullException(nameof(businessSoftwareSettingsService));
-        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
+        _businessSoftwareCatalogService = new BusinessSoftwareCatalogService();
+        _uiTextService = new ResxUiTextService();
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
     }
 
@@ -207,7 +198,7 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
             .GroupBy(item => item.ProcessName, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
 
-        var configuredItems = _businessSoftwareSettingsService.LoadConfiguredProcessNames()
+        var configuredItems = ApplicationConfiguration.Load().BusinessSoftwareProcessNames
             .Select(processName =>
             {
                 if (availableByProcessName.TryGetValue(processName, out var availableItem))
@@ -254,8 +245,7 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
     /// </summary>
     private void PersistAddedBusinessSoftware()
     {
-        _businessSoftwareSettingsService.SaveConfiguredProcessNames(
-            AddedBusinessSoftware.Select(item => item.ProcessName));
+        ApplicationConfiguration.Load().BusinessSoftwareProcessNames = AddedBusinessSoftware.Select(item => item.ProcessName).ToArray();
 
         ConfiguredProcessNamesChanged?.Invoke(this, EventArgs.Empty);
     }

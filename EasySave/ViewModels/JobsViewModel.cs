@@ -48,10 +48,10 @@ public partial class JobsViewModel : ViewModelBase
     /// <param name="jobService">Backup job service.</param>
     /// <param name="uiTextService">Localized text service.</param>
     /// <param name="statusBar">Shared status bar state.</param>
-    public JobsViewModel(IJobService jobService, IUiTextService uiTextService, StatusBarViewModel statusBar)
+    public JobsViewModel(StatusBarViewModel statusBar)
     {
-        _jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
-        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
+        _jobService = new JobService();
+        _uiTextService = new ResxUiTextService();
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
 
         InitializeBackupTypes();

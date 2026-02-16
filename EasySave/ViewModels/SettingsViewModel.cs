@@ -11,10 +11,8 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class SettingsViewModel : ViewModelBase
 {
-    private readonly ILocalizationApplier _localizationApplier;
-    private readonly IApplicationSettingsService _applicationSettingsService;
-    private readonly IUiTextService _uiTextService;
     private readonly StatusBarViewModel _statusBar;
+    private readonly IUiTextService _uiTextService;
     private readonly Action _onLocalizationChanged;
 
     [ObservableProperty] private string _settingsScreenTitle = string.Empty;
@@ -28,25 +26,11 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
     /// </summary>
-    /// <param name="localizationApplier">Localization applier service.</param>
-    /// <param name="applicationSettingsService">Application settings persistence service.</param>
-    /// <param name="uiTextService">Localized text service.</param>
-    /// <param name="statusBar">Shared status bar state.</param>
-    /// <param name="onLocalizationChanged">Callback invoked after language changes.</param>
-    public SettingsViewModel(
-        ILocalizationApplier localizationApplier,
-        IApplicationSettingsService applicationSettingsService,
-        IUiTextService uiTextService,
-        StatusBarViewModel statusBar,
-        Action onLocalizationChanged)
+    public SettingsViewModel(StatusBarViewModel statusBar, Action onLocalizationChanged)
     {
-        _localizationApplier = localizationApplier ?? throw new ArgumentNullException(nameof(localizationApplier));
-        _applicationSettingsService =
-            applicationSettingsService ?? throw new ArgumentNullException(nameof(applicationSettingsService));
-        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
-        _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
-        _onLocalizationChanged = onLocalizationChanged ?? throw new ArgumentNullException(nameof(onLocalizationChanged));
-
+        _statusBar = statusBar;
+        _uiTextService = new ResxUiTextService();
+        _onLocalizationChanged = onLocalizationChanged;
         UpdateUiText();
     }
 
@@ -70,8 +54,8 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void SetFrenchLanguage()
     {
-        _applicationSettingsService.SetLocalization("fr-FR");
-        _localizationApplier.Apply("fr-FR");
+        ApplicationConfiguration.Load().Localization = "fr-FR";
+        LocalizationApplier.Apply("fr-FR");
         _onLocalizationChanged();
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedFr", "Langue changee en Francais");
     }
@@ -82,8 +66,8 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void SetEnglishLanguage()
     {
-        _applicationSettingsService.SetLocalization("en-US");
-        _localizationApplier.Apply("en-US");
+        ApplicationConfiguration.Load().Localization = "en-US";
+        LocalizationApplier.Apply("en-US");
         _onLocalizationChanged();
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedEn", "Language changed to English");
     }
@@ -94,7 +78,7 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void SetJsonLogType()
     {
-        _applicationSettingsService.SetLogType("json");
+        ApplicationConfiguration.Load().LogType = "json";
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LogTypeJsonSet", "Log type set to JSON");
     }
 
@@ -104,7 +88,7 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private void SetXmlLogType()
     {
-        _applicationSettingsService.SetLogType("xml");
+        ApplicationConfiguration.Load().LogType = "xml";
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LogTypeXmlSet", "Log type set to XML");
     }
 }

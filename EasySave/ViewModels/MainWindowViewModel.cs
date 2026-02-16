@@ -15,7 +15,6 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private readonly ILocalizationApplier _localizationApplier;
     private readonly IUiTextService _uiTextService;
     private ViewScreen _previousScreen = ViewScreen.Main;
 
@@ -29,31 +28,15 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
     /// </summary>
-    /// <param name="jobService">Backup job service.</param>
-    /// <param name="localizationApplier">Localization service.</param>
-    /// <param name="applicationSettingsService">Mutable application settings service.</param>
-    /// <param name="businessSoftwareCatalogService">Business software catalog service.</param>
-    /// <param name="businessSoftwareSettingsService">Business software settings service.</param>
-    /// <param name="uiTextService">Localized text service.</param>
-    public MainWindowViewModel(
-        IJobService jobService,
-        ILocalizationApplier localizationApplier,
-        IApplicationSettingsService applicationSettingsService,
-        IBusinessSoftwareCatalogService businessSoftwareCatalogService,
-        IBusinessSoftwareSettingsService businessSoftwareSettingsService,
-        IUiTextService uiTextService)
+    public MainWindowViewModel()
     {
-        _localizationApplier = localizationApplier ?? throw new ArgumentNullException(nameof(localizationApplier));
-        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
+        _uiTextService = new ResxUiTextService();
 
         StatusBar = new StatusBarViewModel();
-        Jobs = new JobsViewModel(jobService, uiTextService, StatusBar);
-        Settings = new SettingsViewModel(localizationApplier, applicationSettingsService, uiTextService, StatusBar,
+        Jobs = new JobsViewModel(StatusBar);
+        Settings = new SettingsViewModel(StatusBar,
             RefreshLocalizedUi);
         BusinessSoftware = new BusinessSoftwareViewModel(
-            businessSoftwareCatalogService,
-            businessSoftwareSettingsService,
-            uiTextService,
             StatusBar);
 
         BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
@@ -188,7 +171,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var config = ApplicationConfiguration.Load();
         if (!string.IsNullOrWhiteSpace(config.Localization))
-            _localizationApplier.Apply(config.Localization);
+            LocalizationApplier.Apply(config.Localization);
     }
 
     /// <summary>

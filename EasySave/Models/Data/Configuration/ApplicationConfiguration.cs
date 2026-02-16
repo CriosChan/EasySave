@@ -1,50 +1,100 @@
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
-namespace EasySave.Data.Configuration;
-
-/// <summary>
-///     Loads and exposes application configuration (read-only at runtime).
-/// </summary>
-public sealed class ApplicationConfiguration
+namespace EasySave.Data.Configuration
 {
     /// <summary>
-    ///     Log directory configuration (can be relative).
+    ///     Loads and exposes application configuration (read/write).
     /// </summary>
-    public string LogPath { get; init; } = "./log"; // Default path for log files
-
-    /// <summary>
-    ///     Job configuration directory (can be relative).
-    /// </summary>
-    public string JobConfigPath { get; init; } = "./config"; // Default path for job configuration files
-
-    /// <summary>
-    ///     Default localization (e.g., "fr-FR").
-    /// </summary>
-    public string Localization { get; init; } = ""; // Default localization setting
-
-    public string LogType { get; init; } = "json"; // Default log type format
-
-    /// <summary>
-    ///     Process names of business software that block backup execution when running.
-    ///     Example values: ["CalculatorApp", "notepad", "notepad.exe"].
-    /// </summary>
-    public string[] BusinessSoftwareProcessNames { get; init; } = [];
-
-    /// <summary>
-    ///     Loads configuration from a JSON file.
-    /// </summary>
-    /// <param name="configFile">Configuration file name.</param>
-    /// <returns>Loaded configuration.</returns>
-    public static ApplicationConfiguration Load(string configFile = "appsettings.json")
+    public sealed class ApplicationConfiguration
     {
-        var configuration = new ConfigurationBuilder()
-            // Use the executable directory so the config is found even if the app is started
-            // from a different working directory.
-            .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile(configFile, false, true) // Load the specified JSON configuration file
-            .Build();
+        // Singleton instance
+        private static ApplicationConfiguration _instance;
+        private static readonly object _lock = new();
 
-        return configuration.Get<ApplicationConfiguration>() ??
-               new ApplicationConfiguration(); // Return the loaded configuration or a new instance
+        // Properties
+        public string LogPath { get; set; } = "./log";
+        public string JobConfigPath { get; set; } = "./config";
+        public string Localization { get; set; } = "";
+
+        public string LogType
+        {
+            get;
+            set
+            {
+                field = value;
+                Save();
+            }
+        } = "json";
+
+        public string[] BusinessSoftwareProcessNames
+        {
+            get;
+            set
+            {
+                field = value
+                    .Where(name => !string.IsNullOrWhiteSpace(name))
+                    .Select(name => name.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
+                    .ToArray();
+                Save(); // Automatically save when BusinessSoftwareProcessNames is set
+            }
+        } = Array.Empty<string>();
+
+        // Property to hold the configuration file path but not serialized
+        [JsonIgnore] // Ensure to ignore this property
+        public string ConfigFile { get; set; } = "appsettings.json";
+
+        /// <summary>
+        ///     Private constructor to create the singleton object.
+        /// </summary>
+        private ApplicationConfiguration() {}
+
+        /// <summary>
+        ///     Loads configuration from a JSON file and returns the singleton instance.
+        /// </summary>
+        /// <param name="configFile">Configuration file name.</param>
+        /// <returns>Loaded configuration.</returns>
+        public static ApplicationConfiguration Load(string configFile = "appsettings.json")
+        {
+            // Double-checked locking for thread safety
+            if (_instance == null)
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        var configuration = new ConfigurationBuilder()
+                            .SetBasePath(AppContext.BaseDirectory)
+                            .AddJsonFile(configFile, optional: false, reloadOnChange: true)
+                            .Build();
+
+                        // Create or get the configuration object
+                        _instance = new ApplicationConfiguration
+                        {
+                            ConfigFile = configFile // Set the config file path
+                        };
+
+                        // Bind values from the loaded configuration
+                        configuration.Bind(_instance);
+                    }
+                }
+            }
+            return _instance;
+        }
+
+        /// <summary>
+        ///     Saves the current configuration to the specified JSON file.
+        /// </summary>
+        public void Save()
+        {
+            var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+            Console.WriteLine(json);
+            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, ConfigFile), json);
+        }
     }
 }

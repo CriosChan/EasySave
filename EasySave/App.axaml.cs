@@ -26,22 +26,9 @@ public class App : Application
         {
             DisableAvaloniaDataAnnotationValidation();
 
-            IJobService jobService = new JobService();
-            ILocalizationApplier localizationApplier = new LocalizationApplier();
-            IApplicationSettingsService applicationSettingsService = new ApplicationSettingsService();
-            IBusinessSoftwareCatalogService businessSoftwareCatalogService = new BusinessSoftwareCatalogService();
-            IBusinessSoftwareSettingsService businessSoftwareSettingsService = new BusinessSoftwareSettingsService();
-            IUiTextService uiTextService = new ResxUiTextService();
-
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(
-                    jobService,
-                    localizationApplier,
-                    applicationSettingsService,
-                    businessSoftwareCatalogService,
-                    businessSoftwareSettingsService,
-                    uiTextService)
+                DataContext = new MainWindowViewModel()
             };
         }
 
