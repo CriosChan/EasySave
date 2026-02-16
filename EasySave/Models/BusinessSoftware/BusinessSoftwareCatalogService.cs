@@ -41,7 +41,6 @@ public sealed class BusinessSoftwareCatalogService : IBusinessSoftwareCatalogSer
         var items = new List<BusinessSoftwareCatalogItem>();
 
         foreach (var source in GetRegistrySources())
-        {
             try
             {
                 using var baseKey = RegistryKey.OpenBaseKey(source.hive, source.view);
@@ -83,7 +82,6 @@ public sealed class BusinessSoftwareCatalogService : IBusinessSoftwareCatalogSer
             {
                 // Keep best-effort behavior and continue with next source.
             }
-        }
 
         return items;
     }
@@ -97,8 +95,10 @@ public sealed class BusinessSoftwareCatalogService : IBusinessSoftwareCatalogSer
     {
         return
         [
-            (RegistryHive.LocalMachine, RegistryView.Registry64, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"),
-            (RegistryHive.LocalMachine, RegistryView.Registry32, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"),
+            (RegistryHive.LocalMachine, RegistryView.Registry64,
+                @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"),
+            (RegistryHive.LocalMachine, RegistryView.Registry32,
+                @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"),
             (RegistryHive.CurrentUser, RegistryView.Default, @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall")
         ];
     }
@@ -123,19 +123,17 @@ public sealed class BusinessSoftwareCatalogService : IBusinessSoftwareCatalogSer
         };
 
         foreach (var folder in folders)
+        foreach (var executablePath in EnumerateExecutableFiles(folder.path, folder.recursive))
         {
-            foreach (var executablePath in EnumerateExecutableFiles(folder.path, folder.recursive))
-            {
-                var processName = Path.GetFileNameWithoutExtension(executablePath).Trim();
-                if (string.IsNullOrWhiteSpace(processName))
-                    continue;
+            var processName = Path.GetFileNameWithoutExtension(executablePath).Trim();
+            if (string.IsNullOrWhiteSpace(processName))
+                continue;
 
-                if (IsInstallerOrUninstallProcess(processName))
-                    continue;
+            if (IsInstallerOrUninstallProcess(processName))
+                continue;
 
-                var displayName = processName;
-                items.Add(new BusinessSoftwareCatalogItem(displayName, processName));
-            }
+            var displayName = processName;
+            items.Add(new BusinessSoftwareCatalogItem(displayName, processName));
         }
 
         return items;

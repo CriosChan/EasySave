@@ -13,11 +13,8 @@ public partial class MainWindow : Window
     protected override void OnOpened(EventArgs e)
     {
         base.OnOpened(e);
-        
+
         // Inject StorageProvider into ViewModel
-        if (DataContext is MainWindowViewModel viewModel)
-        {
-            viewModel.SetStorageProvider(StorageProvider);
-        }
+        if (DataContext is MainWindowViewModel viewModel) viewModel.SetStorageProvider(StorageProvider);
     }
 }

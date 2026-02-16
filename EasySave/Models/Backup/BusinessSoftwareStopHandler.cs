@@ -21,7 +21,8 @@ public sealed class BusinessSoftwareStopHandler
     /// <param name="backupName">Name of the backup job being executed.</param>
     public BusinessSoftwareStopHandler(IBusinessSoftwareMonitor businessSoftwareMonitor, string backupName)
     {
-        _businessSoftwareMonitor = businessSoftwareMonitor ?? throw new ArgumentNullException(nameof(businessSoftwareMonitor));
+        _businessSoftwareMonitor =
+            businessSoftwareMonitor ?? throw new ArgumentNullException(nameof(businessSoftwareMonitor));
         _backupName = backupName.ValidateNonEmpty(nameof(backupName));
     }
 
@@ -65,7 +66,8 @@ public sealed class BusinessSoftwareStopHandler
             TargetPath = blockedFile == null ? string.Empty : PathService.ToFullUncLikePath(blockedFile.TargetFile),
             FileSizeBytes = 0,
             TransferTimeMs = -1,
-            ErrorMessage = $"Backup stopped because one of these business software processes is running: '{softwareLabel}'."
+            ErrorMessage =
+                $"Backup stopped because one of these business software processes is running: '{softwareLabel}'."
         });
     }
 }

@@ -17,31 +17,31 @@ namespace EasySave.ViewModels;
 public partial class JobsViewModel : ViewModelBase
 {
     private readonly IJobService _jobService;
-    private readonly IUiTextService _uiTextService;
     private readonly StatusBarViewModel _statusBar;
-    private IStorageProvider? _storageProvider;
+    private readonly IUiTextService _uiTextService;
+    [ObservableProperty] private string _addButtonLabel = string.Empty;
+    [ObservableProperty] private string _addSectionTitle = string.Empty;
+    [ObservableProperty] private ObservableCollection<string> _backupTypes = [];
+    [ObservableProperty] private string _browseSourceLabel = string.Empty;
+    [ObservableProperty] private string _browseTargetLabel = string.Empty;
 
     [ObservableProperty] private ObservableCollection<BackupJobItemViewModel> _jobs = [];
-    [ObservableProperty] private BackupJobItemViewModel? _selectedJob;
-    [ObservableProperty] private ObservableCollection<string> _backupTypes = [];
-    [ObservableProperty] private string _selectedBackupType = string.Empty;
+
+    [ObservableProperty] private string _jobsSectionTitle = string.Empty;
+    [ObservableProperty] private string _nameLabel = string.Empty;
 
     [ObservableProperty] private string _newJobName = string.Empty;
     [ObservableProperty] private string _newSourceDirectory = string.Empty;
     [ObservableProperty] private string _newTargetDirectory = string.Empty;
-
-    [ObservableProperty] private string _jobsSectionTitle = string.Empty;
-    [ObservableProperty] private string _addSectionTitle = string.Empty;
-    [ObservableProperty] private string _nameLabel = string.Empty;
+    [ObservableProperty] private string _removeButtonLabel = string.Empty;
+    [ObservableProperty] private string _runAllButtonLabel = string.Empty;
+    [ObservableProperty] private string _runSelectedButtonLabel = string.Empty;
+    [ObservableProperty] private string _selectedBackupType = string.Empty;
+    [ObservableProperty] private BackupJobItemViewModel? _selectedJob;
     [ObservableProperty] private string _sourceLabel = string.Empty;
+    private IStorageProvider? _storageProvider;
     [ObservableProperty] private string _targetLabel = string.Empty;
     [ObservableProperty] private string _typeLabel = string.Empty;
-    [ObservableProperty] private string _browseSourceLabel = string.Empty;
-    [ObservableProperty] private string _browseTargetLabel = string.Empty;
-    [ObservableProperty] private string _addButtonLabel = string.Empty;
-    [ObservableProperty] private string _removeButtonLabel = string.Empty;
-    [ObservableProperty] private string _runSelectedButtonLabel = string.Empty;
-    [ObservableProperty] private string _runAllButtonLabel = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="JobsViewModel" /> class.
@@ -123,13 +123,15 @@ public partial class JobsViewModel : ViewModelBase
 
         if (string.IsNullOrWhiteSpace(NewSourceDirectory))
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Gui.Error.SourceRequired", "Error: Source directory is required");
+            _statusBar.StatusMessage =
+                _uiTextService.Get("Gui.Error.SourceRequired", "Error: Source directory is required");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(NewTargetDirectory))
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Gui.Error.TargetRequired", "Error: Target directory is required");
+            _statusBar.StatusMessage =
+                _uiTextService.Get("Gui.Error.TargetRequired", "Error: Target directory is required");
             return;
         }
 
@@ -276,7 +278,7 @@ public partial class JobsViewModel : ViewModelBase
                 if (stoppedByBusinessSoftware)
                     break;
 
-                _statusBar.OverallProgress = ((i + 1) / (double)totalJobs) * 100;
+                _statusBar.OverallProgress = (i + 1) / (double)totalJobs * 100;
             }
 
             if (!stoppedByBusinessSoftware)
@@ -364,7 +366,11 @@ public partial class JobsViewModel : ViewModelBase
             await Task.Run(job.StartBackup);
 
             if (!job.WasStoppedByBusinessSoftware)
+            {
+                _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupAsFinished",
+                    "Backup '{0}' finished.", job.Name);
                 return false;
+            }
 
             _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupStoppedByBusinessSoftware",
                 "Backup '{0}' stopped: business software is running", job.Name);
@@ -386,15 +392,13 @@ public partial class JobsViewModel : ViewModelBase
         if (sender is not BackupJob job)
             return;
 
-        Dispatcher.UIThread.Post(() =>
-        {
-            _statusBar.StatusMessage =
-                $"{_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id, job.Name)} " +
-                $"({job.CurrentFileIndex} / {job.FilesCount} files) - " +
-                $"({Math.Round(job.TransferredSize / 1048576.0)} / {Math.Round(job.TotalSize / 1048576.0)} MB)";
 
-            _statusBar.OverallProgress = job.CurrentProgress;
-        });
+        _statusBar.StatusMessage =
+            $"{_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id, job.Name)} " +
+            $"({job.CurrentFileIndex} / {job.FilesCount} files) - " +
+            $"({Math.Round(job.TransferredSize / 1048576.0)} / {Math.Round(job.TotalSize / 1048576.0)} MB)";
+
+        _statusBar.OverallProgress = job.CurrentProgress;
     }
 
     /// <summary>

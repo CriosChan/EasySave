@@ -1,9 +1,7 @@
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Avalonia.Platform.Storage;
 using EasySave.Data.Configuration;
-using EasySave.Models.Backup.Interfaces;
-using EasySave.Models.BusinessSoftware;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
 
@@ -15,15 +13,26 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class MainWindowViewModel : ViewModelBase
 {
+    /// <summary>
+    ///     Supported in-window screens.
+    /// </summary>
+    public enum ViewScreen
+    {
+        Main,
+        Settings,
+        SoftwareCatalog,
+        AddedSoftware
+    }
+
     private readonly IUiTextService _uiTextService;
+    [ObservableProperty] private string _backButtonLabel = string.Empty;
+    [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
+    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = string.Empty;
+    [ObservableProperty] private string _menuLabel = string.Empty;
+    [ObservableProperty] private string _menuSettingsItemLabel = string.Empty;
     private ViewScreen _previousScreen = ViewScreen.Main;
 
     [ObservableProperty] private string _windowTitle = string.Empty;
-    [ObservableProperty] private string _menuLabel = string.Empty;
-    [ObservableProperty] private string _menuSettingsItemLabel = string.Empty;
-    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = string.Empty;
-    [ObservableProperty] private string _backButtonLabel = string.Empty;
-    [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -219,16 +228,5 @@ public partial class MainWindowViewModel : ViewModelBase
     private void SetCurrentScreen(ViewScreen screen)
     {
         CurrentScreen = screen;
-    }
-
-    /// <summary>
-    ///     Supported in-window screens.
-    /// </summary>
-    public enum ViewScreen
-    {
-        Main,
-        Settings,
-        SoftwareCatalog,
-        AddedSoftware
     }
 }

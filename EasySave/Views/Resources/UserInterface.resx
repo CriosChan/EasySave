@@ -279,4 +279,19 @@
     <data name="Gui.BusinessSoftware.Status.Removed" xml:space="preserve">
         <value>Business software removed from blocker list.</value>
     </data>
+    <data name="Gui.Settings.CryptoSoftKey" xml:space="preserve">
+        <value>CryptoSoft key.</value>
+    </data>
+    <data name="Gui.Status.BackupAsFinished" xml:space="preserve">
+        <value>Backup '{0}' finished.</value>
+    </data>
+    <data name="Gui.Tooltip.DeleteExtension" xml:space="preserve">
+        <value>Remove extension.</value>
+    </data>
+    <data name="Gui.AddExtension" xml:space="preserve">
+        <value>Add Extension</value>
+    </data>
+    <data name="Gui.Settings.ExtensionToCrypt" xml:space="preserve">
+        <value>Extension to crypt</value>
+    </data>
 </root>

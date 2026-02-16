@@ -4,7 +4,7 @@
              RequestedThemeVariant="Default">
     <Application.Styles>
         <FluentTheme />
-        <StyleInclude Source="Views/Styles/MainStyles.axaml"></StyleInclude>
+        <StyleInclude Source="Views/Styles/MainStyles.axaml" />
     </Application.Styles>
     <Application.Resources>
         <SolidColorBrush x:Key="PrimaryBackground">#222831</SolidColorBrush>

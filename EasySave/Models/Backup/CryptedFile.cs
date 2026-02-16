@@ -53,7 +53,7 @@ public class CryptedFile : IFile
         process.WaitForExit();
         sw.Stop();
         elapsedMs = sw.ElapsedMilliseconds; // Get elapsed time in milliseconds
-        LogEntry log = new LogEntry
+        var log = new LogEntry
         {
             BackupName = BackupName,
             SourcePath = SourceFile,
@@ -61,16 +61,12 @@ public class CryptedFile : IFile
             FileSizeBytes = fileSize,
             TransferTimeMs = elapsedMs,
             ErrorMessage = errorMessage, // Log any error messages (currently unused)
-            CryptingTimeMs = process.ExitCode,
+            CryptingTimeMs = process.ExitCode
         };
         if (process.ExitCode != 0)
-        {
             log.CryptingTimeMs = process.ExitCode;
-        }
         else
-        {
             log.CryptingTimeMs = elapsedMs;
-        }
         logger.Log(log);
     }
 

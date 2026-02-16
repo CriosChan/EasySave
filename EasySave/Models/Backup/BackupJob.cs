@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using EasySave.Core.Models;
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.Data.Configuration;
 using EasySave.Models.State;
 using EasySave.Models.Utils;
 
@@ -9,6 +10,9 @@ namespace EasySave.Models.Backup;
 
 public class BackupJob
 {
+    [JsonIgnore] public long TotalSize;
+    [JsonIgnore] public long TransferredSize;
+
     /// <summary>
     ///     Initializes a new instance of the BackupJob class with an ID.
     /// </summary>
@@ -56,6 +60,7 @@ public class BackupJob
     [JsonIgnore] public List<IFile> Files { get; private set; } = []; // List of files to backup
     [JsonIgnore] public int CurrentFileIndex { get; private set; } // Index of the currently processed file
     [JsonIgnore] public int FilesCount { get; private set; }
+
     [JsonIgnore]
     public double CurrentProgress
     {
@@ -66,19 +71,19 @@ public class BackupJob
             OnProgressChanged();
         }
     } // Progress percentage of the backup job
-    [JsonIgnore] public long TotalSize;
-    [JsonIgnore] public long TransferredSize;
 
     /// <summary>
     ///     Gets or sets the monitor used to detect business software activity.
     ///     Exposed for testability and dependency inversion.
     /// </summary>
-    [JsonIgnore] public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
+    [JsonIgnore]
+    public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
 
     /// <summary>
     ///     Gets a value indicating whether the current job run was stopped because business software was detected.
     /// </summary>
-    [JsonIgnore] public bool WasStoppedByBusinessSoftware { get; private set; }
+    [JsonIgnore]
+    public bool WasStoppedByBusinessSoftware { get; private set; }
 
     public event EventHandler? ProgressChanged;
 
@@ -118,6 +123,8 @@ public class BackupJob
     public void StartBackup()
     {
         WasStoppedByBusinessSoftware = false;
+        // Save Key to file for cryptosoft just in case file doesn't exists
+        CryptoSoftConfiguration.Load().Save();
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
         var businessSoftwareStopHandler = new BusinessSoftwareStopHandler(BusinessSoftwareMonitor, Name);

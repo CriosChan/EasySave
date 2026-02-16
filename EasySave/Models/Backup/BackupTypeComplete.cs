@@ -38,13 +38,9 @@ public class BackupTypeComplete : IBackupTypeSelector
         {
             var targetPath = file.Replace(_sourceDir, _targetDir);
             if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file).TrimStart('.')))
-            {
                 filesToBackup.Add(new CryptedFile(file, targetPath, _backupName));
-            }
             else
-            { 
                 filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Create a NormalFile instance
-            }
         }
 
         return filesToBackup; // Return the list of files to be backed up
