@@ -270,4 +270,7 @@
     <data name="Gui.BusinessSoftware.Status.Removed" xml:space="preserve">
         <value>Logiciel métier supprimé de la liste de blocage.</value>
     </data>
+    <data name="Gui.Settings.CryptoSoftKey" xml:space="preserve">
+        <value>Clé CryptoSoft.</value>
+    </data>
 </root>

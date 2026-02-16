@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using EasySave.Core.Models;
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.Data.Configuration;
 using EasySave.Models.State;
 using EasySave.Models.Utils;
 
@@ -103,6 +104,8 @@ public class BackupJob
     public void StartBackup()
     {
         WasStoppedByBusinessSoftware = false;
+        // Save Key to file for cryptosoft just in case file doesn't exists
+        CryptoSoftConfiguration.Load().Save();
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
         var businessSoftwareStopHandler = new BusinessSoftwareStopHandler(BusinessSoftwareMonitor, Name);

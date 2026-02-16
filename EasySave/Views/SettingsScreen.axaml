@@ -67,6 +67,16 @@
                         </WrapPanel>
                     </StackPanel>
                 </Border>
+                
+                <Border Classes="main-section">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="{Binding Settings.SettingsCryptoSoftKey}"
+                                   Classes="section-title" />
+                        <StackPanel Orientation="Vertical">
+                            <TextBox Text="{Binding Settings.CryptoSoftKey}" HorizontalContentAlignment="Stretch"></TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
 

@@ -279,4 +279,7 @@
     <data name="Gui.BusinessSoftware.Status.Removed" xml:space="preserve">
         <value>Business software removed from blocker list.</value>
     </data>
+    <data name="Gui.Settings.CryptoSoftKey" xml:space="preserve">
+        <value>CryptoSoft key.</value>
+    </data>
 </root>

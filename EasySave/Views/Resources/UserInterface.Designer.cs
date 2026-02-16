@@ -177,6 +177,330 @@ namespace EasySave.Views.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added Business Software.
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Added_Title {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Added.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Selected.
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Button_AddSelected {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Button.AddSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Selected.
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Button_RemoveSelected {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Button.RemoveSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Added Software.
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Button_ViewAdded {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Button.ViewAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Business Software.
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Catalog_Title {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Catalog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search software.
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Search_Label {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Search.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type to filter software.
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Search_Placeholder {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Search.Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business software removed from blocker list..
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Status_Removed {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Status.Removed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business software list updated..
+        /// </summary>
+        internal static string Gui_BusinessSoftware_Status_Updated {
+            get {
+                return ResourceManager.GetString("Gui.BusinessSoftware.Status.Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Job.
+        /// </summary>
+        internal static string Gui_Button_AddJob {
+            get {
+                return ResourceManager.GetString("Gui.Button.AddJob", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse source....
+        /// </summary>
+        internal static string Gui_Button_BrowseSource {
+            get {
+                return ResourceManager.GetString("Gui.Button.BrowseSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse target....
+        /// </summary>
+        internal static string Gui_Button_BrowseTarget {
+            get {
+                return ResourceManager.GetString("Gui.Button.BrowseTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        internal static string Gui_Button_English {
+            get {
+                return ResourceManager.GetString("Gui.Button.English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Français.
+        /// </summary>
+        internal static string Gui_Button_French {
+            get {
+                return ResourceManager.GetString("Gui.Button.French", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to JSON.
+        /// </summary>
+        internal static string Gui_Button_Json {
+            get {
+                return ResourceManager.GetString("Gui.Button.Json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Selected.
+        /// </summary>
+        internal static string Gui_Button_RemoveSelected {
+            get {
+                return ResourceManager.GetString("Gui.Button.RemoveSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run All Jobs.
+        /// </summary>
+        internal static string Gui_Button_RunAllJobs {
+            get {
+                return ResourceManager.GetString("Gui.Button.RunAllJobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run Selected Job.
+        /// </summary>
+        internal static string Gui_Button_RunSelectedJob {
+            get {
+                return ResourceManager.GetString("Gui.Button.RunSelectedJob", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML.
+        /// </summary>
+        internal static string Gui_Button_Xml {
+            get {
+                return ResourceManager.GetString("Gui.Button.Xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Features.
+        /// </summary>
+        internal static string Gui_Menu_Features {
+            get {
+                return ResourceManager.GetString("Gui.Menu.Features", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Business Software.
+        /// </summary>
+        internal static string Gui_Menu_ManageBusinessSoftware {
+            get {
+                return ResourceManager.GetString("Gui.Menu.ManageBusinessSoftware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Menu.
+        /// </summary>
+        internal static string Gui_Menu_Root {
+            get {
+                return ResourceManager.GetString("Gui.Menu.Root", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string Gui_Menu_Settings {
+            get {
+                return ResourceManager.GetString("Gui.Menu.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        internal static string Gui_Navigation_Back {
+            get {
+                return ResourceManager.GetString("Gui.Navigation.Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CryptoSoft key..
+        /// </summary>
+        internal static string Gui_Settings_CryptoSoftKey {
+            get {
+                return ResourceManager.GetString("Gui.Settings.CryptoSoftKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This settings screen is ready for future parameters..
+        /// </summary>
+        internal static string Gui_Settings_Hint_FutureExtension {
+            get {
+                return ResourceManager.GetString("Gui.Settings.Hint.FutureExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string Gui_Settings_Label {
+            get {
+                return ResourceManager.GetString("Gui.Settings.Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Settings.
+        /// </summary>
+        internal static string Gui_Settings_Screen_Title {
+            get {
+                return ResourceManager.GetString("Gui.Settings.Screen.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string Gui_Settings_Section_Language {
+            get {
+                return ResourceManager.GetString("Gui.Settings.Section.Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Type.
+        /// </summary>
+        internal static string Gui_Settings_Section_LogType {
+            get {
+                return ResourceManager.GetString("Gui.Settings.Section.LogType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup &apos;{0}&apos; stopped: business software is running.
+        /// </summary>
+        internal static string Gui_Status_BackupStoppedByBusinessSoftware {
+            get {
+                return ResourceManager.GetString("Gui.Status.BackupStoppedByBusinessSoftware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language changed to English.
+        /// </summary>
+        internal static string Gui_Status_LanguageChangedEn {
+            get {
+                return ResourceManager.GetString("Gui.Status.LanguageChangedEn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language changed to French.
+        /// </summary>
+        internal static string Gui_Status_LanguageChangedFr {
+            get {
+                return ResourceManager.GetString("Gui.Status.LanguageChangedFr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log type set to JSON.
+        /// </summary>
+        internal static string Gui_Status_LogTypeJsonSet {
+            get {
+                return ResourceManager.GetString("Gui.Status.LogTypeJsonSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log type set to XML.
+        /// </summary>
+        internal static string Gui_Status_LogTypeXmlSet {
+            get {
+                return ResourceManager.GetString("Gui.Status.LogTypeXmlSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EasySave - Backup Manager.
+        /// </summary>
+        internal static string Gui_Window_Title {
+            get {
+                return ResourceManager.GetString("Gui.Window.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Id | Name                 | Type         | Source -&gt; Target.
         /// </summary>
         internal static string Jobs_Columns {

@@ -2,103 +2,44 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
-namespace EasySave.Data.Configuration;
+namespace EasySave.Models.Data.Configuration;
 
 /// <summary>
 ///     Loads and exposes application configuration (read/write).
 /// </summary>
-public sealed class ApplicationConfiguration
+public sealed class CryptoSoftConfiguration
 {
     // Singleton instance
-    private static ApplicationConfiguration _instance;
+    private static CryptoSoftConfiguration _instance;
     private static readonly object _lock = new();
 
     /// <summary>
     ///     Private constructor to create the singleton object.
     /// </summary>
-    private ApplicationConfiguration()
+    private CryptoSoftConfiguration()
     {
     }
 
     // Properties
-    public string LogPath {
+    public string Key {
         get;
         set
         {
             field = value;
             Save();
         }
-    } = "./log";
-
-    public string JobConfigPath
-    {
-        get;
-        set
-        {
-            field = value;
-            Save();
-        }
-    } = "./config";
-
-    public string Localization {
-        get;
-        set
-        {
-            field = value;
-            Save();
-        }
-    } = "";
-
-    public string LogType {
-        get;
-        set
-        {
-            field = value;
-            Save();
-        }
-    } = "json";
-
-    public string[] BusinessSoftwareProcessNames
-    {
-        get;
-        set
-        {
-            field = value
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .Select(name => name.Trim())
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
-                .ToArray();
-            Save(); // Automatically save when BusinessSoftwareProcessNames is set
-        }
-    } = Array.Empty<string>();
-
-    public List<string> ExtensionToCrypt {
-        get;
-        set
-        {
-            field = value;
-            Save();
-        }
-    } = [];
-
+    } = "value";
+    
     // Property to hold the configuration file path but not serialized
     [JsonIgnore] // Ensure to ignore this property
-    public string ConfigFile {
-        get;
-        set
-        {
-            field = value;
-            Save();
-        }
-    } = "appsettings.json";
+    public string ConfigFile { get; set; } = "Tools/appsettings.json";
 
     /// <summary>
     ///     Loads configuration from a JSON file and returns the singleton instance.
     /// </summary>
     /// <param name="configFile">Configuration file name.</param>
     /// <returns>Loaded configuration.</returns>
-    public static ApplicationConfiguration Load(string configFile = "appsettings.json")
+    public static CryptoSoftConfiguration Load(string configFile = "Tools/appsettings.json")
     {
         // Double-checked locking for thread safety
         if (_instance == null)
@@ -106,6 +47,7 @@ public sealed class ApplicationConfiguration
             {
                 if (_instance == null)
                 {
+                    // Vérifiez si le fichier de configuration existe déjà
                     string filePath = Path.Combine(AppContext.BaseDirectory, configFile);
                     if (!File.Exists(filePath))
                     {
@@ -119,7 +61,7 @@ public sealed class ApplicationConfiguration
                         .Build();
 
                     // Create or get the configuration object
-                    _instance = new ApplicationConfiguration
+                    _instance = new CryptoSoftConfiguration
                     {
                         ConfigFile = configFile // Set the config file path
                     };

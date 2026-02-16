@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
+using EasySave.Models.Data.Configuration;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
 
@@ -19,6 +20,8 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty] private string _jsonButtonLabel = string.Empty;
     [ObservableProperty] private string _settingsLanguageSectionTitle = string.Empty;
     [ObservableProperty] private string _settingsLogTypeSectionTitle = string.Empty;
+    [ObservableProperty] private string _settingsCryptoSoftKey = string.Empty;
+    [ObservableProperty] private string _cryptoSoftKey = CryptoSoftConfiguration.Load().Key;
 
     [ObservableProperty] private string _settingsScreenTitle = string.Empty;
     [ObservableProperty] private string _xmlButtonLabel = string.Empty;
@@ -46,6 +49,7 @@ public partial class SettingsViewModel : ViewModelBase
         EnglishButtonLabel = _uiTextService.Get("Gui.Button.English", "English");
         JsonButtonLabel = _uiTextService.Get("Gui.Button.Json", "JSON");
         XmlButtonLabel = _uiTextService.Get("Gui.Button.Xml", "XML");
+        SettingsCryptoSoftKey = _uiTextService.Get("Gui.Settings.CryptoSoftKey", "CryptoSoft Key");
     }
 
     /// <summary>
@@ -91,4 +95,10 @@ public partial class SettingsViewModel : ViewModelBase
         ApplicationConfiguration.Load().LogType = "xml";
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LogTypeXmlSet", "Log type set to XML");
     }
+    
+    partial void OnCryptoSoftKeyChanged(string value)
+    {
+        CryptoSoftConfiguration.Load().Key = value;
+    }
+
 }
