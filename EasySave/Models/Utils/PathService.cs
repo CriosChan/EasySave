@@ -28,6 +28,61 @@ public static class PathService
     }
 
     /// <summary>
+    ///     Checks if a directory path is accessible (e.g., not a disconnected external drive).
+    /// </summary>
+    /// <param name="path">Path to check.</param>
+    /// <param name="errorMessage">Error message if the path is not accessible.</param>
+    /// <returns>True if the path is accessible.</returns>
+    public static bool IsDirectoryAccessible(string path, out string errorMessage)
+    {
+        errorMessage = string.Empty;
+        
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            errorMessage = "Path is empty or null.";
+            return false;
+        }
+
+        var normalized = NormalizeUserPath(path);
+
+        try
+        {
+            // First check if directory exists
+            if (!Directory.Exists(normalized))
+            {
+                errorMessage = $"Directory does not exist: {normalized}";
+                return false;
+            }
+
+            // Try to access the directory to ensure it's really accessible
+            // This will fail if it's a disconnected drive or inaccessible network location
+            _ = Directory.GetFiles(normalized, "*", SearchOption.TopDirectoryOnly);
+            
+            return true;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            errorMessage = $"Access denied to directory: {normalized}";
+            return false;
+        }
+        catch (DirectoryNotFoundException)
+        {
+            errorMessage = $"Directory not found or disconnected: {normalized}";
+            return false;
+        }
+        catch (IOException ex)
+        {
+            errorMessage = $"I/O error accessing directory: {normalized} - {ex.Message}";
+            return false;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error accessing directory: {normalized} - {ex.Message}";
+            return false;
+        }
+    }
+
+    /// <summary>
     ///     Converts a path to an absolute path while respecting UNC paths.
     /// </summary>
     /// <param name="path">Path to convert.</param>
