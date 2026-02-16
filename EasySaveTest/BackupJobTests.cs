@@ -1,4 +1,4 @@
-﻿﻿using EasySave.Core.Models;
+﻿using EasySave.Core.Models;
 using EasySave.Models.Backup;
 
 namespace EasySaveTest;
