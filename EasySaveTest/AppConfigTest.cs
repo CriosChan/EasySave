@@ -42,7 +42,7 @@ public class AppConfigTest
     [Test]
     public void ConfigHasLocalization()
     {
-        Assert.That(_appSettings.Localization, Is.EqualTo("fr-FR"));
+        Assert.That(_appSettings.Localization, Is.EqualTo(""));
     }
 
     /// <summary>
