@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 namespace EasyLog;
 
 /// <summary>
@@ -5,6 +7,7 @@ namespace EasyLog;
 /// </summary>
 public abstract class AbstractLogger<T>(string logDirectory, string extension)
 {
+    private static readonly ConcurrentDictionary<string, object> FileLocks = new();
     /// <summary>
     ///     Writes a log entry of type <typeparamref name="T" /> to a log file.
     /// </summary>
@@ -22,8 +25,12 @@ public abstract class AbstractLogger<T>(string logDirectory, string extension)
         Directory.CreateDirectory(logDirectory);
         // Make us able to use the same name when writting the file.
         var logFilePath = Path.Join(logDirectory, now.ToString("yyyy-MM-dd") + "." + extension);
-        // Write in the log file.
-        File.AppendAllText(logFilePath, Serialize(log) + Environment.NewLine);
+        // Write in the log file (thread-safe per file).
+        var fileLock = FileLocks.GetOrAdd(logFilePath, _ => new object());
+        lock (fileLock)
+        {
+            File.AppendAllText(logFilePath, Serialize(log) + Environment.NewLine);
+        }
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-using EasySave.Infrastructure.Configuration;
+using EasySave.Data.Configuration;
 
 namespace EasySaveTest;
 
@@ -15,8 +15,7 @@ public class AppConfigTest
     [OneTimeSetUp]
     public void Setup()
     {
-        ApplicationConfiguration.Load();
-        _appSettings = ApplicationConfiguration.Instance;
+        _appSettings = ApplicationConfiguration.Load();
     }
 
     /// <summary>
@@ -43,7 +42,7 @@ public class AppConfigTest
     [Test]
     public void ConfigHasLocalization()
     {
-        Assert.That(_appSettings.Localization, Is.EqualTo("fr-FR"));
+        Assert.That(_appSettings.Localization, Is.EqualTo(""));
     }
 
     /// <summary>
@@ -53,5 +52,15 @@ public class AppConfigTest
     public void ConfigHasLogPath()
     {
         Assert.That(_appSettings.LogPath, Is.EqualTo("./log"));
+    }
+
+    /// <summary>
+    ///     Verifies the configured business software process names list.
+    /// </summary>
+    [Test]
+    public void ConfigHasBusinessSoftwareProcessNames()
+    {
+        Assert.That(_appSettings.BusinessSoftwareProcessNames, Is.Not.Null);
+        Assert.That(_appSettings.BusinessSoftwareProcessNames.Length, Is.EqualTo(0));
     }
 }

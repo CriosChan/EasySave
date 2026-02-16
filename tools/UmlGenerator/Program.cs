@@ -27,23 +27,28 @@ internal static class Program
 
     private static NullabilityInfoContext? _nullabilityContext;
 
-    private static int Main()
+    private static int Main(string[] args)
     {
         _nullabilityContext = TryCreateNullabilityContext();
 
-        string root = FindSolutionRoot(Directory.GetCurrentDirectory());
-        string outDir = Path.Combine(root, "docs", "uml");
-        Directory.CreateDirectory(outDir);
-        string outFile = Path.Combine(outDir, "EasySave-full.puml");
+        if (!TryParseArgs(args, out var options))
+            return 1;
 
-        var assemblyPaths = new[]
+        string root = FindSolutionRoot(Directory.GetCurrentDirectory());
+        string outFile = options.OutputPath ??
+                         Path.Combine(root, "docs", "uml", "EasySave-full.puml");
+        string outDir = Path.GetDirectoryName(outFile) ?? root;
+        Directory.CreateDirectory(outDir);
+
+        var assemblyPaths = ResolveAssemblyPaths(root, options.Configuration, new[] { "EasySave", "EasyLog" });
+        if (assemblyPaths.Count == 0)
         {
-            Path.Combine(root, "EasySave", "bin", "Debug", "net10.0", "EasySave.dll"),
-            Path.Combine(root, "EasyLog", "bin", "Debug", "net10.0", "EasyLog.dll")
-        };
+            Console.Error.WriteLine("No assemblies found. Build first (e.g., dotnet build -c " +
+                                    options.Configuration + ").");
+            return 1;
+        }
 
         var assemblies = assemblyPaths
-            .Where(File.Exists)
             .Select(Assembly.LoadFrom)
             .ToList();
 
@@ -254,9 +259,92 @@ internal static class Program
         sb.AppendLine();
         sb.AppendLine("@enduml");
 
-        File.WriteAllText(outFile, sb.ToString(), Encoding.ASCII);
+        File.WriteAllText(outFile, sb.ToString(), new UTF8Encoding(false));
         Console.WriteLine(outFile);
         return 0;
+    }
+
+    private sealed record Options(string Configuration, string? OutputPath);
+
+    private static bool TryParseArgs(string[] args, out Options options)
+    {
+        string configuration = "Debug";
+        string? output = null;
+
+        for (int i = 0; i < args.Length; i++)
+        {
+            string arg = args[i];
+            switch (arg)
+            {
+                case "-c":
+                case "--config":
+                    if (i + 1 >= args.Length)
+                    {
+                        PrintUsage();
+                        options = new Options(configuration, output);
+                        return false;
+                    }
+
+                    configuration = args[++i];
+                    break;
+                case "--out":
+                    if (i + 1 >= args.Length)
+                    {
+                        PrintUsage();
+                        options = new Options(configuration, output);
+                        return false;
+                    }
+
+                    output = args[++i];
+                    break;
+                case "-h":
+                case "--help":
+                    PrintUsage();
+                    options = new Options(configuration, output);
+                    return false;
+            }
+        }
+
+        options = new Options(configuration, output);
+        return true;
+    }
+
+    private static void PrintUsage()
+    {
+        Console.WriteLine("Usage:");
+        Console.WriteLine("  dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -c <CONFIG> [--out <FILE>]");
+        Console.WriteLine();
+        Console.WriteLine("Options:");
+        Console.WriteLine("  -c, --config   Build configuration to scan (default: Debug)");
+        Console.WriteLine("  --out          Output .puml file (default: docs/uml/EasySave-full.puml)");
+    }
+
+    private static List<string> ResolveAssemblyPaths(string root, string configuration, IEnumerable<string> projects)
+    {
+        var results = new List<string>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string project in projects)
+        {
+            string binDir = Path.Combine(root, project, "bin", configuration);
+            if (!Directory.Exists(binDir))
+                continue;
+
+            var candidates = Directory.GetFiles(binDir, project + ".dll", SearchOption.AllDirectories);
+            if (candidates.Length == 0)
+                continue;
+
+            string latest = candidates
+                .Select(path => new FileInfo(path))
+                .OrderByDescending(info => info.LastWriteTimeUtc)
+                .First()
+                .FullName;
+
+            if (seen.Add(latest))
+                results.Add(latest);
+        }
+
+        return results;
     }
 
     private static string FindSolutionRoot(string start)
