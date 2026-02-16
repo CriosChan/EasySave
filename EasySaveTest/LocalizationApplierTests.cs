@@ -25,9 +25,7 @@ public class LocalizationApplierTests
     [Test]
     public void Apply_WithValidCulture_SetsCulture()
     {
-        var applier = new LocalizationApplier();
-
-        applier.Apply("fr-FR");
+        LocalizationApplier.Apply("fr-FR");
 
         Assert.Multiple(() =>
         {
@@ -39,9 +37,7 @@ public class LocalizationApplierTests
     [Test]
     public void Apply_WithEnglishCulture_SetsCulture()
     {
-        var applier = new LocalizationApplier();
-
-        applier.Apply("en-US");
+        LocalizationApplier.Apply("en-US");
 
         Assert.Multiple(() =>
         {
@@ -53,33 +49,25 @@ public class LocalizationApplierTests
     [Test]
     public void Apply_WithEmptyString_DoesNotThrow()
     {
-        var applier = new LocalizationApplier();
-
-        Assert.DoesNotThrow(() => applier.Apply(""));
+        Assert.DoesNotThrow(() => LocalizationApplier.Apply(""));
     }
 
     [Test]
     public void Apply_WithWhitespace_DoesNotThrow()
     {
-        var applier = new LocalizationApplier();
-
-        Assert.DoesNotThrow(() => applier.Apply("   "));
+        Assert.DoesNotThrow(() => LocalizationApplier.Apply("   "));
     }
 
     [Test]
     public void Apply_WithNull_DoesNotThrow()
     {
-        var applier = new LocalizationApplier();
-
-        Assert.DoesNotThrow(() => applier.Apply(null!));
+        Assert.DoesNotThrow(() => LocalizationApplier.Apply(null!));
     }
 
     [Test]
     public void Apply_WithInvalidCulture_DoesNotThrow()
     {
-        var applier = new LocalizationApplier();
-
-        Assert.DoesNotThrow(() => applier.Apply("invalid-culture"));
+        Assert.DoesNotThrow(() => LocalizationApplier.Apply("invalid-culture"));
     }
 }
 
