@@ -23,11 +23,7 @@ namespace EasySave.Data.Configuration
         public string LogType
         {
             get;
-            set
-            {
-                field = value;
-                Save();
-            }
+            set;
         } = "json";
 
         public string[] BusinessSoftwareProcessNames
@@ -44,8 +40,7 @@ namespace EasySave.Data.Configuration
                 Save(); // Automatically save when BusinessSoftwareProcessNames is set
             }
         } = Array.Empty<string>();
-        public string LogType { get; init; } = "json"; // Default log type format
-        public List<string> ExtensionToCrypt { get; init; } = [];
+        public List<string> ExtensionToCrypt { get; set; } = [];
 
         // Property to hold the configuration file path but not serialized
         [JsonIgnore] // Ensure to ignore this property
