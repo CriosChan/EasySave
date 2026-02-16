@@ -1,4 +1,4 @@
-﻿using EasySave.Models.Utils;
+﻿﻿using EasySave.Models.Utils;
 
 namespace EasySaveTest;
 
@@ -138,6 +138,75 @@ public class PathServiceTests
         {
             Assert.That(result, Does.Not.Contain("'"));
             Assert.That(Path.IsPathRooted(result), Is.True);
+        });
+    }
+
+    [Test]
+    public void IsDirectoryAccessible_WithAccessibleDirectory_ReturnsTrue()
+    {
+        var tempDir = Path.GetTempPath();
+
+        var result = PathService.IsDirectoryAccessible(tempDir, out var errorMessage);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.True);
+            Assert.That(errorMessage, Is.Empty);
+        });
+    }
+
+    [Test]
+    public void IsDirectoryAccessible_WithNonExistentDirectory_ReturnsFalse()
+    {
+        var nonExistentPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+        var result = PathService.IsDirectoryAccessible(nonExistentPath, out var errorMessage);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.False);
+            Assert.That(errorMessage, Is.Not.Empty);
+            Assert.That(errorMessage, Does.Contain("does not exist"));
+        });
+    }
+
+    [Test]
+    public void IsDirectoryAccessible_WithEmptyPath_ReturnsFalse()
+    {
+        var result = PathService.IsDirectoryAccessible("", out var errorMessage);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.False);
+            Assert.That(errorMessage, Is.Not.Empty);
+            Assert.That(errorMessage, Does.Contain("empty"));
+        });
+    }
+
+    [Test]
+    public void IsDirectoryAccessible_WithNullPath_ReturnsFalse()
+    {
+        var result = PathService.IsDirectoryAccessible(null!, out var errorMessage);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.False);
+            Assert.That(errorMessage, Is.Not.Empty);
+        });
+    }
+
+    [Test]
+    public void IsDirectoryAccessible_WithDisconnectedDrive_ReturnsFalse()
+    {
+        // Simule un disque déconnecté (Z: est généralement non utilisé)
+        var disconnectedDrive = "Z:\\SomeFolder";
+
+        var result = PathService.IsDirectoryAccessible(disconnectedDrive, out var errorMessage);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.False);
+            Assert.That(errorMessage, Is.Not.Empty);
         });
     }
 }

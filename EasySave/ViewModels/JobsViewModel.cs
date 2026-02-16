@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using EasySave.Core.Models;
 using EasySave.Models.Backup;
 using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
@@ -139,10 +140,22 @@ public partial class JobsViewModel : ViewModelBase
             return;
         }
 
+        if (!PathService.IsDirectoryAccessible(NewSourceDirectory, out var sourceError))
+        {
+            _statusBar.StatusMessage = $"{_uiTextService.Get("Path.SourceNotAccessible", "Source directory is not accessible:")} {sourceError}";
+            return;
+        }
+
         if (!Directory.Exists(NewTargetDirectory))
         {
             _statusBar.StatusMessage = _uiTextService.Get("Path.TargetNotFound",
                 "Target directory does not exist. Please enter an existing directory.");
+            return;
+        }
+
+        if (!PathService.IsDirectoryAccessible(NewTargetDirectory, out var targetError))
+        {
+            _statusBar.StatusMessage = $"{_uiTextService.Get("Path.TargetNotAccessible", "Target directory is not accessible:")} {targetError}";
             return;
         }
 
@@ -325,6 +338,21 @@ public partial class JobsViewModel : ViewModelBase
     /// <returns>True when execution was stopped by business software.</returns>
     private async Task<bool> ExecuteJobCoreAsync(BackupJob job)
     {
+        // Verify that directories are accessible before starting
+        if (!PathService.IsDirectoryAccessible(job.SourceDirectory, out var sourceError))
+        {
+            _statusBar.StatusMessage = $"{_uiTextService.Get("Gui.Error.SourceNotAccessible", "Error: Source directory is not accessible")} (Job {job.Id}): {sourceError}";
+            Console.WriteLine($"[ERROR] Job {job.Id} - {job.Name}: Source directory error - {sourceError}");
+            throw new Exception($"Source directory error - {sourceError}");
+        }
+
+        if (!PathService.IsDirectoryAccessible(job.TargetDirectory, out var targetError))
+        {
+            _statusBar.StatusMessage = $"{_uiTextService.Get("Gui.Error.TargetNotAccessible", "Error: Target directory is not accessible")} (Job {job.Id}): {targetError}";
+            Console.WriteLine($"[ERROR] Job {job.Id} - {job.Name}: Target directory error - {targetError}");
+            throw new Exception($"Target directory error - {targetError}");
+        }
+
         _statusBar.StatusMessage = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id,
             job.Name);
 

@@ -83,12 +83,31 @@ public class BackupJob
     public event EventHandler? ProgressChanged;
 
     /// <summary>
-    ///     Checks if the source and target directories exist.
+    ///     Checks if the source and target directories exist and are accessible.
     /// </summary>
-    /// <returns>True if both directories exist, otherwise false.</returns>
-    private bool Check()
+    /// <param name="errorMessage">Error message if directories are not accessible.</param>
+    /// <returns>True if both directories exist and are accessible, otherwise false.</returns>
+    private bool Check(out string errorMessage)
     {
-        return Directory.Exists(SourceDirectory) && Directory.Exists(TargetDirectory);
+        errorMessage = string.Empty;
+        
+        // Check source directory
+        if (!PathService.IsDirectoryAccessible(SourceDirectory, out var sourceError))
+        {
+            errorMessage = $"Source directory error: {sourceError}";
+            Console.WriteLine($"[ERROR] {errorMessage}");
+            return false;
+        }
+
+        // Check target directory
+        if (!PathService.IsDirectoryAccessible(TargetDirectory, out var targetError))
+        {
+            errorMessage = $"Target directory error: {targetError}";
+            Console.WriteLine($"[ERROR] {errorMessage}");
+            return false;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -102,8 +121,10 @@ public class BackupJob
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
         var businessSoftwareStopHandler = new BusinessSoftwareStopHandler(BusinessSoftwareMonitor, Name);
-        if (!Check())
+        
+        if (!Check(out var errorMessage))
         {
+            Console.WriteLine($"[ERROR] Backup job '{Name}' (ID: {Id}) failed: {errorMessage}");
             StateLogger.SetStateFailed(state);
             return;
         }
