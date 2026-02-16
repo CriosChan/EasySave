@@ -273,4 +273,16 @@
     <data name="Gui.Settings.CryptoSoftKey" xml:space="preserve">
         <value>Clé CryptoSoft.</value>
     </data>
+    <data name="Gui.Status.BackupAsFinished" xml:space="preserve">
+        <value>Sauvegarde '{0}' terminée.</value>
+    </data>
+    <data name="Gui.Tooltip.DeleteExtension" xml:space="preserve">
+        <value>Retirer l'extension.</value>
+    </data>
+    <data name="Gui.AddExtension" xml:space="preserve">
+        <value>Ajouter une extension</value>
+    </data>
+    <data name="Gui.Settings.ExtensionToCrypt" xml:space="preserve">
+        <value>Extension à chiffrer</value>
+    </data>
 </root>

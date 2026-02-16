@@ -177,6 +177,15 @@ namespace EasySave.Views.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Extension.
+        /// </summary>
+        internal static string Gui_AddExtension {
+            get {
+                return ResourceManager.GetString("Gui.AddExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Added Business Software.
         /// </summary>
         internal static string Gui_BusinessSoftware_Added_Title {
@@ -402,6 +411,15 @@ namespace EasySave.Views.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extension to crypt.
+        /// </summary>
+        internal static string Gui_Settings_ExtensionToCrypt {
+            get {
+                return ResourceManager.GetString("Gui.Settings.ExtensionToCrypt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This settings screen is ready for future parameters..
         /// </summary>
         internal static string Gui_Settings_Hint_FutureExtension {
@@ -447,6 +465,15 @@ namespace EasySave.Views.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backup &apos;{0}&apos; finished..
+        /// </summary>
+        internal static string Gui_Status_BackupAsFinished {
+            get {
+                return ResourceManager.GetString("Gui.Status.BackupAsFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup &apos;{0}&apos; stopped: business software is running.
         /// </summary>
         internal static string Gui_Status_BackupStoppedByBusinessSoftware {
@@ -488,6 +515,15 @@ namespace EasySave.Views.Resources {
         internal static string Gui_Status_LogTypeXmlSet {
             get {
                 return ResourceManager.GetString("Gui.Status.LogTypeXmlSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove extension..
+        /// </summary>
+        internal static string Gui_Tooltip_DeleteExtension {
+            get {
+                return ResourceManager.GetString("Gui.Tooltip.DeleteExtension", resourceCulture);
             }
         }
         

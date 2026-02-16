@@ -338,6 +338,8 @@ public partial class JobsViewModel : ViewModelBase
             await Task.Run(job.StartBackup);
 
             if (!job.WasStoppedByBusinessSoftware)
+                _uiTextService.Format("Gui.Status.BackupAsFinished",
+                    "Backup '{0}' finished.", job.Name);
                 return false;
 
             _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupStoppedByBusinessSoftware",

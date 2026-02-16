@@ -22,6 +22,11 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty] private string _settingsLanguageSectionTitle = string.Empty;
     [ObservableProperty] private string _settingsLogTypeSectionTitle = string.Empty;
     [ObservableProperty] private string _settingsCryptoSoftKey = string.Empty;
+    [ObservableProperty] private string _tooltipRemoveExtension = string.Empty;
+    [ObservableProperty] private string _addExtensionToList = string.Empty;
+    [ObservableProperty] private string _extensionToCrypt = string.Empty;
+
+    
     [ObservableProperty] private string _cryptoSoftKey = CryptoSoftConfiguration.Load().Key;
 
     [ObservableProperty] private string _settingsScreenTitle = string.Empty;
@@ -53,6 +58,9 @@ public partial class SettingsViewModel : ViewModelBase
         JsonButtonLabel = _uiTextService.Get("Gui.Button.Json", "JSON");
         XmlButtonLabel = _uiTextService.Get("Gui.Button.Xml", "XML");
         SettingsCryptoSoftKey = _uiTextService.Get("Gui.Settings.CryptoSoftKey", "CryptoSoft Key");
+        TooltipRemoveExtension = _uiTextService.Get("Gui.Tooltip.DeleteExtension", "Supprimer l'extension");
+        AddExtensionToList = _uiTextService.Get("Gui.AddExtension", "Add Extension");
+        ExtensionToCrypt = _uiTextService.Get("Gui.Settings.ExtensionToCrypt", "Extension to Crypt");
     }
 
     /// <summary>
