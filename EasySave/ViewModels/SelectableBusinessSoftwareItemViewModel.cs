@@ -7,6 +7,8 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class SelectableBusinessSoftwareItemViewModel : ObservableObject
 {
+    [ObservableProperty] private bool _isSelected;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="SelectableBusinessSoftwareItemViewModel" /> class.
     /// </summary>
@@ -32,8 +34,6 @@ public partial class SelectableBusinessSoftwareItemViewModel : ObservableObject
     ///     Gets a display label combining software name and process name.
     /// </summary>
     public string DisplayLabel => $"{DisplayName} ({ProcessName})";
-
-    [ObservableProperty] private bool _isSelected;
 
     /// <summary>
     ///     Raised whenever selection state changes.

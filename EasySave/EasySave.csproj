@@ -27,10 +27,10 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Tools\appsettings.json">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Tools\CryptoSoft.exe">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
@@ -41,8 +41,8 @@
             <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
         </EmbeddedResource>
         <EmbeddedResource Update="Views\Resources\UserInterface.resx">
-          <Generator>ResXFileCodeGenerator</Generator>
-          <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
 

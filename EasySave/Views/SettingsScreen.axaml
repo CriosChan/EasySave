@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="EasySave.Views.SettingsScreen"
+             xmlns:vm="using:EasySave.ViewModels"
+             x:DataType="vm:MainWindowViewModel">
+    <Grid
+        IsVisible="{Binding IsSettingsScreen}"
+        RowDefinitions="Auto,*"
+        RowSpacing="12">
+        <Border Grid.Row="0"
+                Padding="12"
+                CornerRadius="8"
+                Background="{DynamicResource SecondaryBackground}"
+                BorderBrush="{DynamicResource BorderLine}"
+                BorderThickness="1">
+            <Grid ColumnDefinitions="Auto,*"
+                  ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Content="{Binding BackButtonLabel}"
+                        Command="{Binding BackFromSettingsCommand}" />
+                <TextBlock Grid.Column="1"
+                           Text="{Binding Settings.SettingsScreenTitle}"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1"
+                Padding="12"
+                CornerRadius="8"
+                Background="{DynamicResource SecondaryBackground}"
+                BorderBrush="{DynamicResource BorderLine}"
+                BorderThickness="1">
+            <StackPanel Spacing="12">
+                <Border Classes="main-section">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="{Binding Settings.SettingsLanguageSectionTitle}"
+                                   Classes="section-title" />
+                        <WrapPanel>
+                            <Button Content="{Binding Settings.FrenchButtonLabel}"
+                                    Command="{Binding Settings.SetFrenchLanguageCommand}"
+                                    IsEnabled="{Binding StatusBar.IsNotBusy}"
+                                    Margin="0,0,8,0" />
+                            <Button Content="{Binding Settings.EnglishButtonLabel}"
+                                    Command="{Binding Settings.SetEnglishLanguageCommand}"
+                                    IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="main-section">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="{Binding Settings.SettingsLogTypeSectionTitle}"
+                                   Classes="section-title" />
+                        <WrapPanel>
+                            <Button Content="{Binding Settings.JsonButtonLabel}"
+                                    Command="{Binding Settings.SetJsonLogTypeCommand}"
+                                    IsEnabled="{Binding StatusBar.IsNotBusy}"
+                                    Margin="0,0,8,0" />
+                            <Button Content="{Binding Settings.XmlButtonLabel}"
+                                    Command="{Binding Settings.SetXmlLogTypeCommand}"
+                                    IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</UserControl>

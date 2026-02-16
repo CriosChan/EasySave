@@ -3,7 +3,7 @@
     <Design.PreviewWith>
         <Border Padding="20" Background="{DynamicResource PrimaryBackground}">
             <!-- Add Controls for Previewer Here -->
-            <Button Content="Test"></Button>
+            <Button Content="Test" />
         </Border>
     </Design.PreviewWith>
     <Style Selector="Button">
@@ -31,48 +31,48 @@
 
     <!-- Style for generic Border -->
     <Style Selector="Border.main-section">
-        <Setter Property="Padding" Value="12"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Background" Value="{DynamicResource SecondaryBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BoxShadow" Value="-4 0 16 0 #44000000"/>
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Background" Value="{DynamicResource SecondaryBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BoxShadow" Value="-4 0 16 0 #44000000" />
     </Style>
 
     <!-- Style for item's job Border -->
     <Style Selector="Border.job-item">
-        <Setter Property="Padding" Value="8"/>
-        <Setter Property="Margin" Value="0,6,0,6"/>
-        <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="Background" Value="{DynamicResource JobItemBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Margin" Value="0,6,0,6" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Background" Value="{DynamicResource JobItemBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <!-- Style for status bar Border -->
     <Style Selector="Border.status-bar">
-        <Setter Property="Padding" Value="12"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="Background" Value="{DynamicResource StatusBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource StatusBorder}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Background" Value="{DynamicResource StatusBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StatusBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <!-- Style for ListBox -->
     <Style Selector="ListBox">
-        <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <!-- Style for TextBlock section title -->
     <Style Selector="TextBlock.section-title">
-        <Setter Property="FontSize" Value="18"/>
-        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
     <!-- Style for ProgressBar -->
     <Style Selector="ProgressBar">
-        <Setter Property="Height" Value="18"/>
+        <Setter Property="Height" Value="18" />
     </Style>
 </Styles>

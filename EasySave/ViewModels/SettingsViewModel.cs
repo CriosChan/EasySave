@@ -11,16 +11,16 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class SettingsViewModel : ViewModelBase
 {
+    private readonly Action _onLocalizationChanged;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
-    private readonly Action _onLocalizationChanged;
-
-    [ObservableProperty] private string _settingsScreenTitle = string.Empty;
+    [ObservableProperty] private string _englishButtonLabel = string.Empty;
+    [ObservableProperty] private string _frenchButtonLabel = string.Empty;
+    [ObservableProperty] private string _jsonButtonLabel = string.Empty;
     [ObservableProperty] private string _settingsLanguageSectionTitle = string.Empty;
     [ObservableProperty] private string _settingsLogTypeSectionTitle = string.Empty;
-    [ObservableProperty] private string _frenchButtonLabel = string.Empty;
-    [ObservableProperty] private string _englishButtonLabel = string.Empty;
-    [ObservableProperty] private string _jsonButtonLabel = string.Empty;
+
+    [ObservableProperty] private string _settingsScreenTitle = string.Empty;
     [ObservableProperty] private string _xmlButtonLabel = string.Empty;
 
     /// <summary>

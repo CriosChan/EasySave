@@ -9,6 +9,9 @@ namespace EasySave.Models.Backup;
 
 public class BackupJob
 {
+    [JsonIgnore] public long TotalSize;
+    [JsonIgnore] public long TransferredSize;
+
     /// <summary>
     ///     Initializes a new instance of the BackupJob class with an ID.
     /// </summary>
@@ -56,6 +59,7 @@ public class BackupJob
     [JsonIgnore] public List<IFile> Files { get; private set; } = []; // List of files to backup
     [JsonIgnore] public int CurrentFileIndex { get; private set; } // Index of the currently processed file
     [JsonIgnore] public int FilesCount { get; private set; }
+
     [JsonIgnore]
     public double CurrentProgress
     {
@@ -66,19 +70,19 @@ public class BackupJob
             OnProgressChanged();
         }
     } // Progress percentage of the backup job
-    [JsonIgnore] public long TotalSize;
-    [JsonIgnore] public long TransferredSize;
 
     /// <summary>
     ///     Gets or sets the monitor used to detect business software activity.
     ///     Exposed for testability and dependency inversion.
     /// </summary>
-    [JsonIgnore] public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
+    [JsonIgnore]
+    public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
 
     /// <summary>
     ///     Gets a value indicating whether the current job run was stopped because business software was detected.
     /// </summary>
-    [JsonIgnore] public bool WasStoppedByBusinessSoftware { get; private set; }
+    [JsonIgnore]
+    public bool WasStoppedByBusinessSoftware { get; private set; }
 
     public event EventHandler? ProgressChanged;
 
