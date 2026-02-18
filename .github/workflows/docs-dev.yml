@@ -38,16 +38,23 @@ jobs:
       - name: Build docfx
         run: docfx
 
-      - name: Create local docs branch if missing
-        run: |
-          git checkout --orphan docs-temp
-          git rm -rf .
-
-      - name: LS
-        run: ls -la
-        
-      - name: Copy generated documentation
-        run: |
-          cp -r _site/* docs-temp/
-          cd docs-temp
-          git a
+      - name: Deploy to docs branch
+          if: github.event_name == 'push'
+          run: |
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            
+            # Fetch docs branch (create if missing)
+            git fetch origin docs:docs || true
+            git checkout docs || git checkout --orphan docs
+            
+            # Clear existing content
+            git rm -rf . || true
+            
+            # Copy new docs
+            cp -r _site/* .
+            git add .
+            
+            # Commit and push
+            git commit -m "Update docs from dev ($(date))" || echo "No changes"
+            git push origin docs --force
