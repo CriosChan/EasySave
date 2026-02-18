@@ -3,6 +3,8 @@
 
 [English version](#english)
 
+[🔧 Accès à la documentation technique / Technical documentation here 🔧](https://easysave-amv.pages.dev/)
+
 EasySave est un outil de sauvegarde automatise.
 
 ## Installation
