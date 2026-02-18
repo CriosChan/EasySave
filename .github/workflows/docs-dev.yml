@@ -20,62 +20,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # For Git history
-          path: "dev"
+          fetch-depth: 0  # Pour l'historique Git
 
-      - name: Setup .NET  # DocFX requires .NET
+      - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           global-json-file: "./dev/global.json"
 
-      - name: Display active .NET version
-        run: dotnet --version  # Verify 10.x active [web:35]
-
       - name: Install docfx
         run: dotnet tool install --global docfx --version 2.78.3
 
-      - name: Display tool list
-        run: dotnet tool list --global
-        
-      - name: Display docfx version
-        run: docfx -v
-        
       - name: Build docfx
-        run: docfx
+        run: docfx || { echo 'DocFX build failed' ; exit 1; }
 
       - name: Deploy to docs branch
         run: |
-          mkdir ../_site/
-          cp -r _site ../_site/
-          # Fetch existing docs branch (ou clone si absent)
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          mkdir -p ../_site/
+          cp -r _site/* ../_site/ || { echo 'Failed to copy files'; exit 1; }
+          
           git fetch origin docs:docs || true
+          git checkout -B docs || git checkout --orphan docs
           
-          # Check for local changes
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Local changes detected. Stashing changes."
-            git stash
-          fi
-          
-          # Checkout the docs branch
-          git checkout docs || git checkout --orphan docs
-          
-          # Clear existing content in docs branch
           git rm -rf . || true
-          
-          # Copy new content from _site directory
           cp -r ../_site/* .
-          
-          # Add new files to staging
           git add .
+          git commit -m "Update docs from dev ($(date))" || echo "No changes to commit"
           
-          # Commit changes
-          git commit -m "Update docs from dev ($(date))" || echo "No changes"
-          
-          # Push updates to the docs branch
           git push origin docs --force
-          
-          # If changes were stashed, restore them
-          if [ -n "$(git stash list)" ]; then
-            echo "Restoring stashed changes."
-            git stash pop || echo "No stashed changes to apply."
-          fi
