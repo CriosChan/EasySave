@@ -40,6 +40,7 @@ jobs:
 
       - name: Deploy to docs branch
         run: |
+          cp -R _site/
           # Fetch existing docs branch (ou clone si absent)
           git fetch origin docs:docs || true
           
@@ -56,7 +57,7 @@ jobs:
           git rm -rf . || true
           
           # Copy new content from _site directory
-          cp -r _site/* .
+          cp -r /_site/* .
           
           # Add new files to staging
           git add .
