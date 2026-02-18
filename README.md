@@ -3,7 +3,7 @@
 
 [English version](#english)
 
-[🔧 Accès à la documentation technique / Technical documentation here 🔧](https://easysave-amv.pages.dev/)
+[🔧 Accès à la documentation technique / Technical documentation here 🔧](https://crioschan.github.io/EasySave/)
 
 EasySave est un outil de sauvegarde automatise.
 
