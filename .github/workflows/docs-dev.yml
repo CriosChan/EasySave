@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET  # DocFX requires .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.x.x'
+          dotnet-version: 10.0.0
 
       - name: Setup DocFX
         uses: nunit/docfx-action@v2.4.0  # Recommended maintained action [web:4][web:16]
