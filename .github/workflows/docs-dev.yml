@@ -36,7 +36,7 @@ jobs:
         run: docfx -v
         
       - name: Build docfx
-        run: docf
+        run: docfx
 
       - name: Create local docs branch if missing
         run: |
