@@ -72,3 +72,10 @@ Projet EasySave de chez ProSoft.txt
 docs/markdown/
 *.pdf
 .vscode/*
+*.ps1
+
+# DocFX generated files
+_site/
+api/
+!api/index.md
+

@@ -1,7 +1,7 @@
 # EasySave
 ![Version 1.0](https://img.shields.io/badge/Version-1.0-green) ![Project framework .NET](https://img.shields.io/badge/Project%20framework-.NET-purple)
 
-[English version](#ENGLISH)
+[English version](#english)
 
 EasySave est un outil de sauvegarde automatise.
 
