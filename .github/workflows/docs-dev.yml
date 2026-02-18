@@ -1,0 +1,38 @@
+name: Generate and push docs on dev
+
+on:
+  pull_request: 
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: write  # Required for push
+
+jobs:
+  build-and-push-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # For Git history
+
+      - name: Setup .NET  # DocFX requires .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x.x'
+
+      - name: Setup DocFX
+        uses: nunit/docfx-action@v2.4.0  # Recommended maintained action [web:4][web:16]
+
+      - name: Create local docs branch if missing
+        run: |
+          git checkout --orphan docs-temp
+          git rm -rf .
+
+      - name: Copy generated documentation
+        run: |
+          cp -r _site/* docs-temp/
+          cd docs-temp
+          git a
