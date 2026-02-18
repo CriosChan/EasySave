@@ -8,11 +8,11 @@ on:
 
 permissions:
   contents: write  # Required for push
-
+  
 defaults:
   run:
     working-directory: ./dev
-
+    
 jobs:
   build-and-push-docs:
     runs-on: ubuntu-latest
@@ -26,10 +26,9 @@ jobs:
       - name: Setup .NET  # DocFX requires .NET
         uses: actions/setup-dotnet@v5
         with:
-          global-json-file: global.json
+          global-json-file: "./dev/global.json"
 
       - name: Display active .NET version
-        working-directory: ./dev
         run: dotnet --version  # Verify 10.x active [web:35]
 
       - name: Install docfx
