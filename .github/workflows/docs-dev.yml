@@ -44,7 +44,7 @@ jobs:
           git checkout -B docs || git checkout --orphan docs
           
           git rm -rf . || true
-          find . -type f ! -name 'wrangler.jsonc' -exec rm -f {} +
+          rm -rf *
           cp -r ../_site/* .
           git add .
           git commit -m "Update docs from dev ($(date))" || echo "No changes to commit"
