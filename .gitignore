@@ -72,3 +72,4 @@ Projet EasySave de chez ProSoft.txt
 docs/markdown/
 *.pdf
 .vscode/*
+*.ps1
