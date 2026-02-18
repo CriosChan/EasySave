@@ -17,31 +17,39 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # For Git history
+          path: "dev"
 
       - name: Setup .NET  # DocFX requires .NET
         uses: actions/setup-dotnet@v5
+        working-directory: ./dev
         with:
           global-json-file: global.json
 
       - name: Display active .NET version
+        working-directory: ./dev
         run: dotnet --version  # Verify 10.x active [web:35]
 
       - name: Install docfx
+        working-directory: ./dev
         run: dotnet tool install --global docfx --version 2.78.3
 
       - name: Display tool list
+        working-directory: ./dev
         run: dotnet tool list --global
         
       - name: Display docfx version
+        working-directory: ./dev
         run: docfx -v
         
       - name: Build docfx
+        working-directory: ./dev
         run: docfx
 
       - name: Deploy to docs branch
+        working-directory: ./dev
         run: |
-          mkdir /_site/
-          cp -r _site /_site/
+          mkdir ../_site/
+          cp -r _site ../_site/
           # Fetch existing docs branch (ou clone si absent)
           git fetch origin docs:docs || true
           
@@ -58,7 +66,7 @@ jobs:
           git rm -rf . || true
           
           # Copy new content from _site directory
-          cp -r /_site/* .
+          cp -r ../_site/* .
           
           # Add new files to staging
           git add .
