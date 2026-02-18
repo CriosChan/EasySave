@@ -74,8 +74,3 @@ docs/markdown/
 .vscode/*
 *.ps1
 
-# DocFX generated files
-_site/
-api/
-!api/index.md
-

@@ -1,0 +1,184 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  commentId: T:EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  id: MainWindowViewModel.ViewScreen
+  parent: EasySave.ViewModels
+  children:
+  - EasySave.ViewModels.MainWindowViewModel.ViewScreen.AddedSoftware
+  - EasySave.ViewModels.MainWindowViewModel.ViewScreen.Main
+  - EasySave.ViewModels.MainWindowViewModel.ViewScreen.Settings
+  - EasySave.ViewModels.MainWindowViewModel.ViewScreen.SoftwareCatalog
+  langs:
+  - csharp
+  - vb
+  name: MainWindowViewModel.ViewScreen
+  nameWithType: MainWindowViewModel.ViewScreen
+  fullName: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  type: Enum
+  source:
+    remote:
+      path: EasySave/ViewModels/MainWindowViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: ViewScreen
+    path: EasySave/ViewModels/MainWindowViewModel.cs
+    startLine: 226
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Supported in-window screens.
+  example: []
+  syntax:
+    content: public enum MainWindowViewModel.ViewScreen
+    content.vb: Public Enum MainWindowViewModel.ViewScreen
+- uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen.Main
+  commentId: F:EasySave.ViewModels.MainWindowViewModel.ViewScreen.Main
+  id: Main
+  parent: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  langs:
+  - csharp
+  - vb
+  name: Main
+  nameWithType: MainWindowViewModel.ViewScreen.Main
+  fullName: EasySave.ViewModels.MainWindowViewModel.ViewScreen.Main
+  type: Field
+  source:
+    remote:
+      path: EasySave/ViewModels/MainWindowViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: Main
+    path: EasySave/ViewModels/MainWindowViewModel.cs
+    startLine: 228
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  syntax:
+    content: Main = 0
+    return:
+      type: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+- uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen.Settings
+  commentId: F:EasySave.ViewModels.MainWindowViewModel.ViewScreen.Settings
+  id: Settings
+  parent: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  langs:
+  - csharp
+  - vb
+  name: Settings
+  nameWithType: MainWindowViewModel.ViewScreen.Settings
+  fullName: EasySave.ViewModels.MainWindowViewModel.ViewScreen.Settings
+  type: Field
+  source:
+    remote:
+      path: EasySave/ViewModels/MainWindowViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: Settings
+    path: EasySave/ViewModels/MainWindowViewModel.cs
+    startLine: 229
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  syntax:
+    content: Settings = 1
+    return:
+      type: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+- uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen.SoftwareCatalog
+  commentId: F:EasySave.ViewModels.MainWindowViewModel.ViewScreen.SoftwareCatalog
+  id: SoftwareCatalog
+  parent: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  langs:
+  - csharp
+  - vb
+  name: SoftwareCatalog
+  nameWithType: MainWindowViewModel.ViewScreen.SoftwareCatalog
+  fullName: EasySave.ViewModels.MainWindowViewModel.ViewScreen.SoftwareCatalog
+  type: Field
+  source:
+    remote:
+      path: EasySave/ViewModels/MainWindowViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: SoftwareCatalog
+    path: EasySave/ViewModels/MainWindowViewModel.cs
+    startLine: 230
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  syntax:
+    content: SoftwareCatalog = 2
+    return:
+      type: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+- uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen.AddedSoftware
+  commentId: F:EasySave.ViewModels.MainWindowViewModel.ViewScreen.AddedSoftware
+  id: AddedSoftware
+  parent: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  langs:
+  - csharp
+  - vb
+  name: AddedSoftware
+  nameWithType: MainWindowViewModel.ViewScreen.AddedSoftware
+  fullName: EasySave.ViewModels.MainWindowViewModel.ViewScreen.AddedSoftware
+  type: Field
+  source:
+    remote:
+      path: EasySave/ViewModels/MainWindowViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: AddedSoftware
+    path: EasySave/ViewModels/MainWindowViewModel.cs
+    startLine: 231
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  syntax:
+    content: AddedSoftware = 3
+    return:
+      type: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+references:
+- uid: EasySave.ViewModels
+  commentId: N:EasySave.ViewModels
+  href: EasySave.html
+  name: EasySave.ViewModels
+  nameWithType: EasySave.ViewModels
+  fullName: EasySave.ViewModels
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.ViewModels
+    name: ViewModels
+    href: EasySave.ViewModels.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.ViewModels
+    name: ViewModels
+    href: EasySave.ViewModels.html
+- uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  commentId: T:EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.MainWindowViewModel.html
+  name: MainWindowViewModel.ViewScreen
+  nameWithType: MainWindowViewModel.ViewScreen
+  fullName: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  spec.csharp:
+  - uid: EasySave.ViewModels.MainWindowViewModel
+    name: MainWindowViewModel
+    href: EasySave.ViewModels.MainWindowViewModel.html
+  - name: .
+  - uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+    name: ViewScreen
+    href: EasySave.ViewModels.MainWindowViewModel.ViewScreen.html
+  spec.vb:
+  - uid: EasySave.ViewModels.MainWindowViewModel
+    name: MainWindowViewModel
+    href: EasySave.ViewModels.MainWindowViewModel.html
+  - name: .
+  - uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+    name: ViewScreen
+    href: EasySave.ViewModels.MainWindowViewModel.ViewScreen.html

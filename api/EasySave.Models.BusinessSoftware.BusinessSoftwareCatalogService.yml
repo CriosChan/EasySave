@@ -1,0 +1,449 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+  commentId: T:EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+  id: BusinessSoftwareCatalogService
+  parent: EasySave.Models.BusinessSoftware
+  children:
+  - EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.GetAvailableSoftware
+  langs:
+  - csharp
+  - vb
+  name: BusinessSoftwareCatalogService
+  nameWithType: BusinessSoftwareCatalogService
+  fullName: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+  type: Class
+  source:
+    remote:
+      path: EasySave/Models/BusinessSoftware/BusinessSoftwareCatalogService.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: BusinessSoftwareCatalogService
+    path: EasySave/Models/BusinessSoftware/BusinessSoftwareCatalogService.cs
+    startLine: 9
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.BusinessSoftware
+  summary: Provides a catalog of installed software candidates usable as business software blockers.
+  example: []
+  syntax:
+    content: 'public sealed class BusinessSoftwareCatalogService : IBusinessSoftwareCatalogService'
+    content.vb: Public NotInheritable Class BusinessSoftwareCatalogService Implements IBusinessSoftwareCatalogService
+  inheritance:
+  - System.Object
+  implements:
+  - EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.GetAvailableSoftware
+  commentId: M:EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.GetAvailableSoftware
+  id: GetAvailableSoftware
+  parent: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+  langs:
+  - csharp
+  - vb
+  name: GetAvailableSoftware()
+  nameWithType: BusinessSoftwareCatalogService.GetAvailableSoftware()
+  fullName: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.GetAvailableSoftware()
+  type: Method
+  source:
+    remote:
+      path: EasySave/Models/BusinessSoftware/BusinessSoftwareCatalogService.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: GetAvailableSoftware
+    path: EasySave/Models/BusinessSoftware/BusinessSoftwareCatalogService.cs
+    startLine: 15
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.BusinessSoftware
+  summary: Loads available software candidates from the local machine.
+  example: []
+  syntax:
+    content: public IReadOnlyList<BusinessSoftwareCatalogItem> GetAvailableSoftware()
+    return:
+      type: System.Collections.Generic.IReadOnlyList{EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem}
+      description: Read-only list of software candidates.
+    content.vb: Public Function GetAvailableSoftware() As IReadOnlyList(Of BusinessSoftwareCatalogItem)
+  overload: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.GetAvailableSoftware*
+  implements:
+  - EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.GetAvailableSoftware
+references:
+- uid: EasySave.Models.BusinessSoftware
+  commentId: N:EasySave.Models.BusinessSoftware
+  href: EasySave.html
+  name: EasySave.Models.BusinessSoftware
+  nameWithType: EasySave.Models.BusinessSoftware
+  fullName: EasySave.Models.BusinessSoftware
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.BusinessSoftware
+    name: BusinessSoftware
+    href: EasySave.Models.BusinessSoftware.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.BusinessSoftware
+    name: BusinessSoftware
+    href: EasySave.Models.BusinessSoftware.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+  commentId: T:EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+  parent: EasySave.Models.BusinessSoftware
+  href: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.html
+  name: IBusinessSoftwareCatalogService
+  nameWithType: IBusinessSoftwareCatalogService
+  fullName: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.GetAvailableSoftware*
+  commentId: Overload:EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.GetAvailableSoftware
+  href: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.html#EasySave_Models_BusinessSoftware_BusinessSoftwareCatalogService_GetAvailableSoftware
+  name: GetAvailableSoftware
+  nameWithType: BusinessSoftwareCatalogService.GetAvailableSoftware
+  fullName: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.GetAvailableSoftware
+- uid: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.GetAvailableSoftware
+  commentId: M:EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.GetAvailableSoftware
+  parent: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+  href: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.html#EasySave_Models_BusinessSoftware_IBusinessSoftwareCatalogService_GetAvailableSoftware
+  name: GetAvailableSoftware()
+  nameWithType: IBusinessSoftwareCatalogService.GetAvailableSoftware()
+  fullName: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.GetAvailableSoftware()
+  spec.csharp:
+  - uid: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.GetAvailableSoftware
+    name: GetAvailableSoftware
+    href: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.html#EasySave_Models_BusinessSoftware_IBusinessSoftwareCatalogService_GetAvailableSoftware
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.GetAvailableSoftware
+    name: GetAvailableSoftware
+    href: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.html#EasySave_Models_BusinessSoftware_IBusinessSoftwareCatalogService_GetAvailableSoftware
+  - name: (
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList{EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem}
+  commentId: T:System.Collections.Generic.IReadOnlyList{EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<BusinessSoftwareCatalogItem>
+  nameWithType: IReadOnlyList<BusinessSoftwareCatalogItem>
+  fullName: System.Collections.Generic.IReadOnlyList<EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem>
+  nameWithType.vb: IReadOnlyList(Of BusinessSoftwareCatalogItem)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem)
+  name.vb: IReadOnlyList(Of BusinessSoftwareCatalogItem)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem
+    name: BusinessSoftwareCatalogItem
+    href: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem
+    name: BusinessSoftwareCatalogItem
+    href: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem.html
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

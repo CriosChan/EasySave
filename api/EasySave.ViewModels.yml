@@ -1,0 +1,124 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.ViewModels
+  commentId: N:EasySave.ViewModels
+  id: EasySave.ViewModels
+  children:
+  - EasySave.ViewModels.BackupJobItemViewModel
+  - EasySave.ViewModels.BusinessSoftwareViewModel
+  - EasySave.ViewModels.JobsViewModel
+  - EasySave.ViewModels.MainWindowViewModel
+  - EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  - EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel
+  - EasySave.ViewModels.SettingsViewModel
+  - EasySave.ViewModels.StatusBarViewModel
+  - EasySave.ViewModels.ViewModelBase
+  langs:
+  - csharp
+  - vb
+  name: EasySave.ViewModels
+  nameWithType: EasySave.ViewModels
+  fullName: EasySave.ViewModels
+  type: Namespace
+  assemblies:
+  - EasySave
+references:
+- uid: EasySave.ViewModels.BackupJobItemViewModel
+  commentId: T:EasySave.ViewModels.BackupJobItemViewModel
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.BackupJobItemViewModel.html
+  name: BackupJobItemViewModel
+  nameWithType: BackupJobItemViewModel
+  fullName: EasySave.ViewModels.BackupJobItemViewModel
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel
+  commentId: T:EasySave.ViewModels.BusinessSoftwareViewModel
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html
+  name: BusinessSoftwareViewModel
+  nameWithType: BusinessSoftwareViewModel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel
+- uid: EasySave.ViewModels.JobsViewModel
+  commentId: T:EasySave.ViewModels.JobsViewModel
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.JobsViewModel.html
+  name: JobsViewModel
+  nameWithType: JobsViewModel
+  fullName: EasySave.ViewModels.JobsViewModel
+- uid: EasySave.ViewModels.MainWindowViewModel
+  commentId: T:EasySave.ViewModels.MainWindowViewModel
+  href: EasySave.ViewModels.MainWindowViewModel.html
+  name: MainWindowViewModel
+  nameWithType: MainWindowViewModel
+  fullName: EasySave.ViewModels.MainWindowViewModel
+- uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  commentId: T:EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.MainWindowViewModel.html
+  name: MainWindowViewModel.ViewScreen
+  nameWithType: MainWindowViewModel.ViewScreen
+  fullName: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+  spec.csharp:
+  - uid: EasySave.ViewModels.MainWindowViewModel
+    name: MainWindowViewModel
+    href: EasySave.ViewModels.MainWindowViewModel.html
+  - name: .
+  - uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+    name: ViewScreen
+    href: EasySave.ViewModels.MainWindowViewModel.ViewScreen.html
+  spec.vb:
+  - uid: EasySave.ViewModels.MainWindowViewModel
+    name: MainWindowViewModel
+    href: EasySave.ViewModels.MainWindowViewModel.html
+  - name: .
+  - uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+    name: ViewScreen
+    href: EasySave.ViewModels.MainWindowViewModel.ViewScreen.html
+- uid: EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel
+  commentId: T:EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel
+  href: EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel.html
+  name: SelectableBusinessSoftwareItemViewModel
+  nameWithType: SelectableBusinessSoftwareItemViewModel
+  fullName: EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel
+- uid: EasySave.ViewModels.SettingsViewModel
+  commentId: T:EasySave.ViewModels.SettingsViewModel
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.SettingsViewModel.html
+  name: SettingsViewModel
+  nameWithType: SettingsViewModel
+  fullName: EasySave.ViewModels.SettingsViewModel
+- uid: EasySave.ViewModels.StatusBarViewModel
+  commentId: T:EasySave.ViewModels.StatusBarViewModel
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.StatusBarViewModel.html
+  name: StatusBarViewModel
+  nameWithType: StatusBarViewModel
+  fullName: EasySave.ViewModels.StatusBarViewModel
+- uid: EasySave.ViewModels.ViewModelBase
+  commentId: T:EasySave.ViewModels.ViewModelBase
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.ViewModelBase.html
+  name: ViewModelBase
+  nameWithType: ViewModelBase
+  fullName: EasySave.ViewModels.ViewModelBase
+- uid: EasySave.ViewModels
+  commentId: N:EasySave.ViewModels
+  href: EasySave.html
+  name: EasySave.ViewModels
+  nameWithType: EasySave.ViewModels
+  fullName: EasySave.ViewModels
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.ViewModels
+    name: ViewModels
+    href: EasySave.ViewModels.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.ViewModels
+    name: ViewModels
+    href: EasySave.ViewModels.html

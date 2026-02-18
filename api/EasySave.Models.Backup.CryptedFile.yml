@@ -1,0 +1,674 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.Models.Backup.CryptedFile
+  commentId: T:EasySave.Models.Backup.CryptedFile
+  id: CryptedFile
+  parent: EasySave.Models.Backup
+  children:
+  - EasySave.Models.Backup.CryptedFile.#ctor(System.String,System.String,System.String)
+  - EasySave.Models.Backup.CryptedFile.BackupName
+  - EasySave.Models.Backup.CryptedFile.Copy
+  - EasySave.Models.Backup.CryptedFile.GetSize
+  - EasySave.Models.Backup.CryptedFile.SourceFile
+  - EasySave.Models.Backup.CryptedFile.TargetFile
+  langs:
+  - csharp
+  - vb
+  name: CryptedFile
+  nameWithType: CryptedFile
+  fullName: EasySave.Models.Backup.CryptedFile
+  type: Class
+  source:
+    remote:
+      path: EasySave/Models/Backup/CryptedFile.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: CryptedFile
+    path: EasySave/Models/Backup/CryptedFile.cs
+    startLine: 7
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.Backup
+  syntax:
+    content: 'public class CryptedFile : IFile'
+    content.vb: Public Class CryptedFile Implements IFile
+  inheritance:
+  - System.Object
+  implements:
+  - EasySave.Models.Backup.Interfaces.IFile
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: EasySave.Models.Backup.CryptedFile.#ctor(System.String,System.String,System.String)
+  commentId: M:EasySave.Models.Backup.CryptedFile.#ctor(System.String,System.String,System.String)
+  id: '#ctor(System.String,System.String,System.String)'
+  parent: EasySave.Models.Backup.CryptedFile
+  langs:
+  - csharp
+  - vb
+  name: CryptedFile(string, string, string)
+  nameWithType: CryptedFile.CryptedFile(string, string, string)
+  fullName: EasySave.Models.Backup.CryptedFile.CryptedFile(string, string, string)
+  type: Constructor
+  source:
+    remote:
+      path: EasySave/Models/Backup/CryptedFile.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: .ctor
+    path: EasySave/Models/Backup/CryptedFile.cs
+    startLine: 15
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.Backup
+  summary: Initializes a new instance of the CryptedFile class.
+  example: []
+  syntax:
+    content: public CryptedFile(string sourceFile, string targetFile, string backupName)
+    parameters:
+    - id: sourceFile
+      type: System.String
+      description: The path of the source file to back up.
+    - id: targetFile
+      type: System.String
+      description: The path where the backup file will be stored.
+    - id: backupName
+      type: System.String
+      description: The name of the backup process.
+    content.vb: Public Sub New(sourceFile As String, targetFile As String, backupName As String)
+  overload: EasySave.Models.Backup.CryptedFile.#ctor*
+  nameWithType.vb: CryptedFile.New(String, String, String)
+  fullName.vb: EasySave.Models.Backup.CryptedFile.New(String, String, String)
+  name.vb: New(String, String, String)
+- uid: EasySave.Models.Backup.CryptedFile.BackupName
+  commentId: P:EasySave.Models.Backup.CryptedFile.BackupName
+  id: BackupName
+  parent: EasySave.Models.Backup.CryptedFile
+  langs:
+  - csharp
+  - vb
+  name: BackupName
+  nameWithType: CryptedFile.BackupName
+  fullName: EasySave.Models.Backup.CryptedFile.BackupName
+  type: Property
+  source:
+    remote:
+      path: EasySave/Models/Backup/CryptedFile.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: BackupName
+    path: EasySave/Models/Backup/CryptedFile.cs
+    startLine: 22
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.Backup
+  syntax:
+    content: public string BackupName { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property BackupName As String
+  overload: EasySave.Models.Backup.CryptedFile.BackupName*
+- uid: EasySave.Models.Backup.CryptedFile.SourceFile
+  commentId: P:EasySave.Models.Backup.CryptedFile.SourceFile
+  id: SourceFile
+  parent: EasySave.Models.Backup.CryptedFile
+  langs:
+  - csharp
+  - vb
+  name: SourceFile
+  nameWithType: CryptedFile.SourceFile
+  fullName: EasySave.Models.Backup.CryptedFile.SourceFile
+  type: Property
+  source:
+    remote:
+      path: EasySave/Models/Backup/CryptedFile.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: SourceFile
+    path: EasySave/Models/Backup/CryptedFile.cs
+    startLine: 25
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.Backup
+  summary: Gets the source file path that is to be backed up.
+  example: []
+  syntax:
+    content: public string SourceFile { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property SourceFile As String
+  overload: EasySave.Models.Backup.CryptedFile.SourceFile*
+  implements:
+  - EasySave.Models.Backup.Interfaces.IFile.SourceFile
+- uid: EasySave.Models.Backup.CryptedFile.TargetFile
+  commentId: P:EasySave.Models.Backup.CryptedFile.TargetFile
+  id: TargetFile
+  parent: EasySave.Models.Backup.CryptedFile
+  langs:
+  - csharp
+  - vb
+  name: TargetFile
+  nameWithType: CryptedFile.TargetFile
+  fullName: EasySave.Models.Backup.CryptedFile.TargetFile
+  type: Property
+  source:
+    remote:
+      path: EasySave/Models/Backup/CryptedFile.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: TargetFile
+    path: EasySave/Models/Backup/CryptedFile.cs
+    startLine: 26
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.Backup
+  summary: Gets the target file path where the backup will be stored.
+  example: []
+  syntax:
+    content: public string TargetFile { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property TargetFile As String
+  overload: EasySave.Models.Backup.CryptedFile.TargetFile*
+  implements:
+  - EasySave.Models.Backup.Interfaces.IFile.TargetFile
+- uid: EasySave.Models.Backup.CryptedFile.Copy
+  commentId: M:EasySave.Models.Backup.CryptedFile.Copy
+  id: Copy
+  parent: EasySave.Models.Backup.CryptedFile
+  langs:
+  - csharp
+  - vb
+  name: Copy()
+  nameWithType: CryptedFile.Copy()
+  fullName: EasySave.Models.Backup.CryptedFile.Copy()
+  type: Method
+  source:
+    remote:
+      path: EasySave/Models/Backup/CryptedFile.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: Copy
+    path: EasySave/Models/Backup/CryptedFile.cs
+    startLine: 32
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.Backup
+  summary: >-
+    Copies the file from the source location to the target location.
+
+    Logs the operation details including file size and transfer time.
+  example: []
+  syntax:
+    content: public void Copy()
+    content.vb: Public Sub Copy()
+  overload: EasySave.Models.Backup.CryptedFile.Copy*
+  implements:
+  - EasySave.Models.Backup.Interfaces.IFile.Copy
+- uid: EasySave.Models.Backup.CryptedFile.GetSize
+  commentId: M:EasySave.Models.Backup.CryptedFile.GetSize
+  id: GetSize
+  parent: EasySave.Models.Backup.CryptedFile
+  langs:
+  - csharp
+  - vb
+  name: GetSize()
+  nameWithType: CryptedFile.GetSize()
+  fullName: EasySave.Models.Backup.CryptedFile.GetSize()
+  type: Method
+  source:
+    remote:
+      path: EasySave/Models/Backup/CryptedFile.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: GetSize
+    path: EasySave/Models/Backup/CryptedFile.cs
+    startLine: 80
+  assemblies:
+  - EasySave
+  namespace: EasySave.Models.Backup
+  summary: Gets the size of the source file in bytes.
+  example: []
+  syntax:
+    content: public long GetSize()
+    return:
+      type: System.Int64
+      description: The size of the file in bytes.
+    content.vb: Public Function GetSize() As Long
+  overload: EasySave.Models.Backup.CryptedFile.GetSize*
+  implements:
+  - EasySave.Models.Backup.Interfaces.IFile.GetSize
+references:
+- uid: EasySave.Models.Backup
+  commentId: N:EasySave.Models.Backup
+  href: EasySave.html
+  name: EasySave.Models.Backup
+  nameWithType: EasySave.Models.Backup
+  fullName: EasySave.Models.Backup
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.Backup
+    name: Backup
+    href: EasySave.Models.Backup.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.Backup
+    name: Backup
+    href: EasySave.Models.Backup.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: EasySave.Models.Backup.Interfaces.IFile
+  commentId: T:EasySave.Models.Backup.Interfaces.IFile
+  parent: EasySave.Models.Backup.Interfaces
+  href: EasySave.Models.Backup.Interfaces.IFile.html
+  name: IFile
+  nameWithType: IFile
+  fullName: EasySave.Models.Backup.Interfaces.IFile
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: EasySave.Models.Backup.Interfaces
+  commentId: N:EasySave.Models.Backup.Interfaces
+  href: EasySave.html
+  name: EasySave.Models.Backup.Interfaces
+  nameWithType: EasySave.Models.Backup.Interfaces
+  fullName: EasySave.Models.Backup.Interfaces
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.Backup
+    name: Backup
+    href: EasySave.Models.Backup.html
+  - name: .
+  - uid: EasySave.Models.Backup.Interfaces
+    name: Interfaces
+    href: EasySave.Models.Backup.Interfaces.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.Backup
+    name: Backup
+    href: EasySave.Models.Backup.html
+  - name: .
+  - uid: EasySave.Models.Backup.Interfaces
+    name: Interfaces
+    href: EasySave.Models.Backup.Interfaces.html
+- uid: EasySave.Models.Backup.CryptedFile.#ctor*
+  commentId: Overload:EasySave.Models.Backup.CryptedFile.#ctor
+  href: EasySave.Models.Backup.CryptedFile.html#EasySave_Models_Backup_CryptedFile__ctor_System_String_System_String_System_String_
+  name: CryptedFile
+  nameWithType: CryptedFile.CryptedFile
+  fullName: EasySave.Models.Backup.CryptedFile.CryptedFile
+  nameWithType.vb: CryptedFile.New
+  fullName.vb: EasySave.Models.Backup.CryptedFile.New
+  name.vb: New
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: EasySave.Models.Backup.CryptedFile.BackupName*
+  commentId: Overload:EasySave.Models.Backup.CryptedFile.BackupName
+  href: EasySave.Models.Backup.CryptedFile.html#EasySave_Models_Backup_CryptedFile_BackupName
+  name: BackupName
+  nameWithType: CryptedFile.BackupName
+  fullName: EasySave.Models.Backup.CryptedFile.BackupName
+- uid: EasySave.Models.Backup.CryptedFile.SourceFile*
+  commentId: Overload:EasySave.Models.Backup.CryptedFile.SourceFile
+  href: EasySave.Models.Backup.CryptedFile.html#EasySave_Models_Backup_CryptedFile_SourceFile
+  name: SourceFile
+  nameWithType: CryptedFile.SourceFile
+  fullName: EasySave.Models.Backup.CryptedFile.SourceFile
+- uid: EasySave.Models.Backup.Interfaces.IFile.SourceFile
+  commentId: P:EasySave.Models.Backup.Interfaces.IFile.SourceFile
+  parent: EasySave.Models.Backup.Interfaces.IFile
+  href: EasySave.Models.Backup.Interfaces.IFile.html#EasySave_Models_Backup_Interfaces_IFile_SourceFile
+  name: SourceFile
+  nameWithType: IFile.SourceFile
+  fullName: EasySave.Models.Backup.Interfaces.IFile.SourceFile
+- uid: EasySave.Models.Backup.CryptedFile.TargetFile*
+  commentId: Overload:EasySave.Models.Backup.CryptedFile.TargetFile
+  href: EasySave.Models.Backup.CryptedFile.html#EasySave_Models_Backup_CryptedFile_TargetFile
+  name: TargetFile
+  nameWithType: CryptedFile.TargetFile
+  fullName: EasySave.Models.Backup.CryptedFile.TargetFile
+- uid: EasySave.Models.Backup.Interfaces.IFile.TargetFile
+  commentId: P:EasySave.Models.Backup.Interfaces.IFile.TargetFile
+  parent: EasySave.Models.Backup.Interfaces.IFile
+  href: EasySave.Models.Backup.Interfaces.IFile.html#EasySave_Models_Backup_Interfaces_IFile_TargetFile
+  name: TargetFile
+  nameWithType: IFile.TargetFile
+  fullName: EasySave.Models.Backup.Interfaces.IFile.TargetFile
+- uid: EasySave.Models.Backup.CryptedFile.Copy*
+  commentId: Overload:EasySave.Models.Backup.CryptedFile.Copy
+  href: EasySave.Models.Backup.CryptedFile.html#EasySave_Models_Backup_CryptedFile_Copy
+  name: Copy
+  nameWithType: CryptedFile.Copy
+  fullName: EasySave.Models.Backup.CryptedFile.Copy
+- uid: EasySave.Models.Backup.Interfaces.IFile.Copy
+  commentId: M:EasySave.Models.Backup.Interfaces.IFile.Copy
+  parent: EasySave.Models.Backup.Interfaces.IFile
+  href: EasySave.Models.Backup.Interfaces.IFile.html#EasySave_Models_Backup_Interfaces_IFile_Copy
+  name: Copy()
+  nameWithType: IFile.Copy()
+  fullName: EasySave.Models.Backup.Interfaces.IFile.Copy()
+  spec.csharp:
+  - uid: EasySave.Models.Backup.Interfaces.IFile.Copy
+    name: Copy
+    href: EasySave.Models.Backup.Interfaces.IFile.html#EasySave_Models_Backup_Interfaces_IFile_Copy
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: EasySave.Models.Backup.Interfaces.IFile.Copy
+    name: Copy
+    href: EasySave.Models.Backup.Interfaces.IFile.html#EasySave_Models_Backup_Interfaces_IFile_Copy
+  - name: (
+  - name: )
+- uid: EasySave.Models.Backup.CryptedFile.GetSize*
+  commentId: Overload:EasySave.Models.Backup.CryptedFile.GetSize
+  href: EasySave.Models.Backup.CryptedFile.html#EasySave_Models_Backup_CryptedFile_GetSize
+  name: GetSize
+  nameWithType: CryptedFile.GetSize
+  fullName: EasySave.Models.Backup.CryptedFile.GetSize
+- uid: EasySave.Models.Backup.Interfaces.IFile.GetSize
+  commentId: M:EasySave.Models.Backup.Interfaces.IFile.GetSize
+  parent: EasySave.Models.Backup.Interfaces.IFile
+  href: EasySave.Models.Backup.Interfaces.IFile.html#EasySave_Models_Backup_Interfaces_IFile_GetSize
+  name: GetSize()
+  nameWithType: IFile.GetSize()
+  fullName: EasySave.Models.Backup.Interfaces.IFile.GetSize()
+  spec.csharp:
+  - uid: EasySave.Models.Backup.Interfaces.IFile.GetSize
+    name: GetSize
+    href: EasySave.Models.Backup.Interfaces.IFile.html#EasySave_Models_Backup_Interfaces_IFile_GetSize
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: EasySave.Models.Backup.Interfaces.IFile.GetSize
+    name: GetSize
+    href: EasySave.Models.Backup.Interfaces.IFile.html#EasySave_Models_Backup_Interfaces_IFile_GetSize
+  - name: (
+  - name: )
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long

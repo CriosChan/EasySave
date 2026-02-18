@@ -1,0 +1,61 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.ViewModels.Services
+  commentId: N:EasySave.ViewModels.Services
+  id: EasySave.ViewModels.Services
+  children:
+  - EasySave.ViewModels.Services.IUiTextService
+  - EasySave.ViewModels.Services.ResxUiTextService
+  langs:
+  - csharp
+  - vb
+  name: EasySave.ViewModels.Services
+  nameWithType: EasySave.ViewModels.Services
+  fullName: EasySave.ViewModels.Services
+  type: Namespace
+  assemblies:
+  - EasySave
+references:
+- uid: EasySave.ViewModels.Services.IUiTextService
+  commentId: T:EasySave.ViewModels.Services.IUiTextService
+  parent: EasySave.ViewModels.Services
+  href: EasySave.ViewModels.Services.IUiTextService.html
+  name: IUiTextService
+  nameWithType: IUiTextService
+  fullName: EasySave.ViewModels.Services.IUiTextService
+- uid: EasySave.ViewModels.Services.ResxUiTextService
+  commentId: T:EasySave.ViewModels.Services.ResxUiTextService
+  href: EasySave.ViewModels.Services.ResxUiTextService.html
+  name: ResxUiTextService
+  nameWithType: ResxUiTextService
+  fullName: EasySave.ViewModels.Services.ResxUiTextService
+- uid: EasySave.ViewModels.Services
+  commentId: N:EasySave.ViewModels.Services
+  href: EasySave.html
+  name: EasySave.ViewModels.Services
+  nameWithType: EasySave.ViewModels.Services
+  fullName: EasySave.ViewModels.Services
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.ViewModels
+    name: ViewModels
+    href: EasySave.ViewModels.html
+  - name: .
+  - uid: EasySave.ViewModels.Services
+    name: Services
+    href: EasySave.ViewModels.Services.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.ViewModels
+    name: ViewModels
+    href: EasySave.ViewModels.html
+  - name: .
+  - uid: EasySave.ViewModels.Services
+    name: Services
+    href: EasySave.ViewModels.Services.html

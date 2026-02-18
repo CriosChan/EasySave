@@ -1,0 +1,1073 @@
+{
+  "source_base_path": "C:/Users/natha/RiderProjects/EasySave",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "CONTRIBUTING.md",
+      "output": {
+        ".html": {
+          "relative_path": "CONTRIBUTING.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasyLog.AbstractLogger-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasyLog.AbstractLogger-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasyLog.AbstractLogger<T>",
+      "Summary": "<p sourcefile=\"api/EasyLog.AbstractLogger-1.yml\" sourcestartlinenumber=\"1\">Abstract base for typed log writers.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasyLog.JsonLogger-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasyLog.JsonLogger-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasyLog.JsonLogger<T>",
+      "Summary": "<p sourcefile=\"api/EasyLog.JsonLogger-1.yml\" sourcestartlinenumber=\"1\">Logger that serializes entries to JSON.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasyLog.XmlLogger-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasyLog.XmlLogger-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasyLog.XmlLogger<T>",
+      "Summary": "<p sourcefile=\"api/EasyLog.XmlLogger-1.yml\" sourcestartlinenumber=\"1\">Logger that serializes entries to XML.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasyLog.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasyLog.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasyLog",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.App.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.App.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.App",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Cli.CommandController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Cli.CommandController.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Cli.CommandController",
+      "Summary": "<p sourcefile=\"api/EasySave.Cli.CommandController.yml\" sourcestartlinenumber=\"1\">Handles execution of backup jobs via command line arguments.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Cli.CommandLineArgumentParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Cli.CommandLineArgumentParser.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Cli.CommandLineArgumentParser",
+      "Summary": "<p sourcefile=\"api/EasySave.Cli.CommandLineArgumentParser.yml\" sourcestartlinenumber=\"1\">Parses command-line arguments representing backup job IDs.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Cli.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Cli.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Cli",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Core.Models.BackupType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Core.Models.BackupType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Core.Models.BackupType",
+      "Summary": "<p sourcefile=\"api/EasySave.Core.Models.BackupType.yml\" sourcestartlinenumber=\"1\">Supported backup types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Core.Models.LogEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Core.Models.LogEntry.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Core.Models.LogEntry",
+      "Summary": "<p sourcefile=\"api/EasySave.Core.Models.LogEntry.yml\" sourcestartlinenumber=\"1\">Log entry for a backup operation.\nContains information about the backup operation's execution details.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Core.Models.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Core.Models.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Core.Models",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Data.Configuration.ApplicationConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Data.Configuration.ApplicationConfiguration.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Data.Configuration.ApplicationConfiguration",
+      "Summary": "<p sourcefile=\"api/EasySave.Data.Configuration.ApplicationConfiguration.yml\" sourcestartlinenumber=\"1\">Loads and exposes application configuration (read/write).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Data.Configuration.DataPathResolver.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Data.Configuration.DataPathResolver.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Data.Configuration.DataPathResolver",
+      "Summary": "<p sourcefile=\"api/EasySave.Data.Configuration.DataPathResolver.yml\" sourcestartlinenumber=\"1\">Resolves application data directories (config, logs, etc.) from configuration values.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Data.Configuration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Data.Configuration.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Data.Configuration",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.BackupFolder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.BackupFolder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.BackupFolder",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.BackupJob.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.BackupJob.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.BackupJob",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.BackupTypeComplete.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.BackupTypeComplete.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.BackupTypeComplete",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.BackupTypeDifferential.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.BackupTypeDifferential.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.BackupTypeDifferential",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.BusinessSoftwareMonitor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.BusinessSoftwareMonitor.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.BusinessSoftwareMonitor",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Backup.BusinessSoftwareMonitor.yml\" sourcestartlinenumber=\"1\">Detects configured business software processes from application settings.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.BusinessSoftwareStopHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.BusinessSoftwareStopHandler.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.BusinessSoftwareStopHandler",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Backup.BusinessSoftwareStopHandler.yml\" sourcestartlinenumber=\"1\">Handles backup interruption and logging when business software is detected.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.CryptedFile.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.CryptedFile.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.CryptedFile",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.FileExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.FileExtensions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.FileExtensions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.Interfaces.IBackupTypeSelector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.Interfaces.IBackupTypeSelector.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.Interfaces.IBackupTypeSelector",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.Interfaces.IBusinessSoftwareMonitor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.Interfaces.IBusinessSoftwareMonitor.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.Interfaces.IBusinessSoftwareMonitor",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Backup.Interfaces.IBusinessSoftwareMonitor.yml\" sourcestartlinenumber=\"1\">Detects whether the configured business software is currently running.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.Interfaces.IFile.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.Interfaces.IFile.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.Interfaces.IFile",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.Interfaces.IJobService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.Interfaces.IJobService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.Interfaces.IJobService",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Backup.Interfaces.IJobService.yml\" sourcestartlinenumber=\"1\">Defines backup job management operations exposed to presentation layers.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.Interfaces.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.Interfaces.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.Interfaces",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.JobService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.JobService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.JobService",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Backup.JobService.yml\" sourcestartlinenumber=\"1\">Manages backup jobs and enforces business rules.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.NormalFile.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.NormalFile.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.NormalFile",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.TypeSelectorHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.TypeSelectorHelper.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup.TypeSelectorHelper",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Backup.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Backup.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Backup",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem.yml\" sourcestartlinenumber=\"1\">Represents a selectable business software candidate.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.yml\" sourcestartlinenumber=\"1\">Provides a catalog of installed software candidates usable as business software blockers.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.yml\" sourcestartlinenumber=\"1\">Provides available business software candidates from the local machine.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.BusinessSoftware.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.BusinessSoftware.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.BusinessSoftware",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Data.Persistence.JobRepository.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Data.Persistence.JobRepository.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Data.Persistence.JobRepository",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Data.Persistence.JobRepository.yml\" sourcestartlinenumber=\"1\">Persists the list of backup jobs to a JSON file (jobs.json).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Data.Persistence.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Data.Persistence.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Data.Persistence",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Logger.ConfigurableLogWriter-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Logger.ConfigurableLogWriter-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Logger.ConfigurableLogWriter<T>",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Logger.ConfigurableLogWriter-1.yml\" sourcestartlinenumber=\"1\">Log writer that routes entries based on current user preferences.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Logger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Logger.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Logger",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.State.BackupJobState.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.State.BackupJobState.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.State.BackupJobState",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.State.BackupJobState.yml\" sourcestartlinenumber=\"1\">Describes the execution state of a backup job.\nThis class holds information related to the status and progress of a backup operation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.State.JobRunState.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.State.JobRunState.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.State.JobRunState",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.State.JobRunState.yml\" sourcestartlinenumber=\"1\">Possible states for a running job.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.State.StateFileSingleton.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.State.StateFileSingleton.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.State.StateFileSingleton",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.State.StateFileSingleton.yml\" sourcestartlinenumber=\"1\">Writes the real-time backup state file (<code>state.json</code>).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.State.StateLogger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.State.StateLogger.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.State.StateLogger",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.State.StateLogger.yml\" sourcestartlinenumber=\"1\">Manages and updates the state of backup jobs during their execution.\nProvides methods to change the state based on different events in the backup process.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.State.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.State.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.State",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Utils.ILocalizationApplier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Utils.ILocalizationApplier.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Utils.ILocalizationApplier",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Utils.ILocalizationApplier.yml\" sourcestartlinenumber=\"1\">Defines culture application behavior for UI localization.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Utils.JsonFile.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Utils.JsonFile.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Utils.JsonFile",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Utils.JsonFile.yml\" sourcestartlinenumber=\"1\">JSON read/write helpers with error tolerance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Utils.LocalizationApplier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Utils.LocalizationApplier.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Utils.LocalizationApplier",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Utils.LocalizationApplier.yml\" sourcestartlinenumber=\"1\">Applies localization to the current process using CultureInfo.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Utils.MathUtil.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Utils.MathUtil.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Utils.MathUtil",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Utils.PathService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Utils.PathService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Utils.PathService",
+      "Summary": "<p sourcefile=\"api/EasySave.Models.Utils.PathService.yml\" sourcestartlinenumber=\"1\">Implementation of path normalization and conversion operations.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Utils.StringExtension.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Utils.StringExtension.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Utils.StringExtension",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Models.Utils.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Models.Utils.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Models.Utils",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.BackupJobItemViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.BackupJobItemViewModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.BackupJobItemViewModel",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.BackupJobItemViewModel.yml\" sourcestartlinenumber=\"1\">ViewModel wrapper for BackupJob model, providing UI-specific properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.BusinessSoftwareViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.BusinessSoftwareViewModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.BusinessSoftwareViewModel",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.BusinessSoftwareViewModel.yml\" sourcestartlinenumber=\"1\">Handles business software catalog/search/add/remove workflow.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.JobsViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.JobsViewModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.JobsViewModel",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.JobsViewModel.yml\" sourcestartlinenumber=\"1\">Handles backup job creation, removal, execution and related UI state.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.MainWindowViewModel.ViewScreen.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.MainWindowViewModel.ViewScreen.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.MainWindowViewModel.ViewScreen",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.MainWindowViewModel.ViewScreen.yml\" sourcestartlinenumber=\"1\">Supported in-window screens.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.MainWindowViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.MainWindowViewModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.MainWindowViewModel",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.MainWindowViewModel.yml\" sourcestartlinenumber=\"1\">Main window orchestrator ViewModel.\nCoordinates screen navigation and composes specialized child ViewModels.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel.yml\" sourcestartlinenumber=\"1\">Selectable item used in business software selection screens.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.Services.IUiTextService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.Services.IUiTextService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.Services.IUiTextService",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.Services.IUiTextService.yml\" sourcestartlinenumber=\"1\">Defines localized UI text lookup helpers.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.Services.ResxUiTextService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.Services.ResxUiTextService.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.Services.ResxUiTextService",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.Services.ResxUiTextService.yml\" sourcestartlinenumber=\"1\">Resource-based implementation of <xref href=\"EasySave.ViewModels.Services.IUiTextService\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.Services.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.Services.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.Services",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.SettingsViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.SettingsViewModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.SettingsViewModel",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.SettingsViewModel.yml\" sourcestartlinenumber=\"1\">Handles application settings screen state and actions.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.StatusBarViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.StatusBarViewModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.StatusBarViewModel",
+      "Summary": "<p sourcefile=\"api/EasySave.ViewModels.StatusBarViewModel.yml\" sourcestartlinenumber=\"1\">Holds global status and progress state displayed in the bottom status layer.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.ViewModelBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.ViewModelBase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels.ViewModelBase",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.ViewModels.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.ViewModels.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.ViewModels",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Views.MainWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Views.MainWindow.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Views.MainWindow",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.Views.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.Views.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave.Views",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/EasySave.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/EasySave.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "EasySave",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/Rapport.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/Rapport.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "out/docs/uml/BackupService-workflow/BackupService-workflow.svg",
+      "output": {
+        "resource": {
+          "relative_path": "out/docs/uml/BackupService-workflow/BackupService-workflow.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "out/docs/uml/EasySave-full/EasySave-full.svg",
+      "output": {
+        "resource": {
+          "relative_path": "out/docs/uml/EasySave-full/EasySave-full.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "out/docs/uml/EasySave-full/EasySave.svg",
+      "output": {
+        "resource": {
+          "relative_path": "out/docs/uml/EasySave-full/EasySave.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "out/docs/uml/EasySave-sequence/EasySave-sequence.svg",
+      "output": {
+        "resource": {
+          "relative_path": "out/docs/uml/EasySave-sequence/EasySave-sequence.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

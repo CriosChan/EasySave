@@ -1,0 +1,124 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.Models.Backup
+  commentId: N:EasySave.Models.Backup
+  id: EasySave.Models.Backup
+  children:
+  - EasySave.Models.Backup.BackupFolder
+  - EasySave.Models.Backup.BackupJob
+  - EasySave.Models.Backup.BackupTypeComplete
+  - EasySave.Models.Backup.BackupTypeDifferential
+  - EasySave.Models.Backup.BusinessSoftwareMonitor
+  - EasySave.Models.Backup.BusinessSoftwareStopHandler
+  - EasySave.Models.Backup.CryptedFile
+  - EasySave.Models.Backup.FileExtensions
+  - EasySave.Models.Backup.JobService
+  - EasySave.Models.Backup.NormalFile
+  - EasySave.Models.Backup.TypeSelectorHelper
+  langs:
+  - csharp
+  - vb
+  name: EasySave.Models.Backup
+  nameWithType: EasySave.Models.Backup
+  fullName: EasySave.Models.Backup
+  type: Namespace
+  assemblies:
+  - EasySave
+references:
+- uid: EasySave.Models.Backup.BackupFolder
+  commentId: T:EasySave.Models.Backup.BackupFolder
+  href: EasySave.Models.Backup.BackupFolder.html
+  name: BackupFolder
+  nameWithType: BackupFolder
+  fullName: EasySave.Models.Backup.BackupFolder
+- uid: EasySave.Models.Backup.BackupJob
+  commentId: T:EasySave.Models.Backup.BackupJob
+  parent: EasySave.Models.Backup
+  href: EasySave.Models.Backup.BackupJob.html
+  name: BackupJob
+  nameWithType: BackupJob
+  fullName: EasySave.Models.Backup.BackupJob
+- uid: EasySave.Models.Backup.BackupTypeComplete
+  commentId: T:EasySave.Models.Backup.BackupTypeComplete
+  href: EasySave.Models.Backup.BackupTypeComplete.html
+  name: BackupTypeComplete
+  nameWithType: BackupTypeComplete
+  fullName: EasySave.Models.Backup.BackupTypeComplete
+- uid: EasySave.Models.Backup.BackupTypeDifferential
+  commentId: T:EasySave.Models.Backup.BackupTypeDifferential
+  href: EasySave.Models.Backup.BackupTypeDifferential.html
+  name: BackupTypeDifferential
+  nameWithType: BackupTypeDifferential
+  fullName: EasySave.Models.Backup.BackupTypeDifferential
+- uid: EasySave.Models.Backup.BusinessSoftwareMonitor
+  commentId: T:EasySave.Models.Backup.BusinessSoftwareMonitor
+  href: EasySave.Models.Backup.BusinessSoftwareMonitor.html
+  name: BusinessSoftwareMonitor
+  nameWithType: BusinessSoftwareMonitor
+  fullName: EasySave.Models.Backup.BusinessSoftwareMonitor
+- uid: EasySave.Models.Backup.BusinessSoftwareStopHandler
+  commentId: T:EasySave.Models.Backup.BusinessSoftwareStopHandler
+  href: EasySave.Models.Backup.BusinessSoftwareStopHandler.html
+  name: BusinessSoftwareStopHandler
+  nameWithType: BusinessSoftwareStopHandler
+  fullName: EasySave.Models.Backup.BusinessSoftwareStopHandler
+- uid: EasySave.Models.Backup.CryptedFile
+  commentId: T:EasySave.Models.Backup.CryptedFile
+  href: EasySave.Models.Backup.CryptedFile.html
+  name: CryptedFile
+  nameWithType: CryptedFile
+  fullName: EasySave.Models.Backup.CryptedFile
+- uid: EasySave.Models.Backup.FileExtensions
+  commentId: T:EasySave.Models.Backup.FileExtensions
+  href: EasySave.Models.Backup.FileExtensions.html
+  name: FileExtensions
+  nameWithType: FileExtensions
+  fullName: EasySave.Models.Backup.FileExtensions
+- uid: EasySave.Models.Backup.JobService
+  commentId: T:EasySave.Models.Backup.JobService
+  href: EasySave.Models.Backup.JobService.html
+  name: JobService
+  nameWithType: JobService
+  fullName: EasySave.Models.Backup.JobService
+- uid: EasySave.Models.Backup.NormalFile
+  commentId: T:EasySave.Models.Backup.NormalFile
+  href: EasySave.Models.Backup.NormalFile.html
+  name: NormalFile
+  nameWithType: NormalFile
+  fullName: EasySave.Models.Backup.NormalFile
+- uid: EasySave.Models.Backup.TypeSelectorHelper
+  commentId: T:EasySave.Models.Backup.TypeSelectorHelper
+  href: EasySave.Models.Backup.TypeSelectorHelper.html
+  name: TypeSelectorHelper
+  nameWithType: TypeSelectorHelper
+  fullName: EasySave.Models.Backup.TypeSelectorHelper
+- uid: EasySave.Models.Backup
+  commentId: N:EasySave.Models.Backup
+  href: EasySave.html
+  name: EasySave.Models.Backup
+  nameWithType: EasySave.Models.Backup
+  fullName: EasySave.Models.Backup
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.Backup
+    name: Backup
+    href: EasySave.Models.Backup.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.Backup
+    name: Backup
+    href: EasySave.Models.Backup.html
