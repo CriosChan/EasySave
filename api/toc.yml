@@ -1,0 +1,219 @@
+### YamlMime:TableOfContent
+items:
+- uid: EasyLog
+  name: EasyLog
+  type: Namespace
+  items:
+  - uid: EasyLog.AbstractLogger`1
+    name: AbstractLogger<T>
+    type: Class
+  - uid: EasyLog.JsonLogger`1
+    name: JsonLogger<T>
+    type: Class
+  - uid: EasyLog.XmlLogger`1
+    name: XmlLogger<T>
+    type: Class
+- uid: EasySave
+  name: EasySave
+  type: Namespace
+  items:
+  - uid: EasySave.App
+    name: App
+    type: Class
+- uid: EasySave.Cli
+  name: EasySave.Cli
+  type: Namespace
+  items:
+  - uid: EasySave.Cli.CommandController
+    name: CommandController
+    type: Class
+  - uid: EasySave.Cli.CommandLineArgumentParser
+    name: CommandLineArgumentParser
+    type: Class
+- uid: EasySave.Core.Models
+  name: EasySave.Core.Models
+  type: Namespace
+  items:
+  - uid: EasySave.Core.Models.BackupType
+    name: BackupType
+    type: Enum
+  - uid: EasySave.Core.Models.LogEntry
+    name: LogEntry
+    type: Class
+- uid: EasySave.Data.Configuration
+  name: EasySave.Data.Configuration
+  type: Namespace
+  items:
+  - uid: EasySave.Data.Configuration.ApplicationConfiguration
+    name: ApplicationConfiguration
+    type: Class
+  - uid: EasySave.Data.Configuration.DataPathResolver
+    name: DataPathResolver
+    type: Class
+- uid: EasySave.Models.Backup
+  name: EasySave.Models.Backup
+  type: Namespace
+  items:
+  - uid: EasySave.Models.Backup.BackupFolder
+    name: BackupFolder
+    type: Class
+  - uid: EasySave.Models.Backup.BackupJob
+    name: BackupJob
+    type: Class
+  - uid: EasySave.Models.Backup.BackupTypeComplete
+    name: BackupTypeComplete
+    type: Class
+  - uid: EasySave.Models.Backup.BackupTypeDifferential
+    name: BackupTypeDifferential
+    type: Class
+  - uid: EasySave.Models.Backup.BusinessSoftwareMonitor
+    name: BusinessSoftwareMonitor
+    type: Class
+  - uid: EasySave.Models.Backup.BusinessSoftwareStopHandler
+    name: BusinessSoftwareStopHandler
+    type: Class
+  - uid: EasySave.Models.Backup.CryptedFile
+    name: CryptedFile
+    type: Class
+  - uid: EasySave.Models.Backup.FileExtensions
+    name: FileExtensions
+    type: Class
+  - uid: EasySave.Models.Backup.JobService
+    name: JobService
+    type: Class
+  - uid: EasySave.Models.Backup.NormalFile
+    name: NormalFile
+    type: Class
+  - uid: EasySave.Models.Backup.TypeSelectorHelper
+    name: TypeSelectorHelper
+    type: Class
+- uid: EasySave.Models.Backup.Interfaces
+  name: EasySave.Models.Backup.Interfaces
+  type: Namespace
+  items:
+  - uid: EasySave.Models.Backup.Interfaces.IBackupTypeSelector
+    name: IBackupTypeSelector
+    type: Interface
+  - uid: EasySave.Models.Backup.Interfaces.IBusinessSoftwareMonitor
+    name: IBusinessSoftwareMonitor
+    type: Interface
+  - uid: EasySave.Models.Backup.Interfaces.IFile
+    name: IFile
+    type: Interface
+  - uid: EasySave.Models.Backup.Interfaces.IJobService
+    name: IJobService
+    type: Interface
+- uid: EasySave.Models.BusinessSoftware
+  name: EasySave.Models.BusinessSoftware
+  type: Namespace
+  items:
+  - uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem
+    name: BusinessSoftwareCatalogItem
+    type: Class
+  - uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+    name: BusinessSoftwareCatalogService
+    type: Class
+  - uid: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+    name: IBusinessSoftwareCatalogService
+    type: Interface
+- uid: EasySave.Models.Data.Persistence
+  name: EasySave.Models.Data.Persistence
+  type: Namespace
+  items:
+  - uid: EasySave.Models.Data.Persistence.JobRepository
+    name: JobRepository
+    type: Class
+- uid: EasySave.Models.Logger
+  name: EasySave.Models.Logger
+  type: Namespace
+  items:
+  - uid: EasySave.Models.Logger.ConfigurableLogWriter`1
+    name: ConfigurableLogWriter<T>
+    type: Class
+- uid: EasySave.Models.State
+  name: EasySave.Models.State
+  type: Namespace
+  items:
+  - uid: EasySave.Models.State.BackupJobState
+    name: BackupJobState
+    type: Class
+  - uid: EasySave.Models.State.JobRunState
+    name: JobRunState
+    type: Enum
+  - uid: EasySave.Models.State.StateFileSingleton
+    name: StateFileSingleton
+    type: Class
+  - uid: EasySave.Models.State.StateLogger
+    name: StateLogger
+    type: Class
+- uid: EasySave.Models.Utils
+  name: EasySave.Models.Utils
+  type: Namespace
+  items:
+  - uid: EasySave.Models.Utils.ILocalizationApplier
+    name: ILocalizationApplier
+    type: Interface
+  - uid: EasySave.Models.Utils.JsonFile
+    name: JsonFile
+    type: Class
+  - uid: EasySave.Models.Utils.LocalizationApplier
+    name: LocalizationApplier
+    type: Class
+  - uid: EasySave.Models.Utils.MathUtil
+    name: MathUtil
+    type: Class
+  - uid: EasySave.Models.Utils.PathService
+    name: PathService
+    type: Class
+  - uid: EasySave.Models.Utils.StringExtension
+    name: StringExtension
+    type: Class
+- uid: EasySave.ViewModels
+  name: EasySave.ViewModels
+  type: Namespace
+  items:
+  - uid: EasySave.ViewModels.BackupJobItemViewModel
+    name: BackupJobItemViewModel
+    type: Class
+  - uid: EasySave.ViewModels.BusinessSoftwareViewModel
+    name: BusinessSoftwareViewModel
+    type: Class
+  - uid: EasySave.ViewModels.JobsViewModel
+    name: JobsViewModel
+    type: Class
+  - uid: EasySave.ViewModels.MainWindowViewModel
+    name: MainWindowViewModel
+    type: Class
+  - uid: EasySave.ViewModels.MainWindowViewModel.ViewScreen
+    name: MainWindowViewModel.ViewScreen
+    type: Enum
+  - uid: EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel
+    name: SelectableBusinessSoftwareItemViewModel
+    type: Class
+  - uid: EasySave.ViewModels.SettingsViewModel
+    name: SettingsViewModel
+    type: Class
+  - uid: EasySave.ViewModels.StatusBarViewModel
+    name: StatusBarViewModel
+    type: Class
+  - uid: EasySave.ViewModels.ViewModelBase
+    name: ViewModelBase
+    type: Class
+- uid: EasySave.ViewModels.Services
+  name: EasySave.ViewModels.Services
+  type: Namespace
+  items:
+  - uid: EasySave.ViewModels.Services.IUiTextService
+    name: IUiTextService
+    type: Interface
+  - uid: EasySave.ViewModels.Services.ResxUiTextService
+    name: ResxUiTextService
+    type: Class
+- uid: EasySave.Views
+  name: EasySave.Views
+  type: Namespace
+  items:
+  - uid: EasySave.Views.MainWindow
+    name: MainWindow
+    type: Class
+memberLayout: SamePage

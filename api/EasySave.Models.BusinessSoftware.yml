@@ -1,0 +1,68 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.Models.BusinessSoftware
+  commentId: N:EasySave.Models.BusinessSoftware
+  id: EasySave.Models.BusinessSoftware
+  children:
+  - EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem
+  - EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+  - EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+  langs:
+  - csharp
+  - vb
+  name: EasySave.Models.BusinessSoftware
+  nameWithType: EasySave.Models.BusinessSoftware
+  fullName: EasySave.Models.BusinessSoftware
+  type: Namespace
+  assemblies:
+  - EasySave
+references:
+- uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem
+  commentId: T:EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem
+  href: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem.html
+  name: BusinessSoftwareCatalogItem
+  nameWithType: BusinessSoftwareCatalogItem
+  fullName: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogItem
+- uid: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+  commentId: T:EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+  href: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService.html
+  name: BusinessSoftwareCatalogService
+  nameWithType: BusinessSoftwareCatalogService
+  fullName: EasySave.Models.BusinessSoftware.BusinessSoftwareCatalogService
+- uid: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+  commentId: T:EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+  parent: EasySave.Models.BusinessSoftware
+  href: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService.html
+  name: IBusinessSoftwareCatalogService
+  nameWithType: IBusinessSoftwareCatalogService
+  fullName: EasySave.Models.BusinessSoftware.IBusinessSoftwareCatalogService
+- uid: EasySave.Models.BusinessSoftware
+  commentId: N:EasySave.Models.BusinessSoftware
+  href: EasySave.html
+  name: EasySave.Models.BusinessSoftware
+  nameWithType: EasySave.Models.BusinessSoftware
+  fullName: EasySave.Models.BusinessSoftware
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.BusinessSoftware
+    name: BusinessSoftware
+    href: EasySave.Models.BusinessSoftware.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Models
+    name: Models
+    href: EasySave.Models.html
+  - name: .
+  - uid: EasySave.Models.BusinessSoftware
+    name: BusinessSoftware
+    href: EasySave.Models.BusinessSoftware.html

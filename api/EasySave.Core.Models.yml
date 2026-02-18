@@ -1,0 +1,61 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.Core.Models
+  commentId: N:EasySave.Core.Models
+  id: EasySave.Core.Models
+  children:
+  - EasySave.Core.Models.BackupType
+  - EasySave.Core.Models.LogEntry
+  langs:
+  - csharp
+  - vb
+  name: EasySave.Core.Models
+  nameWithType: EasySave.Core.Models
+  fullName: EasySave.Core.Models
+  type: Namespace
+  assemblies:
+  - EasySave
+references:
+- uid: EasySave.Core.Models.BackupType
+  commentId: T:EasySave.Core.Models.BackupType
+  parent: EasySave.Core.Models
+  href: EasySave.Core.Models.BackupType.html
+  name: BackupType
+  nameWithType: BackupType
+  fullName: EasySave.Core.Models.BackupType
+- uid: EasySave.Core.Models.LogEntry
+  commentId: T:EasySave.Core.Models.LogEntry
+  href: EasySave.Core.Models.LogEntry.html
+  name: LogEntry
+  nameWithType: LogEntry
+  fullName: EasySave.Core.Models.LogEntry
+- uid: EasySave.Core.Models
+  commentId: N:EasySave.Core.Models
+  href: EasySave.html
+  name: EasySave.Core.Models
+  nameWithType: EasySave.Core.Models
+  fullName: EasySave.Core.Models
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Core
+    name: Core
+    href: EasySave.Core.html
+  - name: .
+  - uid: EasySave.Core.Models
+    name: Models
+    href: EasySave.Core.Models.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.Core
+    name: Core
+    href: EasySave.Core.html
+  - name: .
+  - uid: EasySave.Core.Models
+    name: Models
+    href: EasySave.Core.Models.html

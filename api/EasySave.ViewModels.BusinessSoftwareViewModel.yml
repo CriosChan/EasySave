@@ -1,0 +1,3241 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel
+  commentId: T:EasySave.ViewModels.BusinessSoftwareViewModel
+  id: BusinessSoftwareViewModel
+  parent: EasySave.ViewModels
+  children:
+  - EasySave.ViewModels.BusinessSoftwareViewModel.#ctor(EasySave.ViewModels.StatusBarViewModel)
+  - EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel
+  - EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand
+  - EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftware
+  - EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftwareTitle
+  - EasySave.ViewModels.BusinessSoftwareViewModel.AllAvailableBusinessSoftware
+  - EasySave.ViewModels.BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle
+  - EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchLabel
+  - EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder
+  - EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchText
+  - EasySave.ViewModels.BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware
+  - EasySave.ViewModels.BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware
+  - EasySave.ViewModels.BusinessSoftwareViewModel.ConfiguredProcessNamesChanged
+  - EasySave.ViewModels.BusinessSoftwareViewModel.FilteredBusinessSoftware
+  - EasySave.ViewModels.BusinessSoftwareViewModel.Initialize
+  - EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftware
+  - EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftwareRequested
+  - EasySave.ViewModels.BusinessSoftwareViewModel.OpenCatalog
+  - EasySave.ViewModels.BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel
+  - EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand
+  - EasySave.ViewModels.BusinessSoftwareViewModel.UpdateUiText
+  - EasySave.ViewModels.BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel
+  langs:
+  - csharp
+  - vb
+  name: BusinessSoftwareViewModel
+  nameWithType: BusinessSoftwareViewModel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel
+  type: Class
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.RelayCommandGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: BusinessSoftwareViewModel
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.RelayCommandGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware.g.cs
+    startLine: 6
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Handles business software catalog/search/add/remove workflow.
+  example: []
+  syntax:
+    content: 'public class BusinessSoftwareViewModel : ViewModelBase, INotifyPropertyChanged, INotifyPropertyChanging'
+    content.vb: Public Class BusinessSoftwareViewModel Inherits ViewModelBase Implements INotifyPropertyChanged, INotifyPropertyChanging
+  inheritance:
+  - System.Object
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  - EasySave.ViewModels.ViewModelBase
+  implements:
+  - System.ComponentModel.INotifyPropertyChanged
+  - System.ComponentModel.INotifyPropertyChanging
+  inheritedMembers:
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.ComponentModel.PropertyChangingEventArgs)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1({T}@,{T},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1({T}@,{T},System.Collections.Generic.IEqualityComparer{{T}},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1({T},{T},System.Action{{T}},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1({T},{T},System.Collections.Generic.IEqualityComparer{{T}},System.Action{{T}},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2({T},{T},{TModel},System.Action{{TModel},{T}},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2({T},{T},System.Collections.Generic.IEqualityComparer{{T}},{TModel},System.Action{{TModel},{T}},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.Action{System.Threading.Tasks.Task},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{{T}}@,System.Threading.Tasks.Task{{T}},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{{T}}@,System.Threading.Tasks.Task{{T}},System.Action{System.Threading.Tasks.Task{{T}}},System.String)
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanged
+  - CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanging
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.ConfiguredProcessNamesChanged
+  commentId: E:EasySave.ViewModels.BusinessSoftwareViewModel.ConfiguredProcessNamesChanged
+  id: ConfiguredProcessNamesChanged
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: ConfiguredProcessNamesChanged
+  nameWithType: BusinessSoftwareViewModel.ConfiguredProcessNamesChanged
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.ConfiguredProcessNamesChanged
+  type: Event
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: ConfiguredProcessNamesChanged
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 34
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Raised when configured process names were persisted.
+  example: []
+  syntax:
+    content: public event EventHandler? ConfiguredProcessNamesChanged
+    return:
+      type: System.EventHandler
+    content.vb: Public Event ConfiguredProcessNamesChanged As EventHandler
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftwareRequested
+  commentId: E:EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftwareRequested
+  id: OpenAddedSoftwareRequested
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: OpenAddedSoftwareRequested
+  nameWithType: BusinessSoftwareViewModel.OpenAddedSoftwareRequested
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftwareRequested
+  type: Event
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: OpenAddedSoftwareRequested
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 39
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Raised when UI should navigate to the added software screen.
+  example: []
+  syntax:
+    content: public event EventHandler? OpenAddedSoftwareRequested
+    return:
+      type: System.EventHandler
+    content.vb: Public Event OpenAddedSoftwareRequested As EventHandler
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware
+  id: CanAddSelectedBusinessSoftware
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: CanAddSelectedBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware
+  type: Property
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: CanAddSelectedBusinessSoftware
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 44
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Gets a value indicating whether at least one available software item is selected.
+  example: []
+  syntax:
+    content: public bool CanAddSelectedBusinessSoftware { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property CanAddSelectedBusinessSoftware As Boolean
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware*
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware
+  id: CanRemoveAddedBusinessSoftware
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: CanRemoveAddedBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware
+  type: Property
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: CanRemoveAddedBusinessSoftware
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 49
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Gets a value indicating whether at least one configured software item is selected.
+  example: []
+  syntax:
+    content: public bool CanRemoveAddedBusinessSoftware { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property CanRemoveAddedBusinessSoftware As Boolean
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware*
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.#ctor(EasySave.ViewModels.StatusBarViewModel)
+  commentId: M:EasySave.ViewModels.BusinessSoftwareViewModel.#ctor(EasySave.ViewModels.StatusBarViewModel)
+  id: '#ctor(EasySave.ViewModels.StatusBarViewModel)'
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: BusinessSoftwareViewModel(StatusBarViewModel)
+  nameWithType: BusinessSoftwareViewModel.BusinessSoftwareViewModel(StatusBarViewModel)
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareViewModel(EasySave.ViewModels.StatusBarViewModel)
+  type: Constructor
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: .ctor
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 55
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Initializes a new instance of the <xref href="EasySave.ViewModels.BusinessSoftwareViewModel" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public BusinessSoftwareViewModel(StatusBarViewModel statusBar)
+    parameters:
+    - id: statusBar
+      type: EasySave.ViewModels.StatusBarViewModel
+      description: Shared status bar state.
+    content.vb: Public Sub New(statusBar As StatusBarViewModel)
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.#ctor*
+  nameWithType.vb: BusinessSoftwareViewModel.New(StatusBarViewModel)
+  fullName.vb: EasySave.ViewModels.BusinessSoftwareViewModel.New(EasySave.ViewModels.StatusBarViewModel)
+  name.vb: New(StatusBarViewModel)
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.Initialize
+  commentId: M:EasySave.ViewModels.BusinessSoftwareViewModel.Initialize
+  id: Initialize
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: Initialize()
+  nameWithType: BusinessSoftwareViewModel.Initialize()
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.Initialize()
+  type: Method
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: Initialize
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 66
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Initializes business software state used by UI.
+  example: []
+  syntax:
+    content: public void Initialize()
+    content.vb: Public Sub Initialize()
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.Initialize*
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.UpdateUiText
+  commentId: M:EasySave.ViewModels.BusinessSoftwareViewModel.UpdateUiText
+  id: UpdateUiText
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: UpdateUiText()
+  nameWithType: BusinessSoftwareViewModel.UpdateUiText()
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.UpdateUiText()
+  type: Method
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: UpdateUiText
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 76
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Updates business software labels from localization resources.
+  example: []
+  syntax:
+    content: public void UpdateUiText()
+    content.vb: Public Sub UpdateUiText()
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.UpdateUiText*
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.OpenCatalog
+  commentId: M:EasySave.ViewModels.BusinessSoftwareViewModel.OpenCatalog
+  id: OpenCatalog
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: OpenCatalog()
+  nameWithType: BusinessSoftwareViewModel.OpenCatalog()
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.OpenCatalog()
+  type: Method
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: OpenCatalog
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 93
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Prepares available and added lists when opening software catalog screen.
+  example: []
+  syntax:
+    content: public void OpenCatalog()
+    content.vb: Public Sub OpenCatalog()
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.OpenCatalog*
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftware
+  commentId: M:EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftware
+  id: OpenAddedSoftware
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: OpenAddedSoftware()
+  nameWithType: BusinessSoftwareViewModel.OpenAddedSoftware()
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftware()
+  type: Method
+  source:
+    remote:
+      path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: OpenAddedSoftware
+    path: EasySave/ViewModels/BusinessSoftwareViewModel.cs
+    startLine: 103
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Prepares configured list when opening added software screen.
+  example: []
+  syntax:
+    content: public void OpenAddedSoftware()
+    content.vb: Public Sub OpenAddedSoftware()
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftware*
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand
+  id: RemoveSelectedAddedBusinessSoftwareCommand
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: RemoveSelectedAddedBusinessSoftwareCommand
+  nameWithType: BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.RelayCommandGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: RemoveSelectedAddedBusinessSoftwareCommand
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.RelayCommandGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware.g.cs
+    startLine: 12
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Gets an <xref href="CommunityToolkit.Mvvm.Input.IRelayCommand" data-throw-if-not-resolved="false"></xref> instance wrapping <xref href="EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public IRelayCommand RemoveSelectedAddedBusinessSoftwareCommand { get; }
+    parameters: []
+    return:
+      type: CommunityToolkit.Mvvm.Input.IRelayCommand
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public ReadOnly Property RemoveSelectedAddedBusinessSoftwareCommand As IRelayCommand
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AllAvailableBusinessSoftware
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.AllAvailableBusinessSoftware
+  id: AllAvailableBusinessSoftware
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: AllAvailableBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.AllAvailableBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AllAvailableBusinessSoftware
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: AllAvailableBusinessSoftware
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 9
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public ObservableCollection<SelectableBusinessSoftwareItemViewModel> AllAvailableBusinessSoftware { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.ObjectModel.ObservableCollection{EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel}
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property AllAvailableBusinessSoftware As ObservableCollection(Of SelectableBusinessSoftwareItemViewModel)
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.AllAvailableBusinessSoftware*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.FilteredBusinessSoftware
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.FilteredBusinessSoftware
+  id: FilteredBusinessSoftware
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: FilteredBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.FilteredBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.FilteredBusinessSoftware
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: FilteredBusinessSoftware
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 31
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public ObservableCollection<SelectableBusinessSoftwareItemViewModel> FilteredBusinessSoftware { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.ObjectModel.ObservableCollection{EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel}
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property FilteredBusinessSoftware As ObservableCollection(Of SelectableBusinessSoftwareItemViewModel)
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.FilteredBusinessSoftware*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftware
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftware
+  id: AddedBusinessSoftware
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: AddedBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.AddedBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftware
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: AddedBusinessSoftware
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 53
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public ObservableCollection<SelectableBusinessSoftwareItemViewModel> AddedBusinessSoftware { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.ObjectModel.ObservableCollection{EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel}
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property AddedBusinessSoftware As ObservableCollection(Of SelectableBusinessSoftwareItemViewModel)
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftware*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchText
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchText
+  id: BusinessSoftwareSearchText
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: BusinessSoftwareSearchText
+  nameWithType: BusinessSoftwareViewModel.BusinessSoftwareSearchText
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchText
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: BusinessSoftwareSearchText
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 75
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public string BusinessSoftwareSearchText { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property BusinessSoftwareSearchText As String
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchText*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle
+  id: AvailableBusinessSoftwareTitle
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: AvailableBusinessSoftwareTitle
+  nameWithType: BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: AvailableBusinessSoftwareTitle
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 97
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public string AvailableBusinessSoftwareTitle { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property AvailableBusinessSoftwareTitle As String
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftwareTitle
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftwareTitle
+  id: AddedBusinessSoftwareTitle
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: AddedBusinessSoftwareTitle
+  nameWithType: BusinessSoftwareViewModel.AddedBusinessSoftwareTitle
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftwareTitle
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: AddedBusinessSoftwareTitle
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 119
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public string AddedBusinessSoftwareTitle { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property AddedBusinessSoftwareTitle As String
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftwareTitle*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchLabel
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchLabel
+  id: BusinessSoftwareSearchLabel
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: BusinessSoftwareSearchLabel
+  nameWithType: BusinessSoftwareViewModel.BusinessSoftwareSearchLabel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchLabel
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: BusinessSoftwareSearchLabel
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 141
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public string BusinessSoftwareSearchLabel { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property BusinessSoftwareSearchLabel As String
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchLabel*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder
+  id: BusinessSoftwareSearchPlaceholder
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: BusinessSoftwareSearchPlaceholder
+  nameWithType: BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: BusinessSoftwareSearchPlaceholder
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 163
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public string BusinessSoftwareSearchPlaceholder { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property BusinessSoftwareSearchPlaceholder As String
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel
+  id: AddSelectedBusinessSoftwareButtonLabel
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: AddSelectedBusinessSoftwareButtonLabel
+  nameWithType: BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: AddSelectedBusinessSoftwareButtonLabel
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 185
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public string AddSelectedBusinessSoftwareButtonLabel { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property AddSelectedBusinessSoftwareButtonLabel As String
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel
+  id: ViewAddedBusinessSoftwareButtonLabel
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: ViewAddedBusinessSoftwareButtonLabel
+  nameWithType: BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: ViewAddedBusinessSoftwareButtonLabel
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 207
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public string ViewAddedBusinessSoftwareButtonLabel { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property ViewAddedBusinessSoftwareButtonLabel As String
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel
+  id: RemoveAddedBusinessSoftwareButtonLabel
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: RemoveAddedBusinessSoftwareButtonLabel
+  nameWithType: BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: RemoveAddedBusinessSoftwareButtonLabel
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.g.cs
+    startLine: 229
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public string RemoveAddedBusinessSoftwareButtonLabel { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public Property RemoveAddedBusinessSoftwareButtonLabel As String
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand
+  commentId: P:EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand
+  id: AddSelectedBusinessSoftwareCommand
+  parent: EasySave.ViewModels.BusinessSoftwareViewModel
+  langs:
+  - csharp
+  - vb
+  name: AddSelectedBusinessSoftwareCommand
+  nameWithType: BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand
+  type: Property
+  source:
+    remote:
+      path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.RelayCommandGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware.g.cs
+      branch: feature/docfx
+      repo: https://github.com/CriosChan/EasySave.git
+    id: AddSelectedBusinessSoftwareCommand
+    path: EasySave/obj/Release/net10.0/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.RelayCommandGenerator/EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware.g.cs
+    startLine: 12
+  assemblies:
+  - EasySave
+  namespace: EasySave.ViewModels
+  summary: Gets an <xref href="CommunityToolkit.Mvvm.Input.IRelayCommand" data-throw-if-not-resolved="false"></xref> instance wrapping <xref href="EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: >-
+      [ExcludeFromCodeCoverage]
+
+      public IRelayCommand AddSelectedBusinessSoftwareCommand { get; }
+    parameters: []
+    return:
+      type: CommunityToolkit.Mvvm.Input.IRelayCommand
+    content.vb: >-
+      <ExcludeFromCodeCoverage>
+
+      Public ReadOnly Property AddSelectedBusinessSoftwareCommand As IRelayCommand
+  overload: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand*
+  attributes:
+  - type: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute
+    ctor: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute.#ctor
+    arguments: []
+references:
+- uid: EasySave.ViewModels
+  commentId: N:EasySave.ViewModels
+  href: EasySave.html
+  name: EasySave.ViewModels
+  nameWithType: EasySave.ViewModels
+  fullName: EasySave.ViewModels
+  spec.csharp:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.ViewModels
+    name: ViewModels
+    href: EasySave.ViewModels.html
+  spec.vb:
+  - uid: EasySave
+    name: EasySave
+    href: EasySave.html
+  - name: .
+  - uid: EasySave.ViewModels
+    name: ViewModels
+    href: EasySave.ViewModels.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  commentId: T:CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  parent: CommunityToolkit.Mvvm.ComponentModel
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject
+  name: ObservableObject
+  nameWithType: ObservableObject
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+- uid: EasySave.ViewModels.ViewModelBase
+  commentId: T:EasySave.ViewModels.ViewModelBase
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.ViewModelBase.html
+  name: ViewModelBase
+  nameWithType: ViewModelBase
+  fullName: EasySave.ViewModels.ViewModelBase
+- uid: System.ComponentModel.INotifyPropertyChanged
+  commentId: T:System.ComponentModel.INotifyPropertyChanged
+  parent: System.ComponentModel
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanged
+  name: INotifyPropertyChanged
+  nameWithType: INotifyPropertyChanged
+  fullName: System.ComponentModel.INotifyPropertyChanged
+- uid: System.ComponentModel.INotifyPropertyChanging
+  commentId: T:System.ComponentModel.INotifyPropertyChanging
+  parent: System.ComponentModel
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanging
+  name: INotifyPropertyChanging
+  nameWithType: INotifyPropertyChanging
+  fullName: System.ComponentModel.INotifyPropertyChanging
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanged#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanged(system-componentmodel-propertychangedeventargs)
+  name: OnPropertyChanged(PropertyChangedEventArgs)
+  nameWithType: ObservableObject.OnPropertyChanged(PropertyChangedEventArgs)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs)
+    name: OnPropertyChanged
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanged#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanged(system-componentmodel-propertychangedeventargs)
+  - name: (
+  - uid: System.ComponentModel.PropertyChangedEventArgs
+    name: PropertyChangedEventArgs
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.componentmodel.propertychangedeventargs
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs)
+    name: OnPropertyChanged
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanged#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanged(system-componentmodel-propertychangedeventargs)
+  - name: (
+  - uid: System.ComponentModel.PropertyChangedEventArgs
+    name: PropertyChangedEventArgs
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.componentmodel.propertychangedeventargs
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.ComponentModel.PropertyChangingEventArgs)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.ComponentModel.PropertyChangingEventArgs)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanging#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanging(system-componentmodel-propertychangingeventargs)
+  name: OnPropertyChanging(PropertyChangingEventArgs)
+  nameWithType: ObservableObject.OnPropertyChanging(PropertyChangingEventArgs)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.ComponentModel.PropertyChangingEventArgs)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.ComponentModel.PropertyChangingEventArgs)
+    name: OnPropertyChanging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanging#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanging(system-componentmodel-propertychangingeventargs)
+  - name: (
+  - uid: System.ComponentModel.PropertyChangingEventArgs
+    name: PropertyChangingEventArgs
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.componentmodel.propertychangingeventargs
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.ComponentModel.PropertyChangingEventArgs)
+    name: OnPropertyChanging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanging#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanging(system-componentmodel-propertychangingeventargs)
+  - name: (
+  - uid: System.ComponentModel.PropertyChangingEventArgs
+    name: PropertyChangingEventArgs
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.componentmodel.propertychangingeventargs
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanged#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanged(system-string)
+  name: OnPropertyChanged(string)
+  nameWithType: ObservableObject.OnPropertyChanged(string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(string)
+  nameWithType.vb: ObservableObject.OnPropertyChanged(String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(String)
+  name.vb: OnPropertyChanged(String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.String)
+    name: OnPropertyChanged
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanged#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanged(system-string)
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanged(System.String)
+    name: OnPropertyChanged
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanged#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanged(system-string)
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanging#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanging(system-string)
+  name: OnPropertyChanging(string)
+  nameWithType: ObservableObject.OnPropertyChanging(string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(string)
+  nameWithType.vb: ObservableObject.OnPropertyChanging(String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(String)
+  name.vb: OnPropertyChanging(String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.String)
+    name: OnPropertyChanging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanging#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanging(system-string)
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.OnPropertyChanging(System.String)
+    name: OnPropertyChanging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanging#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanging(system-string)
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1({T}@,{T},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  definition: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.String)
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-string)
+  name: SetProperty<T>(ref T, T, string)
+  nameWithType: ObservableObject.SetProperty<T>(ref T, T, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<T>(ref T, T, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of T)(T, T, String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of T)(T, T, String)
+  name.vb: SetProperty(Of T)(T, T, String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: ref
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1({T}@,{T},System.Collections.Generic.IEqualityComparer{{T}},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  definition: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-collections-generic-iequalitycomparer((-0))-system-string)
+  name: SetProperty<T>(ref T, T, IEqualityComparer<T>, string)
+  nameWithType: ObservableObject.SetProperty<T>(ref T, T, IEqualityComparer<T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<T>(ref T, T, System.Collections.Generic.IEqualityComparer<T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of T)(T, T, IEqualityComparer(Of T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of T)(T, T, System.Collections.Generic.IEqualityComparer(Of T), String)
+  name.vb: SetProperty(Of T)(T, T, IEqualityComparer(Of T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-collections-generic-iequalitycomparer((-0))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: ref
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-collections-generic-iequalitycomparer((-0))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1({T},{T},System.Action{{T}},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Action{``0},System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  definition: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Action{``0},System.String)
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-action((-0))-system-string)
+  name: SetProperty<T>(T, T, Action<T>, string)
+  nameWithType: ObservableObject.SetProperty<T>(T, T, Action<T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<T>(T, T, System.Action<T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of T)(T, T, Action(Of T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of T)(T, T, System.Action(Of T), String)
+  name.vb: SetProperty(Of T)(T, T, Action(Of T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Action{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-action((-0))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Action{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-action((-0))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1({T},{T},System.Collections.Generic.IEqualityComparer{{T}},System.Action{{T}},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.Action{``0},System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  definition: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.Action{``0},System.String)
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-collections-generic-iequalitycomparer((-0))-system-action((-0))-system-string)
+  name: SetProperty<T>(T, T, IEqualityComparer<T>, Action<T>, string)
+  nameWithType: ObservableObject.SetProperty<T>(T, T, IEqualityComparer<T>, Action<T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<T>(T, T, System.Collections.Generic.IEqualityComparer<T>, System.Action<T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of T)(T, T, IEqualityComparer(Of T), Action(Of T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of T)(T, T, System.Collections.Generic.IEqualityComparer(Of T), System.Action(Of T), String)
+  name.vb: SetProperty(Of T)(T, T, IEqualityComparer(Of T), Action(Of T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.Action{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-collections-generic-iequalitycomparer((-0))-system-action((-0))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.Action{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-collections-generic-iequalitycomparer((-0))-system-action((-0))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2({T},{T},{TModel},System.Action{{TModel},{T}},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,``0,System.Action{``0,``1},System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  definition: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,``0,System.Action{``0,``1},System.String)
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-0-system-action((-0-1))-system-string)
+  name: SetProperty<TModel, T>(T, T, TModel, Action<TModel, T>, string)
+  nameWithType: ObservableObject.SetProperty<TModel, T>(T, T, TModel, Action<TModel, T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<TModel, T>(T, T, TModel, System.Action<TModel, T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of TModel, T)(T, T, TModel, Action(Of TModel, T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of TModel, T)(T, T, TModel, System.Action(Of TModel, T), String)
+  name.vb: SetProperty(Of TModel, T)(T, T, TModel, Action(Of TModel, T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,``0,System.Action{``0,``1},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-0-system-action((-0-1))-system-string)
+  - name: <
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - uid: System.Action`2
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-2
+  - name: <
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,``0,System.Action{``0,``1},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-0-system-action((-0-1))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - uid: System.Action`2
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2({T},{T},System.Collections.Generic.IEqualityComparer{{T}},{TModel},System.Action{{TModel},{T}},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,System.Collections.Generic.IEqualityComparer{``1},``0,System.Action{``0,``1},System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  definition: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,System.Collections.Generic.IEqualityComparer{``1},``0,System.Action{``0,``1},System.String)
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-system-collections-generic-iequalitycomparer((-1))-0-system-action((-0-1))-system-string)
+  name: SetProperty<TModel, T>(T, T, IEqualityComparer<T>, TModel, Action<TModel, T>, string)
+  nameWithType: ObservableObject.SetProperty<TModel, T>(T, T, IEqualityComparer<T>, TModel, Action<TModel, T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<TModel, T>(T, T, System.Collections.Generic.IEqualityComparer<T>, TModel, System.Action<TModel, T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of TModel, T)(T, T, IEqualityComparer(Of T), TModel, Action(Of TModel, T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of TModel, T)(T, T, System.Collections.Generic.IEqualityComparer(Of T), TModel, System.Action(Of TModel, T), String)
+  name.vb: SetProperty(Of TModel, T)(T, T, IEqualityComparer(Of T), TModel, Action(Of TModel, T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,System.Collections.Generic.IEqualityComparer{``1},``0,System.Action{``0,``1},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-system-collections-generic-iequalitycomparer((-1))-0-system-action((-0-1))-system-string)
+  - name: <
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - uid: System.Action`2
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-2
+  - name: <
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,System.Collections.Generic.IEqualityComparer{``1},``0,System.Action{``0,``1},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-system-collections-generic-iequalitycomparer((-1))-0-system-action((-0-1))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - uid: System.Action`2
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier@-system-threading-tasks-task-system-string)
+  name: SetPropertyAndNotifyOnCompletion(ref TaskNotifier, Task, string)
+  nameWithType: ObservableObject.SetPropertyAndNotifyOnCompletion(ref ObservableObject.TaskNotifier, Task, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(ref CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier, System.Threading.Tasks.Task, string)
+  nameWithType.vb: ObservableObject.SetPropertyAndNotifyOnCompletion(ObservableObject.TaskNotifier, Task, String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier, System.Threading.Tasks.Task, String)
+  name.vb: SetPropertyAndNotifyOnCompletion(TaskNotifier, Task, String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier@-system-threading-tasks-task-system-string)
+  - name: (
+  - name: ref
+  - name: " "
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier@-system-threading-tasks-task-system-string)
+  - name: (
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.Action{System.Threading.Tasks.Task},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.Action{System.Threading.Tasks.Task},System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier@-system-threading-tasks-task-system-action((system-threading-tasks-task))-system-string)
+  name: SetPropertyAndNotifyOnCompletion(ref TaskNotifier, Task, Action<Task>, string)
+  nameWithType: ObservableObject.SetPropertyAndNotifyOnCompletion(ref ObservableObject.TaskNotifier, Task, Action<Task>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(ref CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier, System.Threading.Tasks.Task, System.Action<System.Threading.Tasks.Task>, string)
+  nameWithType.vb: ObservableObject.SetPropertyAndNotifyOnCompletion(ObservableObject.TaskNotifier, Task, Action(Of Task), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier, System.Threading.Tasks.Task, System.Action(Of System.Threading.Tasks.Task), String)
+  name.vb: SetPropertyAndNotifyOnCompletion(TaskNotifier, Task, Action(Of Task), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.Action{System.Threading.Tasks.Task},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier@-system-threading-tasks-task-system-action((system-threading-tasks-task))-system-string)
+  - name: (
+  - name: ref
+  - name: " "
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - uid: System.Threading.Tasks.Task
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier@,System.Threading.Tasks.Task,System.Action{System.Threading.Tasks.Task},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier@-system-threading-tasks-task-system-action((system-threading-tasks-task))-system-string)
+  - name: (
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Threading.Tasks.Task
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{{T}}@,System.Threading.Tasks.Task{{T}},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  definition: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.String)
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-string)
+  name: SetPropertyAndNotifyOnCompletion<T>(ref TaskNotifier<T>, Task<T>, string)
+  nameWithType: ObservableObject.SetPropertyAndNotifyOnCompletion<T>(ref ObservableObject.TaskNotifier<T>, Task<T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion<T>(ref CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier<T>, System.Threading.Tasks.Task<T>, string)
+  nameWithType.vb: ObservableObject.SetPropertyAndNotifyOnCompletion(Of T)(ObservableObject.TaskNotifier(Of T), Task(Of T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(Of T)(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier(Of T), System.Threading.Tasks.Task(Of T), String)
+  name.vb: SetPropertyAndNotifyOnCompletion(Of T)(TaskNotifier(Of T), Task(Of T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: ref
+  - name: " "
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier`1
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier`1
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{{T}}@,System.Threading.Tasks.Task{{T}},System.Action{System.Threading.Tasks.Task{{T}}},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.String)
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  definition: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.String)
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-action((system-threading-tasks-task((-0))))-system-string)
+  name: SetPropertyAndNotifyOnCompletion<T>(ref TaskNotifier<T>, Task<T>, Action<Task<T>>, string)
+  nameWithType: ObservableObject.SetPropertyAndNotifyOnCompletion<T>(ref ObservableObject.TaskNotifier<T>, Task<T>, Action<Task<T>>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion<T>(ref CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier<T>, System.Threading.Tasks.Task<T>, System.Action<System.Threading.Tasks.Task<T>>, string)
+  nameWithType.vb: ObservableObject.SetPropertyAndNotifyOnCompletion(Of T)(ObservableObject.TaskNotifier(Of T), Task(Of T), Action(Of Task(Of T)), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(Of T)(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier(Of T), System.Threading.Tasks.Task(Of T), System.Action(Of System.Threading.Tasks.Task(Of T)), String)
+  name.vb: SetPropertyAndNotifyOnCompletion(Of T)(TaskNotifier(Of T), Task(Of T), Action(Of Task(Of T)), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-action((system-threading-tasks-task((-0))))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: ref
+  - name: " "
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier`1
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-action((system-threading-tasks-task((-0))))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier`1
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanged
+  commentId: E:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanged
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.propertychanged
+  name: PropertyChanged
+  nameWithType: ObservableObject.PropertyChanged
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanged
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanging
+  commentId: E:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanging
+  parent: CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.propertychanging
+  name: PropertyChanging
+  nameWithType: ObservableObject.PropertyChanging
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.PropertyChanging
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: CommunityToolkit.Mvvm.ComponentModel
+  commentId: N:CommunityToolkit.Mvvm.ComponentModel
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit
+  name: CommunityToolkit.Mvvm.ComponentModel
+  nameWithType: CommunityToolkit.Mvvm.ComponentModel
+  fullName: CommunityToolkit.Mvvm.ComponentModel
+  spec.csharp:
+  - uid: CommunityToolkit
+    name: CommunityToolkit
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit
+  - name: .
+  - uid: CommunityToolkit.Mvvm
+    name: Mvvm
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm
+  - name: .
+  - uid: CommunityToolkit.Mvvm.ComponentModel
+    name: ComponentModel
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel
+  spec.vb:
+  - uid: CommunityToolkit
+    name: CommunityToolkit
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit
+  - name: .
+  - uid: CommunityToolkit.Mvvm
+    name: Mvvm
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm
+  - name: .
+  - uid: CommunityToolkit.Mvvm.ComponentModel
+    name: ComponentModel
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel
+- uid: System.ComponentModel
+  commentId: N:System.ComponentModel
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.ComponentModel
+  nameWithType: System.ComponentModel
+  fullName: System.ComponentModel
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.ComponentModel
+    name: ComponentModel
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.componentmodel
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.ComponentModel
+    name: ComponentModel
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.componentmodel
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.String)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-string)
+  name: SetProperty<T>(ref T, T, string)
+  nameWithType: ObservableObject.SetProperty<T>(ref T, T, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<T>(ref T, T, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of T)(T, T, String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of T)(T, T, String)
+  name.vb: SetProperty(Of T)(T, T, String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: ref
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-collections-generic-iequalitycomparer((-0))-system-string)
+  name: SetProperty<T>(ref T, T, IEqualityComparer<T>, string)
+  nameWithType: ObservableObject.SetProperty<T>(ref T, T, IEqualityComparer<T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<T>(ref T, T, System.Collections.Generic.IEqualityComparer<T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of T)(T, T, IEqualityComparer(Of T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of T)(T, T, System.Collections.Generic.IEqualityComparer(Of T), String)
+  name.vb: SetProperty(Of T)(T, T, IEqualityComparer(Of T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-collections-generic-iequalitycomparer((-0))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: ref
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0@,``0,System.Collections.Generic.IEqualityComparer{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-collections-generic-iequalitycomparer((-0))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Action{``0},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Action{``0},System.String)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-action((-0))-system-string)
+  name: SetProperty<T>(T, T, Action<T>, string)
+  nameWithType: ObservableObject.SetProperty<T>(T, T, Action<T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<T>(T, T, System.Action<T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of T)(T, T, Action(Of T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of T)(T, T, System.Action(Of T), String)
+  name.vb: SetProperty(Of T)(T, T, Action(Of T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Action{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-action((-0))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Action{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-action((-0))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.Action{``0},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.Action{``0},System.String)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-collections-generic-iequalitycomparer((-0))-system-action((-0))-system-string)
+  name: SetProperty<T>(T, T, IEqualityComparer<T>, Action<T>, string)
+  nameWithType: ObservableObject.SetProperty<T>(T, T, IEqualityComparer<T>, Action<T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<T>(T, T, System.Collections.Generic.IEqualityComparer<T>, System.Action<T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of T)(T, T, IEqualityComparer(Of T), Action(Of T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of T)(T, T, System.Collections.Generic.IEqualityComparer(Of T), System.Action(Of T), String)
+  name.vb: SetProperty(Of T)(T, T, IEqualityComparer(Of T), Action(Of T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.Action{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-collections-generic-iequalitycomparer((-0))-system-action((-0))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0},System.Action{``0},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-collections-generic-iequalitycomparer((-0))-system-action((-0))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,``0,System.Action{``0,``1},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,``0,System.Action{``0,``1},System.String)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-0-system-action((-0-1))-system-string)
+  name: SetProperty<TModel, T>(T, T, TModel, Action<TModel, T>, string)
+  nameWithType: ObservableObject.SetProperty<TModel, T>(T, T, TModel, Action<TModel, T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<TModel, T>(T, T, TModel, System.Action<TModel, T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of TModel, T)(T, T, TModel, Action(Of TModel, T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of TModel, T)(T, T, TModel, System.Action(Of TModel, T), String)
+  name.vb: SetProperty(Of TModel, T)(T, T, TModel, Action(Of TModel, T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,``0,System.Action{``0,``1},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-0-system-action((-0-1))-system-string)
+  - name: <
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - uid: System.Action`2
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-2
+  - name: <
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,``0,System.Action{``0,``1},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-0-system-action((-0-1))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - uid: System.Action`2
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,System.Collections.Generic.IEqualityComparer{``1},``0,System.Action{``0,``1},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,System.Collections.Generic.IEqualityComparer{``1},``0,System.Action{``0,``1},System.String)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-system-collections-generic-iequalitycomparer((-1))-0-system-action((-0-1))-system-string)
+  name: SetProperty<TModel, T>(T, T, IEqualityComparer<T>, TModel, Action<TModel, T>, string)
+  nameWithType: ObservableObject.SetProperty<TModel, T>(T, T, IEqualityComparer<T>, TModel, Action<TModel, T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty<TModel, T>(T, T, System.Collections.Generic.IEqualityComparer<T>, TModel, System.Action<TModel, T>, string)
+  nameWithType.vb: ObservableObject.SetProperty(Of TModel, T)(T, T, IEqualityComparer(Of T), TModel, Action(Of TModel, T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty(Of TModel, T)(T, T, System.Collections.Generic.IEqualityComparer(Of T), TModel, System.Action(Of TModel, T), String)
+  name.vb: SetProperty(Of TModel, T)(T, T, IEqualityComparer(Of T), TModel, Action(Of TModel, T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,System.Collections.Generic.IEqualityComparer{``1},``0,System.Action{``0,``1},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-system-collections-generic-iequalitycomparer((-1))-0-system-action((-0-1))-system-string)
+  - name: <
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: '>'
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - uid: System.Action`2
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-2
+  - name: <
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetProperty``2(``1,``1,System.Collections.Generic.IEqualityComparer{``1},``0,System.Action{``0,``1},System.String)
+    name: SetProperty
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-system-collections-generic-iequalitycomparer((-1))-0-system-action((-0-1))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: T
+  - name: ','
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IEqualityComparer`1
+    name: IEqualityComparer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - uid: System.Action`2
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TModel
+  - name: ','
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.String)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-string)
+  name: SetPropertyAndNotifyOnCompletion<T>(ref TaskNotifier<T>, Task<T>, string)
+  nameWithType: ObservableObject.SetPropertyAndNotifyOnCompletion<T>(ref ObservableObject.TaskNotifier<T>, Task<T>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion<T>(ref CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier<T>, System.Threading.Tasks.Task<T>, string)
+  nameWithType.vb: ObservableObject.SetPropertyAndNotifyOnCompletion(Of T)(ObservableObject.TaskNotifier(Of T), Task(Of T), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(Of T)(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier(Of T), System.Threading.Tasks.Task(Of T), String)
+  name.vb: SetPropertyAndNotifyOnCompletion(Of T)(TaskNotifier(Of T), Task(Of T), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: ref
+  - name: " "
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier`1
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier`1
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.String)
+  commentId: M:CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.String)
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-action((system-threading-tasks-task((-0))))-system-string)
+  name: SetPropertyAndNotifyOnCompletion<T>(ref TaskNotifier<T>, Task<T>, Action<Task<T>>, string)
+  nameWithType: ObservableObject.SetPropertyAndNotifyOnCompletion<T>(ref ObservableObject.TaskNotifier<T>, Task<T>, Action<Task<T>>, string)
+  fullName: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion<T>(ref CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier<T>, System.Threading.Tasks.Task<T>, System.Action<System.Threading.Tasks.Task<T>>, string)
+  nameWithType.vb: ObservableObject.SetPropertyAndNotifyOnCompletion(Of T)(ObservableObject.TaskNotifier(Of T), Task(Of T), Action(Of Task(Of T)), String)
+  fullName.vb: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion(Of T)(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier(Of T), System.Threading.Tasks.Task(Of T), System.Action(Of System.Threading.Tasks.Task(Of T)), String)
+  name.vb: SetPropertyAndNotifyOnCompletion(Of T)(TaskNotifier(Of T), Task(Of T), Action(Of Task(Of T)), String)
+  spec.csharp:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-action((system-threading-tasks-task((-0))))-system-string)
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: ref
+  - name: " "
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier`1
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.SetPropertyAndNotifyOnCompletion``1(CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier{``0}@,System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.String)
+    name: SetPropertyAndNotifyOnCompletion
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-action((system-threading-tasks-task((-0))))-system-string)
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - uid: CommunityToolkit.Mvvm.ComponentModel.ObservableObject.TaskNotifier`1
+    name: TaskNotifier
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.tasknotifier-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.EventHandler
+  commentId: T:System.EventHandler
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.eventhandler
+  name: EventHandler
+  nameWithType: EventHandler
+  fullName: System.EventHandler
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_CanAddSelectedBusinessSoftware
+  name: CanAddSelectedBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.CanAddSelectedBusinessSoftware
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_CanRemoveAddedBusinessSoftware
+  name: CanRemoveAddedBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.CanRemoveAddedBusinessSoftware
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel
+  commentId: T:EasySave.ViewModels.BusinessSoftwareViewModel
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html
+  name: BusinessSoftwareViewModel
+  nameWithType: BusinessSoftwareViewModel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.#ctor*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.#ctor
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel__ctor_EasySave_ViewModels_StatusBarViewModel_
+  name: BusinessSoftwareViewModel
+  nameWithType: BusinessSoftwareViewModel.BusinessSoftwareViewModel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareViewModel
+  nameWithType.vb: BusinessSoftwareViewModel.New
+  fullName.vb: EasySave.ViewModels.BusinessSoftwareViewModel.New
+  name.vb: New
+- uid: EasySave.ViewModels.StatusBarViewModel
+  commentId: T:EasySave.ViewModels.StatusBarViewModel
+  parent: EasySave.ViewModels
+  href: EasySave.ViewModels.StatusBarViewModel.html
+  name: StatusBarViewModel
+  nameWithType: StatusBarViewModel
+  fullName: EasySave.ViewModels.StatusBarViewModel
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.Initialize*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.Initialize
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_Initialize
+  name: Initialize
+  nameWithType: BusinessSoftwareViewModel.Initialize
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.Initialize
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.UpdateUiText*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.UpdateUiText
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_UpdateUiText
+  name: UpdateUiText
+  nameWithType: BusinessSoftwareViewModel.UpdateUiText
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.UpdateUiText
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.OpenCatalog*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.OpenCatalog
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_OpenCatalog
+  name: OpenCatalog
+  nameWithType: BusinessSoftwareViewModel.OpenCatalog
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.OpenCatalog
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftware*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftware
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_OpenAddedSoftware
+  name: OpenAddedSoftware
+  nameWithType: BusinessSoftwareViewModel.OpenAddedSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.OpenAddedSoftware
+- uid: CommunityToolkit.Mvvm.Input.IRelayCommand
+  commentId: T:CommunityToolkit.Mvvm.Input.IRelayCommand
+  parent: CommunityToolkit.Mvvm.Input
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input.irelaycommand
+  name: IRelayCommand
+  nameWithType: IRelayCommand
+  fullName: CommunityToolkit.Mvvm.Input.IRelayCommand
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware
+  commentId: M:EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware
+  name: RemoveSelectedAddedBusinessSoftware()
+  nameWithType: BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware()
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware()
+  spec.csharp:
+  - uid: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware
+    name: RemoveSelectedAddedBusinessSoftware
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftware
+    name: RemoveSelectedAddedBusinessSoftware
+  - name: (
+  - name: )
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_RemoveSelectedAddedBusinessSoftwareCommand
+  name: RemoveSelectedAddedBusinessSoftwareCommand
+  nameWithType: BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveSelectedAddedBusinessSoftwareCommand
+- uid: CommunityToolkit.Mvvm.Input
+  commentId: N:CommunityToolkit.Mvvm.Input
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/communitytoolkit
+  name: CommunityToolkit.Mvvm.Input
+  nameWithType: CommunityToolkit.Mvvm.Input
+  fullName: CommunityToolkit.Mvvm.Input
+  spec.csharp:
+  - uid: CommunityToolkit
+    name: CommunityToolkit
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit
+  - name: .
+  - uid: CommunityToolkit.Mvvm
+    name: Mvvm
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm
+  - name: .
+  - uid: CommunityToolkit.Mvvm.Input
+    name: Input
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input
+  spec.vb:
+  - uid: CommunityToolkit
+    name: CommunityToolkit
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit
+  - name: .
+  - uid: CommunityToolkit.Mvvm
+    name: Mvvm
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm
+  - name: .
+  - uid: CommunityToolkit.Mvvm.Input
+    name: Input
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AllAvailableBusinessSoftware*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.AllAvailableBusinessSoftware
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_AllAvailableBusinessSoftware
+  name: AllAvailableBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.AllAvailableBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AllAvailableBusinessSoftware
+- uid: System.Collections.ObjectModel.ObservableCollection{EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel}
+  commentId: T:System.Collections.ObjectModel.ObservableCollection{EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel}
+  parent: System.Collections.ObjectModel
+  definition: System.Collections.ObjectModel.ObservableCollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1
+  name: ObservableCollection<SelectableBusinessSoftwareItemViewModel>
+  nameWithType: ObservableCollection<SelectableBusinessSoftwareItemViewModel>
+  fullName: System.Collections.ObjectModel.ObservableCollection<EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel>
+  nameWithType.vb: ObservableCollection(Of SelectableBusinessSoftwareItemViewModel)
+  fullName.vb: System.Collections.ObjectModel.ObservableCollection(Of EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel)
+  name.vb: ObservableCollection(Of SelectableBusinessSoftwareItemViewModel)
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ObservableCollection`1
+    name: ObservableCollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1
+  - name: <
+  - uid: EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel
+    name: SelectableBusinessSoftwareItemViewModel
+    href: EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.ObjectModel.ObservableCollection`1
+    name: ObservableCollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel
+    name: SelectableBusinessSoftwareItemViewModel
+    href: EasySave.ViewModels.SelectableBusinessSoftwareItemViewModel.html
+  - name: )
+- uid: System.Collections.ObjectModel.ObservableCollection`1
+  commentId: T:System.Collections.ObjectModel.ObservableCollection`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1
+  name: ObservableCollection<T>
+  nameWithType: ObservableCollection<T>
+  fullName: System.Collections.ObjectModel.ObservableCollection<T>
+  nameWithType.vb: ObservableCollection(Of T)
+  fullName.vb: System.Collections.ObjectModel.ObservableCollection(Of T)
+  name.vb: ObservableCollection(Of T)
+  spec.csharp:
+  - uid: System.Collections.ObjectModel.ObservableCollection`1
+    name: ObservableCollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.ObjectModel.ObservableCollection`1
+    name: ObservableCollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.ObjectModel
+  commentId: N:System.Collections.ObjectModel
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.ObjectModel
+  nameWithType: System.Collections.ObjectModel
+  fullName: System.Collections.ObjectModel
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.ObjectModel
+    name: ObjectModel
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.objectmodel
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.ObjectModel
+    name: ObjectModel
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.objectmodel
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.FilteredBusinessSoftware*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.FilteredBusinessSoftware
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_FilteredBusinessSoftware
+  name: FilteredBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.FilteredBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.FilteredBusinessSoftware
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftware*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftware
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_AddedBusinessSoftware
+  name: AddedBusinessSoftware
+  nameWithType: BusinessSoftwareViewModel.AddedBusinessSoftware
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftware
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchText*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchText
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_BusinessSoftwareSearchText
+  name: BusinessSoftwareSearchText
+  nameWithType: BusinessSoftwareViewModel.BusinessSoftwareSearchText
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchText
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_AvailableBusinessSoftwareTitle
+  name: AvailableBusinessSoftwareTitle
+  nameWithType: BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AvailableBusinessSoftwareTitle
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftwareTitle*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftwareTitle
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_AddedBusinessSoftwareTitle
+  name: AddedBusinessSoftwareTitle
+  nameWithType: BusinessSoftwareViewModel.AddedBusinessSoftwareTitle
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddedBusinessSoftwareTitle
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchLabel*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchLabel
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_BusinessSoftwareSearchLabel
+  name: BusinessSoftwareSearchLabel
+  nameWithType: BusinessSoftwareViewModel.BusinessSoftwareSearchLabel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchLabel
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_BusinessSoftwareSearchPlaceholder
+  name: BusinessSoftwareSearchPlaceholder
+  nameWithType: BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.BusinessSoftwareSearchPlaceholder
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_AddSelectedBusinessSoftwareButtonLabel
+  name: AddSelectedBusinessSoftwareButtonLabel
+  nameWithType: BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareButtonLabel
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_ViewAddedBusinessSoftwareButtonLabel
+  name: ViewAddedBusinessSoftwareButtonLabel
+  nameWithType: BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.ViewAddedBusinessSoftwareButtonLabel
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_RemoveAddedBusinessSoftwareButtonLabel
+  name: RemoveAddedBusinessSoftwareButtonLabel
+  nameWithType: BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.RemoveAddedBusinessSoftwareButtonLabel
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware
+  commentId: M:EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware
+  name: AddSelectedBusinessSoftware()
+  nameWithType: BusinessSoftwareViewModel.AddSelectedBusinessSoftware()
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware()
+  spec.csharp:
+  - uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware
+    name: AddSelectedBusinessSoftware
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftware
+    name: AddSelectedBusinessSoftware
+  - name: (
+  - name: )
+- uid: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand*
+  commentId: Overload:EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand
+  href: EasySave.ViewModels.BusinessSoftwareViewModel.html#EasySave_ViewModels_BusinessSoftwareViewModel_AddSelectedBusinessSoftwareCommand
+  name: AddSelectedBusinessSoftwareCommand
+  nameWithType: BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand
+  fullName: EasySave.ViewModels.BusinessSoftwareViewModel.AddSelectedBusinessSoftwareCommand

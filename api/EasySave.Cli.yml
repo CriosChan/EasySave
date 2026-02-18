@@ -1,0 +1,30 @@
+### YamlMime:ManagedReference
+items:
+- uid: EasySave.Cli
+  commentId: N:EasySave.Cli
+  id: EasySave.Cli
+  children:
+  - EasySave.Cli.CommandController
+  - EasySave.Cli.CommandLineArgumentParser
+  langs:
+  - csharp
+  - vb
+  name: EasySave.Cli
+  nameWithType: EasySave.Cli
+  fullName: EasySave.Cli
+  type: Namespace
+  assemblies:
+  - EasySave
+references:
+- uid: EasySave.Cli.CommandController
+  commentId: T:EasySave.Cli.CommandController
+  href: EasySave.Cli.CommandController.html
+  name: CommandController
+  nameWithType: CommandController
+  fullName: EasySave.Cli.CommandController
+- uid: EasySave.Cli.CommandLineArgumentParser
+  commentId: T:EasySave.Cli.CommandLineArgumentParser
+  href: EasySave.Cli.CommandLineArgumentParser.html
+  name: CommandLineArgumentParser
+  nameWithType: CommandLineArgumentParser
+  fullName: EasySave.Cli.CommandLineArgumentParser
