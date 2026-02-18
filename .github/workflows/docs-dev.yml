@@ -39,7 +39,6 @@ jobs:
         run: docfx
 
       - name: Deploy to docs branch
-          if: github.event_name == 'push'
           run: |
             git config user.name "GitHub Actions"
             git config user.email "actions@github.com"
