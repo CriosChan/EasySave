@@ -40,7 +40,8 @@ jobs:
 
       - name: Deploy to docs branch
         run: |
-          cp -r _site/
+          mkdir /_site/
+          cp -r _site /_site/
           # Fetch existing docs branch (ou clone si absent)
           git fetch origin docs:docs || true
           
