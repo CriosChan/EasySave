@@ -19,9 +19,12 @@ jobs:
           fetch-depth: 0  # For Git history
 
       - name: Setup .NET  # DocFX requires .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 10.0.x
+          global-json-file: global.json
+
+      - name: Display active .NET version
+        run: dotnet --version  # Verify 10.x active [web:35]
 
       - name: Setup DocFX
         uses: nunit/docfx-action@v2.4.0  # Recommended maintained action [web:4][web:16]
