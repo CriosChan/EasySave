@@ -26,8 +26,17 @@ jobs:
       - name: Display active .NET version
         run: dotnet --version  # Verify 10.x active [web:35]
 
-      - name: Setup DocFX
-        uses: nunit/docfx-action@v2.4.0  # Recommended maintained action [web:4][web:16]
+      - name: Install docfx
+        run: dotnet tool install --global docfx --version 2.78.3
+
+      - name: Display tool list
+        run: dotnet tool list --global
+        
+      - name: Display docfx version
+        run: docfx -v
+        
+      - name: Build docfx
+        run: docf
 
       - name: Create local docs branch if missing
         run: |
