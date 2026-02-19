@@ -57,7 +57,7 @@ public static class StateLogger
     {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
-            s.State = JobRunState.Failed;
+            s.State = JobRunState.Stopped;
             s.CurrentAction = "Stopped: business software running";
             s.CurrentSourcePath = null;
             s.CurrentTargetPath = null;
