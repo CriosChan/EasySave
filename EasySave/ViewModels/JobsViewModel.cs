@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Core.Models;
@@ -16,6 +15,7 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class JobsViewModel : ViewModelBase
 {
+    private readonly IBackupExecutionEngine _backupExecutionEngine;
     private readonly IJobService _jobService;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
@@ -51,6 +51,7 @@ public partial class JobsViewModel : ViewModelBase
     /// <param name="statusBar">Shared status bar state.</param>
     public JobsViewModel(StatusBarViewModel statusBar)
     {
+        _backupExecutionEngine = new BackupExecutionEngine();
         _jobService = new JobService();
         _uiTextService = new ResxUiTextService();
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
@@ -358,47 +359,33 @@ public partial class JobsViewModel : ViewModelBase
         _statusBar.StatusMessage = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id,
             job.Name);
 
-        EventHandler handler = OnJobProgressChanged;
-        job.ProgressChanged += handler;
+        var progress = new Progress<BackupExecutionProgressSnapshot>(OnExecutionProgressChanged);
+        var result = await _backupExecutionEngine.ExecuteJobAsync(job, progress);
 
-        try
+        if (!result.WasStoppedByBusinessSoftware)
         {
-            await Task.Run(job.StartBackup);
-
-            if (!job.WasStoppedByBusinessSoftware)
-            {
-                _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupAsFinished",
-                    "Backup '{0}' finished.", job.Name);
-                return false;
-            }
-
-            _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupStoppedByBusinessSoftware",
-                "Backup '{0}' stopped: business software is running", job.Name);
-            return true;
+            _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupAsFinished",
+                "Backup '{0}' finished.", job.Name);
+            return false;
         }
-        finally
-        {
-            job.ProgressChanged -= handler;
-        }
+
+        _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupStoppedByBusinessSoftware",
+            "Backup '{0}' stopped: business software is running", job.Name);
+        return true;
     }
 
     /// <summary>
-    ///     Handles per-file progress updates and marshals UI updates to the UI thread.
+    ///     Handles per-file progress updates emitted by the shared execution engine.
     /// </summary>
-    /// <param name="sender">Backup job sender.</param>
-    /// <param name="e">Event args.</param>
-    private void OnJobProgressChanged(object? sender, EventArgs e)
+    /// <param name="progress">Immutable progress payload.</param>
+    private void OnExecutionProgressChanged(BackupExecutionProgressSnapshot progress)
     {
-        if (sender is not BackupJob job)
-            return;
-
-
         _statusBar.StatusMessage =
-            $"{_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id, job.Name)} " +
-            $"({job.CurrentFileIndex} / {job.FilesCount} files) - " +
-            $"({Math.Round(job.TransferredSize / 1048576.0)} / {Math.Round(job.TotalSize / 1048576.0)} MB)";
+            $"{_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", progress.JobId, progress.JobName)} " +
+            $"({progress.CurrentFileIndex} / {progress.FilesCount} files) - " +
+            $"({Math.Round(progress.TransferredSize / 1048576.0)} / {Math.Round(progress.TotalSize / 1048576.0)} MB)";
 
-        _statusBar.OverallProgress = job.CurrentProgress;
+        _statusBar.OverallProgress = progress.CurrentProgress;
     }
 
     /// <summary>
