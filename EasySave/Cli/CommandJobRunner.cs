@@ -1,5 +1,6 @@
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup;
+using EasySave.Models.Backup.Interfaces;
 using EasySave.Models.State;
 using EasySave.Views.Resources;
 
@@ -10,6 +11,8 @@ namespace EasySave.Cli;
 /// </summary>
 internal sealed class CommandJobRunner
 {
+    private readonly IBackupExecutionEngine _backupExecutionEngine = new BackupExecutionEngine();
+
     /// <summary>
     ///     Executes a list of job IDs in CLI mode.
     /// </summary>
@@ -37,8 +40,8 @@ internal sealed class CommandJobRunner
             }
 
             Console.WriteLine(UserInterface.Launch_RunningOne, job.Id, job.Name);
-            job.StartBackup();
-            if (job.WasStoppedByBusinessSoftware)
+            var result = _backupExecutionEngine.ExecuteJobAsync(job).GetAwaiter().GetResult();
+            if (result.WasStoppedByBusinessSoftware)
                 break;
         }
 
