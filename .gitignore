@@ -74,3 +74,4 @@ docs/markdown/
 .vscode/*
 *.ps1
 
+docs/uml/livrable-3-roadmap-hierarchique.puml
