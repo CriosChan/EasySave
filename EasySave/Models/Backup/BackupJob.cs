@@ -59,7 +59,17 @@ public class BackupJob
 
     [JsonIgnore] public List<IFile> Files { get; private set; } = []; // List of files to backup
     [JsonIgnore] public int CurrentFileIndex { get; private set; } // Index of the currently processed file
-    [JsonIgnore] public int FilesCount { get; private set; }
+
+    [JsonIgnore]
+    public int FilesCount
+    {
+        get;
+        private set
+        {
+            field = value;
+            OnFilesCountEvent();
+        }
+    }
 
     [JsonIgnore]
     public double CurrentProgress
@@ -95,6 +105,7 @@ public class BackupJob
     public event EventHandler? PauseEvent;
     public event EventHandler? StopEvent;
     public event EventHandler? EndEvent;
+    public event EventHandler? FilesCountEvent;
     /// <summary>
     ///     Gets a value indicating whether the current job run was stopped because business software was detected.
     /// </summary>
@@ -251,6 +262,11 @@ public class BackupJob
     protected virtual void OnEndEvent()
     {
         EndEvent?.Invoke(this, EventArgs.Empty);
+    }
+
+    protected virtual void OnFilesCountEvent()
+    {
+        FilesCountEvent?.Invoke(this, EventArgs.Empty);
     }
     
     public bool IsPaused()

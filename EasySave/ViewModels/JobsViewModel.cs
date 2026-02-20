@@ -105,7 +105,7 @@ public partial class JobsViewModel : ViewModelBase
         {
             foreach (var missingJob in missingJobs)
             {
-                Jobs.Add(new BackupJobItemViewModel(missingJob));
+                Jobs.Add(new BackupJobItemViewModel(missingJob, _statusBar));
             }
         }
         

@@ -14,18 +14,24 @@ namespace EasySave.ViewModels;
 /// </summary>
 public sealed partial class BackupJobItemViewModel : ViewModelBase
 {
+    private StatusBarViewModel _statusBar;
+
     /// <summary>
     ///     Initializes a new instance of the BackupJobItemViewModel class.
     /// </summary>
     /// <param name="job">The BackupJob model to wrap.</param>
-    public BackupJobItemViewModel(BackupJob job)
+    public BackupJobItemViewModel(BackupJob job) : this(job, new StatusBarViewModel())
+    {}
+    public BackupJobItemViewModel(BackupJob job, StatusBarViewModel statusBar)
     {
         Job = job ?? throw new ArgumentNullException(nameof(job));
         _stopped = job.WasStopped;
+        _statusBar = statusBar;
         Job.PauseEvent += OnPausedChanged;
         Job.ProgressChanged += OnProgressChanged;
         Job.StopEvent += OnStopChanged;
         Job.EndEvent += OnJobEnded;
+        Job.FilesCountEvent += OnFilesCountChange;
     }
 
     /// <summary>
@@ -88,6 +94,7 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     private void OnProgressChanged(object? sender, EventArgs e)
     {
         Progress = Job.CurrentProgress;
+        _statusBar.UpdateOverallProgress();
         StatusMessage =
             $"({Job.CurrentFileIndex} / {Job.FilesCount} files)\n" +
             $"({Math.Round(Job.TransferredSize / 1048576.0)} / {Math.Round(Job.TotalSize / 1048576.0)} MB)";
@@ -104,6 +111,12 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
             InverseStopped = false;
             StopIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png"));
         });
+        _statusBar.RemoveProgress(Job.FilesCount);
+    }
+
+    private void OnFilesCountChange(object? sender, EventArgs e)
+    {
+        _statusBar.AddMaxProgress(Job.FilesCount);
     }
 
     [RelayCommand]
