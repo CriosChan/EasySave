@@ -186,6 +186,10 @@ public class BackupJob
             }
 
             // Wait if paused
+            if (IsPaused())
+            {
+                StateLogger.SetStatePaused(state);
+            }
             _pauseEvent.WaitOne();
 
             if (WasStopped)
@@ -216,7 +220,7 @@ public class BackupJob
             return;
 
         // Finalize the backup job state
-        StateLogger.SetStateEnd(state, hadError);
+        StateLogger.SetStateEnd(state, hadError, WasStopped);
         
         if (!WasStopped)
         {
