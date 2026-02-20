@@ -7,15 +7,16 @@ namespace EasySave.Models.State;
 ///     Writes the real-time backup state file (<c>state.json</c>).
 /// </summary>
 /// <remarks>
-///     v1.0/v1.1 execute jobs sequentially in a single thread.
-///     Therefore we do not need locking primitives; we just keep an in-memory list and
-///     rewrite the state file atomically each time the state changes.
+///     The state store is shared by all running jobs and is protected by a synchronization lock.
+///     Each mutation rewrites state.json atomically so readers always observe a valid file.
 /// </remarks>
 public sealed class StateFileSingleton
 {
     // Singleton instance for the StateFileSingleton class
     private static readonly Lazy<StateFileSingleton> _instance = new(() => new StateFileSingleton());
 
+    private readonly object _sync = new();
+    private bool _isInitialized;
     private string _statePath; // Path to the state file
     private List<BackupJobState> _states = new(); // In-memory list of job states
 
@@ -26,6 +27,7 @@ public sealed class StateFileSingleton
     private StateFileSingleton()
     {
         _statePath = string.Empty; // Initialize to empty; should be set through the Init method
+        _isInitialized = false;
     }
 
     /// <summary>
@@ -37,31 +39,30 @@ public sealed class StateFileSingleton
     ///     Initializes the state file with the provided directory and job list.
     /// </summary>
     /// <param name="stateDirectory">Directory where state.json is written.</param>
-    /// <param name="jobs">List of backup jobs to initialize state for.</param>
     public void Initialize(string stateDirectory)
     {
-        _statePath = Path.Combine(stateDirectory, "state.json");
-        _states = new JobService().GetAll()
+        if (string.IsNullOrWhiteSpace(stateDirectory))
+            throw new ArgumentException("State directory cannot be null or empty.", nameof(stateDirectory));
+
+        var statePath = Path.Combine(stateDirectory, "state.json");
+        var configuredJobs = new JobService().GetAll()
             .OrderBy(j => j.Id)
-            .Select(j => new BackupJobState
-            {
-                JobId = j.Id,
-                BackupName = j.Name,
-                LastActionTimestamp = DateTime.Now,
-                State = JobRunState.Inactive,
-                TotalFiles = 0,
-                TotalSizeBytes = 0,
-                ProgressPercent = 0,
-                RemainingFiles = 0,
-                RemainingSizeBytes = 0,
-                CurrentAction = null,
-                CurrentSourcePath = null,
-                CurrentTargetPath = null
-            })
             .ToList();
 
-        // Write the initial state to the state file
-        JsonFile.WriteAtomic(_statePath, _states);
+        lock (_sync)
+        {
+            if (!string.Equals(_statePath, statePath, StringComparison.OrdinalIgnoreCase))
+            {
+                _statePath = statePath;
+                _states = File.Exists(_statePath)
+                    ? JsonFile.ReadOrDefault(_statePath, new List<BackupJobState>())
+                    : new List<BackupJobState>();
+            }
+
+            SynchronizeConfiguredJobs(configuredJobs);
+            PersistLocked();
+            _isInitialized = true;
+        }
     }
 
     /// <summary>
@@ -70,15 +71,21 @@ public sealed class StateFileSingleton
     /// <param name="updated">The updated job state to apply.</param>
     public void Update(BackupJobState updated)
     {
-        var idx = _states.FindIndex(s => s.JobId == updated.JobId);
-        if (idx >= 0)
-            _states[idx] = updated; // Update existing state
-        else
-            _states.Add(updated); // Add new state if it doesn't exist
+        ArgumentNullException.ThrowIfNull(updated);
 
-        // Keep the list ordered by JobId
-        _states = _states.OrderBy(s => s.JobId).ToList();
-        JsonFile.WriteAtomic(_statePath, _states); // Write the updated state to the file
+        lock (_sync)
+        {
+            EnsureInitializedLocked();
+
+            var idx = _states.FindIndex(s => s.JobId == updated.JobId);
+            if (idx >= 0)
+                _states[idx] = updated; // Update existing state
+            else
+                _states.Add(updated); // Add new state if it doesn't exist
+
+            _states = _states.OrderBy(s => s.JobId).ToList(); // Keep list ordered by JobId
+            PersistLocked(); // Write the updated state to the file
+        }
     }
 
     /// <summary>
@@ -89,22 +96,29 @@ public sealed class StateFileSingleton
     /// <returns>The existing or newly created job state.</returns>
     public BackupJobState GetOrCreate(int id, string name)
     {
-        var existing = _states.FirstOrDefault(s => s.JobId == id);
-        if (existing != null)
-            return existing;
-
-        // Create a new state if none exists for the job
-        existing = new BackupJobState
+        lock (_sync)
         {
-            JobId = id,
-            BackupName = name,
-            LastActionTimestamp = DateTime.Now,
-            State = JobRunState.Inactive
-        };
+            EnsureInitializedLocked();
 
-        _states.Add(existing);
-        JsonFile.WriteAtomic(_statePath, _states); // Persist the new state to the file
-        return existing;
+            var existing = _states.FirstOrDefault(s => s.JobId == id);
+            if (existing != null)
+            {
+                if (!string.Equals(existing.BackupName, name, StringComparison.Ordinal))
+                {
+                    existing.BackupName = name;
+                    existing.LastActionTimestamp = DateTime.Now;
+                    PersistLocked();
+                }
+
+                return existing;
+            }
+
+            existing = CreateInactiveState(id, name);
+            _states.Add(existing);
+            _states = _states.OrderBy(s => s.JobId).ToList();
+            PersistLocked(); // Persist the new state to the file
+            return existing;
+        }
     }
 
     /// <summary>
@@ -114,8 +128,90 @@ public sealed class StateFileSingleton
     /// <param name="apply">An action to modify the state.</param>
     public void UpdateState(BackupJobState state, Action<BackupJobState> apply)
     {
-        apply(state); // Apply changes through the provided action
-        state.LastActionTimestamp = DateTime.Now; // Update last action timestamp
-        Update(state); // Persist updated state
+        ArgumentNullException.ThrowIfNull(state);
+        ArgumentNullException.ThrowIfNull(apply);
+
+        lock (_sync)
+        {
+            EnsureInitializedLocked();
+
+            var target = _states.FirstOrDefault(s => s.JobId == state.JobId);
+            if (target == null)
+            {
+                target = state;
+                _states.Add(target);
+            }
+
+            apply(target); // Apply changes through the provided action
+            target.LastActionTimestamp = DateTime.Now; // Update last action timestamp
+            _states = _states.OrderBy(s => s.JobId).ToList();
+            PersistLocked(); // Persist updated state
+        }
+    }
+
+    /// <summary>
+    ///     Ensures all configured jobs have a state entry while preserving existing runtime entries.
+    /// </summary>
+    /// <param name="configuredJobs">Configured jobs from persistence.</param>
+    private void SynchronizeConfiguredJobs(IReadOnlyList<BackupJob> configuredJobs)
+    {
+        foreach (var job in configuredJobs)
+        {
+            var existing = _states.FirstOrDefault(s => s.JobId == job.Id);
+            if (existing != null)
+            {
+                existing.BackupName = job.Name;
+                continue;
+            }
+
+            _states.Add(CreateInactiveState(job.Id, job.Name));
+        }
+
+        _states = _states.OrderBy(s => s.JobId).ToList();
+    }
+
+    /// <summary>
+    ///     Persists current in-memory states to state.json.
+    /// </summary>
+    private void PersistLocked()
+    {
+        JsonFile.WriteAtomic(_statePath, _states);
+    }
+
+    /// <summary>
+    ///     Validates that state storage has been initialized before usage.
+    /// </summary>
+    private void EnsureInitializedLocked()
+    {
+        if (_isInitialized)
+            return;
+
+        throw new InvalidOperationException(
+            "State storage is not initialized. Call Initialize(stateDirectory) before accessing states.");
+    }
+
+    /// <summary>
+    ///     Creates a fresh inactive state entry for the given job.
+    /// </summary>
+    /// <param name="jobId">Job identifier.</param>
+    /// <param name="backupName">Backup display name.</param>
+    /// <returns>Inactive state entry.</returns>
+    private static BackupJobState CreateInactiveState(int jobId, string backupName)
+    {
+        return new BackupJobState
+        {
+            JobId = jobId,
+            BackupName = backupName,
+            LastActionTimestamp = DateTime.Now,
+            State = JobRunState.Inactive,
+            TotalFiles = 0,
+            TotalSizeBytes = 0,
+            ProgressPercent = 0,
+            RemainingFiles = 0,
+            RemainingSizeBytes = 0,
+            CurrentAction = null,
+            CurrentSourcePath = null,
+            CurrentTargetPath = null
+        };
     }
 }

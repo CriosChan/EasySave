@@ -29,11 +29,41 @@ public class JobRunStateTests
     }
 
     [Test]
+    public void Paused_HasCorrectValue()
+    {
+        Assert.That((int)JobRunState.Paused, Is.EqualTo(4));
+    }
+
+    [Test]
+    public void Stopped_HasCorrectValue()
+    {
+        Assert.That((int)JobRunState.Stopped, Is.EqualTo(5));
+    }
+
+    [Test]
+    public void WaitingPriority_HasCorrectValue()
+    {
+        Assert.That((int)JobRunState.WaitingPriority, Is.EqualTo(6));
+    }
+
+    [Test]
+    public void WaitingLargeFile_HasCorrectValue()
+    {
+        Assert.That((int)JobRunState.WaitingLargeFile, Is.EqualTo(7));
+    }
+
+    [Test]
+    public void PausedBusinessSoftware_HasCorrectValue()
+    {
+        Assert.That((int)JobRunState.PausedBusinessSoftware, Is.EqualTo(8));
+    }
+
+    [Test]
     public void AllStates_AreDefined()
     {
         var states = Enum.GetValues(typeof(JobRunState));
 
-        Assert.That(states.Length, Is.EqualTo(4));
+        Assert.That(states.Length, Is.EqualTo(9));
     }
 
     [Test]
@@ -66,6 +96,46 @@ public class JobRunStateTests
         JobRunState state = JobRunState.Failed;
 
         Assert.That(state, Is.EqualTo(JobRunState.Failed));
+    }
+
+    [Test]
+    public void CanAssignPaused()
+    {
+        JobRunState state = JobRunState.Paused;
+
+        Assert.That(state, Is.EqualTo(JobRunState.Paused));
+    }
+
+    [Test]
+    public void CanAssignStopped()
+    {
+        JobRunState state = JobRunState.Stopped;
+
+        Assert.That(state, Is.EqualTo(JobRunState.Stopped));
+    }
+
+    [Test]
+    public void CanAssignWaitingPriority()
+    {
+        JobRunState state = JobRunState.WaitingPriority;
+
+        Assert.That(state, Is.EqualTo(JobRunState.WaitingPriority));
+    }
+
+    [Test]
+    public void CanAssignWaitingLargeFile()
+    {
+        JobRunState state = JobRunState.WaitingLargeFile;
+
+        Assert.That(state, Is.EqualTo(JobRunState.WaitingLargeFile));
+    }
+
+    [Test]
+    public void CanAssignPausedBusinessSoftware()
+    {
+        JobRunState state = JobRunState.PausedBusinessSoftware;
+
+        Assert.That(state, Is.EqualTo(JobRunState.PausedBusinessSoftware));
     }
 }
 
