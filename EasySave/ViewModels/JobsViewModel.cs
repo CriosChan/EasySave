@@ -17,6 +17,7 @@ public partial class JobsViewModel : ViewModelBase
 {
     private readonly IBackupExecutionEngine _backupExecutionEngine;
     private readonly IJobService _jobService;
+    private readonly ParallelJobOrchestrator _orchestrator;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
     [ObservableProperty] private string _addButtonLabel = string.Empty;
@@ -46,8 +47,6 @@ public partial class JobsViewModel : ViewModelBase
     /// <summary>
     ///     Initializes a new instance of the <see cref="JobsViewModel" /> class.
     /// </summary>
-    /// <param name="jobService">Backup job service.</param>
-    /// <param name="uiTextService">Localized text service.</param>
     /// <param name="statusBar">Shared status bar state.</param>
     public JobsViewModel(StatusBarViewModel statusBar)
     {
@@ -55,6 +54,7 @@ public partial class JobsViewModel : ViewModelBase
         _jobService = new JobService();
         _uiTextService = new ResxUiTextService();
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
+        _orchestrator = new ParallelJobOrchestrator(_backupExecutionEngine);
 
         InitializeBackupTypes();
         RefreshJobs();
@@ -269,7 +269,7 @@ public partial class JobsViewModel : ViewModelBase
     }
 
     /// <summary>
-    ///     Executes all backup jobs sequentially.
+    ///     Executes all backup jobs in parallel using orchestrator.
     /// </summary>
     [RelayCommand]
     private async Task RunAllJobs()
@@ -286,21 +286,41 @@ public partial class JobsViewModel : ViewModelBase
 
         try
         {
-            var totalJobs = Jobs.Count;
-            var stoppedByBusinessSoftware = false;
+            var jobList = Jobs.Select(j => j.Job).ToList();
+            var totalJobs = jobList.Count;
+            var completedJobs = 0;
 
-            for (var i = 0; i < totalJobs; i++)
+            // Execute jobs in parallel with progress tracking
+            var result = await _orchestrator.ExecuteAllAsync(
+                jobList,
+                (_, _) =>
+                {
+                    // Update overall progress based on completed jobs
+                    var completedCount = _orchestrator.CompletedJobCount;
+                    if (completedCount > completedJobs)
+                    {
+                        completedJobs = completedCount;
+                        _statusBar.OverallProgress = completedCount / (double)totalJobs * 100;
+                    }
+                });
+
+            // Update final status based on result
+            if (result.WasStoppedByBusinessSoftware)
             {
-                var job = Jobs[i].Job;
-                stoppedByBusinessSoftware = await ExecuteJobCoreAsync(job);
-                if (stoppedByBusinessSoftware)
-                    break;
-
-                _statusBar.OverallProgress = (i + 1) / (double)totalJobs * 100;
+                _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.AllJobsStoppedByBusinessSoftware",
+                    "Execution stopped: business software detected");
+            }
+            else if (result.FailedCount > 0)
+            {
+                _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.AllJobsCompletedWithErrors",
+                    "Execution finished: {0} completed, {1} failed", result.CompletedCount, result.FailedCount);
+            }
+            else
+            {
+                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
             }
 
-            if (!stoppedByBusinessSoftware)
-                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
+            _statusBar.OverallProgress = 100;
         }
         catch (Exception ex)
         {
@@ -309,6 +329,7 @@ public partial class JobsViewModel : ViewModelBase
         finally
         {
             _statusBar.IsNotBusy = true;
+            await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
         }
     }
