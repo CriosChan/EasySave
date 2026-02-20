@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>ANALYSE TECHNIQUE DU PROJET EASYSAVE - RAPPORT COMPLET | easy-save </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="ANALYSE TECHNIQUE DU PROJET EASYSAVE - RAPPORT COMPLET | easy-save ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CriosChan/EasySave/blob/dev/docs/Rapport.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="easy-save">
+            easy-save
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="analyse-technique-du-projet-easysave---rapport-complet">ANALYSE TECHNIQUE DU PROJET EASYSAVE - RAPPORT COMPLET</h1>
+
+<h2 id="1-cartographie-du-système">1. CARTOGRAPHIE DU SYSTÈME</h2>
+<h3 id="11-structure-globale">1.1 Structure Globale</h3>
+<p>Le projet suit une organisation en couches inspirée de la Clean Architecture :</p>
+<pre><code>EasySave/
+├── Bootstrap/              # Point d'entrée et composition manuelle
+├── Domain/Models/          # Entités métier (BackupJob, BackupJobState, etc.)
+├── Application/            # Services applicatifs et interfaces
+│   ├── Abstractions/      # 8 interfaces de services
+│   └── Services/          # 8 implémentations concrètes
+├── Infrastructure/         # Implémentations techniques
+│   ├── Configuration/     # Configuration globale (Singleton)
+│   ├── Persistence/       # JobRepository, StateFileService
+│   ├── IO/               # JsonFile, PathService
+│   └── Lang/             # Gestion i18n
+└── Presentation/          # Interface utilisateur
+    ├── Cli/              # Mode ligne de commande
+    ├── Ui/               # Interface interactive (menu console)
+    └── Resources/        # Ressources i18n (.resx)
+
+EasyLog/                   # Projet séparé : système de logging
+</code></pre>
+<h3 id="12-flux-de-données-principal">1.2 Flux de Données Principal</h3>
+<p><strong>Démarrage de l'application</strong> :</p>
+<ol>
+<li><code>Program.cs</code> → charge <code>ApplicationConfiguration.Instance</code> (singleton global)</li>
+<li><code>Bootstrapper.BuildServices()</code> → composition manuelle de tous les services</li>
+<li><code>UserInterface.Initialize()</code> → initialisation des vues UI avec services injectés</li>
+<li><code>UserInterface.ShowMenu()</code> → boucle interactive principale</li>
+</ol>
+<p><strong>Exécution d'un backup</strong> :</p>
+<ol>
+<li>Utilisateur sélectionne un job via <code>JobLaunchView</code></li>
+<li><code>BackupService.RunJob(job)</code> orchestre l'ensemble :
+<ul>
+<li>Validation des chemins (<code>IPathService</code>)</li>
+<li>Sélection des fichiers (<code>IBackupFileSelector</code>)</li>
+<li>Création de la structure de répertoires (<code>IBackupDirectoryPreparer</code>)</li>
+<li>Copie fichier par fichier (<code>IFileCopier</code>)</li>
+<li>Mise à jour de l'état en temps réel (<code>IStateService</code>)</li>
+<li>Logging de chaque opération (<code>ConfigurableLogWriter&lt;LogEntry&gt;</code>)</li>
+<li><strong>Affichage de progression dans la console</strong> (<code>ProgressWidget</code> - instancié dans le service!)</li>
+</ul>
+</li>
+</ol>
+<p><strong>Persistence</strong> :</p>
+<ul>
+<li><strong>Jobs</strong> : Fichier JSON (<code>jobs.json</code>) via <code>JobRepository</code></li>
+<li><strong>État d'exécution</strong> : Fichier JSON (<code>state.json</code>) via <code>StateFileService</code></li>
+<li><strong>Logs</strong> : Fichiers quotidiens JSON ou XML via <code>EasyLog</code></li>
+</ul>
+<h3 id="13-composants-critiques">1.3 Composants Critiques</h3>
+<h4 id="backupservice-applicationservicesbackupservicecs">BackupService (Application/Services/BackupService.cs)</h4>
+<p><strong>Rôle</strong> : Orchestrateur principal de l'exécution des backups.<br>
+<strong>Responsabilités</strong> : Validation, orchestration, logging, gestion d'état, affichage UI (!).<br>
+<strong>Problème</strong> : Fait TOUT. God Object avec 221 lignes, 6 dépendances + violations de layering.</p>
+<h4 id="applicationconfiguration-infrastructureconfigurationapplicationconfigurationcs">ApplicationConfiguration (Infrastructure/Configuration/ApplicationConfiguration.cs)</h4>
+<p><strong>Rôle</strong> : Configuration globale de l'application.<br>
+<strong>Responsabilités</strong> : Chargement/sauvegarde appsettings.json, singleton global.<br>
+<strong>Problème</strong> : Singleton mutable accessible partout via <code>Instance</code>, modifie son propre fichier de config en runtime.</p>
+<h4 id="jobrepository-infrastructurepersistencejobrepositorycs">JobRepository (Infrastructure/Persistence/JobRepository.cs)</h4>
+<p><strong>Rôle</strong> : Persistence des jobs de backup.<br>
+<strong>Responsabilités</strong> : CRUD des jobs, assignation d'ID, limite à 5 jobs.<br>
+<strong>Problème</strong> : API bizarre (passer la liste en paramètre), mélange logique métier et persistence.</p>
+<h4 id="userinterface-presentationuiuserinterfacecs">UserInterface (Presentation/Ui/UserInterface.cs)</h4>
+<p><strong>Rôle</strong> : Point d'entrée de l'UI interactive.<br>
+<strong>Responsabilités</strong> : Initialisation des vues, affichage du menu principal.<br>
+<strong>Problème</strong> : Singleton statique, Service Locator, instancie tout en dur.</p>
+<hr>
+<h2 id="2-problèmes-identifiés">2. PROBLÈMES IDENTIFIÉS</h2>
+<h3 id="21-violations-architecturales-critiques">2.1 VIOLATIONS ARCHITECTURALES CRITIQUES</h3>
+<h4 id="critique-1--inversion-de-dépendance-application--presentation"><strong>CRITIQUE #1 : Inversion de dépendance Application → Presentation</strong></h4>
+<p><strong>Localisation</strong> : <code>BackupService.cs</code> (Application/Services), lignes 3-4, 150</p>
+<p><strong>Code incriminé</strong> :</p>
+<pre><code class="lang-csharp">using EasySave.Presentation.Ui;
+using EasySave.Presentation.Ui.Console;
+
+// ...ligne 150 dans RunJob():
+var progressWidget = new ProgressWidget(new SystemConsole());
+</code></pre>
+<p><strong>Explication</strong> : La couche Application dépend de la couche Presentation, ce qui <strong>inverse complètement</strong> le principe de Dependency Inversion (SOLID). Dans une Clean Architecture, l'Application ne doit JAMAIS connaître l'existence de la Presentation. Les flèches de dépendance doivent pointer vers l'intérieur (Domain), pas vers l'extérieur.</p>
+<p><strong>Impact</strong> :</p>
+<ul>
+<li>Impossible de tester <code>BackupService</code> sans UI</li>
+<li>Impossible de remplacer l'UI (ex: GUI, web) sans modifier Application</li>
+<li>Couplage bétonné entre logique métier et affichage</li>
+<li>Violation de l'Open/Closed Principle</li>
+</ul>
+<p><strong>Gravité</strong> : <strong>CRITIQUE</strong> - Bloque toute évolution de l'architecture</p>
+<hr>
+<h4 id="critique-2--service-locator-pattern---singleton-global-mutable"><strong>CRITIQUE #2 : Service Locator Pattern - Singleton Global Mutable</strong></h4>
+<p><strong>Localisation</strong> : <code>ApplicationConfiguration.cs</code> (Infrastructure/Configuration), lignes 11-34<br>
+Utilisé dans : <code>ConfigurableLogWriter&lt;T&gt;</code>, <code>LogTypeView</code>, <code>LanguageView</code>, <code>LoggerService</code>, <code>LanguageService</code></p>
+<p><strong>Code incriminé</strong> :</p>
+<pre><code class="lang-csharp">public class ApplicationConfiguration
+{
+    private static ApplicationConfiguration? _instance;
+    
+    public static ApplicationConfiguration Instance
+    {
+        get
+        {
+            if (_instance == null)
+                throw new InvalidOperationException(&quot;ApplicationConfiguration has not been loaded.&quot;);
+            return _instance;
+        }
+    }
+    
+    // Properties avec side-effects :
+    public string LogPath
+    {
+        get;
+        set
+        {
+            if (field != value)
+            {
+                field = value;
+                Save(nameof(LogPath), value); // Modifie le fichier!
+            }
+        }
+    } = &quot;./log&quot;;
+}
+</code></pre>
+<p><strong>Utilisation typique</strong> :</p>
+<pre><code class="lang-csharp">// Dans ConfigurableLogWriter&lt;T&gt;.cs
+private ILogger&lt;T&gt; DetermineLogger()
+{
+    var cfg = ApplicationConfiguration.Instance; // Service Locator
+    return cfg.LogType.ToLower() switch { /* ... */ };
+}
+</code></pre>
+<p><strong>Explication</strong> : Le Service Locator est un anti-pattern reconnu qui crée un <strong>couplage global invisible</strong>. Chaque classe qui utilise <code>ApplicationConfiguration.Instance</code> a une dépendance cachée non déclarée dans son constructeur. De plus, les setters modifient le fichier <code>appsettings.json</code> en runtime, ce qui est une <strong>pratique non standard</strong> (les fichiers de config doivent être read-only en production).</p>
+<p><strong>Impact</strong> :</p>
+<ul>
+<li>Dépendances cachées → code non testable</li>
+<li>Ordre d'initialisation fragile (exception si <code>Load()</code> non appelé avant)</li>
+<li>Impossible de mocker pour les tests</li>
+<li>Modification de fichiers de config en prod = risque de corruption/conflit</li>
+<li>État global partagé = cauchemar pour threading futur</li>
+</ul>
+<p><strong>Gravité</strong> : <strong>CRITIQUE</strong> - Mine la testabilité de toute la codebase</p>
+<hr>
+<h4 id="critique-3--repository-pattern-mal-implémenté"><strong>CRITIQUE #3 : Repository Pattern Mal Implémenté</strong></h4>
+<p><strong>Localisation</strong> : <code>IJobRepository.cs</code> (Application/Abstractions) + <code>JobRepository.cs</code> (Infrastructure/Persistence)</p>
+<p><strong>Code incriminé</strong> :</p>
+<pre><code class="lang-csharp">public interface IJobRepository
+{
+    List&lt;BackupJob&gt; Load();
+    void Save(List&lt;BackupJob&gt; jobs);
+    (bool ok, string error) AddJob(List&lt;BackupJob&gt; jobs, BackupJob job);
+    bool RemoveJob(List&lt;BackupJob&gt; jobs, string idOrName);
+}
+</code></pre>
+<p><strong>Utilisation typique</strong> :</p>
+<pre><code class="lang-csharp">var jobs = _repository.Load();  // Charge depuis le disque
+var (ok, error) = _repository.AddJob(jobs, newJob);  // Passe la liste + l'item
+// Le repository modifie la liste ET persiste!
+</code></pre>
+<p><strong>Explication</strong> : Cette API viole le principe &quot;Tell, Don't Ask&quot;. Le repository ne devrait <strong>pas</strong> demander au client de lui passer la collection à modifier. Cela crée une confusion sur qui est responsable de l'état : l'appelant doit gérer une liste qu'il a chargée, puis la passer au repository qui la modifie et persiste. C'est un <strong>leaky abstraction</strong> qui expose les détails d'implémentation (fichier JSON = tout en mémoire).</p>
+<p><strong>Design attendu</strong> :</p>
+<pre><code class="lang-csharp">public interface IJobRepository
+{
+    IEnumerable&lt;BackupJob&gt; GetAll();
+    BackupJob GetById(int id);
+    void Add(BackupJob job);
+    void Remove(int id);
+    // State géré en interne, pas exposé à l'appelant
+}
+</code></pre>
+<p><strong>Impact</strong> :</p>
+<ul>
+<li>API confuse et error-prone</li>
+<li>Responsabilités floues (qui gère la liste?)</li>
+<li>Impossible de changer l'implémentation (ex: base de données) sans casser l'API</li>
+<li>Force l'appelant à charger toute la collection à chaque fois</li>
+</ul>
+<p><strong>Gravité</strong> : <strong>IMPORTANTE</strong> - Complique significativement l'évolution</p>
+<hr>
+<h3 id="22-violations-des-principes-solid">2.2 VIOLATIONS DES PRINCIPES SOLID</h3>
+<h4 id="violation-srp-1--backupservice---god-method"><strong>VIOLATION SRP #1 : BackupService - God Method</strong></h4>
+<p><strong>Localisation</strong> : <code>BackupService.cs</code>, méthode <code>RunJob()</code> lignes 65-220 (156 lignes)</p>
+<p><strong>Responsabilités multiples</strong> :</p>
+<ol>
+<li>Validation des chemins source/target</li>
+<li>Logging des erreurs de validation</li>
+<li>Préparation de la structure de répertoires</li>
+<li>Sélection des fichiers à copier</li>
+<li>Calcul de la taille totale</li>
+<li>Gestion de l'état d'exécution (8 updates de <code>jobState</code>)</li>
+<li>Boucle de copie fichier par fichier</li>
+<li>Gestion des erreurs de copie</li>
+<li>Logging de chaque transfert</li>
+<li><strong>Affichage de la barre de progression UI</strong> (ligne 150, 197)</li>
+<li>Finalisation et log de complétion</li>
+</ol>
+<p><strong>Code symptomatique</strong> :</p>
+<pre><code class="lang-csharp">public void RunJob(BackupJob job)
+{
+    // 1. Validation
+    var sourceOk = _paths.TryNormalizeExistingDirectory(...);
+    if (!sourceOk) { /* log + update state */ }
+    
+    // 2-3. Preparation
+    _directoryPreparer.EnsureTargetDirectories(...);
+    var filesToCopy = _fileSelector.GetFilesToCopy(...);
+    
+    // 4. Update state
+    jobState.State = JobRunState.Active;
+    _state.Update(jobState);
+    
+    // 5. UI (!!)
+    var progressWidget = new ProgressWidget(new SystemConsole());
+    
+    // 6. Boucle principale
+    foreach (var sourceFile in filesToCopy)
+    {
+        // Update state again
+        jobState.CurrentAction = &quot;file_transfer&quot;;
+        _state.Update(jobState);
+        
+        // Copy + log + update progress + update state
+        // ...encore 40 lignes...
+    }
+    
+    // 7. Cleanup + final state update
+    jobState.State = hadError ? JobRunState.Failed : JobRunState.Completed;
+    _state.Update(jobState);
+}
+</code></pre>
+<p><strong>Duplication</strong> : 4 appels quasi-identiques à <code>_logger.Log(new LogEntry { ... })</code> avec variations mineures.</p>
+<p><strong>Impact</strong> :</p>
+<ul>
+<li>Méthode impossible à tester unitairement (trop de dépendances)</li>
+<li>Impossible à réutiliser partiellement</li>
+<li>Modification risquée (beaucoup de responsabilités = beaucoup de raisons de changer)</li>
+<li>Difficile à comprendre (charge cognitive élevée)</li>
+</ul>
+<p><strong>Gravité</strong> : <strong>IMPORTANTE</strong> - Entrave maintenance et tests</p>
+<hr>
+<h4 id="violation-dip-2--dépendances-concrètes-dans-les-constructeurs"><strong>VIOLATION DIP #2 : Dépendances concrètes dans les constructeurs</strong></h4>
+<p><strong>Localisation</strong> : Multiples fichiers</p>
+<p><strong>Exemples</strong> :</p>
+<pre><code class="lang-csharp">// BackupService.cs - ligne 22
+private readonly ConfigurableLogWriter&lt;LogEntry&gt; _logger;  // Classe concrète!
+
+public BackupService(
+    ConfigurableLogWriter&lt;LogEntry&gt; logger,  // Devrait être ILogger&lt;LogEntry&gt;
+    // ...
+)
+
+// LogTypeView.cs - ligne 22
+public LogTypeView(IConsole console)
+{
+    _loggerService = new LoggerService();  // new dans constructeur!
+}
+
+// MainMenuController.cs - ligne 49
+new Option(..., new LanguageView(_console).Show),  // new dans initialisation
+</code></pre>
+<p><strong>Explication</strong> : Le Dependency Inversion Principle stipule que les dépendances doivent pointer vers des <strong>abstractions</strong> (interfaces), pas des implémentations concrètes. Injecter <code>ConfigurableLogWriter&lt;T&gt;</code> au lieu d'une interface <code>ILogger&lt;T&gt;</code> crée un couplage fort. Instancier des dépendances avec <code>new</code> dans un constructeur ou une méthode viole complètement le principe d'inversion de contrôle.</p>
+<p><strong>Impact</strong> :</p>
+<ul>
+<li>Tests impossibles (pas de mock)</li>
+<li>Changement d'implémentation = modification de nombreux fichiers</li>
+<li>Couplage en cascade</li>
+</ul>
+<p><strong>Gravité</strong> : <strong>IMPORTANTE</strong> - Complique tests et modifications</p>
+<hr>
+<h3 id="23-over-engineering-et-complexité-inutile">2.3 OVER-ENGINEERING ET COMPLEXITÉ INUTILE</h3>
+<h4 id="over-engineering-1--abstraction-excessive-sans-justification"><strong>OVER-ENGINEERING #1 : Abstraction Excessive Sans Justification</strong></h4>
+<p><strong>Localisation</strong> : <code>Application/Abstractions/</code> - 8 interfaces pour des cas simples</p>
+<p><strong>Exemples</strong> :</p>
+<pre><code class="lang-csharp">// IBackupDirectoryPreparer.cs
+public interface IBackupDirectoryPreparer
+{
+    void EnsureTargetDirectories(BackupJob job, string sourceDir, string targetDir);
+    void EnsureTargetDirectoryForFile(BackupJob job, string sourceFile, string targetFile);
+}
+
+// IFileCopier.cs
+public interface IFileCopier
+{
+    long Copy(string sourceFile, string targetFile);
+}
+</code></pre>
+<p><strong>Explication</strong> : Ces interfaces n'ont <strong>qu'une seule implémentation</strong> et n'en auront probablement jamais d'autre (comment implémenter différemment la copie de fichiers?). C'est une application dogmatique du principe &quot;Program to an interface, not an implementation&quot; sans analyse du besoin réel. Cela crée une <strong>indirection inutile</strong> qui complique la navigation dans le code sans apporter de flexibilité.</p>
+<p><strong>Justification manquante</strong> : Pourquoi aurait-on besoin de plusieurs implémentations de <code>IFileCopier</code>? Quand est-ce que copier un fichier pourrait varier?</p>
+<p><strong>Impact</strong> :</p>
+<ul>
+<li>Navigation dans le code compliquée (clic sur interface → &quot;Find implementations&quot;)</li>
+<li>Fichiers supplémentaires à maintenir</li>
+<li>Complexité conceptuelle accrue pour les nouveaux développeurs</li>
+</ul>
+<p><strong>Gravité</strong> : <strong>MINEURE</strong> - N'empêche pas le fonctionnement mais ralentit la compréhension</p>
+<hr>
+<h4 id="over-engineering-2--configurablelogwriter---complexité-pour-rien"><strong>OVER-ENGINEERING #2 : ConfigurableLogWriter - Complexité Pour Rien</strong></h4>
+<p><strong>Localisation</strong> : <code>ConfigurableLogWriter&lt;T&gt;.cs</code> (Application/Services)</p>
+<p><strong>Code</strong> :</p>
+<pre><code class="lang-csharp">public class ConfigurableLogWriter&lt;T&gt;
+{
+    private readonly object _sync = new();
+    private ILogger&lt;T&gt; _logger;
+
+    public ConfigurableLogWriter(string logDirectory)
+    {
+        _logger = DetermineLogger(logDirectory);
+    }
+
+    public void Log(T entry)
+    {
+        lock (_sync)  // Thread-safety... mais EasySave est single-threaded!
+        {
+            _logger.Log(entry);
+        }
+    }
+
+    private ILogger&lt;T&gt; DetermineLogger(string logDirectory)
+    {
+        var cfg = ApplicationConfiguration.Instance;  // Service Locator
+        return cfg.LogType.ToLower() switch
+        {
+            &quot;json&quot; =&gt; new JsonLogger&lt;T&gt;(logDirectory),
+            &quot;xml&quot; =&gt; new XmlLogger&lt;T&gt;(logDirectory),
+            _ =&gt; new JsonLogger&lt;T&gt;(logDirectory)
+        };
+    }
+}
+</code></pre>
+<p><strong>Problèmes</strong> :</p>
+<ol>
+<li><strong>Lock inutile</strong> : Le code commente &quot;v1.0/v1.1 execute jobs sequentially in a single thread&quot; mais ajoute du locking</li>
+<li><strong>Service Locator</strong> : Dépendance cachée à <code>ApplicationConfiguration.Instance</code></li>
+<li><strong>Pas d'interface</strong> : Classe concrète injectée dans <code>BackupService</code></li>
+<li><strong>Réassignation impossible</strong> : Comment changer de logger à runtime? Le field <code>_logger</code> n'est jamais réassigné</li>
+</ol>
+<p><strong>Alternative simple</strong> :</p>
+<pre><code class="lang-csharp">// Injecter directement ILogger&lt;T&gt; choisi au démarrage
+public BackupService(ILogger&lt;LogEntry&gt; logger, ...)
+</code></pre>
+<p><strong>Gravité</strong> : <strong>MINEURE</strong> - Fonctionne mais ajoute complexité inutile</p>
+<hr>
+<h3 id="24-problèmes-de-code-et-bugs-potentiels">2.4 PROBLÈMES DE CODE ET BUGS POTENTIELS</h3>
+<h4 id="bug-1--exception-avalée-sans-logging"><strong>BUG #1 : Exception Avalée Sans Logging</strong></h4>
+<p><strong>Localisation</strong> : <code>BackupService.cs</code>, ligne 172-176</p>
+<p><strong>Code</strong> :</p>
+<pre><code class="lang-csharp">try
+{
+    var fi = new FileInfo(sourceFile);
+    fileSize = fi.Length;
+    elapsedMs = _fileCopier.Copy(sourceFile, targetFile);
+}
+catch (Exception)
+{
+    hadError = true;
+    elapsedMs = -1;
+}
+</code></pre>
+<p><strong>Explication</strong> : Le catch attrape <strong>toutes</strong> les exceptions (<code>Exception</code>) sans logger le message d'erreur. Impossible de débugger un problème en production : pourquoi le fichier n'a pas été copié? IOException? UnauthorizedAccessException? OutOfMemoryException? Aucune information.</p>
+<p><strong>Impact</strong> : Diagnostic impossible en cas de problème</p>
+<p><strong>Gravité</strong> : <strong>IMPORTANTE</strong> - Complique significativement le debugging</p>
+<hr>
+<h4 id="bug-2--thread-safety-absente-dans-abstractlogger"><strong>BUG #2 : Thread Safety Absente Dans AbstractLogger<t></t></strong></h4>
+<p><strong>Localisation</strong> : <code>EasyLog/AbstractLogger.cs</code>, ligne 26</p>
+<p><strong>Code</strong> :</p>
+<pre><code class="lang-csharp">protected void WriteLogFile(T log)
+{
+    // ...
+    File.AppendAllText(logFilePath, Serialize(log) + Environment.NewLine);
+}
+</code></pre>
+<p><strong>Explication</strong> : <code>File.AppendAllText()</code> n'est <strong>pas thread-safe</strong>. Si deux threads (ou processus) écrivent simultanément dans le même fichier de log, corruption possible. Bien que l'application soit actuellement single-threaded, le commentaire dans <code>StateFileService</code> mentionne &quot;we do not need locking primitives&quot; mais cela pourrait changer en v2.0.</p>
+<p><strong>Impact</strong> : Corruption de logs si évolution vers multi-threading</p>
+<p><strong>Gravité</strong> : <strong>MINEURE</strong> actuellement, <strong>IMPORTANTE</strong> si évolution prévue</p>
+<hr>
+<h4 id="code-smell-1--modèles-anémiques"><strong>CODE SMELL #1 : Modèles Anémiques</strong></h4>
+<p><strong>Localisation</strong> : Tous les modèles <code>Domain/Models/</code></p>
+<p><strong>Exemple</strong> :</p>
+<pre><code class="lang-csharp">public sealed class BackupJob
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string SourceDirectory { get; set; } = string.Empty;
+    public string TargetDirectory { get; set; } = string.Empty;
+    public BackupType Type { get; set; }
+}
+</code></pre>
+<p><strong>Explication</strong> : Les entités Domain n'ont <strong>aucune logique métier</strong>, que des getters/setters publics. Tous les champs sont mutables. C'est un <strong>Anemic Domain Model</strong> anti-pattern : les objets ne font rien, toute la logique est dans les services. De plus, aucune validation : on peut créer un <code>BackupJob</code> avec <code>Name = &quot;&quot;</code> et <code>SourceDirectory = null</code>.</p>
+<p><strong>Design attendu</strong> :</p>
+<pre><code class="lang-csharp">public sealed class BackupJob
+{
+    public int Id { get; private set; }
+    public string Name { get; }
+    public DirectoryPath SourceDirectory { get; }
+    public DirectoryPath TargetDirectory { get; }
+    public BackupType Type { get; }
+    
+    public BackupJob(string name, DirectoryPath source, DirectoryPath target, BackupType type)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException(&quot;Name cannot be empty&quot;, nameof(name));
+        
+        Name = name;
+        SourceDirectory = source ?? throw new ArgumentNullException(nameof(source));
+        TargetDirectory = target ?? throw new ArgumentNullException(nameof(target));
+        Type = type;
+    }
+    
+    public void AssignId(int id) { Id = id; }
+}
+</code></pre>
+<p><strong>Impact</strong> : Aucune garantie d'intégrité des données, validation dispersée dans les services</p>
+<p><strong>Gravité</strong> : <strong>IMPORTANTE</strong> - Complique validation et garanties métier</p>
+<hr>
+<h4 id="code-smell-2--duplication-de-validation"><strong>CODE SMELL #2 : Duplication de Validation</strong></h4>
+<p><strong>Localisation</strong> : <code>BackupService.cs</code>, <code>CommandJobRunner.cs</code>, <code>JobLaunchView.cs</code></p>
+<p><strong>Code dupliqué</strong> :</p>
+<pre><code class="lang-csharp">// Dans BackupService.cs
+if (!_paths.TryNormalizeExistingDirectory(job.SourceDirectory, out _))
+{
+    jobState.State = JobRunState.Failed;
+    jobState.CurrentAction = &quot;source_missing&quot;;
+    _state.Update(jobState);
+    _logger.Log(/* ... */);
+    return;
+}
+
+// Dans CommandJobRunner.cs (quasi identique)
+if (!_paths.TryNormalizeExistingDirectory(job.SourceDirectory, out _))
+{
+    message = string.Format(UserInterface.Terminal_log_JobSourceNotFound, job.Id);
+    return false;
+}
+
+// Dans JobLaunchView.cs (encore!)
+if (!_paths.TryNormalizeExistingDirectory(j.SourceDirectory, out _))
+{
+    _console.WriteLine($&quot;[{j.Id}] {Resources.UserInterface.Path_SourceNotFound}&quot;);
+    continue;
+}
+</code></pre>
+<p><strong>Explication</strong> : La validation des chemins est répétée dans 3 endroits différents avec 3 comportements légèrement différents. C'est une violation du DRY (Don't Repeat Yourself). Si la logique de validation change, il faut modifier 3 fichiers.</p>
+<p><strong>Impact</strong> : Risque d'incohérence, maintenabilité réduite</p>
+<p><strong>Gravité</strong> : <strong>MINEURE</strong> - Amélioration souhaitable</p>
+<hr>
+<h3 id="25-manque-de-cohésion-et-couplage-excessif">2.5 MANQUE DE COHÉSION ET COUPLAGE EXCESSIF</h3>
+<h4 id="couplage-1--infrastructure-connaît-domain"><strong>COUPLAGE #1 : Infrastructure Connaît Domain</strong></h4>
+<p><strong>Localisation</strong> : <code>JobRepository.cs</code>, <code>StateFileService.cs</code></p>
+<p><strong>Code</strong> :</p>
+<pre><code class="lang-csharp">// JobRepository.cs dépend de Domain.Models
+using EasySave.Domain.Models;
+
+public sealed class JobRepository : IJobRepository
+{
+    public (bool ok, string error) AddJob(List&lt;BackupJob&gt; jobs, BackupJob job)
+    {
+        // Logique métier : limite 5 jobs, assignation d'ID
+        if (jobs.Count &gt;= MaxJobs)
+            return (false, &quot;Error.MaxJobs&quot;);
+        
+        var id = GetNextFreeId(jobs);
+        job.Id = id;  // Modifie l'entité Domain!
+        jobs.Add(job);
+        Save(jobs);
+    }
+}
+</code></pre>
+<p><strong>Explication</strong> : Le repository (Infrastructure) contient de la <strong>logique métier</strong> (limite de 5 jobs, assignation d'ID). Il modifie directement les entités Domain. Dans une Clean Architecture, Infrastructure ne devrait être qu'un détail d'implémentation technique (lecture/écriture disque), pas contenir de règles métier.</p>
+<p><strong>Design attendu</strong> : La règle &quot;max 5 jobs&quot; devrait être dans Domain ou Application, pas Infrastructure.</p>
+<p><strong>Impact</strong> : Mélange des responsabilités, difficulté à changer la persistence</p>
+<p><strong>Gravité</strong> : <strong>IMPORTANTE</strong> - Complexifie l'architecture</p>
+<hr>
+<h4 id="couplage-2--presentation-appelle-directement-repository"><strong>COUPLAGE #2 : Presentation Appelle Directement Repository</strong></h4>
+<p><strong>Localisation</strong> : Toutes les vues UI (JobCreationView, JobRemovalView, JobListView, etc.)</p>
+<p><strong>Code</strong> :</p>
+<pre><code class="lang-csharp">public sealed class JobCreationView
+{
+    private readonly IJobRepository _repository;
+    
+    public void Show()
+    {
+        var jobs = _repository.Load();  // Presentation → Infrastructure !
+        // ...
+        var (ok, error) = _repository.AddJob(jobs, newJob);
+    }
+}
+</code></pre>
+<p><strong>Explication</strong> : La couche Presentation accède directement au Repository (Infrastructure), en court-circuitant la couche Application. Cela viole la séparation des couches : Presentation devrait passer par des <strong>cas d'usage</strong> (Application) qui orchestrent les opérations.</p>
+<p><strong>Design attendu</strong> :</p>
+<pre><code>Presentation → Application (Use Cases) → Domain ← Infrastructure
+</code></pre>
+<p><strong>Impact</strong> : Logique métier dispersée, difficile à réutiliser (ex: API web)</p>
+<p><strong>Gravité</strong> : <strong>IMPORTANTE</strong> - Viole l'architecture en couches</p>
+<hr>
+<h3 id="26-problèmes-spécifiques-à-lia">2.6 PROBLÈMES SPÉCIFIQUES À L'IA</h3>
+<h4 id="symptôme-ia-1--documentation-excessive-mais-inutile"><strong>SYMPTÔME IA #1 : Documentation Excessive Mais Inutile</strong></h4>
+<p><strong>Localisation</strong> : Partout</p>
+<p><strong>Exemple</strong> :</p>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
+///     Builds the backup orchestrator.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;logger&quot;&gt;Log writer.&lt;/param&gt;
+/// &lt;param name=&quot;state&quot;&gt;State management service.&lt;/param&gt;
+/// &lt;param name=&quot;paths&quot;&gt;Path service.&lt;/param&gt;
+/// &lt;param name=&quot;fileSelector&quot;&gt;File selector.&lt;/param&gt;
+/// &lt;param name=&quot;directoryPreparer&quot;&gt;Target directory preparer.&lt;/param&gt;
+/// &lt;param name=&quot;fileCopier&quot;&gt;File copier.&lt;/param&gt;
+public BackupService(
+    ConfigurableLogWriter&lt;LogEntry&gt; logger,
+    IStateService state,
+    // ...
+)
+</code></pre>
+<p><strong>Explication</strong> : Les commentaires XML sont <strong>verbeux</strong> et ne disent rien que le code ne dit déjà. &quot;Log writer&quot; pour un paramètre nommé <code>logger</code> n'apporte aucune valeur. C'est typique de l'IA qui génère du XML Doc systématiquement sans réflexion sur l'utilité.</p>
+<hr>
+<h4 id="symptôme-ia-2--sur-utilisation-dinterfaces-sans-raison"><strong>SYMPTÔME IA #2 : Sur-utilisation d'Interfaces Sans Raison</strong></h4>
+<p>Déjà couvert en 2.3 (Over-engineering #1).</p>
+<hr>
+<h4 id="symptôme-ia-3--patterns-appliqués-dogmatiquement"><strong>SYMPTÔME IA #3 : Patterns Appliqués Dogmatiquement</strong></h4>
+<p><strong>Observation</strong> : Le code tente d'implémenter Repository Pattern, Service Layer, Dependency Injection, mais <strong>incorrectement</strong> :</p>
+<ul>
+<li>Repository qui demande la liste en paramètre</li>
+<li>DI manuelle au lieu d'un conteneur IoC (alors que les packages MS sont là!)</li>
+<li>Interfaces partout même pour des classes qui n'en ont pas besoin</li>
+</ul>
+<p><strong>Explication</strong> : L'IA connaît les noms des patterns mais pas leur <strong>intention</strong> ni leur contexte d'application approprié.</p>
+<hr>
+<h2 id="3-synthèse-et-recommandations">3. SYNTHÈSE ET RECOMMANDATIONS</h2>
+<h3 id="31-résumé-des-problèmes-majeurs-par-ordre-de-priorité">3.1 Résumé des Problèmes Majeurs (Par Ordre de Priorité)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Problème</th>
+<th>Gravité</th>
+<th>Impact</th>
+<th>Effort Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Service Locator (Singleton global)</td>
+<td><strong>CRITIQUE</strong></td>
+<td>Testabilité nulle, couplage global</td>
+<td>Élevé</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Application dépend de Presentation</td>
+<td><strong>CRITIQUE</strong></td>
+<td>Évolutivité bloquée</td>
+<td>Moyen</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Repository mal implémenté</td>
+<td><strong>IMPORTANTE</strong></td>
+<td>API confuse, rigidité</td>
+<td>Moyen</td>
+</tr>
+<tr>
+<td>4</td>
+<td>BackupService God Method</td>
+<td><strong>IMPORTANTE</strong></td>
+<td>Maintenance difficile</td>
+<td>Moyen</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Modèles anémiques sans validation</td>
+<td><strong>IMPORTANTE</strong></td>
+<td>Intégrité données</td>
+<td>Faible</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Exceptions avalées sans log</td>
+<td><strong>IMPORTANTE</strong></td>
+<td>Debugging impossible</td>
+<td>Faible</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Couplage Infrastructure/Domain</td>
+<td><strong>IMPORTANTE</strong></td>
+<td>Architecture compromise</td>
+<td>Moyen</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Dépendances concrètes (pas d'IoC)</td>
+<td><strong>IMPORTANTE</strong></td>
+<td>Tests compliqués</td>
+<td>Élevé</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Configuration mutable runtime</td>
+<td>MINEURE</td>
+<td>Risque corruption</td>
+<td>Faible</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Over-engineering (interfaces inutiles)</td>
+<td>MINEURE</td>
+<td>Compréhension ralentie</td>
+<td>Faible</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-impact-global-sur-la-qualité-de-la-codebase">3.2 Impact Global sur la Qualité de la Codebase</h3>
+<p><strong>Testabilité</strong> : <strong>2/10</strong></p>
+<ul>
+<li>Impossible de tester unitairement la plupart des classes (Singleton global, dépendances concrètes)</li>
+<li>Pas de tests existants détectés dans le projet</li>
+</ul>
+<p><strong>Maintenabilité</strong> : <strong>3/10</strong></p>
+<ul>
+<li>God Methods difficiles à modifier</li>
+<li>Duplication de code</li>
+<li>Couplage fort = changements en cascade</li>
+</ul>
+<p><strong>Évolutivité</strong> : <strong>2/10</strong></p>
+<ul>
+<li>Impossible d'ajouter une GUI sans refactoriser (couplage Presentation)</li>
+<li>Impossible de paralléliser (Singleton mutable, absence de thread-safety)</li>
+<li>Impossible de distribuer (tout est en mémoire)</li>
+</ul>
+<p><strong>Lisibilité</strong> : <strong>5/10</strong></p>
+<ul>
+<li>Documentation excessive mais peu utile</li>
+<li>Navigation compliquée (interfaces inutiles)</li>
+<li>Fichiers longs (BackupService 221 lignes)</li>
+</ul>
+<p><strong>Robustesse</strong> : <strong>4/10</strong></p>
+<ul>
+<li>Exceptions avalées</li>
+<li>Absence de validation Domain</li>
+<li>Configuration mutable = risque corruption</li>
+</ul>
+<h3 id="33-axes-de-refactorisation-prioritaires">3.3 Axes de Refactorisation Prioritaires</h3>
+<h4 id="priorité-1--éliminer-le-service-locator"><strong>PRIORITÉ 1 : Éliminer le Service Locator</strong></h4>
+<p><strong>Objectif</strong> : Remplacer <code>ApplicationConfiguration.Instance</code> par injection de dépendances.</p>
+<p><strong>Actions</strong> :</p>
+<ol>
+<li>Créer une interface <code>IApplicationConfiguration</code> en lecture seule</li>
+<li>Utiliser le conteneur IoC <code>Microsoft.Extensions.DependencyInjection</code> (packages déjà présents!)</li>
+<li>Enregistrer tous les services dans <code>Bootstrapper</code> via le conteneur</li>
+<li>Injecter <code>IApplicationConfiguration</code> dans les classes qui en ont besoin</li>
+</ol>
+<p><strong>Bénéfice</strong> : Testabilité restaurée, dépendances explicites.</p>
+<hr>
+<h4 id="priorité-2--inverser-la-dépendance-presentation"><strong>PRIORITÉ 2 : Inverser la Dépendance Presentation</strong></h4>
+<p><strong>Objectif</strong> : Supprimer les <code>using EasySave.Presentation</code> de <code>BackupService</code>.</p>
+<p><strong>Actions</strong> :</p>
+<ol>
+<li>Créer une interface <code>IProgressReporter</code> dans Application :
+<pre><code class="lang-csharp">public interface IProgressReporter
+{
+    void ReportProgress(double percentage);
+}
+</code></pre>
+</li>
+<li>Injecter <code>IProgressReporter</code> dans <code>BackupService</code></li>
+<li>Implémenter dans Presentation : <code>ConsoleProgressReporter : IProgressReporter</code></li>
+</ol>
+<p><strong>Bénéfice</strong> : Respect de la Clean Architecture, réutilisabilité du service.</p>
+<hr>
+<h4 id="priorité-3--refactoriser-le-repository"><strong>PRIORITÉ 3 : Refactoriser le Repository</strong></h4>
+<p><strong>Objectif</strong> : API cohérente et responsabilités claires.</p>
+<p><strong>Actions</strong> :</p>
+<ol>
+<li>Modifier l'interface :
+<pre><code class="lang-csharp">public interface IJobRepository
+{
+    IEnumerable&lt;BackupJob&gt; GetAll();
+    void Add(BackupJob job);  // Gère l'ID en interne
+    void Remove(int id);
+}
+</code></pre>
+</li>
+<li>Déplacer la logique &quot;max 5 jobs&quot; dans un service Application ou Domain</li>
+<li>Le repository ne fait que persist/load, pas de logique métier</li>
+</ol>
+<p><strong>Bénéfice</strong> : API claire, séparation des responsabilités.</p>
+<hr>
+<h4 id="priorité-4--découper-backupservice"><strong>PRIORITÉ 4 : Découper BackupService</strong></h4>
+<p><strong>Objectif</strong> : Méthode <code>RunJob</code> &lt; 50 lignes.</p>
+<p><strong>Actions</strong> :</p>
+<ol>
+<li>Extraire méthode <code>ValidateJob(BackupJob) : ValidationResult</code></li>
+<li>Extraire méthode <code>PrepareBackup(BackupJob, sourceDir, targetDir) : BackupPlan</code></li>
+<li>Extraire méthode <code>ExecuteBackup(BackupPlan) : BackupResult</code></li>
+<li>Extraire classe <code>BackupProgressTracker</code> pour gérer les updates d'état</li>
+</ol>
+<p><strong>Bénéfice</strong> : Code testable, compréhensible, maintenable.</p>
+<hr>
+<h4 id="priorité-5--ajouter-validation-domain"><strong>PRIORITÉ 5 : Ajouter Validation Domain</strong></h4>
+<p><strong>Objectif</strong> : Entités immutables avec validation.</p>
+<p><strong>Actions</strong> :</p>
+<ol>
+<li>Rendre les setters <code>private</code> ou supprimer</li>
+<li>Valider dans les constructeurs</li>
+<li>Utiliser Value Objects pour <code>SourceDirectory</code> / <code>TargetDirectory</code> (ex: <code>DirectoryPath</code>)</li>
+</ol>
+<p><strong>Bénéfice</strong> : Intégrité des données garantie par le Domain.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CriosChan/EasySave/blob/dev/docs/Rapport.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
