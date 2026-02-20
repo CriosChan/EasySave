@@ -41,7 +41,7 @@
                            TextWrapping="Wrap" />
 
                 <ProgressBar Minimum="0"
-                             Maximum="100"
+                             Maximum="{Binding StatusBar.MaxProgress}"
                              Value="{Binding StatusBar.OverallProgress}"
                              Height="18" />
             </StackPanel>

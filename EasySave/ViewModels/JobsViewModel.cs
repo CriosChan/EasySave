@@ -94,11 +94,28 @@ public partial class JobsViewModel : ViewModelBase
     /// </summary>
     public void RefreshJobs()
     {
-        var jobModels = _jobService.GetAll();
-        Jobs.Clear();
+        var jobModels = _jobService.GetAll().ToList();
 
-        foreach (var job in jobModels)
-            Jobs.Add(new BackupJobItemViewModel(job));
+        var missingJobs = jobModels
+            .Where(jobModel => Jobs.All(job => job.Job.Id != jobModel.Id))
+            .ToList();
+        
+        
+        if (missingJobs.Any())
+        {
+            foreach (var missingJob in missingJobs)
+            {
+                Jobs.Add(new BackupJobItemViewModel(missingJob, _statusBar));
+            }
+        }
+        
+        foreach (var job in Jobs.ToList()) // ToList() pour éviter l'exception de modification de la collection
+        {
+            if (jobModels.All(jobModel => jobModel.Id != job.Job.Id))
+            {
+                Jobs.Remove(job);
+            }
+        }
     }
 
     /// <summary>

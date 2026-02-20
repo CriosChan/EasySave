@@ -64,16 +64,24 @@ public static class StateLogger
         });
     }
 
+    public static void SetStatePaused(BackupJobState state)
+    {
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.Paused;
+        });
+    }
+
     /// <summary>
     ///     Sets the state of the backup job to completed, based on if an error occurred.
     /// </summary>
     /// <param name="state">The current state of the backup job.</param>
     /// <param name="hadError">Indicates if an error occurred during the backup.</param>
-    public static void SetStateEnd(BackupJobState state, bool hadError)
+    public static void SetStateEnd(BackupJobState state, bool hadError, bool wasStopped)
     {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
-            s.State = hadError ? JobRunState.Failed : JobRunState.Completed; // Set job state
+            s.State = wasStopped ? JobRunState.Stopped : (hadError ? JobRunState.Failed : JobRunState.Completed); // Set job state
             s.CurrentAction = hadError ? "completed_with_errors" : "completed"; // Action message
             s.CurrentSourcePath = null; // Reset source path
             s.CurrentTargetPath = null; // Reset target path
@@ -92,6 +100,7 @@ public static class StateLogger
     {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
+            s.State = JobRunState.Active;
             s.CurrentAction = "file_transfer"; // Set current action
             s.CurrentSourcePath = PathService.ToFullUncLikePath(file.SourceFile); // Set source path
             s.CurrentTargetPath = PathService.ToFullUncLikePath(file.TargetFile); // Set target path
