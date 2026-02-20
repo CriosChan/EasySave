@@ -37,14 +37,47 @@
                                     Background="#10000000"
                                     BorderBrush="{DynamicResource BorderLine}"
                                     BorderThickness="1">
-                                <StackPanel Spacing="2">
-                                    <TextBlock Text="{Binding DisplayName}"
-                                               FontWeight="SemiBold" />
-                                    <TextBlock Text="{Binding Type}" Opacity="0.8" />
-                                    <TextBlock Text="{Binding DisplayPath}"
-                                               TextWrapping="Wrap"
-                                               Opacity="0.8" />
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80*"></ColumnDefinition>
+                                        <ColumnDefinition Width="20*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+    
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Type}" Opacity="0.8" />
+                                        <TextBlock Text="{Binding DisplayPath}" TextWrapping="Wrap" Opacity="0.8" />
+                                    </StackPanel>
+    
+                                    <StackPanel Grid.Column="1">
+                                        <Grid HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/> <!-- Colonne flexible -->
+                                                <ColumnDefinition Width="Auto"/> <!-- Colonne pour le StackPanel -->
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                                                <Button Command="{Binding PauseResumeJobCommand}" IsVisible="{Binding InverseStopped}">
+                                                    <Image Source="{Binding PauseIcon}" Width="24" Height="24" />
+                                                </Button>
+                                                <Button Command="{Binding StartStopJobCommand}">
+                                                    <Image Source="{Binding StopIcon}" Width="24" Height="24"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                        <TextBlock Text="{Binding StatusMessage}"
+                                                   TextWrapping="Wrap" />
+                                        <ProgressBar 
+                                            Minimum="0"
+                                            Maximum="100"
+                                            Value="{Binding Progress}"
+                                            Foreground="{Binding ProgressBarColor}"
+                                            Height="18"
+                                            MinWidth="0"
+                                            HorizontalAlignment="Stretch" 
+                                            Margin="5" />
+                                    </StackPanel>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

@@ -78,7 +78,23 @@ public class BackupJob
     /// </summary>
     [JsonIgnore]
     public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
+    
+    [JsonIgnore] private ManualResetEvent _pauseEvent = new ManualResetEvent(true);
 
+    [JsonIgnore]
+    public bool WasStopped
+    {
+        get;
+        set
+        {
+            field = value;
+            OnStopEvent();
+        }
+    } = true;
+
+    public event EventHandler? PauseEvent;
+    public event EventHandler? StopEvent;
+    public event EventHandler? EndEvent;
     /// <summary>
     ///     Gets a value indicating whether the current job run was stopped because business software was detected.
     /// </summary>
@@ -123,6 +139,8 @@ public class BackupJob
     public void StartBackup()
     {
         WasStoppedByBusinessSoftware = false;
+        WasStopped = false;
+        CurrentProgress = 0;
         // Save Key to file for cryptosoft just in case file doesn't exists
         CryptoSoftConfiguration.Load().Save();
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
@@ -133,12 +151,7 @@ public class BackupJob
         {
             Console.WriteLine($"[ERROR] Backup job '{Name}' (ID: {Id}) failed: {errorMessage}");
             StateLogger.SetStateFailed(state);
-            return;
-        }
-
-        if (businessSoftwareStopHandler.ShouldStopBackup(state, null))
-        {
-            WasStoppedByBusinessSoftware = true;
+            WasStopped = true;
             return;
         }
 
@@ -158,6 +171,14 @@ public class BackupJob
             if (i > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, Files[i]))
             {
                 WasStoppedByBusinessSoftware = true;
+                Pause();
+            }
+
+            // Wait if paused
+            _pauseEvent.WaitOne();
+
+            if (WasStopped)
+            {
                 break;
             }
 
@@ -185,11 +206,56 @@ public class BackupJob
 
         // Finalize the backup job state
         StateLogger.SetStateEnd(state, hadError);
-        CurrentProgress = 100; // Set progress to 100% at completion
+        
+        if (!WasStopped)
+        {
+            CurrentProgress = 100; // Set progress to 100% at completion
+        }
+        OnEndEvent(); 
+    }
+
+    public void Pause()
+    {
+        _pauseEvent.Reset();
+        OnPauseEvent();
+    }
+
+    public void Resume()
+    {
+        _pauseEvent.Set();
+        OnPauseEvent();
+    }
+
+    public void Stop()
+    {
+        WasStopped = true;
+        _pauseEvent.Set();
+        OnPauseEvent();
     }
 
     protected virtual void OnProgressChanged()
     {
         ProgressChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    protected virtual void OnPauseEvent()
+    {
+        PauseEvent?.Invoke(this, EventArgs.Empty);
+    }
+
+    protected virtual void OnStopEvent()
+    {
+        StopEvent?.Invoke(this, EventArgs.Empty);
+    }
+    
+    protected virtual void OnEndEvent()
+    {
+        EndEvent?.Invoke(this, EventArgs.Empty);
+    }
+    
+    public bool IsPaused()
+    {
+        bool isSignaled = _pauseEvent.WaitOne(0);
+        return !isSignaled;
     }
 }
