@@ -40,11 +40,13 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
     ///     Initializes a new instance of the <see cref="BusinessSoftwareViewModel" /> class.
     /// </summary>
     /// <param name="statusBar">Shared status bar state.</param>
+    /// <param name="uiTextService">Localized UI text service.</param>
     public BusinessSoftwareViewModel(
-        StatusBarViewModel statusBar)
+        StatusBarViewModel statusBar,
+        IUiTextService uiTextService)
     {
         _businessSoftwareCatalogService = new BusinessSoftwareCatalogService();
-        _uiTextService = new ResxUiTextService();
+        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
     }
 

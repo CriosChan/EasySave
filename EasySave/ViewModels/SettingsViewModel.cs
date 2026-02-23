@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
 using EasySave.Models.Data.Configuration;
-using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
@@ -13,7 +12,7 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class SettingsViewModel : ViewModelBase
 {
-    private readonly Action _onLocalizationChanged;
+    private readonly IUiLocalizationService _uiLocalizationService;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
     [ObservableProperty] private string _englishButtonLabel = string.Empty;
@@ -45,11 +44,16 @@ public partial class SettingsViewModel : ViewModelBase
     /// <summary>
     ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
     /// </summary>
-    public SettingsViewModel(StatusBarViewModel statusBar, Action onLocalizationChanged)
+    /// <param name="uiTextService">Localized UI text service.</param>
+    /// <param name="uiLocalizationService">UI localization switch service.</param>
+    public SettingsViewModel(
+        StatusBarViewModel statusBar,
+        IUiTextService uiTextService,
+        IUiLocalizationService uiLocalizationService)
     {
-        _statusBar = statusBar;
-        _uiTextService = new ResxUiTextService();
-        _onLocalizationChanged = onLocalizationChanged;
+        _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
+        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
+        _uiLocalizationService = uiLocalizationService ?? throw new ArgumentNullException(nameof(uiLocalizationService));
         UpdateUiText();
     }
 
@@ -81,8 +85,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetFrenchLanguage()
     {
         ApplicationConfiguration.Load().Localization = "fr-FR";
-        LocalizationApplier.Apply("fr-FR");
-        _onLocalizationChanged();
+        _uiLocalizationService.Apply("fr-FR");
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedFr", "Langue changee en Francais");
     }
 
@@ -93,8 +96,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetEnglishLanguage()
     {
         ApplicationConfiguration.Load().Localization = "en-US";
-        LocalizationApplier.Apply("en-US");
-        _onLocalizationChanged();
+        _uiLocalizationService.Apply("en-US");
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedEn", "Language changed to English");
     }
 

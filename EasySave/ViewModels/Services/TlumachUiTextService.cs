@@ -1,11 +1,11 @@
-using EasySave.Views.Resources;
+using EasySave.Translation;
 
 namespace EasySave.ViewModels.Services;
 
 /// <summary>
-///     Resource-based implementation of <see cref="IUiTextService" />.
+///     Tlumach-based implementation of <see cref="IUiTextService" />.
 /// </summary>
-public sealed class ResxUiTextService : IUiTextService
+public sealed class TlumachUiTextService : IUiTextService
 {
     /// <summary>
     ///     Gets a localized string and falls back to a default value when missing.
@@ -15,7 +15,11 @@ public sealed class ResxUiTextService : IUiTextService
     /// <returns>Localized text or fallback value.</returns>
     public string Get(string resourceKey, string fallback)
     {
-        return UserInterface.ResourceManager.GetString(resourceKey, UserInterface.Culture) ?? fallback;
+        if (string.IsNullOrWhiteSpace(resourceKey))
+            return fallback;
+
+        var text = Strings.TranslationManager.GetValue(resourceKey).Text;
+        return string.IsNullOrWhiteSpace(text) ? fallback : text;
     }
 
     /// <summary>

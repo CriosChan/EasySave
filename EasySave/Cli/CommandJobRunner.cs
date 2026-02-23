@@ -2,7 +2,7 @@ using EasySave.Data.Configuration;
 using EasySave.Models.Backup;
 using EasySave.Models.Backup.Interfaces;
 using EasySave.Models.State;
-using EasySave.Views.Resources;
+using EasySave.ViewModels.Services;
 
 namespace EasySave.Cli;
 
@@ -13,12 +13,15 @@ internal sealed class CommandJobRunner
 {
     private readonly IBackupExecutionEngine _backupExecutionEngine = new BackupExecutionEngine();
     private readonly ParallelJobOrchestrator _orchestrator;
+    private readonly IUiTextService _uiTextService;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="CommandJobRunner" /> class.
     /// </summary>
-    public CommandJobRunner()
+    /// <param name="uiTextService">Localized text service.</param>
+    public CommandJobRunner(IUiTextService uiTextService)
     {
+        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
         _orchestrator = new ParallelJobOrchestrator(_backupExecutionEngine);
     }
 
@@ -32,7 +35,7 @@ internal sealed class CommandJobRunner
         var jobs = new JobService().GetAll().OrderBy(j => j.Id).ToList();
         if (jobs.Count == 0)
         {
-            Console.WriteLine(UserInterface.Terminal_log_NoJobConfigured);
+            Console.WriteLine(_uiTextService.Get("Terminal.Log.NoJobConfigured", "No backup job configured."));
             return 1;
         }
 
@@ -45,11 +48,11 @@ internal sealed class CommandJobRunner
             var job = jobs.FirstOrDefault(j => j.Id == id);
             if (job == null)
             {
-                Console.WriteLine(UserInterface.Terminal_log_JobIdNotFound, id);
+                Console.WriteLine(_uiTextService.Format("Terminal.Log.JobIdNotFound", "Job {0} not found.", id));
                 continue;
             }
 
-            Console.WriteLine(UserInterface.Launch_RunningOne, job.Id, job.Name);
+            Console.WriteLine(_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id, job.Name));
             jobsToRun.Add(job);
         }
 
@@ -61,17 +64,20 @@ internal sealed class CommandJobRunner
 
         if (result.WasStoppedByBusinessSoftware)
         {
-            Console.WriteLine("Execution stopped: business software detected");
+            Console.WriteLine(_uiTextService.Get("Gui.Status.AllJobsStoppedByBusinessSoftware",
+                "Execution stopped: business software detected"));
             return 0;
         }
 
         if (result.FailedCount > 0)
         {
-            Console.WriteLine("Execution finished: {0} completed, {1} failed", result.CompletedCount, result.FailedCount);
+            Console.WriteLine(_uiTextService.Format("Gui.Status.AllJobsCompletedWithErrors",
+                "Execution finished: {0} completed, {1} failed", result.CompletedCount, result.FailedCount));
             return 1;
         }
 
-        Console.WriteLine("All jobs completed successfully ({0} jobs)", result.CompletedCount);
+        Console.WriteLine(_uiTextService.Format("Terminal.Log.AllJobsCompletedSuccessfully",
+            "All jobs completed successfully ({0} jobs)", result.CompletedCount));
         return 0;
     }
 }

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AlliedBits.Tlumach" Version="1.2.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="strings.cfg" />
+    <AdditionalFiles Include="strings.toml" />
+    <AdditionalFiles Include="strings_fr-FR.toml" />
+    <EmbeddedResource Include="strings.toml">
+      <LogicalName>strings.toml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="strings_fr-FR.toml">
+      <LogicalName>strings_fr-FR.toml</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
