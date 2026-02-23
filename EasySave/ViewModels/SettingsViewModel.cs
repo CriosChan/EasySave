@@ -15,21 +15,8 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IUiLocalizationService _uiLocalizationService;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
-    [ObservableProperty] private string _englishButtonLabel = string.Empty;
-    [ObservableProperty] private string _frenchButtonLabel = string.Empty;
-    [ObservableProperty] private string _jsonButtonLabel = string.Empty;
-    [ObservableProperty] private string _settingsLanguageSectionTitle = string.Empty;
-    [ObservableProperty] private string _settingsLogTypeSectionTitle = string.Empty;
-    [ObservableProperty] private string _settingsCryptoSoftKey = string.Empty;
-    [ObservableProperty] private string _tooltipRemoveExtension = string.Empty;
-    [ObservableProperty] private string _addExtensionToList = string.Empty;
-    [ObservableProperty] private string _extensionToCrypt = string.Empty;
 
-    
     [ObservableProperty] private string _cryptoSoftKey = CryptoSoftConfiguration.Load().Key;
-
-    [ObservableProperty] private string _settingsScreenTitle = string.Empty;
-    [ObservableProperty] private string _xmlButtonLabel = string.Empty;
     [ObservableProperty] private ObservableCollection<string> _cryptoSoftExtensions = new(ApplicationConfiguration.Load().ExtensionToCrypt);
     [ObservableProperty] private string _newExtensionContent = string.Empty;
 
@@ -46,25 +33,6 @@ public partial class SettingsViewModel : ViewModelBase
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
         _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
         _uiLocalizationService = uiLocalizationService ?? throw new ArgumentNullException(nameof(uiLocalizationService));
-        UpdateUiText();
-    }
-
-    /// <summary>
-    ///     Updates settings labels from localization resources.
-    /// </summary>
-    public void UpdateUiText()
-    {
-        SettingsScreenTitle = _uiTextService.Get("Gui.Settings.Screen.Title", "Application Settings");
-        SettingsLanguageSectionTitle = _uiTextService.Get("Gui.Settings.Section.Language", "Language");
-        SettingsLogTypeSectionTitle = _uiTextService.Get("Gui.Settings.Section.LogType", "Log Format");
-        FrenchButtonLabel = _uiTextService.Get("Gui.Button.French", "Francais");
-        EnglishButtonLabel = _uiTextService.Get("Gui.Button.English", "English");
-        JsonButtonLabel = _uiTextService.Get("Gui.Button.Json", "JSON");
-        XmlButtonLabel = _uiTextService.Get("Gui.Button.Xml", "XML");
-        SettingsCryptoSoftKey = _uiTextService.Get("Gui.Settings.CryptoSoftKey", "CryptoSoft Key");
-        TooltipRemoveExtension = _uiTextService.Get("Gui.Tooltip.DeleteExtension", "Supprimer l'extension");
-        AddExtensionToList = _uiTextService.Get("Gui.AddExtension", "Add Extension");
-        ExtensionToCrypt = _uiTextService.Get("Gui.Settings.ExtensionToCrypt", "Extension to Crypt");
     }
 
     /// <summary>

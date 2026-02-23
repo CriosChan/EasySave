@@ -19,22 +19,13 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _addedBusinessSoftware = [];
 
-    [ObservableProperty] private string _addedBusinessSoftwareTitle = string.Empty;
-    [ObservableProperty] private string _addSelectedBusinessSoftwareButtonLabel = string.Empty;
-
     [ObservableProperty]
     private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _allAvailableBusinessSoftware = [];
 
-    [ObservableProperty] private string _availableBusinessSoftwareTitle = string.Empty;
-    [ObservableProperty] private string _businessSoftwareSearchLabel = string.Empty;
-    [ObservableProperty] private string _businessSoftwareSearchPlaceholder = string.Empty;
     [ObservableProperty] private string _businessSoftwareSearchText = string.Empty;
 
     [ObservableProperty]
     private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _filteredBusinessSoftware = [];
-
-    [ObservableProperty] private string _removeAddedBusinessSoftwareButtonLabel = string.Empty;
-    [ObservableProperty] private string _viewAddedBusinessSoftwareButtonLabel = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="BusinessSoftwareViewModel" /> class.
@@ -77,26 +68,6 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
     {
         LoadAddedBusinessSoftware();
         ApplyBusinessSoftwareFilter();
-        UpdateUiText();
-    }
-
-    /// <summary>
-    ///     Updates business software labels from localization resources.
-    /// </summary>
-    public void UpdateUiText()
-    {
-        AvailableBusinessSoftwareTitle =
-            _uiTextService.Get("Gui.BusinessSoftware.Catalog.Title", "Select Business Software");
-        AddedBusinessSoftwareTitle = _uiTextService.Get("Gui.BusinessSoftware.Added.Title", "Added Business Software");
-        BusinessSoftwareSearchLabel = _uiTextService.Get("Gui.BusinessSoftware.Search.Label", "Search software");
-        BusinessSoftwareSearchPlaceholder =
-            _uiTextService.Get("Gui.BusinessSoftware.Search.Placeholder", "Type to filter software");
-        AddSelectedBusinessSoftwareButtonLabel =
-            _uiTextService.Get("Gui.BusinessSoftware.Button.AddSelected", "Add Selected");
-        ViewAddedBusinessSoftwareButtonLabel =
-            _uiTextService.Get("Gui.BusinessSoftware.Button.ViewAdded", "View Added Software");
-        RemoveAddedBusinessSoftwareButtonLabel =
-            _uiTextService.Get("Gui.BusinessSoftware.Button.RemoveSelected", "Remove Selected");
     }
 
     /// <summary>
