@@ -36,6 +36,7 @@
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
         </EmbeddedResource>
+        <AdditionalFiles Include="Views\Resources\UserInterface.cfg" />
     </ItemGroup>
 
     <Target Name="CopyResxTranslations" AfterTargets="Build">

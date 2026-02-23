@@ -38,7 +38,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetFrenchLanguage()
     {
         ApplicationConfiguration.Load().Localization = "fr-FR";
-        Strings.SetCulture(new CultureInfo("fr-FR"));
+        Strings.TranslationManager.CurrentCulture = new CultureInfo("fr-FR");
         _statusBar.StatusMessage = _uiTextService.Get("Gui_Status_LanguageChangedFr", "Langue changee en Francais");
     }
 
@@ -49,7 +49,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetEnglishLanguage()
     {
         ApplicationConfiguration.Load().Localization = "en-US";
-        Strings.SetCulture(new CultureInfo("en-US"));
+        Strings.TranslationManager.CurrentCulture = new CultureInfo("en-US");
         _statusBar.StatusMessage = _uiTextService.Get("Gui_Status_LanguageChangedEn", "Language changed to English");
     }
 

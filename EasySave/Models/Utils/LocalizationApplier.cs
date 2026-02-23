@@ -27,7 +27,7 @@ public static class LocalizationApplier
 
         if (culture != null)
         {
-            try { Strings.SetCulture(culture); }
+            try { Strings.TranslationManager.CurrentCulture = culture; }
             catch { /* Strings may not be available in non-Avalonia contexts (e.g., tests). */ }
         }
     }
