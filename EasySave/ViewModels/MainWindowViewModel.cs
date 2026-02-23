@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
+using Tlumach.Avalonia;
 
 namespace EasySave.ViewModels;
 
@@ -24,35 +25,50 @@ public partial class MainWindowViewModel : ViewModelBase
         AddedSoftware
     }
 
-    private readonly IUiTextService _uiTextService;
-    [ObservableProperty] private string _backButtonLabel = string.Empty;
+    private readonly IUiTextService _uiTextService = new TlumachUiTextService();
     [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
-    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = string.Empty;
-    [ObservableProperty] private string _menuLabel = string.Empty;
-    [ObservableProperty] private string _menuSettingsItemLabel = string.Empty;
     private ViewScreen _previousScreen = ViewScreen.Main;
 
-    [ObservableProperty] private string _windowTitle = string.Empty;
+    /// <summary>
+    ///     Gets the localized window title.
+    /// </summary>
+    public TranslationUnit WindowTitle { get; } = Localizer.CreateUnit("Gui.Window.Title");
+
+    /// <summary>
+    ///     Gets the localized menu root label.
+    /// </summary>
+    public TranslationUnit MenuLabel { get; } = Localizer.CreateUnit("Gui.Menu.Root");
+
+    /// <summary>
+    ///     Gets the localized settings menu item label.
+    /// </summary>
+    public TranslationUnit MenuSettingsItemLabel { get; } = Localizer.CreateUnit("Gui.Menu.Settings");
+
+    /// <summary>
+    ///     Gets the localized manage business software menu item label.
+    /// </summary>
+    public TranslationUnit ManageBusinessSoftwareMenuItemLabel { get; } =
+        Localizer.CreateUnit("Gui.Menu.ManageBusinessSoftware");
+
+    /// <summary>
+    ///     Gets the localized back button label.
+    /// </summary>
+    public TranslationUnit BackButtonLabel { get; } = Localizer.CreateUnit("Gui.Navigation.Back");
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
     /// </summary>
     public MainWindowViewModel()
     {
-        _uiTextService = new ResxUiTextService();
-
         StatusBar = new StatusBarViewModel();
         Jobs = new JobsViewModel(StatusBar);
-        Settings = new SettingsViewModel(StatusBar,
-            RefreshLocalizedUi);
-        BusinessSoftware = new BusinessSoftwareViewModel(
-            StatusBar);
+        Settings = new SettingsViewModel(StatusBar);
+        BusinessSoftware = new BusinessSoftwareViewModel(StatusBar);
 
         BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
         BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
 
         ApplyConfiguredLocalization();
-        RefreshLocalizedUi();
         BusinessSoftware.Initialize();
         StatusBar.StatusMessage = _uiTextService.Get("Gui.Status.Ready", "Ready");
     }
@@ -181,23 +197,6 @@ public partial class MainWindowViewModel : ViewModelBase
         var config = ApplicationConfiguration.Load();
         if (!string.IsNullOrWhiteSpace(config.Localization))
             LocalizationApplier.Apply(config.Localization);
-    }
-
-    /// <summary>
-    ///     Refreshes localized labels for this ViewModel and all child ViewModels.
-    /// </summary>
-    private void RefreshLocalizedUi()
-    {
-        WindowTitle = _uiTextService.Get("Gui.Window.Title", "EasySave - Backup Manager");
-        MenuLabel = _uiTextService.Get("Gui.Menu.Root", "Menu");
-        MenuSettingsItemLabel = _uiTextService.Get("Gui.Menu.Settings", "Settings");
-        ManageBusinessSoftwareMenuItemLabel =
-            _uiTextService.Get("Gui.Menu.ManageBusinessSoftware", "Manage Business Software");
-        BackButtonLabel = _uiTextService.Get("Gui.Navigation.Back", "Back");
-
-        Jobs.UpdateUiText();
-        Settings.UpdateUiText();
-        BusinessSoftware.UpdateUiText();
     }
 
     /// <summary>

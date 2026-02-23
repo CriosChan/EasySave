@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
 using EasySave.Models.BusinessSoftware;
 using EasySave.ViewModels.Services;
+using Tlumach.Avalonia;
 
 namespace EasySave.ViewModels;
 
@@ -14,27 +15,60 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
 {
     private readonly IBusinessSoftwareCatalogService _businessSoftwareCatalogService;
     private readonly StatusBarViewModel _statusBar;
-    private readonly IUiTextService _uiTextService;
+    private readonly IUiTextService _uiTextService = new TlumachUiTextService();
 
     [ObservableProperty]
     private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _addedBusinessSoftware = [];
 
-    [ObservableProperty] private string _addedBusinessSoftwareTitle = string.Empty;
-    [ObservableProperty] private string _addSelectedBusinessSoftwareButtonLabel = string.Empty;
-
     [ObservableProperty]
     private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _allAvailableBusinessSoftware = [];
 
-    [ObservableProperty] private string _availableBusinessSoftwareTitle = string.Empty;
-    [ObservableProperty] private string _businessSoftwareSearchLabel = string.Empty;
-    [ObservableProperty] private string _businessSoftwareSearchPlaceholder = string.Empty;
     [ObservableProperty] private string _businessSoftwareSearchText = string.Empty;
 
     [ObservableProperty]
     private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _filteredBusinessSoftware = [];
 
-    [ObservableProperty] private string _removeAddedBusinessSoftwareButtonLabel = string.Empty;
-    [ObservableProperty] private string _viewAddedBusinessSoftwareButtonLabel = string.Empty;
+    /// <summary>
+    ///     Gets the localized available business software title.
+    /// </summary>
+    public TranslationUnit AvailableBusinessSoftwareTitle { get; } =
+        Localizer.CreateUnit("Gui.BusinessSoftware.Catalog.Title");
+
+    /// <summary>
+    ///     Gets the localized added business software title.
+    /// </summary>
+    public TranslationUnit AddedBusinessSoftwareTitle { get; } =
+        Localizer.CreateUnit("Gui.BusinessSoftware.Added.Title");
+
+    /// <summary>
+    ///     Gets the localized search label.
+    /// </summary>
+    public TranslationUnit BusinessSoftwareSearchLabel { get; } =
+        Localizer.CreateUnit("Gui.BusinessSoftware.Search.Label");
+
+    /// <summary>
+    ///     Gets the localized search placeholder.
+    /// </summary>
+    public TranslationUnit BusinessSoftwareSearchPlaceholder { get; } =
+        Localizer.CreateUnit("Gui.BusinessSoftware.Search.Placeholder");
+
+    /// <summary>
+    ///     Gets the localized add selected button label.
+    /// </summary>
+    public TranslationUnit AddSelectedBusinessSoftwareButtonLabel { get; } =
+        Localizer.CreateUnit("Gui.BusinessSoftware.Button.AddSelected");
+
+    /// <summary>
+    ///     Gets the localized view added button label.
+    /// </summary>
+    public TranslationUnit ViewAddedBusinessSoftwareButtonLabel { get; } =
+        Localizer.CreateUnit("Gui.BusinessSoftware.Button.ViewAdded");
+
+    /// <summary>
+    ///     Gets the localized remove selected button label.
+    /// </summary>
+    public TranslationUnit RemoveAddedBusinessSoftwareButtonLabel { get; } =
+        Localizer.CreateUnit("Gui.BusinessSoftware.Button.RemoveSelected");
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="BusinessSoftwareViewModel" /> class.
@@ -44,7 +78,6 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
         StatusBarViewModel statusBar)
     {
         _businessSoftwareCatalogService = new BusinessSoftwareCatalogService();
-        _uiTextService = new ResxUiTextService();
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
     }
 
@@ -75,26 +108,6 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
     {
         LoadAddedBusinessSoftware();
         ApplyBusinessSoftwareFilter();
-        UpdateUiText();
-    }
-
-    /// <summary>
-    ///     Updates business software labels from localization resources.
-    /// </summary>
-    public void UpdateUiText()
-    {
-        AvailableBusinessSoftwareTitle =
-            _uiTextService.Get("Gui.BusinessSoftware.Catalog.Title", "Select Business Software");
-        AddedBusinessSoftwareTitle = _uiTextService.Get("Gui.BusinessSoftware.Added.Title", "Added Business Software");
-        BusinessSoftwareSearchLabel = _uiTextService.Get("Gui.BusinessSoftware.Search.Label", "Search software");
-        BusinessSoftwareSearchPlaceholder =
-            _uiTextService.Get("Gui.BusinessSoftware.Search.Placeholder", "Type to filter software");
-        AddSelectedBusinessSoftwareButtonLabel =
-            _uiTextService.Get("Gui.BusinessSoftware.Button.AddSelected", "Add Selected");
-        ViewAddedBusinessSoftwareButtonLabel =
-            _uiTextService.Get("Gui.BusinessSoftware.Button.ViewAdded", "View Added Software");
-        RemoveAddedBusinessSoftwareButtonLabel =
-            _uiTextService.Get("Gui.BusinessSoftware.Button.RemoveSelected", "Remove Selected");
     }
 
     /// <summary>

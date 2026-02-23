@@ -48,7 +48,11 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>UserInterface.resx</DependentUpon>
         </Compile>
-        <Compile Remove="ViewModels\Services\TlumachUiTextService.cs" />
     </ItemGroup>
+
+    <Target Name="CopyResxTranslations" AfterTargets="Build">
+        <Copy SourceFiles="$(ProjectDir)Views\Resources\UserInterface.resx;$(ProjectDir)Views\Resources\UserInterface.fr-FR.resx"
+              DestinationFolder="$(OutDir)Views\Resources\" />
+    </Target>
 
 </Project>

@@ -19,10 +19,10 @@
             <Grid ColumnDefinitions="Auto,*"
                   ColumnSpacing="12">
                 <Button Grid.Column="0"
-                        Content="{Binding BackButtonLabel}"
+                        Content="{Binding BackButtonLabel.Value^}"
                         Command="{Binding BackFromSettingsCommand}" />
                 <TextBlock Grid.Column="1"
-                           Text="{Binding Settings.SettingsScreenTitle}"
+                           Text="{Binding Settings.SettingsScreenTitle.Value^}"
                            FontSize="18"
                            FontWeight="Bold"
                            VerticalAlignment="Center" />
@@ -38,14 +38,14 @@
             <StackPanel Spacing="12">
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsLanguageSectionTitle}"
+                        <TextBlock Text="{Binding Settings.SettingsLanguageSectionTitle.Value^}"
                                    Classes="section-title" />
                         <WrapPanel>
-                            <Button Content="{Binding Settings.FrenchButtonLabel}"
+                            <Button Content="{Binding Settings.FrenchButtonLabel.Value^}"
                                     Command="{Binding Settings.SetFrenchLanguageCommand}"
                                     IsEnabled="{Binding StatusBar.IsNotBusy}"
                                     Margin="0,0,8,0" />
-                            <Button Content="{Binding Settings.EnglishButtonLabel}"
+                            <Button Content="{Binding Settings.EnglishButtonLabel.Value^}"
                                     Command="{Binding Settings.SetEnglishLanguageCommand}"
                                     IsEnabled="{Binding StatusBar.IsNotBusy}" />
                         </WrapPanel>
@@ -54,14 +54,14 @@
 
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsLogTypeSectionTitle}"
+                        <TextBlock Text="{Binding Settings.SettingsLogTypeSectionTitle.Value^}"
                                    Classes="section-title" />
                         <WrapPanel>
-                            <Button Content="{Binding Settings.JsonButtonLabel}"
+                            <Button Content="{Binding Settings.JsonButtonLabel.Value^}"
                                     Command="{Binding Settings.SetJsonLogTypeCommand}"
                                     IsEnabled="{Binding StatusBar.IsNotBusy}"
                                     Margin="0,0,8,0" />
-                            <Button Content="{Binding Settings.XmlButtonLabel}"
+                            <Button Content="{Binding Settings.XmlButtonLabel.Value^}"
                                     Command="{Binding Settings.SetXmlLogTypeCommand}"
                                     IsEnabled="{Binding StatusBar.IsNotBusy}" />
                         </WrapPanel>
@@ -70,7 +70,7 @@
                 
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsCryptoSoftKey}"
+                        <TextBlock Text="{Binding Settings.SettingsCryptoSoftKey.Value^}"
                                    Classes="section-title" />
                         <StackPanel Orientation="Vertical">
                             <TextBox Text="{Binding Settings.CryptoSoftKey}" HorizontalContentAlignment="Stretch"></TextBox>
@@ -80,11 +80,11 @@
                 
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.ExtensionToCrypt}"
+                        <TextBlock Text="{Binding Settings.ExtensionToCrypt.Value^}"
                                    Classes="section-title" />
                         <StackPanel Orientation="Horizontal">
                             <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}" HorizontalContentAlignment="Stretch"></TextBox>
-                            <Button Content="{Binding Settings.AddExtensionToList}" Command="{Binding Settings.AddExtensionToCryptoSoftCommand}"></Button>
+                            <Button Content="{Binding Settings.AddExtensionToList.Value^}" Command="{Binding Settings.AddExtensionToCryptoSoftCommand}"></Button>
                         </StackPanel>
                         <ItemsControl ItemsSource="{Binding Settings.CryptoSoftExtensions}">
                             <ItemsControl.ItemsPanel>
@@ -94,7 +94,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:CompileBindings="False">
-                                    <Button ToolTip.Tip="{Binding $parent[UserControl].DataContext.Settings.TooltipRemoveExtension}" Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}" CommandParameter="{Binding}" IsEnabled="True"/>
+                                    <Button ToolTip.Tip="{Binding $parent[UserControl].DataContext.Settings.TooltipRemoveExtension.CurrentValue}" Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}" CommandParameter="{Binding}" IsEnabled="True"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

@@ -1,4 +1,5 @@
 using System.Globalization;
+using EasySave.ViewModels.Services;
 
 namespace EasySave.Models.Utils;
 
@@ -22,5 +23,7 @@ public static class LocalizationApplier
         {
             // If localization is invalid, keep the default system culture.
         }
+
+        Localizer.SetCulture(cultureName);
     }
 }
