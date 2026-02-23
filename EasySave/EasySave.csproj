@@ -11,6 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AlliedBits.Tlumach" Version="1.2.3.2" />
         <PackageReference Include="Avalonia" Version="11.3.11"/>
         <PackageReference Include="Avalonia.Desktop" Version="11.3.11"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.11"/>
@@ -47,6 +48,7 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>UserInterface.resx</DependentUpon>
         </Compile>
+        <Compile Remove="ViewModels\Services\TlumachUiTextService.cs" />
     </ItemGroup>
 
 </Project>
