@@ -117,15 +117,29 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     /// </summary>
     private void OnJobEnded(object? sender, EventArgs e)
     {
-        Dispatcher.UIThread.InvokeAsync(() =>
+        if (Job.WasStopped)
         {
-            StatusMessage = ""; // Clear status message
-            ProgressBarColor = new SolidColorBrush(Color.FromRgb(0, 255, 0)); // Set color to green for completion
-            Progress = 100; // Set progress to 100%
-            Stopped = true; // Mark job as stopped
-            InverseStopped = false; // Reset inverse stopped state
-            StopIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png")); // Reset stop icon
-        });
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                StatusMessage = ""; // Clear status message
+                Stopped = true; // Mark job as stopped
+                InverseStopped = false; // Reset inverse stopped state
+                StopIcon = ImageHelper.LoadFromResource(
+                    new Uri("avares://EasySave/Assets/play-button.png")); // Reset stop icon
+            });
+        } else
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                StatusMessage = ""; // Clear status message
+                ProgressBarColor = new SolidColorBrush(Color.FromRgb(0, 255, 0)); // Set color to green for completion
+                Progress = 100; // Set progress to 100%
+                Stopped = true; // Mark job as stopped
+                InverseStopped = false; // Reset inverse stopped state
+                StopIcon = ImageHelper.LoadFromResource(
+                    new Uri("avares://EasySave/Assets/play-button.png")); // Reset stop icon
+            });
+        }
     }
 
     private void OnFilesCountChange(object? sender, EventArgs e) { }
@@ -153,7 +167,7 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     /// Command to start or stop the backup job.
     /// </summary>
     [RelayCommand]
-    private async Task StartStopJob()
+    private void StartStopJob()
     {
         if (!Stopped)
         {
@@ -161,7 +175,7 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
         }
         else if (_executeJobCallback != null)
         {
-            await _executeJobCallback(Job);
+            Task.Run(() => _executeJobCallback(Job));
         }
         else
         {

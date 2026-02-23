@@ -60,7 +60,7 @@
                                                 <Button Command="{Binding PauseResumeJobCommand}" IsVisible="{Binding InverseStopped}">
                                                     <Image Source="{Binding PauseIcon}" Width="24" Height="24" />
                                                 </Button>
-                                                <Button Command="{Binding StartStopJobCommand}">
+                                                <Button Command="{Binding StartStopJobCommand}" IsEnabled="True">
                                                     <Image Source="{Binding StopIcon}" Width="24" Height="24"/>
                                                 </Button>
                                             </StackPanel>
