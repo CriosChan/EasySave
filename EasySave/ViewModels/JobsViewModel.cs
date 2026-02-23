@@ -7,7 +7,6 @@ using EasySave.Models.Backup;
 using EasySave.Models.Backup.Interfaces;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
-
 namespace EasySave.ViewModels;
 
 /// <summary>
@@ -17,6 +16,7 @@ public partial class JobsViewModel : ViewModelBase
 {
     private readonly IBackupExecutionEngine _backupExecutionEngine;
     private readonly IJobService _jobService;
+    private readonly ParallelJobOrchestrator _orchestrator;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
     [ObservableProperty] private string _addButtonLabel = string.Empty;
@@ -46,8 +46,6 @@ public partial class JobsViewModel : ViewModelBase
     /// <summary>
     ///     Initializes a new instance of the <see cref="JobsViewModel" /> class.
     /// </summary>
-    /// <param name="jobService">Backup job service.</param>
-    /// <param name="uiTextService">Localized text service.</param>
     /// <param name="statusBar">Shared status bar state.</param>
     public JobsViewModel(StatusBarViewModel statusBar)
     {
@@ -55,6 +53,7 @@ public partial class JobsViewModel : ViewModelBase
         _jobService = new JobService();
         _uiTextService = new ResxUiTextService();
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
+        _orchestrator = new ParallelJobOrchestrator(_backupExecutionEngine);
 
         InitializeBackupTypes();
         RefreshJobs();
@@ -105,7 +104,7 @@ public partial class JobsViewModel : ViewModelBase
         {
             foreach (var missingJob in missingJobs)
             {
-                Jobs.Add(new BackupJobItemViewModel(missingJob, _statusBar));
+                Jobs.Add(new BackupJobItemViewModel(missingJob, RunJobFromItemAsync));
             }
         }
         
@@ -245,6 +244,7 @@ public partial class JobsViewModel : ViewModelBase
 
         _statusBar.IsNotBusy = false;
         _statusBar.OverallProgress = 0;
+        _statusBar.MaxProgress = 100;
 
         try
         {
@@ -263,13 +263,15 @@ public partial class JobsViewModel : ViewModelBase
         finally
         {
             _statusBar.IsNotBusy = true;
+            _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
+            _statusBar.MaxProgress = 0;
         }
     }
 
     /// <summary>
-    ///     Executes all backup jobs sequentially.
+    ///     Executes all backup jobs in parallel using orchestrator.
     /// </summary>
     [RelayCommand]
     private async Task RunAllJobs()
@@ -283,24 +285,34 @@ public partial class JobsViewModel : ViewModelBase
         _statusBar.StatusMessage = _uiTextService.Get("Launch.RunningAll", "Running all jobs...");
         _statusBar.IsNotBusy = false;
         _statusBar.OverallProgress = 0;
+        _statusBar.MaxProgress = 100;
 
         try
         {
-            var totalJobs = Jobs.Count;
-            var stoppedByBusinessSoftware = false;
+            var jobList = Jobs.Select(j => j.Job).ToList();
 
-            for (var i = 0; i < totalJobs; i++)
+            // Execute jobs in parallel with progress tracking
+            var result = await _orchestrator.ExecuteAllAsync(
+                jobList,
+                (_, snapshot) => _statusBar.ReportJobProgress(snapshot));
+
+            // Update final status based on result
+            if (result.WasStoppedByBusinessSoftware)
             {
-                var job = Jobs[i].Job;
-                stoppedByBusinessSoftware = await ExecuteJobCoreAsync(job);
-                if (stoppedByBusinessSoftware)
-                    break;
-
-                _statusBar.OverallProgress = (i + 1) / (double)totalJobs * 100;
+                _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.AllJobsStoppedByBusinessSoftware",
+                    "Execution stopped: business software detected");
+            }
+            else if (result.FailedCount > 0)
+            {
+                _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.AllJobsCompletedWithErrors",
+                    "Execution finished: {0} completed, {1} failed", result.CompletedCount, result.FailedCount);
+            }
+            else
+            {
+                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
             }
 
-            if (!stoppedByBusinessSoftware)
-                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
+            _statusBar.OverallProgress = 100;
         }
         catch (Exception ex)
         {
@@ -309,7 +321,10 @@ public partial class JobsViewModel : ViewModelBase
         finally
         {
             _statusBar.IsNotBusy = true;
+            _statusBar.ClearActiveJobs();
+            await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
+            _statusBar.MaxProgress = 0;
         }
     }
 
@@ -352,6 +367,39 @@ public partial class JobsViewModel : ViewModelBase
     }
 
     /// <summary>
+    ///     Executes a single backup job triggered from a job item button, with full StatusBar handling.
+    /// </summary>
+    /// <param name="job">Job to execute.</param>
+    public async Task RunJobFromItemAsync(BackupJob job)
+    {
+        _statusBar.IsNotBusy = false;
+        _statusBar.OverallProgress = 0;
+        _statusBar.MaxProgress = 100;
+
+        try
+        {
+            var stoppedByBusinessSoftware = await ExecuteJobCoreAsync(job);
+            if (!stoppedByBusinessSoftware)
+            {
+                _statusBar.OverallProgress = 100;
+                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
+            }
+        }
+        catch (Exception ex)
+        {
+            _statusBar.StatusMessage = $"Error executing job '{job.Name}' (ID: {job.Id}): {ex.Message}";
+        }
+        finally
+        {
+            _statusBar.IsNotBusy = true;
+            _statusBar.ClearActiveJobs();
+            await Task.Delay(2000);
+            _statusBar.OverallProgress = 0;
+            _statusBar.MaxProgress = 0;
+        }
+    }
+
+    /// <summary>
     ///     Executes one backup job and handles progress notifications.
     /// </summary>
     /// <param name="job">Job to execute.</param>
@@ -376,8 +424,13 @@ public partial class JobsViewModel : ViewModelBase
         _statusBar.StatusMessage = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id,
             job.Name);
 
-        var progress = new Progress<BackupExecutionProgressSnapshot>(OnExecutionProgressChanged);
+        var progress = new Progress<BackupExecutionProgressSnapshot>(snapshot =>
+        {
+            _statusBar.ReportJobProgress(snapshot);
+        });
         var result = await _backupExecutionEngine.ExecuteJobAsync(job, progress);
+
+        _statusBar.UnregisterJob(job.Id);
 
         if (!result.WasStoppedByBusinessSoftware)
         {
@@ -391,19 +444,6 @@ public partial class JobsViewModel : ViewModelBase
         return true;
     }
 
-    /// <summary>
-    ///     Handles per-file progress updates emitted by the shared execution engine.
-    /// </summary>
-    /// <param name="progress">Immutable progress payload.</param>
-    private void OnExecutionProgressChanged(BackupExecutionProgressSnapshot progress)
-    {
-        _statusBar.StatusMessage =
-            $"{_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", progress.JobId, progress.JobName)} " +
-            $"({progress.CurrentFileIndex} / {progress.FilesCount} files) - " +
-            $"({Math.Round(progress.TransferredSize / 1048576.0)} / {Math.Round(progress.TotalSize / 1048576.0)} MB)";
-
-        _statusBar.OverallProgress = progress.CurrentProgress;
-    }
 
     /// <summary>
     ///     Initializes available backup type values.

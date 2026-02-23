@@ -1,4 +1,7 @@
+using System.Collections.Concurrent;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using EasySave.Models.Backup;
 
 namespace EasySave.ViewModels;
 
@@ -7,50 +10,71 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class StatusBarViewModel : ViewModelBase
 {
-    [ObservableProperty] private bool _isNotBusy = true; // Indicates if the application is busy or not
-    [ObservableProperty] private double _overallProgress; // Tracks overall progress as a percentage
-    [ObservableProperty] private double _maxProgress; // Represents the maximum progress threshold
-    [ObservableProperty] private string _statusMessage = string.Empty; // Message to display in the status bar
+    [ObservableProperty] private bool _isNotBusy = true;
+    [ObservableProperty] private double _overallProgress;
+    [ObservableProperty] private double _maxProgress;
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
-    private readonly Lock _lockOverall = new(); // Lock for synchronizing access to overall progress
-    private readonly Lock _lockMax = new(); // Lock for synchronizing access to maximum progress
+    // Active job snapshots keyed by job ID
+    private readonly ConcurrentDictionary<int, BackupExecutionProgressSnapshot> _activeSnapshots = new();
 
     /// <summary>
-    /// Increments the overall progress by one unit.
+    ///     Registers or updates the progress snapshot for a running job,
+    ///     then rebuilds the aggregated status message on the UI thread.
     /// </summary>
-    public void UpdateOverallProgress()
+    /// <param name="snapshot">Latest progress snapshot for the job.</param>
+    public void ReportJobProgress(BackupExecutionProgressSnapshot snapshot)
     {
-        lock (_lockOverall) // Ensure thread-safe access to overall progress
-        {
-            OverallProgress += 1; // Increment overall progress
-        }
+        _activeSnapshots[snapshot.JobId] = snapshot;
+        RefreshStatusMessage();
     }
 
     /// <summary>
-    /// Increases the maximum progress threshold by the specified amount.
+    ///     Removes a job from the active registry and refreshes the status message.
     /// </summary>
-    /// <param name="max">The amount to increase max progress by.</param>
-    public void AddMaxProgress(double max)
+    /// <param name="jobId">ID of the completed or failed job.</param>
+    public void UnregisterJob(int jobId)
     {
-        lock (_lockMax) // Ensure thread-safe access to max progress
-        {
-            MaxProgress += max; // Increase maximum progress
-        }
+        _activeSnapshots.TryRemove(jobId, out _);
+        RefreshStatusMessage();
     }
 
     /// <summary>
-    /// Removes a specified number from both overall and maximum progress.
+    ///     Clears all active job snapshots (e.g. on full reset).
     /// </summary>
-    /// <param name="number">The amount to decrease from both progress values.</param>
-    public void RemoveProgress(double transfered, double number)
+    public void ClearActiveJobs()
     {
-        lock (_lockMax) // Ensure thread-safe access to max progress
-        {
-            lock (_lockOverall) // Ensure thread-safe access to overall progress
-            {
-                MaxProgress -= number; // Decrease maximum progress
-                OverallProgress -= transfered; // Decrease overall progress
-            }
-        }
+        _activeSnapshots.Clear();
+    }
+
+    /// <summary>
+    ///     Rebuilds the aggregated progress message from all active snapshots.
+    /// </summary>
+    private void RefreshStatusMessage()
+    {
+        var snapshots = _activeSnapshots.Values.ToList();
+        if (snapshots.Count == 0)
+            return;
+
+        var totalFiles = snapshots.Sum(s => s.FilesCount);
+        var processedFiles = snapshots.Sum(s => s.CurrentFileIndex);
+        var totalBytes = snapshots.Sum(s => s.TotalSize);
+        var processedBytes = snapshots.Sum(s => s.TransferredSize);
+
+        var message = string.Format(
+            "Running {0} job{1} - ({2} / {3} files) - ({4} / {5} MB)",
+            snapshots.Count,
+            snapshots.Count > 1 ? "s" : "",
+            processedFiles,
+            totalFiles,
+            Math.Round(processedBytes / 1048576.0),
+            Math.Round(totalBytes / 1048576.0));
+
+        // Always post to UI thread — this may be called from background threads
+        Dispatcher.UIThread.Post(() => StatusMessage = message);
+
+        // Update global progress as average across all active jobs
+        var avgProgress = snapshots.Average(s => s.CurrentProgress);
+        Dispatcher.UIThread.Post(() => OverallProgress = avgProgress);
     }
 }
