@@ -43,11 +43,11 @@
                         <WrapPanel>
                             <Button Content="{Binding Settings.FrenchButtonLabel}"
                                     Command="{Binding Settings.SetFrenchLanguageCommand}"
-                                    IsEnabled="{Binding StatusBar.IsNotBusy}"
+                                    
                                     Margin="0,0,8,0" />
                             <Button Content="{Binding Settings.EnglishButtonLabel}"
                                     Command="{Binding Settings.SetEnglishLanguageCommand}"
-                                    IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                                     />
                         </WrapPanel>
                     </StackPanel>
                 </Border>
@@ -59,11 +59,11 @@
                         <WrapPanel>
                             <Button Content="{Binding Settings.JsonButtonLabel}"
                                     Command="{Binding Settings.SetJsonLogTypeCommand}"
-                                    IsEnabled="{Binding StatusBar.IsNotBusy}"
+                                    
                                     Margin="0,0,8,0" />
                             <Button Content="{Binding Settings.XmlButtonLabel}"
                                     Command="{Binding Settings.SetXmlLogTypeCommand}"
-                                    IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                                     />
                         </WrapPanel>
                     </StackPanel>
                 </Border>

@@ -105,12 +105,12 @@
 
                 <TextBlock Text="{Binding Jobs.NameLabel}" />
                 <TextBox Text="{Binding Jobs.NewJobName}"
-                         IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                          />
 
                 <TextBlock Text="{Binding Jobs.SourceLabel}" />
                 <StackPanel Spacing="4">
                     <Button Command="{Binding Jobs.BrowseSourceDirectoryCommand}"
-                            IsEnabled="{Binding StatusBar.IsNotBusy}"
+                            
                             HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <PathIcon
@@ -129,7 +129,7 @@
                 <TextBlock Text="{Binding Jobs.TargetLabel}" />
                 <StackPanel Spacing="4">
                     <Button Command="{Binding Jobs.BrowseTargetDirectoryCommand}"
-                            IsEnabled="{Binding StatusBar.IsNotBusy}"
+                            
                             HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <PathIcon
@@ -148,18 +148,18 @@
                 <TextBlock Text="{Binding Jobs.TypeLabel}" />
                 <ComboBox ItemsSource="{Binding Jobs.BackupTypes}"
                           SelectedItem="{Binding Jobs.SelectedBackupType}"
-                          IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                           />
 
                 <Button Content="{Binding Jobs.AddButtonLabel}"
                         Command="{Binding Jobs.AddJobCommand}"
-                        IsEnabled="{Binding StatusBar.IsNotBusy}"
+                        
                         Margin="0,4,0,0" />
 
                 <Separator Margin="0,8,0,8" />
 
                 <Button Content="{Binding Jobs.RemoveButtonLabel}"
                         Command="{Binding Jobs.RemoveSelectedJobCommand}"
-                        IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                         />
             </StackPanel>
         </Border>
 
@@ -173,11 +173,11 @@
             <WrapPanel ItemHeight="32" VerticalAlignment="Center">
                 <Button Content="{Binding Jobs.RunSelectedButtonLabel}"
                         Command="{Binding Jobs.RunSelectedJobCommand}"
-                        IsEnabled="{Binding StatusBar.IsNotBusy}"
+                        
                         Margin="0,0,8,0" />
                 <Button Content="{Binding Jobs.RunAllButtonLabel}"
                         Command="{Binding Jobs.RunAllJobsCommand}"
-                        IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                         />
             </WrapPanel>
         </Border>
 
