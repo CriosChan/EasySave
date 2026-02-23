@@ -44,7 +44,8 @@
                              Maximum="{Binding StatusBar.MaxProgress}"
                              Value="{Binding StatusBar.OverallProgress}"
                              Foreground="#4CAF50"
-                             Height="18" />
+                             Height="18"
+                             ShowProgressText="True" />
             </StackPanel>
         </Border>
     </Grid>
