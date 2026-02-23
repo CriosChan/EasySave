@@ -242,7 +242,7 @@ public partial class JobsViewModel : ViewModelBase
             return;
         }
 
-        _statusBar.IsNotBusy = false;
+        
         _statusBar.OverallProgress = 0;
         _statusBar.MaxProgress = 100;
 
@@ -262,7 +262,7 @@ public partial class JobsViewModel : ViewModelBase
         }
         finally
         {
-            _statusBar.IsNotBusy = true;
+            
             _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
@@ -283,7 +283,7 @@ public partial class JobsViewModel : ViewModelBase
         }
 
         _statusBar.StatusMessage = _uiTextService.Get("Launch.RunningAll", "Running all jobs...");
-        _statusBar.IsNotBusy = false;
+        
         _statusBar.OverallProgress = 0;
         _statusBar.MaxProgress = 100;
 
@@ -320,7 +320,7 @@ public partial class JobsViewModel : ViewModelBase
         }
         finally
         {
-            _statusBar.IsNotBusy = true;
+            
             _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
@@ -372,7 +372,7 @@ public partial class JobsViewModel : ViewModelBase
     /// <param name="job">Job to execute.</param>
     public async Task RunJobFromItemAsync(BackupJob job)
     {
-        _statusBar.IsNotBusy = false;
+        
         _statusBar.OverallProgress = 0;
         _statusBar.MaxProgress = 100;
 
@@ -391,7 +391,7 @@ public partial class JobsViewModel : ViewModelBase
         }
         finally
         {
-            _statusBar.IsNotBusy = true;
+            
             _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;

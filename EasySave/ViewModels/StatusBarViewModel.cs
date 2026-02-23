@@ -10,7 +10,6 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class StatusBarViewModel : ViewModelBase
 {
-    [ObservableProperty] private bool _isNotBusy = true;
     [ObservableProperty] private double _overallProgress;
     [ObservableProperty] private double _maxProgress;
     [ObservableProperty] private string _statusMessage = string.Empty;
