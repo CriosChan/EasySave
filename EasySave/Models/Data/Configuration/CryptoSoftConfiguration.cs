@@ -80,6 +80,9 @@ public sealed class CryptoSoftConfiguration
     public void Save()
     {
         var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, ConfigFile), json);
+        lock (_lock)
+        {
+            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, ConfigFile), json);
+        }
     }
 }

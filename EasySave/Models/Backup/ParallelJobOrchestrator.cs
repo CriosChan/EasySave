@@ -67,61 +67,61 @@ public sealed class ParallelJobOrchestrator
         var stoppedByBusinessSoftware = false;
         var lockObject = new object();
 
-        // Execute jobs in parallel
-        var tasks = jobList.Select(async job =>
+        // Launch each job sequentially so they register correctly,
+        // then let them all run in parallel via Task.WhenAll.
+        var tasks = new List<Task>();
+        foreach (var job in jobList)
         {
-            // Check if execution should stop due to business software
             lock (lockObject)
             {
                 if (stoppedByBusinessSoftware)
                 {
                     _jobStates[job.Id] = JobExecutionState.Skipped;
-                    return;
+                    continue;
                 }
             }
 
             _jobStates[job.Id] = JobExecutionState.Active;
 
-            try
+            IProgress<BackupExecutionProgressSnapshot>? progress = null;
+            if (progressCallback != null)
             {
-                IProgress<BackupExecutionProgressSnapshot>? progress = null;
-                if (progressCallback != null)
-                {
-                    // Use DirectProgress to invoke the callback on the calling thread,
-                    // bypassing SynchronizationContext capture issues in thread pool tasks.
-                    var capturedJob = job;
-                    progress = new DirectProgress<BackupExecutionProgressSnapshot>(
-                        snapshot => progressCallback(capturedJob, snapshot));
-                }
+                var capturedJob = job;
+                progress = new DirectProgress<BackupExecutionProgressSnapshot>(snapshot =>
+                    progressCallback(capturedJob, snapshot));
+            }
 
-                var result = await _executionEngine.ExecuteJobAsync(job, progress, cancellationToken);
-                results.Add(result);
-
-                if (result.WasStoppedByBusinessSoftware)
+            // Start the task and store it — execution runs in parallel on the thread pool
+            var task = _executionEngine.ExecuteJobAsync(job, progress, cancellationToken)
+                .ContinueWith(t =>
                 {
-                    lock (lockObject)
+                    if (t.IsFaulted)
                     {
-                        stoppedByBusinessSoftware = true;
+                        _jobStates[job.Id] = JobExecutionState.Failed;
+                        return;
+                    }
+                    if (t.IsCanceled)
+                    {
+                        _jobStates[job.Id] = JobExecutionState.Cancelled;
+                        return;
                     }
 
-                    _jobStates[job.Id] = JobExecutionState.StoppedByBusinessSoftware;
-                }
-                else
-                {
-                    _jobStates[job.Id] = JobExecutionState.Completed;
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                _jobStates[job.Id] = JobExecutionState.Cancelled;
-                throw;
-            }
-            catch (Exception)
-            {
-                _jobStates[job.Id] = JobExecutionState.Failed;
-                throw;
-            }
-        });
+                    var result = t.Result;
+                    results.Add(result);
+
+                    if (result.WasStoppedByBusinessSoftware)
+                    {
+                        lock (lockObject) { stoppedByBusinessSoftware = true; }
+                        _jobStates[job.Id] = JobExecutionState.StoppedByBusinessSoftware;
+                    }
+                    else
+                    {
+                        _jobStates[job.Id] = JobExecutionState.Completed;
+                    }
+                }, TaskScheduler.Default);
+
+            tasks.Add(task);
+        }
 
         try
         {

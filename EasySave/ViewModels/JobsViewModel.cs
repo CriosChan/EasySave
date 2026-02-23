@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Core.Models;
@@ -264,6 +263,7 @@ public partial class JobsViewModel : ViewModelBase
         finally
         {
             _statusBar.IsNotBusy = true;
+            _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
             _statusBar.MaxProgress = 0;
@@ -290,30 +290,11 @@ public partial class JobsViewModel : ViewModelBase
         try
         {
             var jobList = Jobs.Select(j => j.Job).ToList();
-            var totalJobs = jobList.Count;
 
             // Execute jobs in parallel with progress tracking
             var result = await _orchestrator.ExecuteAllAsync(
                 jobList,
-                (_, snapshot) =>
-                {
-                    var header = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", snapshot.JobId, snapshot.JobName);
-                    var message = string.Format("{0} ({1} / {2} files) - ({3} / {4} MB)",
-                        header,
-                        snapshot.CurrentFileIndex,
-                        snapshot.FilesCount,
-                        Math.Round(snapshot.TransferredSize / 1048576.0),
-                        Math.Round(snapshot.TotalSize / 1048576.0));
-
-                    var completedCount = _orchestrator.CompletedJobCount;
-                    var globalProgress = (completedCount + snapshot.CurrentProgress / 100.0) / totalJobs * 100.0;
-
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        _statusBar.StatusMessage = message;
-                        _statusBar.OverallProgress = globalProgress;
-                    });
-                });
+                (_, snapshot) => _statusBar.ReportJobProgress(snapshot));
 
             // Update final status based on result
             if (result.WasStoppedByBusinessSoftware)
@@ -340,6 +321,7 @@ public partial class JobsViewModel : ViewModelBase
         finally
         {
             _statusBar.IsNotBusy = true;
+            _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
             _statusBar.MaxProgress = 0;
@@ -410,6 +392,7 @@ public partial class JobsViewModel : ViewModelBase
         finally
         {
             _statusBar.IsNotBusy = true;
+            _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
             _statusBar.MaxProgress = 0;
@@ -443,18 +426,11 @@ public partial class JobsViewModel : ViewModelBase
 
         var progress = new Progress<BackupExecutionProgressSnapshot>(snapshot =>
         {
-            var header = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", snapshot.JobId, snapshot.JobName);
-            var message = string.Format("{0} ({1} / {2} files) - ({3} / {4} MB)",
-                header,
-                snapshot.CurrentFileIndex,
-                snapshot.FilesCount,
-                Math.Round(snapshot.TransferredSize / 1048576.0),
-                Math.Round(snapshot.TotalSize / 1048576.0));
-
-            _statusBar.StatusMessage = message;
-            _statusBar.OverallProgress = snapshot.CurrentProgress;
+            _statusBar.ReportJobProgress(snapshot);
         });
         var result = await _backupExecutionEngine.ExecuteJobAsync(job, progress);
+
+        _statusBar.UnregisterJob(job.Id);
 
         if (!result.WasStoppedByBusinessSoftware)
         {
