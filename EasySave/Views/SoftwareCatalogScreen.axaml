@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tlumach="clr-namespace:Tlumach.Avalonia;assembly=Tlumach.Avalonia"
+             xmlns:t="clr-namespace:EasySave.Translations;assembly=EasySave"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EasySave.Views.SoftwareCatalogScreen"
              xmlns:vm="using:EasySave.ViewModels"
@@ -19,16 +21,16 @@
             <Grid ColumnDefinitions="Auto,*,Auto"
                   ColumnSpacing="12">
                 <Button Grid.Column="0"
-                        Content="{Binding BackButtonLabel.Value^}"
+                        Content="{tlumach:Translate {x:Static t:Strings.GuiNavigationBack}}"
                         Command="{Binding BackFromSoftwareCatalogCommand}" />
                 <TextBlock Grid.Column="1"
-                           Text="{Binding BusinessSoftware.AvailableBusinessSoftwareTitle.Value^}"
+                           Text="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareCatalogTitle}}"
                            FontSize="18"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center" />
                 <Button Grid.Column="2"
-                        Content="{Binding BusinessSoftware.ViewAddedBusinessSoftwareButtonLabel.Value^}"
+                        Content="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareButtonViewAdded}}"
                         Command="{Binding OpenAddedBusinessSoftwareCommand}" />
             </Grid>
         </Border>
@@ -40,9 +42,9 @@
                 BorderBrush="{DynamicResource BorderLine}"
                 BorderThickness="1">
             <StackPanel Spacing="6">
-                <TextBlock Text="{Binding BusinessSoftware.BusinessSoftwareSearchLabel.Value^}" />
+                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareSearchLabel}}" />
                 <TextBox Text="{Binding BusinessSoftware.BusinessSoftwareSearchText}"
-                         Watermark="{Binding BusinessSoftware.BusinessSoftwareSearchPlaceholder.Value^}" />
+                         Watermark="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareSearchPlaceholder}}" />
             </StackPanel>
         </Border>
 
@@ -83,7 +85,7 @@
                 BorderThickness="1">
             <StackPanel Orientation="Horizontal"
                         Spacing="8">
-                <Button Content="{Binding BusinessSoftware.AddSelectedBusinessSoftwareButtonLabel.Value^}"
+                <Button Content="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareButtonAddSelected}}"
                         Command="{Binding BusinessSoftware.AddSelectedBusinessSoftwareCommand}"
                         IsVisible="{Binding BusinessSoftware.CanAddSelectedBusinessSoftware}" />
             </StackPanel>

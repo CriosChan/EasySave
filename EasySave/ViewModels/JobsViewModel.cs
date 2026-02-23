@@ -7,7 +7,6 @@ using EasySave.Models.Backup;
 using EasySave.Models.Backup.Interfaces;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
-using Tlumach.Avalonia;
 namespace EasySave.ViewModels;
 
 /// <summary>
@@ -30,66 +29,6 @@ public partial class JobsViewModel : ViewModelBase
     [ObservableProperty] private BackupJobItemViewModel? _selectedJob;
     [ObservableProperty] private string _selectedBackupType = string.Empty;
     private IStorageProvider? _storageProvider;
-
-    /// <summary>
-    ///     Gets the localized jobs section title.
-    /// </summary>
-    public TranslationUnit JobsSectionTitle { get; } = Localizer.CreateUnit("Jobs.Header");
-
-    /// <summary>
-    ///     Gets the localized add section title.
-    /// </summary>
-    public TranslationUnit AddSectionTitle { get; } = Localizer.CreateUnit("Add.Header");
-
-    /// <summary>
-    ///     Gets the localized name label.
-    /// </summary>
-    public TranslationUnit NameLabel { get; } = Localizer.CreateUnit("Add.PromptName");
-
-    /// <summary>
-    ///     Gets the localized source label.
-    /// </summary>
-    public TranslationUnit SourceLabel { get; } = Localizer.CreateUnit("Add.PromptSource");
-
-    /// <summary>
-    ///     Gets the localized target label.
-    /// </summary>
-    public TranslationUnit TargetLabel { get; } = Localizer.CreateUnit("Add.PromptTarget");
-
-    /// <summary>
-    ///     Gets the localized type label.
-    /// </summary>
-    public TranslationUnit TypeLabel { get; } = Localizer.CreateUnit("Add.PromptType");
-
-    /// <summary>
-    ///     Gets the localized browse source button label.
-    /// </summary>
-    public TranslationUnit BrowseSourceLabel { get; } = Localizer.CreateUnit("Gui.Button.BrowseSource");
-
-    /// <summary>
-    ///     Gets the localized browse target button label.
-    /// </summary>
-    public TranslationUnit BrowseTargetLabel { get; } = Localizer.CreateUnit("Gui.Button.BrowseTarget");
-
-    /// <summary>
-    ///     Gets the localized add button label.
-    /// </summary>
-    public TranslationUnit AddButtonLabel { get; } = Localizer.CreateUnit("Gui.Button.AddJob");
-
-    /// <summary>
-    ///     Gets the localized remove button label.
-    /// </summary>
-    public TranslationUnit RemoveButtonLabel { get; } = Localizer.CreateUnit("Gui.Button.RemoveSelected");
-
-    /// <summary>
-    ///     Gets the localized run selected job button label.
-    /// </summary>
-    public TranslationUnit RunSelectedButtonLabel { get; } = Localizer.CreateUnit("Gui.Button.RunSelectedJob");
-
-    /// <summary>
-    ///     Gets the localized run all jobs button label.
-    /// </summary>
-    public TranslationUnit RunAllButtonLabel { get; } = Localizer.CreateUnit("Gui.Button.RunAllJobs");
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="JobsViewModel" /> class.

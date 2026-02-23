@@ -4,8 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
 using EasySave.Models.Data.Configuration;
 using EasySave.Models.Utils;
+using EasySave.Translations;
 using EasySave.ViewModels.Services;
-using Tlumach.Avalonia;
 
 namespace EasySave.ViewModels;
 
@@ -23,61 +23,6 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty] private string _newExtensionContent = string.Empty;
 
     /// <summary>
-    ///     Gets the localized settings screen title.
-    /// </summary>
-    public TranslationUnit SettingsScreenTitle { get; } = Localizer.CreateUnit("Gui.Settings.Screen.Title");
-
-    /// <summary>
-    ///     Gets the localized language section title.
-    /// </summary>
-    public TranslationUnit SettingsLanguageSectionTitle { get; } = Localizer.CreateUnit("Gui.Settings.Section.Language");
-
-    /// <summary>
-    ///     Gets the localized log type section title.
-    /// </summary>
-    public TranslationUnit SettingsLogTypeSectionTitle { get; } = Localizer.CreateUnit("Gui.Settings.Section.LogType");
-
-    /// <summary>
-    ///     Gets the localized French button label.
-    /// </summary>
-    public TranslationUnit FrenchButtonLabel { get; } = Localizer.CreateUnit("Gui.Button.French");
-
-    /// <summary>
-    ///     Gets the localized English button label.
-    /// </summary>
-    public TranslationUnit EnglishButtonLabel { get; } = Localizer.CreateUnit("Gui.Button.English");
-
-    /// <summary>
-    ///     Gets the localized JSON button label.
-    /// </summary>
-    public TranslationUnit JsonButtonLabel { get; } = Localizer.CreateUnit("Gui.Button.Json");
-
-    /// <summary>
-    ///     Gets the localized XML button label.
-    /// </summary>
-    public TranslationUnit XmlButtonLabel { get; } = Localizer.CreateUnit("Gui.Button.Xml");
-
-    /// <summary>
-    ///     Gets the localized CryptoSoft key section label.
-    /// </summary>
-    public TranslationUnit SettingsCryptoSoftKey { get; } = Localizer.CreateUnit("Gui.Settings.CryptoSoftKey");
-
-    /// <summary>
-    ///     Gets the localized tooltip for removing an extension.
-    /// </summary>
-    public TranslationUnit TooltipRemoveExtension { get; } = Localizer.CreateUnit("Gui.Tooltip.DeleteExtension");
-
-    /// <summary>
-    ///     Gets the localized add extension button label.
-    /// </summary>
-    public TranslationUnit AddExtensionToList { get; } = Localizer.CreateUnit("Gui.AddExtension");
-
-    /// <summary>
-    ///     Gets the localized extension to crypt section label.
-    /// </summary>
-    public TranslationUnit ExtensionToCrypt { get; } = Localizer.CreateUnit("Gui.Settings.ExtensionToCrypt");
-
-    /// <summary>
     ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
     /// </summary>
     public SettingsViewModel(StatusBarViewModel statusBar)
@@ -92,7 +37,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetFrenchLanguage()
     {
         ApplicationConfiguration.Load().Localization = "fr-FR";
-        LocalizationApplier.Apply("fr-FR");
+        Strings.SetCulture("fr-FR");
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedFr", "Langue changee en Francais");
     }
 
@@ -103,7 +48,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetEnglishLanguage()
     {
         ApplicationConfiguration.Load().Localization = "en-US";
-        LocalizationApplier.Apply("en-US");
+        Strings.SetCulture("en-US");
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedEn", "Language changed to English");
     }
 

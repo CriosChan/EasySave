@@ -3,8 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
 using EasySave.Models.Utils;
+using EasySave.Translations;
 using EasySave.ViewModels.Services;
-using Tlumach.Avalonia;
 
 namespace EasySave.ViewModels;
 
@@ -28,32 +28,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IUiTextService _uiTextService = new TlumachUiTextService();
     [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
     private ViewScreen _previousScreen = ViewScreen.Main;
-
-    /// <summary>
-    ///     Gets the localized window title.
-    /// </summary>
-    public TranslationUnit WindowTitle { get; } = Localizer.CreateUnit("Gui.Window.Title");
-
-    /// <summary>
-    ///     Gets the localized menu root label.
-    /// </summary>
-    public TranslationUnit MenuLabel { get; } = Localizer.CreateUnit("Gui.Menu.Root");
-
-    /// <summary>
-    ///     Gets the localized settings menu item label.
-    /// </summary>
-    public TranslationUnit MenuSettingsItemLabel { get; } = Localizer.CreateUnit("Gui.Menu.Settings");
-
-    /// <summary>
-    ///     Gets the localized manage business software menu item label.
-    /// </summary>
-    public TranslationUnit ManageBusinessSoftwareMenuItemLabel { get; } =
-        Localizer.CreateUnit("Gui.Menu.ManageBusinessSoftware");
-
-    /// <summary>
-    ///     Gets the localized back button label.
-    /// </summary>
-    public TranslationUnit BackButtonLabel { get; } = Localizer.CreateUnit("Gui.Navigation.Back");
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -229,3 +203,4 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentScreen = screen;
     }
 }
+

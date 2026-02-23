@@ -1,5 +1,5 @@
 using System.Globalization;
-using EasySave.ViewModels.Services;
+using EasySave.Translations;
 
 namespace EasySave.Models.Utils;
 
@@ -24,6 +24,7 @@ public static class LocalizationApplier
             // If localization is invalid, keep the default system culture.
         }
 
-        Localizer.SetCulture(cultureName);
+        try { Strings.SetCulture(cultureName); }
+        catch { /* Strings may not be available in non-Avalonia contexts (e.g., tests). */ }
     }
 }

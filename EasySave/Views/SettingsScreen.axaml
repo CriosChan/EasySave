@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tlumach="clr-namespace:Tlumach.Avalonia;assembly=Tlumach.Avalonia"
+             xmlns:t="clr-namespace:EasySave.Translations;assembly=EasySave"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EasySave.Views.SettingsScreen"
              xmlns:vm="using:EasySave.ViewModels"
@@ -19,10 +21,10 @@
             <Grid ColumnDefinitions="Auto,*"
                   ColumnSpacing="12">
                 <Button Grid.Column="0"
-                        Content="{Binding BackButtonLabel.Value^}"
+                        Content="{tlumach:Translate {x:Static t:Strings.GuiNavigationBack}}"
                         Command="{Binding BackFromSettingsCommand}" />
                 <TextBlock Grid.Column="1"
-                           Text="{Binding Settings.SettingsScreenTitle.Value^}"
+                           Text="{tlumach:Translate {x:Static t:Strings.GuiSettingsScreenTitle}}"
                            FontSize="18"
                            FontWeight="Bold"
                            VerticalAlignment="Center" />
@@ -38,14 +40,14 @@
             <StackPanel Spacing="12">
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsLanguageSectionTitle.Value^}"
+                        <TextBlock Text="{tlumach:Translate {x:Static t:Strings.GuiSettingsSectionLanguage}}"
                                    Classes="section-title" />
                         <WrapPanel>
-                            <Button Content="{Binding Settings.FrenchButtonLabel.Value^}"
+                            <Button Content="{tlumach:Translate {x:Static t:Strings.GuiButtonFrench}}"
                                     Command="{Binding Settings.SetFrenchLanguageCommand}"
                                     IsEnabled="{Binding StatusBar.IsNotBusy}"
                                     Margin="0,0,8,0" />
-                            <Button Content="{Binding Settings.EnglishButtonLabel.Value^}"
+                            <Button Content="{tlumach:Translate {x:Static t:Strings.GuiButtonEnglish}}"
                                     Command="{Binding Settings.SetEnglishLanguageCommand}"
                                     IsEnabled="{Binding StatusBar.IsNotBusy}" />
                         </WrapPanel>
@@ -54,14 +56,14 @@
 
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsLogTypeSectionTitle.Value^}"
+                        <TextBlock Text="{tlumach:Translate {x:Static t:Strings.GuiSettingsSectionLogType}}"
                                    Classes="section-title" />
                         <WrapPanel>
-                            <Button Content="{Binding Settings.JsonButtonLabel.Value^}"
+                            <Button Content="{tlumach:Translate {x:Static t:Strings.GuiButtonJson}}"
                                     Command="{Binding Settings.SetJsonLogTypeCommand}"
                                     IsEnabled="{Binding StatusBar.IsNotBusy}"
                                     Margin="0,0,8,0" />
-                            <Button Content="{Binding Settings.XmlButtonLabel.Value^}"
+                            <Button Content="{tlumach:Translate {x:Static t:Strings.GuiButtonXml}}"
                                     Command="{Binding Settings.SetXmlLogTypeCommand}"
                                     IsEnabled="{Binding StatusBar.IsNotBusy}" />
                         </WrapPanel>
@@ -70,7 +72,7 @@
                 
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsCryptoSoftKey.Value^}"
+                        <TextBlock Text="{tlumach:Translate {x:Static t:Strings.GuiSettingsCryptoSoftKey}}"
                                    Classes="section-title" />
                         <StackPanel Orientation="Vertical">
                             <TextBox Text="{Binding Settings.CryptoSoftKey}" HorizontalContentAlignment="Stretch"></TextBox>
@@ -80,11 +82,11 @@
                 
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.ExtensionToCrypt.Value^}"
+                        <TextBlock Text="{tlumach:Translate {x:Static t:Strings.GuiSettingsExtensionToCrypt}}"
                                    Classes="section-title" />
                         <StackPanel Orientation="Horizontal">
                             <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}" HorizontalContentAlignment="Stretch"></TextBox>
-                            <Button Content="{Binding Settings.AddExtensionToList.Value^}" Command="{Binding Settings.AddExtensionToCryptoSoftCommand}"></Button>
+                            <Button Content="{tlumach:Translate {x:Static t:Strings.GuiAddExtension}}" Command="{Binding Settings.AddExtensionToCryptoSoftCommand}"></Button>
                         </StackPanel>
                         <ItemsControl ItemsSource="{Binding Settings.CryptoSoftExtensions}">
                             <ItemsControl.ItemsPanel>
@@ -94,7 +96,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:CompileBindings="False">
-                                    <Button ToolTip.Tip="{Binding $parent[UserControl].DataContext.Settings.TooltipRemoveExtension.CurrentValue}" Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}" CommandParameter="{Binding}" IsEnabled="True"/>
+                                    <Button ToolTip.Tip="{tlumach:Translate {x:Static t:Strings.GuiTooltipDeleteExtension}}" Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}" CommandParameter="{Binding}" IsEnabled="True"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
 using EasySave.Models.BusinessSoftware;
 using EasySave.ViewModels.Services;
-using Tlumach.Avalonia;
 
 namespace EasySave.ViewModels;
 
@@ -27,48 +26,6 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
 
     [ObservableProperty]
     private ObservableCollection<SelectableBusinessSoftwareItemViewModel> _filteredBusinessSoftware = [];
-
-    /// <summary>
-    ///     Gets the localized available business software title.
-    /// </summary>
-    public TranslationUnit AvailableBusinessSoftwareTitle { get; } =
-        Localizer.CreateUnit("Gui.BusinessSoftware.Catalog.Title");
-
-    /// <summary>
-    ///     Gets the localized added business software title.
-    /// </summary>
-    public TranslationUnit AddedBusinessSoftwareTitle { get; } =
-        Localizer.CreateUnit("Gui.BusinessSoftware.Added.Title");
-
-    /// <summary>
-    ///     Gets the localized search label.
-    /// </summary>
-    public TranslationUnit BusinessSoftwareSearchLabel { get; } =
-        Localizer.CreateUnit("Gui.BusinessSoftware.Search.Label");
-
-    /// <summary>
-    ///     Gets the localized search placeholder.
-    /// </summary>
-    public TranslationUnit BusinessSoftwareSearchPlaceholder { get; } =
-        Localizer.CreateUnit("Gui.BusinessSoftware.Search.Placeholder");
-
-    /// <summary>
-    ///     Gets the localized add selected button label.
-    /// </summary>
-    public TranslationUnit AddSelectedBusinessSoftwareButtonLabel { get; } =
-        Localizer.CreateUnit("Gui.BusinessSoftware.Button.AddSelected");
-
-    /// <summary>
-    ///     Gets the localized view added button label.
-    /// </summary>
-    public TranslationUnit ViewAddedBusinessSoftwareButtonLabel { get; } =
-        Localizer.CreateUnit("Gui.BusinessSoftware.Button.ViewAdded");
-
-    /// <summary>
-    ///     Gets the localized remove selected button label.
-    /// </summary>
-    public TranslationUnit RemoveAddedBusinessSoftwareButtonLabel { get; } =
-        Localizer.CreateUnit("Gui.BusinessSoftware.Button.RemoveSelected");
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="BusinessSoftwareViewModel" /> class.
