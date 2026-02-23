@@ -47,11 +47,12 @@ public partial class JobsViewModel : ViewModelBase
     ///     Initializes a new instance of the <see cref="JobsViewModel" /> class.
     /// </summary>
     /// <param name="statusBar">Shared status bar state.</param>
-    public JobsViewModel(StatusBarViewModel statusBar)
+    /// <param name="uiTextService">Localized UI text service.</param>
+    public JobsViewModel(StatusBarViewModel statusBar, IUiTextService uiTextService)
     {
         _backupExecutionEngine = new BackupExecutionEngine();
         _jobService = new JobService();
-        _uiTextService = new ResxUiTextService();
+        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
         _orchestrator = new ParallelJobOrchestrator(_backupExecutionEngine);
 

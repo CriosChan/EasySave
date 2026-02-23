@@ -2,7 +2,6 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
-using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
@@ -25,6 +24,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     private readonly IUiTextService _uiTextService;
+    private readonly IUiLocalizationService _uiLocalizationService;
     [ObservableProperty] private string _backButtonLabel = string.Empty;
     [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
     [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = string.Empty;
@@ -39,14 +39,16 @@ public partial class MainWindowViewModel : ViewModelBase
     /// </summary>
     public MainWindowViewModel()
     {
-        _uiTextService = new ResxUiTextService();
+        _uiTextService = new TlumachUiTextService();
+        _uiLocalizationService = new TlumachUiLocalizationService();
+        _uiLocalizationService.CultureChanged += OnCultureChanged;
 
         StatusBar = new StatusBarViewModel();
-        Jobs = new JobsViewModel(StatusBar);
-        Settings = new SettingsViewModel(StatusBar,
-            RefreshLocalizedUi);
+        Jobs = new JobsViewModel(StatusBar, _uiTextService);
+        Settings = new SettingsViewModel(StatusBar, _uiTextService, _uiLocalizationService);
         BusinessSoftware = new BusinessSoftwareViewModel(
-            StatusBar);
+            StatusBar,
+            _uiTextService);
 
         BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
         BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
@@ -180,7 +182,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var config = ApplicationConfiguration.Load();
         if (!string.IsNullOrWhiteSpace(config.Localization))
-            LocalizationApplier.Apply(config.Localization);
+            _uiLocalizationService.Apply(config.Localization);
     }
 
     /// <summary>
@@ -219,6 +221,16 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _previousScreen = ViewScreen.SoftwareCatalog;
         SetCurrentScreen(ViewScreen.AddedSoftware);
+    }
+
+    /// <summary>
+    ///     Handles application culture changes and refreshes all localized labels.
+    /// </summary>
+    /// <param name="sender">Event sender.</param>
+    /// <param name="e">Event args.</param>
+    private void OnCultureChanged(object? sender, EventArgs e)
+    {
+        RefreshLocalizedUi();
     }
 
     /// <summary>
