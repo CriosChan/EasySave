@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
@@ -37,8 +38,8 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetFrenchLanguage()
     {
         ApplicationConfiguration.Load().Localization = "fr-FR";
-        Strings.SetCulture("fr-FR");
-        _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedFr", "Langue changee en Francais");
+        Strings.SetCulture(new CultureInfo("fr-FR"));
+        _statusBar.StatusMessage = _uiTextService.Get("Gui_Status_LanguageChangedFr", "Langue changee en Francais");
     }
 
     /// <summary>
@@ -48,8 +49,8 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetEnglishLanguage()
     {
         ApplicationConfiguration.Load().Localization = "en-US";
-        Strings.SetCulture("en-US");
-        _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedEn", "Language changed to English");
+        Strings.SetCulture(new CultureInfo("en-US"));
+        _statusBar.StatusMessage = _uiTextService.Get("Gui_Status_LanguageChangedEn", "Language changed to English");
     }
 
     /// <summary>
@@ -59,7 +60,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetJsonLogType()
     {
         ApplicationConfiguration.Load().LogType = "json";
-        _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LogTypeJsonSet", "Log type set to JSON");
+        _statusBar.StatusMessage = _uiTextService.Get("Gui_Status_LogTypeJsonSet", "Log type set to JSON");
     }
 
     /// <summary>
@@ -69,7 +70,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void SetXmlLogType()
     {
         ApplicationConfiguration.Load().LogType = "xml";
-        _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LogTypeXmlSet", "Log type set to XML");
+        _statusBar.StatusMessage = _uiTextService.Get("Gui_Status_LogTypeXmlSet", "Log type set to XML");
     }
 
     [RelayCommand]

@@ -64,7 +64,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_Error_MaxJobs {
             get {
-                return ResourceManager.GetString("Add.Error.MaxJobs", resourceCulture);
+                return ResourceManager.GetString("Add_Error_MaxJobs", resourceCulture);
             }
         }
         
@@ -73,7 +73,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_Error_NoFreeSlot {
             get {
-                return ResourceManager.GetString("Add.Error.NoFreeSlot", resourceCulture);
+                return ResourceManager.GetString("Add_Error_NoFreeSlot", resourceCulture);
             }
         }
         
@@ -82,7 +82,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_Failed {
             get {
-                return ResourceManager.GetString("Add.Failed", resourceCulture);
+                return ResourceManager.GetString("Add_Failed", resourceCulture);
             }
         }
         
@@ -91,7 +91,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_Header {
             get {
-                return ResourceManager.GetString("Add.Header", resourceCulture);
+                return ResourceManager.GetString("Add_Header", resourceCulture);
             }
         }
         
@@ -100,7 +100,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_PromptName {
             get {
-                return ResourceManager.GetString("Add.PromptName", resourceCulture);
+                return ResourceManager.GetString("Add_PromptName", resourceCulture);
             }
         }
         
@@ -109,7 +109,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_PromptSource {
             get {
-                return ResourceManager.GetString("Add.PromptSource", resourceCulture);
+                return ResourceManager.GetString("Add_PromptSource", resourceCulture);
             }
         }
         
@@ -118,7 +118,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_PromptTarget {
             get {
-                return ResourceManager.GetString("Add.PromptTarget", resourceCulture);
+                return ResourceManager.GetString("Add_PromptTarget", resourceCulture);
             }
         }
         
@@ -127,7 +127,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_PromptType {
             get {
-                return ResourceManager.GetString("Add.PromptType", resourceCulture);
+                return ResourceManager.GetString("Add_PromptType", resourceCulture);
             }
         }
         
@@ -136,7 +136,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_Success {
             get {
-                return ResourceManager.GetString("Add.Success", resourceCulture);
+                return ResourceManager.GetString("Add_Success", resourceCulture);
             }
         }
         
@@ -145,7 +145,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Add_TypeOptions {
             get {
-                return ResourceManager.GetString("Add.TypeOptions", resourceCulture);
+                return ResourceManager.GetString("Add_TypeOptions", resourceCulture);
             }
         }
         
@@ -154,7 +154,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Common_Cancelled {
             get {
-                return ResourceManager.GetString("Common.Cancelled", resourceCulture);
+                return ResourceManager.GetString("Common_Cancelled", resourceCulture);
             }
         }
         
@@ -163,7 +163,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Common_InvalidInput {
             get {
-                return ResourceManager.GetString("Common.InvalidInput", resourceCulture);
+                return ResourceManager.GetString("Common_InvalidInput", resourceCulture);
             }
         }
         
@@ -172,7 +172,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Common_PressAnyKey {
             get {
-                return ResourceManager.GetString("Common.PressAnyKey", resourceCulture);
+                return ResourceManager.GetString("Common_PressAnyKey", resourceCulture);
             }
         }
         
@@ -181,7 +181,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_AddExtension {
             get {
-                return ResourceManager.GetString("Gui.AddExtension", resourceCulture);
+                return ResourceManager.GetString("Gui_AddExtension", resourceCulture);
             }
         }
         
@@ -190,7 +190,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Added_Title {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Added.Title", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Added_Title", resourceCulture);
             }
         }
         
@@ -199,7 +199,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Button_AddSelected {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Button.AddSelected", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Button_AddSelected", resourceCulture);
             }
         }
         
@@ -208,7 +208,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Button_RemoveSelected {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Button.RemoveSelected", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Button_RemoveSelected", resourceCulture);
             }
         }
         
@@ -217,7 +217,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Button_ViewAdded {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Button.ViewAdded", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Button_ViewAdded", resourceCulture);
             }
         }
         
@@ -226,7 +226,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Catalog_Title {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Catalog.Title", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Catalog_Title", resourceCulture);
             }
         }
         
@@ -235,7 +235,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Search_Label {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Search.Label", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Search_Label", resourceCulture);
             }
         }
         
@@ -244,7 +244,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Search_Placeholder {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Search.Placeholder", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Search_Placeholder", resourceCulture);
             }
         }
         
@@ -253,7 +253,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Status_Removed {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Status.Removed", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Status_Removed", resourceCulture);
             }
         }
         
@@ -262,7 +262,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_BusinessSoftware_Status_Updated {
             get {
-                return ResourceManager.GetString("Gui.BusinessSoftware.Status.Updated", resourceCulture);
+                return ResourceManager.GetString("Gui_BusinessSoftware_Status_Updated", resourceCulture);
             }
         }
         
@@ -271,7 +271,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_AddJob {
             get {
-                return ResourceManager.GetString("Gui.Button.AddJob", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_AddJob", resourceCulture);
             }
         }
         
@@ -280,7 +280,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_BrowseSource {
             get {
-                return ResourceManager.GetString("Gui.Button.BrowseSource", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_BrowseSource", resourceCulture);
             }
         }
         
@@ -289,7 +289,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_BrowseTarget {
             get {
-                return ResourceManager.GetString("Gui.Button.BrowseTarget", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_BrowseTarget", resourceCulture);
             }
         }
         
@@ -298,7 +298,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_English {
             get {
-                return ResourceManager.GetString("Gui.Button.English", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_English", resourceCulture);
             }
         }
         
@@ -307,7 +307,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_French {
             get {
-                return ResourceManager.GetString("Gui.Button.French", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_French", resourceCulture);
             }
         }
         
@@ -316,7 +316,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_Json {
             get {
-                return ResourceManager.GetString("Gui.Button.Json", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_Json", resourceCulture);
             }
         }
         
@@ -325,7 +325,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_RemoveSelected {
             get {
-                return ResourceManager.GetString("Gui.Button.RemoveSelected", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_RemoveSelected", resourceCulture);
             }
         }
         
@@ -334,7 +334,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_RunAllJobs {
             get {
-                return ResourceManager.GetString("Gui.Button.RunAllJobs", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_RunAllJobs", resourceCulture);
             }
         }
         
@@ -343,7 +343,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_RunSelectedJob {
             get {
-                return ResourceManager.GetString("Gui.Button.RunSelectedJob", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_RunSelectedJob", resourceCulture);
             }
         }
         
@@ -352,7 +352,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Button_Xml {
             get {
-                return ResourceManager.GetString("Gui.Button.Xml", resourceCulture);
+                return ResourceManager.GetString("Gui_Button_Xml", resourceCulture);
             }
         }
         
@@ -361,7 +361,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Menu_Features {
             get {
-                return ResourceManager.GetString("Gui.Menu.Features", resourceCulture);
+                return ResourceManager.GetString("Gui_Menu_Features", resourceCulture);
             }
         }
         
@@ -370,7 +370,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Menu_ManageBusinessSoftware {
             get {
-                return ResourceManager.GetString("Gui.Menu.ManageBusinessSoftware", resourceCulture);
+                return ResourceManager.GetString("Gui_Menu_ManageBusinessSoftware", resourceCulture);
             }
         }
         
@@ -379,7 +379,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Menu_Root {
             get {
-                return ResourceManager.GetString("Gui.Menu.Root", resourceCulture);
+                return ResourceManager.GetString("Gui_Menu_Root", resourceCulture);
             }
         }
         
@@ -388,7 +388,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Menu_Settings {
             get {
-                return ResourceManager.GetString("Gui.Menu.Settings", resourceCulture);
+                return ResourceManager.GetString("Gui_Menu_Settings", resourceCulture);
             }
         }
         
@@ -397,7 +397,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Navigation_Back {
             get {
-                return ResourceManager.GetString("Gui.Navigation.Back", resourceCulture);
+                return ResourceManager.GetString("Gui_Navigation_Back", resourceCulture);
             }
         }
         
@@ -406,7 +406,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Settings_CryptoSoftKey {
             get {
-                return ResourceManager.GetString("Gui.Settings.CryptoSoftKey", resourceCulture);
+                return ResourceManager.GetString("Gui_Settings_CryptoSoftKey", resourceCulture);
             }
         }
         
@@ -415,7 +415,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Settings_ExtensionToCrypt {
             get {
-                return ResourceManager.GetString("Gui.Settings.ExtensionToCrypt", resourceCulture);
+                return ResourceManager.GetString("Gui_Settings_ExtensionToCrypt", resourceCulture);
             }
         }
         
@@ -424,7 +424,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Settings_Hint_FutureExtension {
             get {
-                return ResourceManager.GetString("Gui.Settings.Hint.FutureExtension", resourceCulture);
+                return ResourceManager.GetString("Gui_Settings_Hint_FutureExtension", resourceCulture);
             }
         }
         
@@ -433,7 +433,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Settings_Label {
             get {
-                return ResourceManager.GetString("Gui.Settings.Label", resourceCulture);
+                return ResourceManager.GetString("Gui_Settings_Label", resourceCulture);
             }
         }
         
@@ -442,7 +442,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Settings_Screen_Title {
             get {
-                return ResourceManager.GetString("Gui.Settings.Screen.Title", resourceCulture);
+                return ResourceManager.GetString("Gui_Settings_Screen_Title", resourceCulture);
             }
         }
         
@@ -451,7 +451,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Settings_Section_Language {
             get {
-                return ResourceManager.GetString("Gui.Settings.Section.Language", resourceCulture);
+                return ResourceManager.GetString("Gui_Settings_Section_Language", resourceCulture);
             }
         }
         
@@ -460,7 +460,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Settings_Section_LogType {
             get {
-                return ResourceManager.GetString("Gui.Settings.Section.LogType", resourceCulture);
+                return ResourceManager.GetString("Gui_Settings_Section_LogType", resourceCulture);
             }
         }
         
@@ -469,7 +469,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Status_BackupAsFinished {
             get {
-                return ResourceManager.GetString("Gui.Status.BackupAsFinished", resourceCulture);
+                return ResourceManager.GetString("Gui_Status_BackupAsFinished", resourceCulture);
             }
         }
         
@@ -478,7 +478,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Status_BackupStoppedByBusinessSoftware {
             get {
-                return ResourceManager.GetString("Gui.Status.BackupStoppedByBusinessSoftware", resourceCulture);
+                return ResourceManager.GetString("Gui_Status_BackupStoppedByBusinessSoftware", resourceCulture);
             }
         }
         
@@ -487,7 +487,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Status_LanguageChangedEn {
             get {
-                return ResourceManager.GetString("Gui.Status.LanguageChangedEn", resourceCulture);
+                return ResourceManager.GetString("Gui_Status_LanguageChangedEn", resourceCulture);
             }
         }
         
@@ -496,7 +496,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Status_LanguageChangedFr {
             get {
-                return ResourceManager.GetString("Gui.Status.LanguageChangedFr", resourceCulture);
+                return ResourceManager.GetString("Gui_Status_LanguageChangedFr", resourceCulture);
             }
         }
         
@@ -505,7 +505,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Status_LogTypeJsonSet {
             get {
-                return ResourceManager.GetString("Gui.Status.LogTypeJsonSet", resourceCulture);
+                return ResourceManager.GetString("Gui_Status_LogTypeJsonSet", resourceCulture);
             }
         }
         
@@ -514,7 +514,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Status_LogTypeXmlSet {
             get {
-                return ResourceManager.GetString("Gui.Status.LogTypeXmlSet", resourceCulture);
+                return ResourceManager.GetString("Gui_Status_LogTypeXmlSet", resourceCulture);
             }
         }
         
@@ -523,7 +523,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Tooltip_DeleteExtension {
             get {
-                return ResourceManager.GetString("Gui.Tooltip.DeleteExtension", resourceCulture);
+                return ResourceManager.GetString("Gui_Tooltip_DeleteExtension", resourceCulture);
             }
         }
         
@@ -532,7 +532,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Gui_Window_Title {
             get {
-                return ResourceManager.GetString("Gui.Window.Title", resourceCulture);
+                return ResourceManager.GetString("Gui_Window_Title", resourceCulture);
             }
         }
         
@@ -541,7 +541,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Jobs_Columns {
             get {
-                return ResourceManager.GetString("Jobs.Columns", resourceCulture);
+                return ResourceManager.GetString("Jobs_Columns", resourceCulture);
             }
         }
         
@@ -550,16 +550,16 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Jobs_Execute_All {
             get {
-                return ResourceManager.GetString("Jobs.Execute.All", resourceCulture);
+                return ResourceManager.GetString("Jobs_Execute_All", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Run the job - {0} - {1}.
         /// </summary>
-        internal static string Jobs_Execute_ID {
+        internal static string Jobs_Execute_Id {
             get {
-                return ResourceManager.GetString("Jobs.Execute.ID", resourceCulture);
+                return ResourceManager.GetString("Jobs_Execute_Id", resourceCulture);
             }
         }
         
@@ -568,7 +568,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Jobs_Header {
             get {
-                return ResourceManager.GetString("Jobs.Header", resourceCulture);
+                return ResourceManager.GetString("Jobs_Header", resourceCulture);
             }
         }
         
@@ -577,16 +577,16 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Jobs_None {
             get {
-                return ResourceManager.GetString("Jobs.None", resourceCulture);
+                return ResourceManager.GetString("Jobs_None", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Remove job {0} - {1}.
         /// </summary>
-        internal static string Jobs_Remove_ID {
+        internal static string Jobs_Remove_Id {
             get {
-                return ResourceManager.GetString("Jobs.Remove.ID", resourceCulture);
+                return ResourceManager.GetString("Jobs_Remove_Id", resourceCulture);
             }
         }
         
@@ -595,7 +595,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Launch_Done {
             get {
-                return ResourceManager.GetString("Launch.Done", resourceCulture);
+                return ResourceManager.GetString("Launch_Done", resourceCulture);
             }
         }
         
@@ -604,7 +604,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Launch_Header {
             get {
-                return ResourceManager.GetString("Launch.Header", resourceCulture);
+                return ResourceManager.GetString("Launch_Header", resourceCulture);
             }
         }
         
@@ -613,7 +613,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Launch_Invalid {
             get {
-                return ResourceManager.GetString("Launch.Invalid", resourceCulture);
+                return ResourceManager.GetString("Launch_Invalid", resourceCulture);
             }
         }
         
@@ -622,7 +622,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Launch_NotFound {
             get {
-                return ResourceManager.GetString("Launch.NotFound", resourceCulture);
+                return ResourceManager.GetString("Launch_NotFound", resourceCulture);
             }
         }
         
@@ -631,7 +631,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Launch_Prompt {
             get {
-                return ResourceManager.GetString("Launch.Prompt", resourceCulture);
+                return ResourceManager.GetString("Launch_Prompt", resourceCulture);
             }
         }
         
@@ -640,7 +640,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Launch_RunningAll {
             get {
-                return ResourceManager.GetString("Launch.RunningAll", resourceCulture);
+                return ResourceManager.GetString("Launch_RunningAll", resourceCulture);
             }
         }
         
@@ -649,7 +649,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Launch_RunningOne {
             get {
-                return ResourceManager.GetString("Launch.RunningOne", resourceCulture);
+                return ResourceManager.GetString("Launch_RunningOne", resourceCulture);
             }
         }
         
@@ -658,7 +658,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_AddBackup {
             get {
-                return ResourceManager.GetString("Menu.AddBackup", resourceCulture);
+                return ResourceManager.GetString("Menu_AddBackup", resourceCulture);
             }
         }
         
@@ -667,7 +667,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_Lang {
             get {
-                return ResourceManager.GetString("Menu.Lang", resourceCulture);
+                return ResourceManager.GetString("Menu_Lang", resourceCulture);
             }
         }
         
@@ -676,7 +676,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_LaunchBackupJob {
             get {
-                return ResourceManager.GetString("Menu.LaunchBackupJob", resourceCulture);
+                return ResourceManager.GetString("Menu_LaunchBackupJob", resourceCulture);
             }
         }
         
@@ -685,7 +685,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_ListJobs {
             get {
-                return ResourceManager.GetString("Menu.ListJobs", resourceCulture);
+                return ResourceManager.GetString("Menu_ListJobs", resourceCulture);
             }
         }
         
@@ -694,7 +694,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_Log {
             get {
-                return ResourceManager.GetString("Menu.Log", resourceCulture);
+                return ResourceManager.GetString("Menu_Log", resourceCulture);
             }
         }
         
@@ -703,7 +703,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_Quit {
             get {
-                return ResourceManager.GetString("Menu.Quit", resourceCulture);
+                return ResourceManager.GetString("Menu_Quit", resourceCulture);
             }
         }
         
@@ -712,7 +712,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_RemoveBackup {
             get {
-                return ResourceManager.GetString("Menu.RemoveBackup", resourceCulture);
+                return ResourceManager.GetString("Menu_RemoveBackup", resourceCulture);
             }
         }
         
@@ -721,7 +721,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_Title_Lang {
             get {
-                return ResourceManager.GetString("Menu.Title.Lang", resourceCulture);
+                return ResourceManager.GetString("Menu_Title_Lang", resourceCulture);
             }
         }
         
@@ -730,7 +730,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_Title_LogType {
             get {
-                return ResourceManager.GetString("Menu.Title.LogType", resourceCulture);
+                return ResourceManager.GetString("Menu_Title_LogType", resourceCulture);
             }
         }
         
@@ -739,7 +739,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_Title_Main {
             get {
-                return ResourceManager.GetString("Menu.Title.Main", resourceCulture);
+                return ResourceManager.GetString("Menu_Title_Main", resourceCulture);
             }
         }
         
@@ -748,7 +748,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_Title_RemoveJob {
             get {
-                return ResourceManager.GetString("Menu.Title.RemoveJob", resourceCulture);
+                return ResourceManager.GetString("Menu_Title_RemoveJob", resourceCulture);
             }
         }
         
@@ -757,7 +757,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Menu_Title_StartJob {
             get {
-                return ResourceManager.GetString("Menu.Title.StartJob", resourceCulture);
+                return ResourceManager.GetString("Menu_Title_StartJob", resourceCulture);
             }
         }
         
@@ -766,7 +766,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Path_SourceNotFound {
             get {
-                return ResourceManager.GetString("Path.SourceNotFound", resourceCulture);
+                return ResourceManager.GetString("Path_SourceNotFound", resourceCulture);
             }
         }
         
@@ -775,7 +775,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Path_TargetNotFound {
             get {
-                return ResourceManager.GetString("Path.TargetNotFound", resourceCulture);
+                return ResourceManager.GetString("Path_TargetNotFound", resourceCulture);
             }
         }
         
@@ -784,7 +784,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Remove_Header {
             get {
-                return ResourceManager.GetString("Remove.Header", resourceCulture);
+                return ResourceManager.GetString("Remove_Header", resourceCulture);
             }
         }
         
@@ -793,7 +793,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Remove_NotFound {
             get {
-                return ResourceManager.GetString("Remove.NotFound", resourceCulture);
+                return ResourceManager.GetString("Remove_NotFound", resourceCulture);
             }
         }
         
@@ -802,7 +802,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Remove_Prompt {
             get {
-                return ResourceManager.GetString("Remove.Prompt", resourceCulture);
+                return ResourceManager.GetString("Remove_Prompt", resourceCulture);
             }
         }
         
@@ -811,7 +811,7 @@ namespace EasySave.Views.Resources {
         /// </summary>
         internal static string Remove_Success {
             get {
-                return ResourceManager.GetString("Remove.Success", resourceCulture);
+                return ResourceManager.GetString("Remove_Success", resourceCulture);
             }
         }
         
@@ -827,45 +827,45 @@ namespace EasySave.Views.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Job {0} not found..
         /// </summary>
-        internal static string Terminal_log_JobIdNotFound {
+        internal static string Terminal_Log_JobIdNotFound {
             get {
-                return ResourceManager.GetString("Terminal.log.JobIdNotFound", resourceCulture);
+                return ResourceManager.GetString("Terminal_Log_JobIdNotFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Job {0} skipped: source directory not found..
         /// </summary>
-        internal static string Terminal_log_JobSourceNotFound {
+        internal static string Terminal_Log_JobSourceNotFound {
             get {
-                return ResourceManager.GetString("Terminal.log.JobSourceNotFound", resourceCulture);
+                return ResourceManager.GetString("Terminal_Log_JobSourceNotFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Job {0} skipped: target directory not found..
         /// </summary>
-        internal static string Terminal_log_JobTargetNotFound {
+        internal static string Terminal_Log_JobTargetNotFound {
             get {
-                return ResourceManager.GetString("Terminal.log.JobTargetNotFound", resourceCulture);
+                return ResourceManager.GetString("Terminal_Log_JobTargetNotFound", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to No backup job configured..
         /// </summary>
-        internal static string Terminal_log_NoJobConfigured {
+        internal static string Terminal_Log_NoJobConfigured {
             get {
-                return ResourceManager.GetString("Terminal.log.NoJobConfigured", resourceCulture);
+                return ResourceManager.GetString("Terminal_Log_NoJobConfigured", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Usage:.
         /// </summary>
-        internal static string Terminal_log_Usage {
+        internal static string Terminal_Log_Usage {
             get {
-                return ResourceManager.GetString("Terminal.log.Usage", resourceCulture);
+                return ResourceManager.GetString("Terminal_Log_Usage", resourceCulture);
             }
         }
     }

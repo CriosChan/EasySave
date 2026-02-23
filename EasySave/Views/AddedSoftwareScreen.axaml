@@ -21,10 +21,10 @@
             <Grid ColumnDefinitions="Auto,*"
                   ColumnSpacing="12">
                 <Button Grid.Column="0"
-                        Content="{tlumach:Translate {x:Static t:Strings.GuiNavigationBack}}"
+                        Content="{tlumach:Translate {x:Static t:Strings.Gui_Navigation_Back}}"
                         Command="{Binding BackFromAddedSoftwareCommand}" />
                 <TextBlock Grid.Column="1"
-                           Text="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareAddedTitle}}"
+                           Text="{tlumach:Translate {x:Static t:Strings.Gui_BusinessSoftware_Added_Title}}"
                            FontSize="18"
                            FontWeight="Bold"
                            VerticalAlignment="Center" />
@@ -68,7 +68,7 @@
                 BorderThickness="1">
             <StackPanel Orientation="Horizontal"
                         Spacing="8">
-                <Button Content="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareButtonRemoveSelected}}"
+                <Button Content="{tlumach:Translate {x:Static t:Strings.Gui_BusinessSoftware_Button_RemoveSelected}}"
                         Command="{Binding BusinessSoftware.RemoveSelectedAddedBusinessSoftwareCommand}"
                         IsVisible="{Binding BusinessSoftware.CanRemoveAddedBusinessSoftware}" />
             </StackPanel>

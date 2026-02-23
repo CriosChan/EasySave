@@ -116,7 +116,7 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
 
         PersistAddedBusinessSoftware();
         _statusBar.StatusMessage =
-            _uiTextService.Get("Gui.BusinessSoftware.Status.Updated", "Business software list updated.");
+            _uiTextService.Get("Gui_BusinessSoftware_Status_Updated", "Business software list updated.");
         OnPropertyChanged(nameof(CanAddSelectedBusinessSoftware));
         OpenAddedSoftwareRequested?.Invoke(this, EventArgs.Empty);
     }
@@ -138,7 +138,7 @@ public partial class BusinessSoftwareViewModel : ViewModelBase
         }
 
         PersistAddedBusinessSoftware();
-        _statusBar.StatusMessage = _uiTextService.Get("Gui.BusinessSoftware.Status.Removed",
+        _statusBar.StatusMessage = _uiTextService.Get("Gui_BusinessSoftware_Status_Removed",
             "Business software removed from blocker list.");
         OnPropertyChanged(nameof(CanRemoveAddedBusinessSoftware));
     }

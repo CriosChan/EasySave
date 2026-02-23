@@ -22,7 +22,7 @@
                 BorderBrush="{DynamicResource BorderLine}"
                 BorderThickness="1">
             <StackPanel Spacing="8">
-                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.JobsHeader}}"
+                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Jobs_Header}}"
                            FontSize="18"
                            FontWeight="Bold" />
 
@@ -92,24 +92,24 @@
                 Classes="main-section">
             <StackPanel Spacing="8">
                 <Menu HorizontalAlignment="Left">
-                    <MenuItem Header="{tlumach:Translate {x:Static t:Strings.GuiMenuRoot}}">
-                        <MenuItem Header="{tlumach:Translate {x:Static t:Strings.GuiMenuSettings}}"
+                    <MenuItem Header="{tlumach:Translate {x:Static t:Strings.Gui_Menu_Root}}">
+                        <MenuItem Header="{tlumach:Translate {x:Static t:Strings.Gui_Menu_Settings}}"
                                   Command="{Binding OpenSettingsCommand}" />
-                        <MenuItem Header="{tlumach:Translate {x:Static t:Strings.GuiMenuManageBusinessSoftware}}"
+                        <MenuItem Header="{tlumach:Translate {x:Static t:Strings.Gui_Menu_ManageBusinessSoftware}}"
                                   Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
                     </MenuItem>
                 </Menu>
 
                 <Separator Margin="0,8,0,8" />
 
-                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.AddHeader}}"
+                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Add_Header}}"
                            Classes="section-title" />
 
-                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.AddPromptName}}" />
+                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Add_PromptName}}" />
                 <TextBox Text="{Binding Jobs.NewJobName}"
                          IsEnabled="{Binding StatusBar.IsNotBusy}" />
 
-                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.AddPromptSource}}" />
+                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Add_PromptSource}}" />
                 <StackPanel Spacing="4">
                     <Button Command="{Binding Jobs.BrowseSourceDirectoryCommand}"
                             IsEnabled="{Binding StatusBar.IsNotBusy}"
@@ -118,7 +118,7 @@
                             <PathIcon
                                 Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
                                 Width="16" Height="16" />
-                            <TextBlock Text="{tlumach:Translate {x:Static t:Strings.GuiButtonBrowseSource}}" />
+                            <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Gui_Button_BrowseSource}}" />
                         </StackPanel>
                     </Button>
                     <TextBlock Text="{Binding Jobs.NewSourceDirectory}"
@@ -128,7 +128,7 @@
                                IsVisible="{Binding Jobs.NewSourceDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 </StackPanel>
 
-                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.AddPromptTarget}}" />
+                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Add_PromptTarget}}" />
                 <StackPanel Spacing="4">
                     <Button Command="{Binding Jobs.BrowseTargetDirectoryCommand}"
                             IsEnabled="{Binding StatusBar.IsNotBusy}"
@@ -137,7 +137,7 @@
                             <PathIcon
                                 Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
                                 Width="16" Height="16" />
-                            <TextBlock Text="{tlumach:Translate {x:Static t:Strings.GuiButtonBrowseTarget}}" />
+                            <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Gui_Button_BrowseTarget}}" />
                         </StackPanel>
                     </Button>
                     <TextBlock Text="{Binding Jobs.NewTargetDirectory}"
@@ -147,19 +147,19 @@
                                IsVisible="{Binding Jobs.NewTargetDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 </StackPanel>
 
-                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.AddPromptType}}" />
+                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Add_PromptType}}" />
                 <ComboBox ItemsSource="{Binding Jobs.BackupTypes}"
                           SelectedItem="{Binding Jobs.SelectedBackupType}"
                           IsEnabled="{Binding StatusBar.IsNotBusy}" />
 
-                <Button Content="{tlumach:Translate {x:Static t:Strings.GuiButtonAddJob}}"
+                <Button Content="{tlumach:Translate {x:Static t:Strings.Gui_Button_AddJob}}"
                         Command="{Binding Jobs.AddJobCommand}"
                         IsEnabled="{Binding StatusBar.IsNotBusy}"
                         Margin="0,4,0,0" />
 
                 <Separator Margin="0,8,0,8" />
 
-                <Button Content="{tlumach:Translate {x:Static t:Strings.GuiButtonRemoveSelected}}"
+                <Button Content="{tlumach:Translate {x:Static t:Strings.Gui_Button_RemoveSelected}}"
                         Command="{Binding Jobs.RemoveSelectedJobCommand}"
                         IsEnabled="{Binding StatusBar.IsNotBusy}" />
             </StackPanel>
@@ -173,11 +173,11 @@
                 BorderBrush="{DynamicResource BorderLine}"
                 BorderThickness="1">
             <WrapPanel ItemHeight="32" VerticalAlignment="Center">
-                <Button Content="{tlumach:Translate {x:Static t:Strings.GuiButtonRunSelectedJob}}"
+                <Button Content="{tlumach:Translate {x:Static t:Strings.Gui_Button_RunSelectedJob}}"
                         Command="{Binding Jobs.RunSelectedJobCommand}"
                         IsEnabled="{Binding StatusBar.IsNotBusy}"
                         Margin="0,0,8,0" />
-                <Button Content="{tlumach:Translate {x:Static t:Strings.GuiButtonRunAllJobs}}"
+                <Button Content="{tlumach:Translate {x:Static t:Strings.Gui_Button_RunAllJobs}}"
                         Command="{Binding Jobs.RunAllJobsCommand}"
                         IsEnabled="{Binding StatusBar.IsNotBusy}" />
             </WrapPanel>

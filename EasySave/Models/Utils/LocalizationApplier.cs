@@ -13,9 +13,10 @@ public static class LocalizationApplier
         if (string.IsNullOrWhiteSpace(cultureName))
             return;
 
+        CultureInfo? culture = null;
         try
         {
-            var culture = new CultureInfo(cultureName);
+            culture = new CultureInfo(cultureName);
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
         }
@@ -24,7 +25,10 @@ public static class LocalizationApplier
             // If localization is invalid, keep the default system culture.
         }
 
-        try { Strings.SetCulture(cultureName); }
-        catch { /* Strings may not be available in non-Avalonia contexts (e.g., tests). */ }
+        if (culture != null)
+        {
+            try { Strings.SetCulture(culture); }
+            catch { /* Strings may not be available in non-Avalonia contexts (e.g., tests). */ }
+        }
     }
 }

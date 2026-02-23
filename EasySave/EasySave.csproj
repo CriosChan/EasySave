@@ -32,22 +32,10 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
-        <EmbeddedResource Update="Presentation\Resources\UserInterface.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
         <EmbeddedResource Update="Views\Resources\UserInterface.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>UserInterface.Designer.cs</LastGenOutput>
         </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Presentation\Resources\UserInterface.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>UserInterface.resx</DependentUpon>
-        </Compile>
     </ItemGroup>
 
     <Target Name="CopyResxTranslations" AfterTargets="Build">

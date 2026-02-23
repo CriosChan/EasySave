@@ -12,7 +12,7 @@ internal static class CommandUsagePrinter
     /// </summary>
     internal static void Print()
     {
-        Console.WriteLine(UserInterface.Terminal_log_Usage);
+        Console.WriteLine(UserInterface.Terminal_Log_Usage);
         Console.WriteLine("  EasySave.exe 1-3");
         Console.WriteLine("  EasySave.exe 1;3");
         Console.WriteLine("  EasySave.exe 2");

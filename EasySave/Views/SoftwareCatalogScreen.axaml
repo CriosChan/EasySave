@@ -21,16 +21,16 @@
             <Grid ColumnDefinitions="Auto,*,Auto"
                   ColumnSpacing="12">
                 <Button Grid.Column="0"
-                        Content="{tlumach:Translate {x:Static t:Strings.GuiNavigationBack}}"
+                        Content="{tlumach:Translate {x:Static t:Strings.Gui_Navigation_Back}}"
                         Command="{Binding BackFromSoftwareCatalogCommand}" />
                 <TextBlock Grid.Column="1"
-                           Text="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareCatalogTitle}}"
+                           Text="{tlumach:Translate {x:Static t:Strings.Gui_BusinessSoftware_Catalog_Title}}"
                            FontSize="18"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center" />
                 <Button Grid.Column="2"
-                        Content="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareButtonViewAdded}}"
+                        Content="{tlumach:Translate {x:Static t:Strings.Gui_BusinessSoftware_Button_ViewAdded}}"
                         Command="{Binding OpenAddedBusinessSoftwareCommand}" />
             </Grid>
         </Border>
@@ -42,9 +42,9 @@
                 BorderBrush="{DynamicResource BorderLine}"
                 BorderThickness="1">
             <StackPanel Spacing="6">
-                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareSearchLabel}}" />
+                <TextBlock Text="{tlumach:Translate {x:Static t:Strings.Gui_BusinessSoftware_Search_Label}}" />
                 <TextBox Text="{Binding BusinessSoftware.BusinessSoftwareSearchText}"
-                         Watermark="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareSearchPlaceholder}}" />
+                         Watermark="{tlumach:Translate {x:Static t:Strings.Gui_BusinessSoftware_Search_Placeholder}}" />
             </StackPanel>
         </Border>
 
@@ -85,7 +85,7 @@
                 BorderThickness="1">
             <StackPanel Orientation="Horizontal"
                         Spacing="8">
-                <Button Content="{tlumach:Translate {x:Static t:Strings.GuiBusinessSoftwareButtonAddSelected}}"
+                <Button Content="{tlumach:Translate {x:Static t:Strings.Gui_BusinessSoftware_Button_AddSelected}}"
                         Command="{Binding BusinessSoftware.AddSelectedBusinessSoftwareCommand}"
                         IsVisible="{Binding BusinessSoftware.CanAddSelectedBusinessSoftware}" />
             </StackPanel>

@@ -44,7 +44,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         ApplyConfiguredLocalization();
         BusinessSoftware.Initialize();
-        StatusBar.StatusMessage = _uiTextService.Get("Gui.Status.Ready", "Ready");
+        StatusBar.StatusMessage = _uiTextService.Get("Gui_Status_Ready", "Ready");
     }
 
     /// <summary>

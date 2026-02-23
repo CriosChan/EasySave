@@ -100,53 +100,53 @@ public partial class JobsViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(NewJobName))
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Gui.Error.JobNameRequired", "Error: Job name is required");
+            _statusBar.StatusMessage = _uiTextService.Get("Gui_Error_JobNameRequired", "Error: Job name is required");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(NewSourceDirectory))
         {
             _statusBar.StatusMessage =
-                _uiTextService.Get("Gui.Error.SourceRequired", "Error: Source directory is required");
+                _uiTextService.Get("Gui_Error_SourceRequired", "Error: Source directory is required");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(NewTargetDirectory))
         {
             _statusBar.StatusMessage =
-                _uiTextService.Get("Gui.Error.TargetRequired", "Error: Target directory is required");
+                _uiTextService.Get("Gui_Error_TargetRequired", "Error: Target directory is required");
             return;
         }
 
         if (!Directory.Exists(NewSourceDirectory))
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Path.SourceNotFound",
+            _statusBar.StatusMessage = _uiTextService.Get("Path_SourceNotFound",
                 "Source directory does not exist. Please enter an existing directory.");
             return;
         }
 
         if (!PathService.IsDirectoryAccessible(NewSourceDirectory, out var sourceError))
         {
-            _statusBar.StatusMessage = $"{_uiTextService.Get("Path.SourceNotAccessible", "Source directory is not accessible:")} {sourceError}";
+            _statusBar.StatusMessage = $"{_uiTextService.Get("Path_SourceNotAccessible", "Source directory is not accessible:")} {sourceError}";
             return;
         }
 
         if (!Directory.Exists(NewTargetDirectory))
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Path.TargetNotFound",
+            _statusBar.StatusMessage = _uiTextService.Get("Path_TargetNotFound",
                 "Target directory does not exist. Please enter an existing directory.");
             return;
         }
 
         if (!PathService.IsDirectoryAccessible(NewTargetDirectory, out var targetError))
         {
-            _statusBar.StatusMessage = $"{_uiTextService.Get("Path.TargetNotAccessible", "Target directory is not accessible:")} {targetError}";
+            _statusBar.StatusMessage = $"{_uiTextService.Get("Path_TargetNotAccessible", "Target directory is not accessible:")} {targetError}";
             return;
         }
 
         if (!Enum.TryParse<BackupType>(SelectedBackupType, out var backupType))
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Gui.Error.InvalidBackupType", "Error: Invalid backup type");
+            _statusBar.StatusMessage = _uiTextService.Get("Gui_Error_InvalidBackupType", "Error: Invalid backup type");
             return;
         }
 
@@ -157,13 +157,13 @@ public partial class JobsViewModel : ViewModelBase
         {
             _statusBar.StatusMessage = error switch
             {
-                "Error.NoFreeSlot" => _uiTextService.Get("Add.Error.NoFreeSlot", "No free slot available (1..5)."),
-                _ => $"{_uiTextService.Get("Add.Failed", "Unable to create the job:")} {error}"
+                "Error.NoFreeSlot" => _uiTextService.Get("Add_Error_NoFreeSlot", "No free slot available (1..5)."),
+                _ => $"{_uiTextService.Get("Add_Failed", "Unable to create the job:")} {error}"
             };
             return;
         }
 
-        _statusBar.StatusMessage = _uiTextService.Get("Add.Success", "Backup job created.");
+        _statusBar.StatusMessage = _uiTextService.Get("Add_Success", "Backup job created.");
         RefreshJobs();
         ClearInputFields();
     }
@@ -176,7 +176,7 @@ public partial class JobsViewModel : ViewModelBase
     {
         if (SelectedJob == null)
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Gui.Error.NoJobSelected", "Error: No job selected");
+            _statusBar.StatusMessage = _uiTextService.Get("Gui_Error_NoJobSelected", "Error: No job selected");
             return;
         }
 
@@ -185,12 +185,12 @@ public partial class JobsViewModel : ViewModelBase
         var removed = _jobService.RemoveJob(selectedId);
         if (!removed)
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Gui.Error.RemoveFailed", "Error: Failed to remove job");
+            _statusBar.StatusMessage = _uiTextService.Get("Gui_Error_RemoveFailed", "Error: Failed to remove job");
             return;
         }
 
         _statusBar.StatusMessage = string.Format(
-            _uiTextService.Get("Gui.Status.JobRemoved", "Job '{0}' removed successfully"),
+            _uiTextService.Get("Gui_Status_JobRemoved", "Job '{0}' removed successfully"),
             selectedName);
         SelectedJob = null;
         RefreshJobs();
@@ -204,7 +204,7 @@ public partial class JobsViewModel : ViewModelBase
     {
         if (SelectedJob == null)
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Gui.Error.NoJobSelected", "Error: No job selected");
+            _statusBar.StatusMessage = _uiTextService.Get("Gui_Error_NoJobSelected", "Error: No job selected");
             return;
         }
 
@@ -218,7 +218,7 @@ public partial class JobsViewModel : ViewModelBase
             if (!stoppedByBusinessSoftware)
             {
                 _statusBar.OverallProgress = 100;
-                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
+                _statusBar.StatusMessage = _uiTextService.Get("Launch_Done", "Execution finished.");
             }
         }
         catch (Exception ex)
@@ -244,11 +244,11 @@ public partial class JobsViewModel : ViewModelBase
     {
         if (Jobs.Count == 0)
         {
-            _statusBar.StatusMessage = _uiTextService.Get("Jobs.None", "No backup job is configured.");
+            _statusBar.StatusMessage = _uiTextService.Get("Jobs_None", "No backup job is configured.");
             return;
         }
 
-        _statusBar.StatusMessage = _uiTextService.Get("Launch.RunningAll", "Running all jobs...");
+        _statusBar.StatusMessage = _uiTextService.Get("Launch_RunningAll", "Running all jobs...");
         _statusBar.IsNotBusy = false;
         _statusBar.OverallProgress = 0;
         _statusBar.MaxProgress = 100;
@@ -265,17 +265,17 @@ public partial class JobsViewModel : ViewModelBase
             // Update final status based on result
             if (result.WasStoppedByBusinessSoftware)
             {
-                _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.AllJobsStoppedByBusinessSoftware",
+                _statusBar.StatusMessage = _uiTextService.Get("Gui_Status_AllJobsStoppedByBusinessSoftware",
                     "Execution stopped: business software detected");
             }
             else if (result.FailedCount > 0)
             {
-                _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.AllJobsCompletedWithErrors",
+                _statusBar.StatusMessage = _uiTextService.Format("Gui_Status_AllJobsCompletedWithErrors",
                     "Execution finished: {0} completed, {1} failed", result.CompletedCount, result.FailedCount);
             }
             else
             {
-                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
+                _statusBar.StatusMessage = _uiTextService.Get("Launch_Done", "Execution finished.");
             }
 
             _statusBar.OverallProgress = 100;
@@ -305,7 +305,7 @@ public partial class JobsViewModel : ViewModelBase
 
         var folders = await _storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = _uiTextService.Get("Gui.Dialog.SelectSourceDirectory", "Select Source Directory"),
+            Title = _uiTextService.Get("Gui_Dialog_SelectSourceDirectory", "Select Source Directory"),
             AllowMultiple = false
         });
 
@@ -324,7 +324,7 @@ public partial class JobsViewModel : ViewModelBase
 
         var folders = await _storageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            Title = _uiTextService.Get("Gui.Dialog.SelectTargetDirectory", "Select Target Directory"),
+            Title = _uiTextService.Get("Gui_Dialog_SelectTargetDirectory", "Select Target Directory"),
             AllowMultiple = false
         });
 
@@ -348,7 +348,7 @@ public partial class JobsViewModel : ViewModelBase
             if (!stoppedByBusinessSoftware)
             {
                 _statusBar.OverallProgress = 100;
-                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
+                _statusBar.StatusMessage = _uiTextService.Get("Launch_Done", "Execution finished.");
             }
         }
         catch (Exception ex)
@@ -375,19 +375,19 @@ public partial class JobsViewModel : ViewModelBase
         // Verify that directories are accessible before starting
         if (!PathService.IsDirectoryAccessible(job.SourceDirectory, out var sourceError))
         {
-            _statusBar.StatusMessage = $"{_uiTextService.Get("Gui.Error.SourceNotAccessible", "Error: Source directory is not accessible")} (Job {job.Id}): {sourceError}";
+            _statusBar.StatusMessage = $"{_uiTextService.Get("Gui_Error_SourceNotAccessible", "Error: Source directory is not accessible")} (Job {job.Id}): {sourceError}";
             Console.WriteLine($"[ERROR] Job {job.Id} - {job.Name}: Source directory error - {sourceError}");
             throw new Exception($"Source directory error - {sourceError}");
         }
 
         if (!PathService.IsDirectoryAccessible(job.TargetDirectory, out var targetError))
         {
-            _statusBar.StatusMessage = $"{_uiTextService.Get("Gui.Error.TargetNotAccessible", "Error: Target directory is not accessible")} (Job {job.Id}): {targetError}";
+            _statusBar.StatusMessage = $"{_uiTextService.Get("Gui_Error_TargetNotAccessible", "Error: Target directory is not accessible")} (Job {job.Id}): {targetError}";
             Console.WriteLine($"[ERROR] Job {job.Id} - {job.Name}: Target directory error - {targetError}");
             throw new Exception($"Target directory error - {targetError}");
         }
 
-        _statusBar.StatusMessage = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id,
+        _statusBar.StatusMessage = _uiTextService.Format("Launch_RunningOne", "Running job {0} - {1}...", job.Id,
             job.Name);
 
         var progress = new Progress<BackupExecutionProgressSnapshot>(snapshot =>
@@ -400,12 +400,12 @@ public partial class JobsViewModel : ViewModelBase
 
         if (!result.WasStoppedByBusinessSoftware)
         {
-            _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupAsFinished",
+            _statusBar.StatusMessage = _uiTextService.Format("Gui_Status_BackupAsFinished",
                 "Backup '{0}' finished.", job.Name);
             return false;
         }
 
-        _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.BackupStoppedByBusinessSoftware",
+        _statusBar.StatusMessage = _uiTextService.Format("Gui_Status_BackupStoppedByBusinessSoftware",
             "Backup '{0}' stopped: business software is running", job.Name);
         return true;
     }

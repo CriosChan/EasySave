@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         x:Class="EasySave.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="{tlumach:Translate {x:Static t:Strings.GuiWindowTitle}}"
+        Title="{tlumach:Translate {x:Static t:Strings.Gui_Window_Title}}"
         Icon="/Assets/avalonia-logo.ico"
         Width="1200"
         Height="760"
