@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -14,23 +13,19 @@ namespace EasySave.ViewModels;
 /// </summary>
 public sealed partial class BackupJobItemViewModel : ViewModelBase
 {
-    private StatusBarViewModel _statusBar; // Reference to the status bar view model
+    private readonly Func<BackupJob, Task>? _executeJobCallback;
 
     /// <summary>
-    /// Initializes a new instance of the BackupJobItemViewModel class with a specified BackupJob and a StatusBarViewModel.
+    /// Initializes a new instance of the BackupJobItemViewModel class.
     /// </summary>
     /// <param name="job">The BackupJob model to wrap.</param>
-    public BackupJobItemViewModel(BackupJob job) : this(job, new StatusBarViewModel())
+    /// <param name="executeJobCallback">Callback invoked when the user starts the job from the item button.</param>
+    public BackupJobItemViewModel(BackupJob job, Func<BackupJob, Task>? executeJobCallback = null)
     {
-    }
-
-    public BackupJobItemViewModel(BackupJob job, StatusBarViewModel statusBar)
-    {
-        Job = job ?? throw new ArgumentNullException(nameof(job)); // Ensure job is not null
+        Job = job ?? throw new ArgumentNullException(nameof(job));
         _stopped = job.WasStopped;
-        _statusBar = statusBar;
+        _executeJobCallback = executeJobCallback;
 
-        // Subscribe to events from the BackupJob
         Job.PauseEvent += OnPausedChanged;
         Job.ProgressChanged += OnProgressChanged;
         Job.StopEvent += OnStopChanged;
@@ -108,11 +103,13 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     /// </summary>
     private void OnProgressChanged(object? sender, EventArgs e)
     {
-        Progress = Job.CurrentProgress; // Update progress
-        _statusBar.UpdateOverallProgress(); // Update overall progress in status bar
-        StatusMessage =
-            $"({Job.CurrentFileIndex} / {Job.FilesCount} files)\n" +
-            $"({Math.Round(Job.TransferredSize / 1048576.0)} / {Math.Round(Job.TotalSize / 1048576.0)} MB)"; // Show detailed status message
+        Dispatcher.UIThread.Post(() =>
+        {
+            Progress = Job.CurrentProgress;
+            StatusMessage =
+                $"({Job.CurrentFileIndex} / {Job.FilesCount} files)\n" +
+                $"({Math.Round(Job.TransferredSize / 1048576.0)} / {Math.Round(Job.TotalSize / 1048576.0)} MB)";
+        });
     }
 
     /// <summary>
@@ -129,16 +126,9 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
             InverseStopped = false; // Reset inverse stopped state
             StopIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png")); // Reset stop icon
         });
-        _statusBar.RemoveProgress(Job.FilesCount); // Update status bar to remove progress
     }
 
-    /// <summary>
-    /// Event handler called when the file count changes.
-    /// </summary>
-    private void OnFilesCountChange(object? sender, EventArgs e)
-    {
-        _statusBar.AddMaxProgress(Job.FilesCount); // Update max progress in the status bar
-    }
+    private void OnFilesCountChange(object? sender, EventArgs e) { }
 
     /// <summary>
     /// Command to pause or resume the backup job.
@@ -163,15 +153,18 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     /// Command to start or stop the backup job.
     /// </summary>
     [RelayCommand]
-    private void StartStopJob()
+    private async Task StartStopJob()
     {
         if (!Stopped)
         {
             Job.Stop(); // Stop the job
         }
+        else if (_executeJobCallback != null)
+        {
+            await _executeJobCallback(Job);
+        }
         else
         {
-            // TODO: Handle threading appropriately
             new Thread(Job.StartBackup).Start(); // Start the job in a new thread
         }
     }

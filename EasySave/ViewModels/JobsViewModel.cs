@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Core.Models;
@@ -7,7 +8,6 @@ using EasySave.Models.Backup;
 using EasySave.Models.Backup.Interfaces;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
-
 namespace EasySave.ViewModels;
 
 /// <summary>
@@ -105,7 +105,7 @@ public partial class JobsViewModel : ViewModelBase
         {
             foreach (var missingJob in missingJobs)
             {
-                Jobs.Add(new BackupJobItemViewModel(missingJob, _statusBar));
+                Jobs.Add(new BackupJobItemViewModel(missingJob, RunJobFromItemAsync));
             }
         }
         
@@ -245,6 +245,7 @@ public partial class JobsViewModel : ViewModelBase
 
         _statusBar.IsNotBusy = false;
         _statusBar.OverallProgress = 0;
+        _statusBar.MaxProgress = 100;
 
         try
         {
@@ -265,6 +266,7 @@ public partial class JobsViewModel : ViewModelBase
             _statusBar.IsNotBusy = true;
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
+            _statusBar.MaxProgress = 0;
         }
     }
 
@@ -283,25 +285,34 @@ public partial class JobsViewModel : ViewModelBase
         _statusBar.StatusMessage = _uiTextService.Get("Launch.RunningAll", "Running all jobs...");
         _statusBar.IsNotBusy = false;
         _statusBar.OverallProgress = 0;
+        _statusBar.MaxProgress = 100;
 
         try
         {
             var jobList = Jobs.Select(j => j.Job).ToList();
             var totalJobs = jobList.Count;
-            var completedJobs = 0;
 
             // Execute jobs in parallel with progress tracking
             var result = await _orchestrator.ExecuteAllAsync(
                 jobList,
-                (_, _) =>
+                (_, snapshot) =>
                 {
-                    // Update overall progress based on completed jobs
+                    var header = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", snapshot.JobId, snapshot.JobName);
+                    var message = string.Format("{0} ({1} / {2} files) - ({3} / {4} MB)",
+                        header,
+                        snapshot.CurrentFileIndex,
+                        snapshot.FilesCount,
+                        Math.Round(snapshot.TransferredSize / 1048576.0),
+                        Math.Round(snapshot.TotalSize / 1048576.0));
+
                     var completedCount = _orchestrator.CompletedJobCount;
-                    if (completedCount > completedJobs)
+                    var globalProgress = (completedCount + snapshot.CurrentProgress / 100.0) / totalJobs * 100.0;
+
+                    Dispatcher.UIThread.Post(() =>
                     {
-                        completedJobs = completedCount;
-                        _statusBar.OverallProgress = completedCount / (double)totalJobs * 100;
-                    }
+                        _statusBar.StatusMessage = message;
+                        _statusBar.OverallProgress = globalProgress;
+                    });
                 });
 
             // Update final status based on result
@@ -331,6 +342,7 @@ public partial class JobsViewModel : ViewModelBase
             _statusBar.IsNotBusy = true;
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
+            _statusBar.MaxProgress = 0;
         }
     }
 
@@ -373,6 +385,38 @@ public partial class JobsViewModel : ViewModelBase
     }
 
     /// <summary>
+    ///     Executes a single backup job triggered from a job item button, with full StatusBar handling.
+    /// </summary>
+    /// <param name="job">Job to execute.</param>
+    public async Task RunJobFromItemAsync(BackupJob job)
+    {
+        _statusBar.IsNotBusy = false;
+        _statusBar.OverallProgress = 0;
+        _statusBar.MaxProgress = 100;
+
+        try
+        {
+            var stoppedByBusinessSoftware = await ExecuteJobCoreAsync(job);
+            if (!stoppedByBusinessSoftware)
+            {
+                _statusBar.OverallProgress = 100;
+                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
+            }
+        }
+        catch (Exception ex)
+        {
+            _statusBar.StatusMessage = $"Error executing job '{job.Name}' (ID: {job.Id}): {ex.Message}";
+        }
+        finally
+        {
+            _statusBar.IsNotBusy = true;
+            await Task.Delay(2000);
+            _statusBar.OverallProgress = 0;
+            _statusBar.MaxProgress = 0;
+        }
+    }
+
+    /// <summary>
     ///     Executes one backup job and handles progress notifications.
     /// </summary>
     /// <param name="job">Job to execute.</param>
@@ -397,7 +441,19 @@ public partial class JobsViewModel : ViewModelBase
         _statusBar.StatusMessage = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", job.Id,
             job.Name);
 
-        var progress = new Progress<BackupExecutionProgressSnapshot>(OnExecutionProgressChanged);
+        var progress = new Progress<BackupExecutionProgressSnapshot>(snapshot =>
+        {
+            var header = _uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", snapshot.JobId, snapshot.JobName);
+            var message = string.Format("{0} ({1} / {2} files) - ({3} / {4} MB)",
+                header,
+                snapshot.CurrentFileIndex,
+                snapshot.FilesCount,
+                Math.Round(snapshot.TransferredSize / 1048576.0),
+                Math.Round(snapshot.TotalSize / 1048576.0));
+
+            _statusBar.StatusMessage = message;
+            _statusBar.OverallProgress = snapshot.CurrentProgress;
+        });
         var result = await _backupExecutionEngine.ExecuteJobAsync(job, progress);
 
         if (!result.WasStoppedByBusinessSoftware)
@@ -412,19 +468,6 @@ public partial class JobsViewModel : ViewModelBase
         return true;
     }
 
-    /// <summary>
-    ///     Handles per-file progress updates emitted by the shared execution engine.
-    /// </summary>
-    /// <param name="progress">Immutable progress payload.</param>
-    private void OnExecutionProgressChanged(BackupExecutionProgressSnapshot progress)
-    {
-        _statusBar.StatusMessage =
-            $"{_uiTextService.Format("Launch.RunningOne", "Running job {0} - {1}...", progress.JobId, progress.JobName)} " +
-            $"({progress.CurrentFileIndex} / {progress.FilesCount} files) - " +
-            $"({Math.Round(progress.TransferredSize / 1048576.0)} / {Math.Round(progress.TotalSize / 1048576.0)} MB)";
-
-        _statusBar.OverallProgress = progress.CurrentProgress;
-    }
 
     /// <summary>
     ///     Initializes available backup type values.

@@ -86,7 +86,13 @@ public sealed class ParallelJobOrchestrator
             {
                 IProgress<BackupExecutionProgressSnapshot>? progress = null;
                 if (progressCallback != null)
-                    progress = new Progress<BackupExecutionProgressSnapshot>(snapshot => progressCallback(job, snapshot));
+                {
+                    // Use DirectProgress to invoke the callback on the calling thread,
+                    // bypassing SynchronizationContext capture issues in thread pool tasks.
+                    var capturedJob = job;
+                    progress = new DirectProgress<BackupExecutionProgressSnapshot>(
+                        snapshot => progressCallback(capturedJob, snapshot));
+                }
 
                 var result = await _executionEngine.ExecuteJobAsync(job, progress, cancellationToken);
                 results.Add(result);
