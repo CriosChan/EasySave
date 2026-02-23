@@ -46,7 +46,7 @@ public class CryptedFile : IFile
             StartInfo =
             {
                 FileName = "Tools/CryptoSoft.exe",
-                Arguments = $"{SourceFile} {TargetFile}"
+                Arguments = $"\"{SourceFile}\" \"{TargetFile}\""
             }
         };
         process.Start();
