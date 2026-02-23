@@ -60,7 +60,7 @@ public static class Localizer
         {
             _manager.CurrentCulture = new CultureInfo(cultureName);
         }
-        catch
+        catch (CultureNotFoundException)
         {
             // If the culture name is invalid, keep the current culture.
         }
