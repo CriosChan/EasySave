@@ -76,16 +76,5 @@ public partial class StatusBarViewModel : ViewModelBase
         // Update global progress as average across all active jobs
         var avgProgress = snapshots.Average(s => s.CurrentProgress);
         Dispatcher.UIThread.Post(() => OverallProgress = avgProgress);
-    /// <param name="number">The amount to decrease from both progress values.</param>
-    public void RemoveProgress(double transfered, double number)
-    {
-        lock (_lockMax) // Ensure thread-safe access to max progress
-        {
-            lock (_lockOverall) // Ensure thread-safe access to overall progress
-            {
-                MaxProgress -= number; // Decrease maximum progress
-                OverallProgress -= transfered; // Decrease overall progress
-            }
-        }
     }
 }

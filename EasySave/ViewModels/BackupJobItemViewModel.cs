@@ -126,7 +126,6 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
             InverseStopped = false; // Reset inverse stopped state
             StopIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png")); // Reset stop icon
         });
-        _statusBar.RemoveProgress(Job.CurrentFileIndex, Job.FilesCount); // Update status bar to remove progress
     }
 
     private void OnFilesCountChange(object? sender, EventArgs e) { }
