@@ -25,14 +25,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private readonly IUiTextService _uiTextService;
     private readonly IUiLocalizationService _uiLocalizationService;
-    [ObservableProperty] private string _backButtonLabel = string.Empty;
     [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
-    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = string.Empty;
-    [ObservableProperty] private string _menuLabel = string.Empty;
-    [ObservableProperty] private string _menuSettingsItemLabel = string.Empty;
     private ViewScreen _previousScreen = ViewScreen.Main;
-
-    [ObservableProperty] private string _windowTitle = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -41,7 +35,6 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _uiTextService = new TlumachUiTextService();
         _uiLocalizationService = new TlumachUiLocalizationService();
-        _uiLocalizationService.CultureChanged += OnCultureChanged;
 
         StatusBar = new StatusBarViewModel();
         Jobs = new JobsViewModel(StatusBar, _uiTextService);
@@ -54,7 +47,6 @@ public partial class MainWindowViewModel : ViewModelBase
         BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
 
         ApplyConfiguredLocalization();
-        RefreshLocalizedUi();
         BusinessSoftware.Initialize();
         StatusBar.StatusMessage = _uiTextService.Get("Gui.Status.Ready", "Ready");
     }
@@ -186,23 +178,6 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
-    ///     Refreshes localized labels for this ViewModel and all child ViewModels.
-    /// </summary>
-    private void RefreshLocalizedUi()
-    {
-        WindowTitle = _uiTextService.Get("Gui.Window.Title", "EasySave - Backup Manager");
-        MenuLabel = _uiTextService.Get("Gui.Menu.Root", "Menu");
-        MenuSettingsItemLabel = _uiTextService.Get("Gui.Menu.Settings", "Settings");
-        ManageBusinessSoftwareMenuItemLabel =
-            _uiTextService.Get("Gui.Menu.ManageBusinessSoftware", "Manage Business Software");
-        BackButtonLabel = _uiTextService.Get("Gui.Navigation.Back", "Back");
-
-        Jobs.UpdateUiText();
-        Settings.UpdateUiText();
-        BusinessSoftware.UpdateUiText();
-    }
-
-    /// <summary>
     ///     Handles configured process name changes and refreshes job monitor instances.
     /// </summary>
     /// <param name="sender">Event sender.</param>
@@ -221,16 +196,6 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _previousScreen = ViewScreen.SoftwareCatalog;
         SetCurrentScreen(ViewScreen.AddedSoftware);
-    }
-
-    /// <summary>
-    ///     Handles application culture changes and refreshes all localized labels.
-    /// </summary>
-    /// <param name="sender">Event sender.</param>
-    /// <param name="e">Event args.</param>
-    private void OnCultureChanged(object? sender, EventArgs e)
-    {
-        RefreshLocalizedUi();
     }
 
     /// <summary>
