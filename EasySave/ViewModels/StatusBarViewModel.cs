@@ -42,14 +42,14 @@ public partial class StatusBarViewModel : ViewModelBase
     /// Removes a specified number from both overall and maximum progress.
     /// </summary>
     /// <param name="number">The amount to decrease from both progress values.</param>
-    public void RemoveProgress(double number)
+    public void RemoveProgress(double transfered, double number)
     {
         lock (_lockMax) // Ensure thread-safe access to max progress
         {
             lock (_lockOverall) // Ensure thread-safe access to overall progress
             {
                 MaxProgress -= number; // Decrease maximum progress
-                OverallProgress -= number; // Decrease overall progress
+                OverallProgress -= transfered; // Decrease overall progress
             }
         }
     }
