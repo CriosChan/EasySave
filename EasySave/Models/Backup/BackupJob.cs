@@ -185,48 +185,77 @@ public class BackupJob
         FilesCount = Files.Count();
         var hadError = false;
 
+        // Partition files into priority and standard queues
+        var config = ApplicationConfiguration.Load();
+        var (priorityQueue, standardQueue) = FilePartitioner.Partition(Files, config.PriorityExtensions);
+
         // Set the state of the backup as active
         StateLogger.SetStateActive(state, FilesCount, TotalSize);
-        
-        // Process each file
-        for (var i = 0; i < FilesCount; i++)
+        StateFileSingleton.Instance.UpdateState(state, s =>
         {
-            if (i > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, Files[i]))
+            s.PriorityFilesRemaining = priorityQueue.Count;
+            s.StandardFilesRemaining = standardQueue.Count;
+        });
+
+        // Transfer priority files first, then standard files
+        var processedCount = 0;
+        var aborted = false;
+        foreach (var (queue, transferType) in new[]
+        {
+            (priorityQueue, "priority file transfer"),
+            (standardQueue, "standard file transfer")
+        })
+        {
+            if (aborted) break;
+
+            while (queue.Count > 0)
             {
-                WasStoppedByBusinessSoftware = true; // Mark as stopped by business software
-                Pause();
+                if (processedCount > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, queue.Peek()))
+                {
+                    WasStoppedByBusinessSoftware = true; // Mark as stopped by business software
+                    Pause();
+                }
+
+                // Wait if paused
+                if (IsPaused())
+                {
+                    StateLogger.SetStatePaused(state); // Log pause state
+                }
+                _pauseEvent.WaitOne();
+
+                if (WasStopped)
+                {
+                    aborted = true; // Exit both loops if the job was manually stopped
+                    break;
+                }
+
+                var file = queue.Dequeue();
+
+                StateLogger.SetStateStartTransfer(state, file, transferType); // Log start of transfer with type
+                CurrentFileIndex = processedCount;
+
+                try
+                {
+                    file.Copy(); // Execute the file copy
+                }
+                catch (Exception)
+                {
+                    hadError = true; // Log an error if the copy fails
+                }
+
+                TransferredSize += file.GetSize(); // Update transferred size
+                CurrentProgress = MathUtil.Percentage(TransferredSize, TotalSize); // Update current progress
+
+                processedCount++;
+
+                // Update per-queue counters and global remaining counters
+                StateFileSingleton.Instance.UpdateState(state, s =>
+                {
+                    s.PriorityFilesRemaining = priorityQueue.Count;
+                    s.StandardFilesRemaining = standardQueue.Count;
+                });
+                StateLogger.SetStateEndTransfer(state, FilesCount, processedCount - 1, TotalSize, TransferredSize, CurrentProgress);
             }
-
-            // Wait if paused
-            if (IsPaused())
-            {
-                StateLogger.SetStatePaused(state); // Log pause state
-            }
-            _pauseEvent.WaitOne();
-
-            if (WasStopped)
-            {
-                break; // Exit if the job was manually stopped
-            }
-
-            var i1 = i;
-            StateLogger.SetStateStartTransfer(state, Files[i1]); // Log the start of transfer
-            CurrentFileIndex = i1;
-
-            try
-            {
-                Files[i1].Copy(); // Execute the file copy
-            }
-            catch (Exception)
-            {
-                hadError = true; // Log an error if the copy fails
-            }
-
-            TransferredSize += Files[i1].GetSize(); // Update transferred size
-            CurrentProgress = MathUtil.Percentage(TransferredSize, TotalSize); // Update current progress
-
-            // Log the end of the transfer for the current file
-            StateLogger.SetStateEndTransfer(state, FilesCount, i1, TotalSize, TransferredSize, CurrentProgress);
         }
 
         if (WasStoppedByBusinessSoftware)

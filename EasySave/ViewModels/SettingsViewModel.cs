@@ -20,6 +20,9 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty] private ObservableCollection<string> _cryptoSoftExtensions = new(ApplicationConfiguration.Load().ExtensionToCrypt);
     [ObservableProperty] private string _newExtensionContent = string.Empty;
 
+    [ObservableProperty] private ObservableCollection<string> _priorityExtensions = new(ApplicationConfiguration.Load().PriorityExtensions);
+    [ObservableProperty] private string _newPriorityExtensionContent = string.Empty;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
     /// </summary>
@@ -96,6 +99,31 @@ public partial class SettingsViewModel : ViewModelBase
     {
         CryptoSoftExtensions.Remove(ext);
         ApplicationConfiguration.Load().ExtensionToCrypt = CryptoSoftExtensions.ToList();
+    }
+
+    /// <summary>
+    ///     Adds a new priority extension to the list and persists the configuration.
+    /// </summary>
+    [RelayCommand]
+    private void AddPriorityExtension()
+    {
+        var value = NewPriorityExtensionContent.Replace(".", "").Trim();
+        if (value == string.Empty || PriorityExtensions.Contains(value))
+            return;
+
+        PriorityExtensions.Add(value);
+        ApplicationConfiguration.Load().PriorityExtensions = PriorityExtensions.ToList();
+        NewPriorityExtensionContent = string.Empty;
+    }
+
+    /// <summary>
+    ///     Removes a priority extension from the list and persists the configuration.
+    /// </summary>
+    [RelayCommand]
+    private void RemovePriorityExtension(string ext)
+    {
+        PriorityExtensions.Remove(ext);
+        ApplicationConfiguration.Load().PriorityExtensions = PriorityExtensions.ToList();
     }
 
     partial void OnCryptoSoftKeyChanged(string value)
