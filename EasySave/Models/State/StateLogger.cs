@@ -73,6 +73,20 @@ public static class StateLogger
     }
 
     /// <summary>
+    ///     Sets the state of the backup job to waiting for priority files (WaitingPriority).
+    ///     Job is blocked because standard files cannot be processed while priority files exist in the system.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    public static void SetStatePausedPriority(BackupJobState state)
+    {
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.WaitingPriority;
+            s.CurrentAction = "Waiting for priority files"; // Indicate the reason for waiting
+        });
+    }
+
+    /// <summary>
     ///     Sets the state of the backup job to completed, based on if an error occurred.
     /// </summary>
     /// <param name="state">The current state of the backup job.</param>

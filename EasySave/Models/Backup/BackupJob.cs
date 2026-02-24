@@ -11,7 +11,7 @@ namespace EasySave.Models.Backup;
 /// <summary>
 /// Represents a backup job that manages the process of backing up files from a source directory to a target directory.
 /// </summary>
-public class BackupJob
+public sealed class BackupJob
 {
     /// <summary> The total size of files to be backed up. </summary>
     [JsonIgnore] public long TotalSize;
@@ -94,14 +94,21 @@ public class BackupJob
     /// </summary>
     [JsonIgnore]
     public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
+
+    /// <summary>
+    /// Gets or sets the global priority arbitrator shared across all jobs.
+    /// Used to enforce the v3 business rule: no standard files while priority files exist.
+    /// </summary>
+    [JsonIgnore]
+    public IPriorityArbitrator? PriorityArbitrator { get; set; }
     
-    [JsonIgnore] private ManualResetEvent _pauseEvent = new ManualResetEvent(true); // Event for managing pause and resume
+    [JsonIgnore] private readonly ManualResetEvent _pauseEvent = new ManualResetEvent(true); // Event for managing pause and resume
 
     [JsonIgnore]
     public bool WasStopped
     {
-        get; 
-        set
+        get;
+        private set
         {
             field = value; // Indicates if the job was stopped
             OnStopEvent(); // Triggers the stop event
@@ -189,6 +196,9 @@ public class BackupJob
         var config = ApplicationConfiguration.Load();
         var (priorityQueue, standardQueue) = FilePartitioner.Partition(Files, config.PriorityExtensions);
 
+        // Initialize the global priority arbitrator if available
+        PriorityArbitrator?.Initialize(new Dictionary<int, int> { { Id, priorityQueue.Count } });
+
         // Set the state of the backup as active
         StateLogger.SetStateActive(state, FilesCount, TotalSize);
         StateFileSingleton.Instance.UpdateState(state, s =>
@@ -202,8 +212,8 @@ public class BackupJob
         var aborted = false;
         foreach (var (queue, transferType) in new[]
         {
-            (priorityQueue, "priority file transfer"),
-            (standardQueue, "standard file transfer")
+            (priorityQueue, FileTransferPriority.High),
+            (standardQueue, FileTransferPriority.Low)
         })
         {
             if (aborted) break;
@@ -231,7 +241,29 @@ public class BackupJob
 
                 var file = queue.Dequeue();
 
-                StateLogger.SetStateStartTransfer(state, file, transferType); // Log start of transfer with type
+                // Check priority arbitration for standard files
+                if (transferType == FileTransferPriority.Low)
+                {
+                    while (!CanProcessStandardFile(PriorityArbitrator, Id))
+                    {
+                        // Job is blocked waiting for priority files to be processed globally
+                        StateLogger.SetStatePausedPriority(state);
+                        _pauseEvent.WaitOne(100); // Small wait to avoid busy-spinning
+
+                        if (WasStopped)
+                        {
+                            aborted = true;
+                            break;
+                        }
+                    }
+
+                    if (aborted) break;
+
+                    // Resume to active state once unblocked
+                    StateLogger.SetStateActive(state, FilesCount, TotalSize);
+                }
+
+                StateLogger.SetStateStartTransfer(state, file, (transferType==(int)FileTransferPriority.High) ? "Priority file transfer" : "Standard File Transfer"); // Log start of transfer with type
                 CurrentFileIndex = processedCount;
 
                 try
@@ -248,6 +280,12 @@ public class BackupJob
 
                 processedCount++;
 
+                // Update global priority arbitrator after processing a priority file
+                if (transferType == FileTransferPriority.High && PriorityArbitrator != null)
+                {
+                    PriorityArbitrator.UpdateGlobalPriorityCount(Id, priorityQueue.Count);
+                }
+
                 // Update per-queue counters and global remaining counters
                 StateFileSingleton.Instance.UpdateState(state, s =>
                 {
@@ -257,6 +295,9 @@ public class BackupJob
                 StateLogger.SetStateEndTransfer(state, FilesCount, processedCount - 1, TotalSize, TransferredSize, CurrentProgress);
             }
         }
+
+        // Signal job completion to the arbitrator
+        PriorityArbitrator?.OnJobCompleted(Id);
 
         if (WasStoppedByBusinessSoftware)
             return; // Exit early if stopped by business software
@@ -299,27 +340,27 @@ public class BackupJob
         OnPauseEvent(); // Trigger pause event
     }
 
-    protected virtual void OnProgressChanged()
+    private void OnProgressChanged()
     {
         ProgressChanged?.Invoke(this, EventArgs.Empty); // Trigger progress changed event
     }
 
-    protected virtual void OnPauseEvent()
+    private void OnPauseEvent()
     {
         PauseEvent?.Invoke(this, EventArgs.Empty); // Trigger pause event
     }
 
-    protected virtual void OnStopEvent()
+    private void OnStopEvent()
     {
         StopEvent?.Invoke(this, EventArgs.Empty); // Trigger stop event
     }
-    
-    protected virtual void OnEndEvent()
+
+    private void OnEndEvent()
     {
         EndEvent?.Invoke(this, EventArgs.Empty); // Trigger end event
     }
 
-    protected virtual void OnFilesCountEvent()
+    private void OnFilesCountEvent()
     {
         FilesCountEvent?.Invoke(this, EventArgs.Empty); // Trigger files count changed event
     }
@@ -333,4 +374,17 @@ public class BackupJob
         bool isSignaled = _pauseEvent.WaitOne(0);
         return !isSignaled; // Return the paused state
     }
+
+    /// <summary>
+    /// Determines whether a standard (non-priority) file can be processed.
+    /// Delegates to the global priority arbitrator if available, otherwise allows processing.
+    /// </summary>
+    /// <param name="arbitrator">The priority arbitrator (may be null).</param>
+    /// <param name="jobId">The current job ID.</param>
+    /// <returns>True if the file can be processed; false if it should be deferred.</returns>
+    private static bool CanProcessStandardFile(IPriorityArbitrator? arbitrator, int jobId)
+    {
+        return arbitrator == null || arbitrator.CanProcessStandardFile(jobId);
+    }
 }
+
