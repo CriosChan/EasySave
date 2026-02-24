@@ -16,6 +16,7 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
 
+    
     [ObservableProperty] private string _cryptoSoftKey = CryptoSoftConfiguration.Load().Key;
     [ObservableProperty] private ObservableCollection<string> _cryptoSoftExtensions = new(ApplicationConfiguration.Load().ExtensionToCrypt);
     [ObservableProperty] private string _newExtensionContent = string.Empty;
@@ -30,9 +31,17 @@ public partial class SettingsViewModel : ViewModelBase
         IUiTextService uiTextService,
         IUiLocalizationService uiLocalizationService)
     {
-        _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
-        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
-        _uiLocalizationService = uiLocalizationService ?? throw new ArgumentNullException(nameof(uiLocalizationService));
+        SettingsScreenTitle = _uiTextService.Get("Gui.Settings.Screen.Title", "Application Settings");
+        SettingsLanguageSectionTitle = _uiTextService.Get("Gui.Settings.Section.Language", "Language");
+        SettingsLogTypeSectionTitle = _uiTextService.Get("Gui.Settings.Section.LogType", "Log Format");
+        FrenchButtonLabel = _uiTextService.Get("Gui.Button.French", "Francais");
+        EnglishButtonLabel = _uiTextService.Get("Gui.Button.English", "English");
+        JsonButtonLabel = _uiTextService.Get("Gui.Button.Json", "JSON");
+        XmlButtonLabel = _uiTextService.Get("Gui.Button.Xml", "XML");
+        SettingsCryptoSoftKey = _uiTextService.Get("Gui.Settings.CryptoSoftKey", "CryptoSoft Key");
+        TooltipRemoveExtension = _uiTextService.Get("Gui.Tooltip.DeleteExtension", "Supprimer l'extension");
+        AddExtensionToList = _uiTextService.Get("Gui.AddExtension", "Add Extension");
+        ExtensionToCrypt = _uiTextService.Get("Gui.Settings.ExtensionToCrypt", "Extension to Crypt");
     }
 
     /// <summary>
