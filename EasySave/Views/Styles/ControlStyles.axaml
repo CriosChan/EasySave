@@ -1,0 +1,15 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- ListBox Style -->
+    <Style Selector="ListBox">
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <!-- ProgressBar Style -->
+    <Style Selector="ProgressBar">
+        <Setter Property="Height" Value="18" />
+    </Style>
+</Styles>

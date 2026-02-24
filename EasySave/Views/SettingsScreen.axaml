@@ -13,11 +13,7 @@
         RowDefinitions="Auto,*"
         RowSpacing="12">
         <Border Grid.Row="0"
-                Padding="12"
-                CornerRadius="8"
-                Background="{DynamicResource SecondaryBackground}"
-                BorderBrush="{DynamicResource BorderLine}"
-                BorderThickness="1">
+                Classes="main-section">
             <Grid ColumnDefinitions="Auto,*"
                   ColumnSpacing="12">
                 <Button Grid.Column="0"
@@ -25,18 +21,13 @@
                         Command="{Binding BackFromSettingsCommand}" />
                 <TextBlock Grid.Column="1"
                            Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsScreenTitle}}"
-                           FontSize="18"
-                           FontWeight="Bold"
+                           Classes="section-title"
                            VerticalAlignment="Center" />
             </Grid>
         </Border>
 
         <Border Grid.Row="1"
-                Padding="12"
-                CornerRadius="8"
-                Background="{DynamicResource SecondaryBackground}"
-                BorderBrush="{DynamicResource BorderLine}"
-                BorderThickness="1">
+                Classes="main-section">
             <StackPanel Spacing="12">
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
