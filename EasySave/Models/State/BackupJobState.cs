@@ -65,4 +65,14 @@ public sealed class BackupJobState
     ///     Gets or sets the name of the action currently being performed.
     /// </summary>
     public string? CurrentAction { get; set; } // Nullable for current action description
+
+    /// <summary>
+    ///     Gets or sets the number of priority files still waiting to be transferred.
+    /// </summary>
+    public int RemainingPriorityFiles { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the number of standard (non-priority) files still waiting to be transferred.
+    /// </summary>
+    public int RemainingStandardFiles { get; set; }
 }

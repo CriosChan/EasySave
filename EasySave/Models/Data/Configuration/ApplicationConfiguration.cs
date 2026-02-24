@@ -82,6 +82,20 @@ public sealed class ApplicationConfiguration
         }
     } = [];
 
+    /// <summary>
+    ///     File extensions that are treated as priority during backup.
+    ///     Extensions are stored normalised (lowercase, with leading dot).
+    /// </summary>
+    public List<string> PriorityExtensions
+    {
+        get;
+        set
+        {
+            field = value;
+            Save();
+        }
+    } = [];
+
     // Property to hold the configuration file path but not serialized
     [JsonIgnore] // Ensure to ignore this property
     public string ConfigFile {

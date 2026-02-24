@@ -108,22 +108,82 @@ public static class StateLogger
     }
 
     /// <summary>
-    ///     Updates the state with the progress of file transfers.
+    ///     Sets the state of the backup job to active and initialises priority/standard queue counters.
     /// </summary>
     /// <param name="state">The current state of the backup job.</param>
-    /// <param name="filesCount">Total number of files being processed.</param>
-    /// <param name="i1">The index of the current file.</param>
-    /// <param name="totalSize">Total size of the files being processed.</param>
-    /// <param name="transferredSize">Size of the files that have been transferred.</param>
+    /// <param name="filesCount">Total number of files to process.</param>
+    /// <param name="totalSize">Total size in bytes.</param>
+    /// <param name="priorityCount">Number of priority files.</param>
+    /// <param name="standardCount">Number of standard files.</param>
+    public static void SetStateActiveWithQueues(
+        BackupJobState state,
+        int filesCount,
+        long totalSize,
+        int priorityCount,
+        int standardCount)
+    {
+        StateFileSingleton.Instance.UpdateState(state, jobState =>
+        {
+            jobState.State = JobRunState.Active;
+            jobState.TotalFiles = filesCount;
+            jobState.TotalSizeBytes = totalSize;
+            jobState.ProgressPercent = 0;
+            jobState.RemainingFiles = filesCount;
+            jobState.RemainingSizeBytes = totalSize;
+            jobState.CurrentAction = "start";
+            jobState.CurrentSourcePath = null;
+            jobState.CurrentTargetPath = null;
+            jobState.RemainingPriorityFiles = priorityCount;
+            jobState.RemainingStandardFiles = standardCount;
+        });
+    }
+
+    /// <summary>
+    ///     Sets the state for the beginning of a file transfer, labelling it as priority or standard.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    /// <param name="file">The file being transferred.</param>
+    /// <param name="isPriority">Whether the file belongs to the priority queue.</param>
+    public static void SetStateStartTransfer(BackupJobState state, IFile file, bool isPriority)
+    {
+        var label = isPriority ? "priority file transfer" : "standard file transfer";
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.Active;
+            s.CurrentAction = label;
+            s.CurrentSourcePath = PathService.ToFullUncLikePath(file.SourceFile);
+            s.CurrentTargetPath = PathService.ToFullUncLikePath(file.TargetFile);
+        });
+    }
+
+    /// <summary>
+    ///     Updates progress counters, including priority/standard remaining counts.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    /// <param name="filesCount">Total number of files.</param>
+    /// <param name="processedIndex">Zero-based index of the file just processed.</param>
+    /// <param name="totalSize">Total size in bytes.</param>
+    /// <param name="transferredSize">Transferred size in bytes so far.</param>
     /// <param name="currentProgress">Current progress percentage.</param>
-    public static void SetStateEndTransfer(BackupJobState state, int filesCount, int i1, long totalSize,
-        long transferredSize, double currentProgress)
+    /// <param name="remainingPriority">Remaining priority files count.</param>
+    /// <param name="remainingStandard">Remaining standard files count.</param>
+    public static void SetStateEndTransferWithQueues(
+        BackupJobState state,
+        int filesCount,
+        int processedIndex,
+        long totalSize,
+        long transferredSize,
+        double currentProgress,
+        int remainingPriority,
+        int remainingStandard)
     {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
-            s.RemainingFiles = filesCount - (i1 + 1); // Update remaining files
-            s.RemainingSizeBytes = totalSize - transferredSize; // Update remaining size
-            s.ProgressPercent = currentProgress; // Update current progress
+            s.RemainingFiles = filesCount - (processedIndex + 1);
+            s.RemainingSizeBytes = totalSize - transferredSize;
+            s.ProgressPercent = currentProgress;
+            s.RemainingPriorityFiles = remainingPriority;
+            s.RemainingStandardFiles = remainingStandard;
         });
     }
 }

@@ -66,6 +66,12 @@ public class BackupJob
     [JsonIgnore] public List<IFile> Files { get; private set; } = []; // List of files to backup
     [JsonIgnore] public int CurrentFileIndex { get; private set; } // Index of the currently processed file
 
+    /// <summary> Files whose extension matches a configured priority extension. </summary>
+    [JsonIgnore] public Queue<IFile> PriorityQueue { get; private set; } = new();
+
+    /// <summary> Files whose extension does not match any priority extension. </summary>
+    [JsonIgnore] public Queue<IFile> StandardQueue { get; private set; } = new();
+
     [JsonIgnore]
     public int FilesCount
     {
@@ -182,16 +188,27 @@ public class BackupJob
         Files = selector.GetFilesToBackup();
         TotalSize = Files.GetAllSize();
         TransferredSize = 0;
+
+        // Partition files into priority and standard queues
+        var priorityExtensions = ApplicationConfiguration.Load().PriorityExtensions;
+        FilePartitioner.Partition(Files, priorityExtensions, out var priorityQueue, out var standardQueue);
+        PriorityQueue = priorityQueue;
+        StandardQueue = standardQueue;
+
         FilesCount = Files.Count();
         var hadError = false;
 
-        // Set the state of the backup as active
-        StateLogger.SetStateActive(state, FilesCount, TotalSize);
-        
+        // Set the state of the backup as active with queue counters
+        StateLogger.SetStateActiveWithQueues(state, FilesCount, TotalSize, PriorityQueue.Count, StandardQueue.Count);
+
+        // Build the ordered processing list: priority files first, then standard files
+        var orderedFiles = PriorityQueue.ToList().Concat(StandardQueue.ToList()).ToList();
+        var initialPriorityCount = PriorityQueue.Count;
+
         // Process each file
-        for (var i = 0; i < FilesCount; i++)
+        for (var i = 0; i < orderedFiles.Count; i++)
         {
-            if (i > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, Files[i]))
+            if (i > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, orderedFiles[i]))
             {
                 WasStoppedByBusinessSoftware = true; // Mark as stopped by business software
                 Pause();
@@ -209,28 +226,40 @@ public class BackupJob
                 break; // Exit if the job was manually stopped
             }
 
-            var i1 = i;
-            StateLogger.SetStateStartTransfer(state, Files[i1]); // Log the start of transfer
-            CurrentFileIndex = i1;
+            var currentFile = orderedFiles[i];
+            var isPriority = i < initialPriorityCount;
+
+            // Log the start of transfer with priority label
+            StateLogger.SetStateStartTransfer(state, currentFile, isPriority);
+            CurrentFileIndex = i;
+
 
             try
             {
-                Files[i1].Copy(); // Execute the file copy
+                currentFile.Copy(); // Execute the file copy
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 hadError = true; // Log an error if the copy fails
             }
 
-            TransferredSize += Files[i1].GetSize(); // Update transferred size
+            TransferredSize += currentFile.GetSize(); // Update transferred size
             CurrentProgress = MathUtil.Percentage(TransferredSize, TotalSize); // Update current progress
 
-            // Log the end of the transfer for the current file
-            StateLogger.SetStateEndTransfer(state, FilesCount, i1, TotalSize, TransferredSize, CurrentProgress);
+            // Remaining counts: files not yet processed
+            var remainingPriority = Math.Max(0, initialPriorityCount - (i + 1));
+            var remainingStandard = orderedFiles.Count - initialPriorityCount - Math.Max(0, i + 1 - initialPriorityCount);
+
+            // Log the end of the transfer with queue counters
+            StateLogger.SetStateEndTransferWithQueues(
+                state, FilesCount, i, TotalSize, TransferredSize, CurrentProgress,
+                remainingPriority, Math.Max(0, remainingStandard));
         }
 
         if (WasStoppedByBusinessSoftware)
+        {
             return; // Exit early if stopped by business software
+        }
 
         // Finalize the backup job state
         StateLogger.SetStateEnd(state, hadError, WasStopped);
