@@ -199,12 +199,15 @@ public class BackupJob
 
         // Transfer priority files first, then standard files
         var processedCount = 0;
+        var aborted = false;
         foreach (var (queue, transferType) in new[]
         {
             (priorityQueue, "priority file transfer"),
             (standardQueue, "standard file transfer")
         })
         {
+            if (aborted) break;
+
             while (queue.Count > 0)
             {
                 if (processedCount > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, queue.Peek()))
@@ -221,7 +224,10 @@ public class BackupJob
                 _pauseEvent.WaitOne();
 
                 if (WasStopped)
-                    goto endLoop; // Exit both loops if the job was manually stopped
+                {
+                    aborted = true; // Exit both loops if the job was manually stopped
+                    break;
+                }
 
                 var file = queue.Dequeue();
 
@@ -252,7 +258,6 @@ public class BackupJob
             }
         }
 
-        endLoop:
         if (WasStoppedByBusinessSoftware)
             return; // Exit early if stopped by business software
 
