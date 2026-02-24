@@ -78,7 +78,11 @@ public sealed class GlobalPriorityArbitrator : IPriorityArbitrator
             {
                 var elapsedMs = (DateTime.UtcNow - waitStart).TotalMilliseconds;
                 if (elapsedMs > AntiFamineTimeoutMs)
+                {
+                    // Reset timer so the next blocking period starts fresh
+                    _jobWaitStartTimes.Remove(jobId);
                     return true;
+                }
             }
             else
             {

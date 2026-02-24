@@ -105,14 +105,18 @@ public class PriorityArbitrationIntegrationTests
         });
 
         // Job 1 starts processing but keeps getting more priority files
-        for (int i = 10; i > 0; i--)
+        // Stop at i=1 (remaining=1): standard files must stay blocked while priority > 0
+        for (int i = 10; i > 1; i--)
         {
             _arbitrator.UpdateGlobalPriorityCount(1, i - 1);
             Assert.That(_arbitrator.CanProcessStandardFile(1), Is.False);
             System.Threading.Thread.Sleep(100); // Simulate processing
         }
 
-        // After 1 second, still blocked normally
+        // Process the last priority file
+        _arbitrator.UpdateGlobalPriorityCount(1, 0);
+
+        // All priority files done: standard files are now allowed
         Assert.That(_arbitrator.CanProcessStandardFile(1), Is.True); // All priorities done
 
         // Now it can process standard files
