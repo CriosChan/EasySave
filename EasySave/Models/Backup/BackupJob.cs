@@ -11,7 +11,7 @@ namespace EasySave.Models.Backup;
 /// <summary>
 /// Represents a backup job that manages the process of backing up files from a source directory to a target directory.
 /// </summary>
-public class BackupJob
+public sealed class BackupJob
 {
     /// <summary> The total size of files to be backed up. </summary>
     [JsonIgnore] public long TotalSize;
@@ -102,13 +102,13 @@ public class BackupJob
     [JsonIgnore]
     public IPriorityArbitrator? PriorityArbitrator { get; set; }
     
-    [JsonIgnore] private ManualResetEvent _pauseEvent = new ManualResetEvent(true); // Event for managing pause and resume
+    [JsonIgnore] private readonly ManualResetEvent _pauseEvent = new ManualResetEvent(true); // Event for managing pause and resume
 
     [JsonIgnore]
     public bool WasStopped
     {
-        get; 
-        set
+        get;
+        private set
         {
             field = value; // Indicates if the job was stopped
             OnStopEvent(); // Triggers the stop event
@@ -212,8 +212,8 @@ public class BackupJob
         var aborted = false;
         foreach (var (queue, transferType) in new[]
         {
-            (priorityQueue, "priority file transfer"),
-            (standardQueue, "standard file transfer")
+            (priorityQueue, FileTransferPriority.High),
+            (standardQueue, FileTransferPriority.Low)
         })
         {
             if (aborted) break;
@@ -242,7 +242,7 @@ public class BackupJob
                 var file = queue.Dequeue();
 
                 // Check priority arbitration for standard files
-                if (transferType == "standard file transfer")
+                if (transferType == FileTransferPriority.Low)
                 {
                     while (!CanProcessStandardFile(PriorityArbitrator, Id))
                     {
@@ -263,7 +263,7 @@ public class BackupJob
                     StateLogger.SetStateActive(state, FilesCount, TotalSize);
                 }
 
-                StateLogger.SetStateStartTransfer(state, file, transferType); // Log start of transfer with type
+                StateLogger.SetStateStartTransfer(state, file, (transferType==(int)FileTransferPriority.High) ? "Priority file transfer" : "Standard File Transfer"); // Log start of transfer with type
                 CurrentFileIndex = processedCount;
 
                 try
@@ -281,7 +281,7 @@ public class BackupJob
                 processedCount++;
 
                 // Update global priority arbitrator after processing a priority file
-                if (transferType == "priority file transfer" && PriorityArbitrator != null)
+                if (transferType == FileTransferPriority.High && PriorityArbitrator != null)
                 {
                     PriorityArbitrator.UpdateGlobalPriorityCount(Id, priorityQueue.Count);
                 }
@@ -340,27 +340,27 @@ public class BackupJob
         OnPauseEvent(); // Trigger pause event
     }
 
-    protected virtual void OnProgressChanged()
+    private void OnProgressChanged()
     {
         ProgressChanged?.Invoke(this, EventArgs.Empty); // Trigger progress changed event
     }
 
-    protected virtual void OnPauseEvent()
+    private void OnPauseEvent()
     {
         PauseEvent?.Invoke(this, EventArgs.Empty); // Trigger pause event
     }
 
-    protected virtual void OnStopEvent()
+    private void OnStopEvent()
     {
         StopEvent?.Invoke(this, EventArgs.Empty); // Trigger stop event
     }
-    
-    protected virtual void OnEndEvent()
+
+    private void OnEndEvent()
     {
         EndEvent?.Invoke(this, EventArgs.Empty); // Trigger end event
     }
 
-    protected virtual void OnFilesCountEvent()
+    private void OnFilesCountEvent()
     {
         FilesCountEvent?.Invoke(this, EventArgs.Empty); // Trigger files count changed event
     }

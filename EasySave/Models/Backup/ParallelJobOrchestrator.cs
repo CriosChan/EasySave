@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
 
@@ -69,7 +69,7 @@ public sealed class ParallelJobOrchestrator
 
         // Calculate initial priority file counts for all jobs to initialize the global arbitrator
         var jobPriorityCounts = new Dictionary<int, int>();
-        var config = EasySave.Data.Configuration.ApplicationConfiguration.Load();
+        var config = ApplicationConfiguration.Load();
         foreach (var job in jobList)
         {
             var selector = TypeSelectorHelper.GetSelector(job.Type, job.SourceDirectory, job.TargetDirectory, job.Name);
