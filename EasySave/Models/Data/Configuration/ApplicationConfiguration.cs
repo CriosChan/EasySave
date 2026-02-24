@@ -82,6 +82,19 @@ public sealed class ApplicationConfiguration
         }
     } = [];
 
+    /// <summary>
+    ///     Gets or sets the list of file extensions that should be treated as priority during backup.
+    ///     Priority files are transferred before standard files.
+    /// </summary>
+    public List<string> PriorityExtensions {
+        get;
+        set
+        {
+            field = value;
+            Save();
+        }
+    } = [];
+
     // Property to hold the configuration file path but not serialized
     [JsonIgnore] // Ensure to ignore this property
     public string ConfigFile {

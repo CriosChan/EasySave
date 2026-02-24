@@ -47,6 +47,16 @@ public sealed class BackupJobState
     public int RemainingFiles { get; set; }
 
     /// <summary>
+    ///     Gets or sets the number of priority files still waiting to be transferred.
+    /// </summary>
+    public int PriorityFilesRemaining { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the number of standard (non-priority) files still waiting to be transferred.
+    /// </summary>
+    public int StandardFilesRemaining { get; set; }
+
+    /// <summary>
     ///     Gets or sets the total remaining size in bytes of files yet to be backed up.
     /// </summary>
     public long RemainingSizeBytes { get; set; }

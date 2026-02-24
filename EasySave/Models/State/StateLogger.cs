@@ -97,11 +97,23 @@ public static class StateLogger
     /// <param name="state">The current state of the backup job.</param>
     /// <param name="file">The file being transferred.</param>
     public static void SetStateStartTransfer(BackupJobState state, IFile file)
+        => SetStateStartTransfer(state, file, "file_transfer");
+
+    /// <summary>
+    ///     Sets the state for the beginning of a file transfer with an explicit transfer type label.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    /// <param name="file">The file being transferred.</param>
+    /// <param name="transferType">
+    ///     Label describing the transfer category, e.g. <c>"priority file transfer"</c>
+    ///     or <c>"standard file transfer"</c>.
+    /// </param>
+    public static void SetStateStartTransfer(BackupJobState state, IFile file, string transferType)
     {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
             s.State = JobRunState.Active;
-            s.CurrentAction = "file_transfer"; // Set current action
+            s.CurrentAction = transferType; // Set current action to the provided transfer type
             s.CurrentSourcePath = PathService.ToFullUncLikePath(file.SourceFile); // Set source path
             s.CurrentTargetPath = PathService.ToFullUncLikePath(file.TargetFile); // Set target path
         });

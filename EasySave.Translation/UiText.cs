@@ -34,6 +34,7 @@ public static class UiText
     public static TranslationUnit GuiSettingsSectionLogType => Strings.Gui.Settings.Section.LogType;
     public static TranslationUnit GuiSettingsCryptoSoftKey => Strings.Gui.Settings.CryptoSoftKey;
     public static TranslationUnit GuiSettingsExtensionToCrypt => Strings.Gui.Settings.ExtensionToCrypt;
+    public static TranslationUnit GuiSettingsExtensionPriority => Strings.Gui.Settings.ExtensionPriority;
 
     public static TranslationUnit GuiButtonFrench => Strings.Gui.Button.French;
     public static TranslationUnit GuiButtonEnglish => Strings.Gui.Button.English;

@@ -80,6 +80,7 @@ Back = "Back"
 [Gui.Settings]
 CryptoSoftKey = "CryptoSoft key."
 ExtensionToCrypt = "Extension to crypt"
+ExtensionPriority = "Priority extensions"
 Label = "Settings"
 
 [Gui.Settings.Hint]

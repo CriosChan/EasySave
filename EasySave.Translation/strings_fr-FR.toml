@@ -80,6 +80,7 @@ Back = "Retour"
 [Gui.Settings]
 CryptoSoftKey = "Clé CryptoSoft."
 ExtensionToCrypt = "Extension à chiffrer"
+ExtensionPriority = "Extensions prioritaires"
 Label = "Paramètres"
 
 [Gui.Settings.Hint]
