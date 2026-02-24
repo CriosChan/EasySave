@@ -16,14 +16,22 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
 
-    
     [ObservableProperty] private string _cryptoSoftKey = CryptoSoftConfiguration.Load().Key;
-    [ObservableProperty] private ObservableCollection<string> _cryptoSoftExtensions = new(ApplicationConfiguration.Load().ExtensionToCrypt);
+
+    // Crypt extensions
+    [ObservableProperty] private ObservableCollection<string> _cryptoSoftExtensions =
+        new(ApplicationConfiguration.Load().ExtensionToCrypt);
     [ObservableProperty] private string _newExtensionContent = string.Empty;
+
+    // Priority extensions
+    [ObservableProperty] private ObservableCollection<string> _priorityExtensions =
+        new(ApplicationConfiguration.Load().PriorityExtensions);
+    [ObservableProperty] private string _newPriorityExtensionContent = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
     /// </summary>
+    /// <param name="statusBar">Shared status bar state.</param>
     /// <param name="uiTextService">Localized UI text service.</param>
     /// <param name="uiLocalizationService">UI localization switch service.</param>
     public SettingsViewModel(
@@ -31,17 +39,9 @@ public partial class SettingsViewModel : ViewModelBase
         IUiTextService uiTextService,
         IUiLocalizationService uiLocalizationService)
     {
-        SettingsScreenTitle = _uiTextService.Get("Gui.Settings.Screen.Title", "Application Settings");
-        SettingsLanguageSectionTitle = _uiTextService.Get("Gui.Settings.Section.Language", "Language");
-        SettingsLogTypeSectionTitle = _uiTextService.Get("Gui.Settings.Section.LogType", "Log Format");
-        FrenchButtonLabel = _uiTextService.Get("Gui.Button.French", "Francais");
-        EnglishButtonLabel = _uiTextService.Get("Gui.Button.English", "English");
-        JsonButtonLabel = _uiTextService.Get("Gui.Button.Json", "JSON");
-        XmlButtonLabel = _uiTextService.Get("Gui.Button.Xml", "XML");
-        SettingsCryptoSoftKey = _uiTextService.Get("Gui.Settings.CryptoSoftKey", "CryptoSoft Key");
-        TooltipRemoveExtension = _uiTextService.Get("Gui.Tooltip.DeleteExtension", "Supprimer l'extension");
-        AddExtensionToList = _uiTextService.Get("Gui.AddExtension", "Add Extension");
-        ExtensionToCrypt = _uiTextService.Get("Gui.Settings.ExtensionToCrypt", "Extension to Crypt");
+        _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
+        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
+        _uiLocalizationService = uiLocalizationService ?? throw new ArgumentNullException(nameof(uiLocalizationService));
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         ApplicationConfiguration.Load().Localization = "fr-FR";
         _uiLocalizationService.Apply("fr-FR");
-        _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedFr", "Langue changee en Francais");
+        _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LanguageChangedFr", "Language changed to French");
     }
 
     /// <summary>
@@ -86,20 +86,24 @@ public partial class SettingsViewModel : ViewModelBase
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LogTypeXmlSet", "Log type set to XML");
     }
 
+    /// <summary>
+    ///     Adds a normalised extension to the crypt list and persists it.
+    /// </summary>
     [RelayCommand]
     private void AddExtensionToCryptoSoft()
     {
         var value = NewExtensionContent.Replace(".", "").Trim();
         if (value == string.Empty || CryptoSoftExtensions.Contains(value))
-        {
             return;
-        }
-        
+
         CryptoSoftExtensions.Add(value);
         ApplicationConfiguration.Load().ExtensionToCrypt = CryptoSoftExtensions.ToList();
         NewExtensionContent = string.Empty;
     }
 
+    /// <summary>
+    ///     Removes an extension from the crypt list and persists the change.
+    /// </summary>
     [RelayCommand]
     private void RemoveExtension(string ext)
     {

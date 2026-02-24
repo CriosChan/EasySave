@@ -34,6 +34,7 @@ public static class UiText
     public static TranslationUnit GuiSettingsSectionLogType => Strings.Gui.Settings.Section.LogType;
     public static TranslationUnit GuiSettingsCryptoSoftKey => Strings.Gui.Settings.CryptoSoftKey;
     public static TranslationUnit GuiSettingsExtensionToCrypt => Strings.Gui.Settings.ExtensionToCrypt;
+    public static TranslationUnit GuiSettingsPriorityExtensions => Strings.Gui.Settings.PriorityExtensions;
 
     public static TranslationUnit GuiButtonFrench => Strings.Gui.Button.French;
     public static TranslationUnit GuiButtonEnglish => Strings.Gui.Button.English;
@@ -41,7 +42,9 @@ public static class UiText
     public static TranslationUnit GuiButtonXml => Strings.Gui.Button.Xml;
 
     public static TranslationUnit GuiAddExtension => Strings.Gui.AddExtension;
+    public static TranslationUnit GuiAddPriorityExtension => Strings.Gui.AddPriorityExtension;
     public static TranslationUnit GuiTooltipDeleteExtension => Strings.Gui.Tooltip.DeleteExtension;
+    public static TranslationUnit GuiTooltipDeletePriorityExtension => Strings.Gui.Tooltip.DeletePriorityExtension;
 
     public static TranslationUnit GuiBusinessSoftwareCatalogTitle => Strings.Gui.BusinessSoftware.Catalog.Title;
     public static TranslationUnit GuiBusinessSoftwareAddedTitle => Strings.Gui.BusinessSoftware.Added.Title;

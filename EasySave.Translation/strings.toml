@@ -22,6 +22,7 @@ PressAnyKey = "Press any key to return to the menu."
 
 [Gui]
 AddExtension = "Add Extension"
+AddPriorityExtension = "Add Extension"
 
 [Gui.BusinessSoftware.Added]
 Title = "Added Business Software"
@@ -80,6 +81,7 @@ Back = "Back"
 [Gui.Settings]
 CryptoSoftKey = "CryptoSoft key."
 ExtensionToCrypt = "Extension to crypt"
+PriorityExtensions = "Priority extensions"
 Label = "Settings"
 
 [Gui.Settings.Hint]
@@ -106,6 +108,7 @@ Ready = "Ready"
 
 [Gui.Tooltip]
 DeleteExtension = "Remove extension."
+DeletePriorityExtension = "Remove priority extension."
 
 [Gui.Window]
 Title = "EasySave - Backup Manager"

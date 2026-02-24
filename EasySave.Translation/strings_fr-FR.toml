@@ -22,6 +22,7 @@ PressAnyKey = "Appuyez sur une touche pour revenir au menu."
 
 [Gui]
 AddExtension = "Ajouter une extension"
+AddPriorityExtension = "Ajouter une extension"
 
 [Gui.BusinessSoftware.Added]
 Title = "Logiciels métier ajoutés"
@@ -80,6 +81,7 @@ Back = "Retour"
 [Gui.Settings]
 CryptoSoftKey = "Clé CryptoSoft."
 ExtensionToCrypt = "Extension à chiffrer"
+PriorityExtensions = "Extensions prioritaires"
 Label = "Paramètres"
 
 [Gui.Settings.Hint]
@@ -106,6 +108,7 @@ Ready = "Pret"
 
 [Gui.Tooltip]
 DeleteExtension = "Retirer l'extension."
+DeletePriorityExtension = "Retirer l'extension prioritaire."
 
 [Gui.Window]
 Title = "EasySave - Gestionnaire de sauvegarde"

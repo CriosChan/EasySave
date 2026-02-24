@@ -80,38 +80,16 @@
                     </StackPanel>
                 </Border>
                 
-                <Border Classes="main-section">
-                    <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.ExtensionToCrypt}"
-                                   Classes="section-title" />
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}" HorizontalContentAlignment="Stretch"></TextBox>
-                            <Button Content="{Binding Settings.AddExtensionToList}" Command="{Binding Settings.AddExtensionToCryptoSoftCommand}"></Button>
-                        </StackPanel>
-                        <ItemsControl ItemsSource="{Binding Settings.CryptoSoftExtensions}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:CompileBindings="False">
-                                    <Button ToolTip.Tip="{Binding $parent[UserControl].DataContext.Settings.TooltipRemoveExtension}" Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}" CommandParameter="{Binding}" IsEnabled="True"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Border>
                 <Grid ColumnDefinitions="*,16,*">
                     <!-- Left: extensions to crypt -->
                     <Border Grid.Column="0" Classes="main-section">
                         <StackPanel Spacing="8">
-                            <TextBlock Text="{Binding Settings.ExtensionToCrypt}"
+                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionToCrypt}}"
                                        Classes="section-title" />
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}"
                                          HorizontalContentAlignment="Stretch" />
-                                <Button Content="{Binding Settings.AddExtensionToList}"
+                                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiAddExtension}}"
                                         Command="{Binding Settings.AddExtensionToCryptoSoftCommand}" />
                             </StackPanel>
                             <ItemsControl ItemsSource="{Binding Settings.CryptoSoftExtensions}">
@@ -122,11 +100,10 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:CompileBindings="False">
-                                        <Button ToolTip.Tip="{Binding $parent[UserControl].DataContext.Settings.TooltipRemoveExtension}"
+                                        <Button ToolTip.Tip="{tlumach:Translate {x:Static translations:UiText.GuiTooltipDeleteExtension}}"
                                                 Content="{Binding}"
                                                 Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}"
-                                                CommandParameter="{Binding}"
-                                                IsEnabled="True" />
+                                                CommandParameter="{Binding}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -136,12 +113,12 @@
                     <!-- Right: priority extensions -->
                     <Border Grid.Column="2" Classes="main-section">
                         <StackPanel Spacing="8">
-                            <TextBlock Text="{Binding Settings.PriorityExtensionsSectionTitle}"
+                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsPriorityExtensions}}"
                                        Classes="section-title" />
                             <StackPanel Orientation="Horizontal">
                                 <TextBox Text="{Binding Settings.NewPriorityExtensionContent, Mode=TwoWay}"
                                          HorizontalContentAlignment="Stretch" />
-                                <Button Content="{Binding Settings.AddPriorityExtensionLabel}"
+                                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiAddPriorityExtension}}"
                                         Command="{Binding Settings.AddPriorityExtensionCommand}" />
                             </StackPanel>
                             <ItemsControl ItemsSource="{Binding Settings.PriorityExtensions}">
@@ -152,11 +129,10 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:CompileBindings="False">
-                                        <Button ToolTip.Tip="{Binding $parent[UserControl].DataContext.Settings.TooltipRemovePriorityExtension}"
+                                        <Button ToolTip.Tip="{tlumach:Translate {x:Static translations:UiText.GuiTooltipDeletePriorityExtension}}"
                                                 Content="{Binding}"
                                                 Command="{Binding $parent[UserControl].DataContext.Settings.RemovePriorityExtensionCommand}"
-                                                CommandParameter="{Binding}"
-                                                IsEnabled="True" />
+                                                CommandParameter="{Binding}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
