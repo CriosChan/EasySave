@@ -94,6 +94,13 @@ public class BackupJob
     /// </summary>
     [JsonIgnore]
     public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
+
+    /// <summary>
+    /// Gets or sets the global priority arbitrator shared across all jobs.
+    /// Used to enforce the v3 business rule: no standard files while priority files exist.
+    /// </summary>
+    [JsonIgnore]
+    public IPriorityArbitrator? PriorityArbitrator { get; set; }
     
     [JsonIgnore] private ManualResetEvent _pauseEvent = new ManualResetEvent(true); // Event for managing pause and resume
 
@@ -189,6 +196,9 @@ public class BackupJob
         var config = ApplicationConfiguration.Load();
         var (priorityQueue, standardQueue) = FilePartitioner.Partition(Files, config.PriorityExtensions);
 
+        // Initialize the global priority arbitrator if available
+        PriorityArbitrator?.Initialize(new Dictionary<int, int> { { Id, priorityQueue.Count } });
+
         // Set the state of the backup as active
         StateLogger.SetStateActive(state, FilesCount, TotalSize);
         StateFileSingleton.Instance.UpdateState(state, s =>
@@ -231,6 +241,28 @@ public class BackupJob
 
                 var file = queue.Dequeue();
 
+                // Check priority arbitration for standard files
+                if (transferType == "standard file transfer")
+                {
+                    while (!CanProcessStandardFile(PriorityArbitrator, Id))
+                    {
+                        // Job is blocked waiting for priority files to be processed globally
+                        StateLogger.SetStatePausedPriority(state);
+                        _pauseEvent.WaitOne(100); // Small wait to avoid busy-spinning
+
+                        if (WasStopped)
+                        {
+                            aborted = true;
+                            break;
+                        }
+                    }
+
+                    if (aborted) break;
+
+                    // Resume to active state once unblocked
+                    StateLogger.SetStateActive(state, FilesCount, TotalSize);
+                }
+
                 StateLogger.SetStateStartTransfer(state, file, transferType); // Log start of transfer with type
                 CurrentFileIndex = processedCount;
 
@@ -248,6 +280,12 @@ public class BackupJob
 
                 processedCount++;
 
+                // Update global priority arbitrator after processing a priority file
+                if (transferType == "priority file transfer" && PriorityArbitrator != null)
+                {
+                    PriorityArbitrator.UpdateGlobalPriorityCount(Id, priorityQueue.Count);
+                }
+
                 // Update per-queue counters and global remaining counters
                 StateFileSingleton.Instance.UpdateState(state, s =>
                 {
@@ -257,6 +295,9 @@ public class BackupJob
                 StateLogger.SetStateEndTransfer(state, FilesCount, processedCount - 1, TotalSize, TransferredSize, CurrentProgress);
             }
         }
+
+        // Signal job completion to the arbitrator
+        PriorityArbitrator?.OnJobCompleted(Id);
 
         if (WasStoppedByBusinessSoftware)
             return; // Exit early if stopped by business software
@@ -333,4 +374,17 @@ public class BackupJob
         bool isSignaled = _pauseEvent.WaitOne(0);
         return !isSignaled; // Return the paused state
     }
+
+    /// <summary>
+    /// Determines whether a standard (non-priority) file can be processed.
+    /// Delegates to the global priority arbitrator if available, otherwise allows processing.
+    /// </summary>
+    /// <param name="arbitrator">The priority arbitrator (may be null).</param>
+    /// <param name="jobId">The current job ID.</param>
+    /// <returns>True if the file can be processed; false if it should be deferred.</returns>
+    private static bool CanProcessStandardFile(IPriorityArbitrator? arbitrator, int jobId)
+    {
+        return arbitrator == null || arbitrator.CanProcessStandardFile(jobId);
+    }
 }
+
