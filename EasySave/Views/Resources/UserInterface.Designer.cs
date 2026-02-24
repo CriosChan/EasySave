@@ -186,6 +186,15 @@ namespace EasySave.Views.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Extension.
+        /// </summary>
+        internal static string Gui_AddPriorityExtension {
+            get {
+                return ResourceManager.GetString("Gui.AddPriorityExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Added Business Software.
         /// </summary>
         internal static string Gui_BusinessSoftware_Added_Title {
@@ -438,6 +447,15 @@ namespace EasySave.Views.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Priority extensions.
+        /// </summary>
+        internal static string Gui_Settings_PriorityExtensions {
+            get {
+                return ResourceManager.GetString("Gui.Settings.PriorityExtensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application Settings.
         /// </summary>
         internal static string Gui_Settings_Screen_Title {
@@ -524,6 +542,15 @@ namespace EasySave.Views.Resources {
         internal static string Gui_Tooltip_DeleteExtension {
             get {
                 return ResourceManager.GetString("Gui.Tooltip.DeleteExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove priority extension..
+        /// </summary>
+        internal static string Gui_Tooltip_DeletePriorityExtension {
+            get {
+                return ResourceManager.GetString("Gui.Tooltip.DeletePriorityExtension", resourceCulture);
             }
         }
         

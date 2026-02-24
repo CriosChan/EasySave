@@ -26,6 +26,14 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty] private string _addExtensionToList = string.Empty;
     [ObservableProperty] private string _extensionToCrypt = string.Empty;
 
+    // Priority extensions
+    [ObservableProperty] private string _priorityExtensionsSectionTitle = string.Empty;
+    [ObservableProperty] private string _addPriorityExtensionLabel = string.Empty;
+    [ObservableProperty] private string _tooltipRemovePriorityExtension = string.Empty;
+    [ObservableProperty] private ObservableCollection<string> _priorityExtensions =
+        new(ApplicationConfiguration.Load().PriorityExtensions);
+    [ObservableProperty] private string _newPriorityExtensionContent = string.Empty;
+
     
     [ObservableProperty] private string _cryptoSoftKey = CryptoSoftConfiguration.Load().Key;
 
@@ -61,6 +69,9 @@ public partial class SettingsViewModel : ViewModelBase
         TooltipRemoveExtension = _uiTextService.Get("Gui.Tooltip.DeleteExtension", "Supprimer l'extension");
         AddExtensionToList = _uiTextService.Get("Gui.AddExtension", "Add Extension");
         ExtensionToCrypt = _uiTextService.Get("Gui.Settings.ExtensionToCrypt", "Extension to Crypt");
+        PriorityExtensionsSectionTitle = _uiTextService.Get("Gui.Settings.PriorityExtensions", "Priority extensions");
+        AddPriorityExtensionLabel = _uiTextService.Get("Gui.AddPriorityExtension", "Add Extension");
+        TooltipRemovePriorityExtension = _uiTextService.Get("Gui.Tooltip.DeletePriorityExtension", "Remove priority extension.");
     }
 
     /// <summary>
@@ -126,6 +137,31 @@ public partial class SettingsViewModel : ViewModelBase
     {
         CryptoSoftExtensions.Remove(ext);
         ApplicationConfiguration.Load().ExtensionToCrypt = CryptoSoftExtensions.ToList();
+    }
+
+    /// <summary>
+    ///     Adds a normalised extension to the priority list and persists it.
+    /// </summary>
+    [RelayCommand]
+    private void AddPriorityExtension()
+    {
+        var value = NewPriorityExtensionContent.Replace(".", "").Trim();
+        if (value == string.Empty || PriorityExtensions.Contains(value))
+            return;
+
+        PriorityExtensions.Add(value);
+        ApplicationConfiguration.Load().PriorityExtensions = PriorityExtensions.ToList();
+        NewPriorityExtensionContent = string.Empty;
+    }
+
+    /// <summary>
+    ///     Removes an extension from the priority list and persists the change.
+    /// </summary>
+    [RelayCommand]
+    private void RemovePriorityExtension(string ext)
+    {
+        PriorityExtensions.Remove(ext);
+        ApplicationConfiguration.Load().PriorityExtensions = PriorityExtensions.ToList();
     }
 
     partial void OnCryptoSoftKeyChanged(string value)

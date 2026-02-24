@@ -294,4 +294,13 @@
     <data name="Gui.Settings.ExtensionToCrypt" xml:space="preserve">
         <value>Extension to crypt</value>
     </data>
+    <data name="Gui.Settings.PriorityExtensions" xml:space="preserve">
+        <value>Priority extensions</value>
+    </data>
+    <data name="Gui.AddPriorityExtension" xml:space="preserve">
+        <value>Add Extension</value>
+    </data>
+    <data name="Gui.Tooltip.DeletePriorityExtension" xml:space="preserve">
+        <value>Remove priority extension.</value>
+    </data>
 </root>

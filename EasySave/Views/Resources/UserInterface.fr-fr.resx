@@ -285,4 +285,13 @@
     <data name="Gui.Settings.ExtensionToCrypt" xml:space="preserve">
         <value>Extension à chiffrer</value>
     </data>
+    <data name="Gui.Settings.PriorityExtensions" xml:space="preserve">
+        <value>Extensions prioritaires</value>
+    </data>
+    <data name="Gui.AddPriorityExtension" xml:space="preserve">
+        <value>Ajouter une extension</value>
+    </data>
+    <data name="Gui.Tooltip.DeletePriorityExtension" xml:space="preserve">
+        <value>Retirer l'extension prioritaire.</value>
+    </data>
 </root>
