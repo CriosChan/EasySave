@@ -33,11 +33,7 @@
         <views:AddedSoftwareScreen Grid.Row="0" IsVisible="{Binding IsAddedSoftwareScreen}"/>
 
         <Border Grid.Row="1"
-                Padding="12"
-                CornerRadius="8"
-                Background="#18003D7A"
-                BorderBrush="#33003D7A"
-                BorderThickness="1">
+                Classes="status-bar">
             <StackPanel Spacing="8">
                 <TextBlock Text="{Binding StatusBar.StatusMessage}"
                            TextWrapping="Wrap" />
@@ -45,8 +41,7 @@
                 <ProgressBar Minimum="0"
                              Maximum="{Binding StatusBar.MaxProgress}"
                              Value="{Binding StatusBar.OverallProgress}"
-                             Foreground="#4CAF50"
-                             Height="18"
+                             Foreground="{DynamicResource ProgressSuccess}"
                              ShowProgressText="True" />
             </StackPanel>
         </Border>
