@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tlumach="clr-namespace:Tlumach.Avalonia;assembly=Tlumach.Avalonia"
+             xmlns:translations="using:EasySave.Translation"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EasySave.Views.AddedSoftwareScreen"
              xmlns:vm="using:EasySave.ViewModels"
@@ -19,10 +21,10 @@
             <Grid ColumnDefinitions="Auto,*"
                   ColumnSpacing="12">
                 <Button Grid.Column="0"
-                        Content="{Binding BackButtonLabel}"
+                        Content="{tlumach:Translate {x:Static translations:UiText.GuiNavigationBack}}"
                         Command="{Binding BackFromAddedSoftwareCommand}" />
                 <TextBlock Grid.Column="1"
-                           Text="{Binding BusinessSoftware.AddedBusinessSoftwareTitle}"
+                           Text="{tlumach:Translate {x:Static translations:UiText.GuiBusinessSoftwareAddedTitle}}"
                            FontSize="18"
                            FontWeight="Bold"
                            VerticalAlignment="Center" />
@@ -66,7 +68,7 @@
                 BorderThickness="1">
             <StackPanel Orientation="Horizontal"
                         Spacing="8">
-                <Button Content="{Binding BusinessSoftware.RemoveAddedBusinessSoftwareButtonLabel}"
+                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiBusinessSoftwareButtonRemoveSelected}}"
                         Command="{Binding BusinessSoftware.RemoveSelectedAddedBusinessSoftwareCommand}"
                         IsVisible="{Binding BusinessSoftware.CanRemoveAddedBusinessSoftware}" />
             </StackPanel>

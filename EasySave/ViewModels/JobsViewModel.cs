@@ -19,45 +19,32 @@ public partial class JobsViewModel : ViewModelBase
     private readonly ParallelJobOrchestrator _orchestrator;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
-    [ObservableProperty] private string _addButtonLabel = string.Empty;
-    [ObservableProperty] private string _addSectionTitle = string.Empty;
     [ObservableProperty] private ObservableCollection<string> _backupTypes = [];
-    [ObservableProperty] private string _browseSourceLabel = string.Empty;
-    [ObservableProperty] private string _browseTargetLabel = string.Empty;
 
     [ObservableProperty] private ObservableCollection<BackupJobItemViewModel> _jobs = [];
-
-    [ObservableProperty] private string _jobsSectionTitle = string.Empty;
-    [ObservableProperty] private string _nameLabel = string.Empty;
 
     [ObservableProperty] private string _newJobName = string.Empty;
     [ObservableProperty] private string _newSourceDirectory = string.Empty;
     [ObservableProperty] private string _newTargetDirectory = string.Empty;
-    [ObservableProperty] private string _removeButtonLabel = string.Empty;
-    [ObservableProperty] private string _runAllButtonLabel = string.Empty;
-    [ObservableProperty] private string _runSelectedButtonLabel = string.Empty;
     [ObservableProperty] private string _selectedBackupType = string.Empty;
     [ObservableProperty] private BackupJobItemViewModel? _selectedJob;
-    [ObservableProperty] private string _sourceLabel = string.Empty;
     private IStorageProvider? _storageProvider;
-    [ObservableProperty] private string _targetLabel = string.Empty;
-    [ObservableProperty] private string _typeLabel = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="JobsViewModel" /> class.
     /// </summary>
     /// <param name="statusBar">Shared status bar state.</param>
-    public JobsViewModel(StatusBarViewModel statusBar)
+    /// <param name="uiTextService">Localized UI text service.</param>
+    public JobsViewModel(StatusBarViewModel statusBar, IUiTextService uiTextService)
     {
         _backupExecutionEngine = new BackupExecutionEngine();
         _jobService = new JobService();
-        _uiTextService = new ResxUiTextService();
+        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
         _orchestrator = new ParallelJobOrchestrator(_backupExecutionEngine);
 
         InitializeBackupTypes();
         RefreshJobs();
-        UpdateUiText();
     }
 
     /// <summary>
@@ -67,25 +54,6 @@ public partial class JobsViewModel : ViewModelBase
     public void SetStorageProvider(IStorageProvider storageProvider)
     {
         _storageProvider = storageProvider;
-    }
-
-    /// <summary>
-    ///     Updates localized labels used by the jobs area.
-    /// </summary>
-    public void UpdateUiText()
-    {
-        JobsSectionTitle = _uiTextService.Get("Jobs.Header", "Configured backup jobs");
-        AddSectionTitle = _uiTextService.Get("Add.Header", "Add a backup job");
-        NameLabel = _uiTextService.Get("Add.PromptName", "Backup name:");
-        SourceLabel = _uiTextService.Get("Add.PromptSource", "Source directory:");
-        TargetLabel = _uiTextService.Get("Add.PromptTarget", "Target directory:");
-        TypeLabel = _uiTextService.Get("Add.PromptType", "Backup type:");
-        BrowseSourceLabel = _uiTextService.Get("Gui.Button.BrowseSource", "Browse source...");
-        BrowseTargetLabel = _uiTextService.Get("Gui.Button.BrowseTarget", "Browse target...");
-        AddButtonLabel = _uiTextService.Get("Gui.Button.AddJob", "Add Job");
-        RemoveButtonLabel = _uiTextService.Get("Gui.Button.RemoveSelected", "Remove Selected");
-        RunSelectedButtonLabel = _uiTextService.Get("Gui.Button.RunSelectedJob", "Run Selected Job");
-        RunAllButtonLabel = _uiTextService.Get("Gui.Button.RunAllJobs", "Run All Jobs");
     }
 
     /// <summary>

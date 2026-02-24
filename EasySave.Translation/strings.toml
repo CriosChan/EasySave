@@ -1,0 +1,168 @@
+﻿# Generated from legacy UserInterface.resx for Tlumach migration.
+Return = "Return to menu"
+
+[Add]
+Failed = "Unable to create the job:"
+Header = "Add a backup job"
+PromptName = "Backup name:"
+PromptSource = "Source directory:"
+PromptTarget = "Target directory:"
+PromptType = "Backup type:"
+Success = "Backup job created."
+TypeOptions = "1) Complete   2) Differential"
+
+[Add.Error]
+MaxJobs = "Maximum number of jobs reached (5)."
+NoFreeSlot = "No free slot available (1..5)."
+
+[Common]
+Cancelled = "Action cancelled."
+InvalidInput = "Invalid input, please try again."
+PressAnyKey = "Press any key to return to the menu."
+
+[Gui]
+AddExtension = "Add Extension"
+
+[Gui.BusinessSoftware.Added]
+Title = "Added Business Software"
+
+[Gui.BusinessSoftware.Button]
+AddSelected = "Add Selected"
+RemoveSelected = "Remove Selected"
+ViewAdded = "View Added Software"
+
+[Gui.BusinessSoftware.Catalog]
+Title = "Select Business Software"
+
+[Gui.BusinessSoftware.Search]
+Label = "Search software"
+Placeholder = "Type to filter software"
+
+[Gui.BusinessSoftware.Status]
+Removed = "Business software removed from blocker list."
+Updated = "Business software list updated."
+
+[Gui.Button]
+AddJob = "Add Job"
+BrowseSource = "Browse source..."
+BrowseTarget = "Browse target..."
+English = "English"
+French = "Français"
+Json = "JSON"
+RemoveSelected = "Remove Selected"
+RunAllJobs = "Run All Jobs"
+RunSelectedJob = "Run Selected Job"
+Xml = "XML"
+
+[Gui.Dialog]
+SelectSourceDirectory = "Select Source Directory"
+SelectTargetDirectory = "Select Target Directory"
+
+[Gui.Error]
+InvalidBackupType = "Error: Invalid backup type"
+JobNameRequired = "Error: Job name is required"
+NoJobSelected = "Error: No job selected"
+RemoveFailed = "Error: Failed to remove job"
+SourceNotAccessible = "Error: Source directory is not accessible"
+SourceRequired = "Error: Source directory is required"
+TargetNotAccessible = "Error: Target directory is not accessible"
+TargetRequired = "Error: Target directory is required"
+
+[Gui.Menu]
+Features = "Features"
+ManageBusinessSoftware = "Manage Business Software"
+Root = "Menu"
+Settings = "Settings"
+
+[Gui.Navigation]
+Back = "Back"
+
+[Gui.Settings]
+CryptoSoftKey = "CryptoSoft key."
+ExtensionToCrypt = "Extension to crypt"
+Label = "Settings"
+
+[Gui.Settings.Hint]
+FutureExtension = "This settings screen is ready for future parameters."
+
+[Gui.Settings.Screen]
+Title = "Application Settings"
+
+[Gui.Settings.Section]
+Language = "Language"
+LogType = "Log Type"
+
+[Gui.Status]
+AllJobsCompletedWithErrors = "Execution finished: {0} completed, {1} failed"
+AllJobsStoppedByBusinessSoftware = "Execution stopped: business software detected"
+BackupAsFinished = "Backup '{0}' finished."
+BackupStoppedByBusinessSoftware = "Backup '{0}' stopped: business software is running"
+JobRemoved = "Job '{0}' removed successfully"
+LanguageChangedEn = "Language changed to English"
+LanguageChangedFr = "Language changed to French"
+LogTypeJsonSet = "Log type set to JSON"
+LogTypeXmlSet = "Log type set to XML"
+Ready = "Ready"
+
+[Gui.Tooltip]
+DeleteExtension = "Remove extension."
+
+[Gui.Window]
+Title = "EasySave - Backup Manager"
+
+[Jobs]
+Columns = "Id | Name                 | Type         | Source -> Target"
+Header = "Configured backup jobs"
+None = "No backup job is configured."
+
+[Jobs.Execute]
+All = "Execute all jobs"
+ID = "Run the job - {0} - {1}"
+
+[Jobs.Remove]
+ID = "Remove job {0} - {1}"
+
+[Launch]
+Done = "Execution finished."
+Header = "Launch backup"
+Invalid = "Invalid id."
+NotFound = "Job not found."
+Prompt = "Enter a job id to run, or 0 to run all jobs sequentially:"
+RunningAll = "Running all jobs..."
+RunningOne = "Running job {0} - {1}..."
+
+[Menu]
+AddBackup = "Add backup configuration"
+Lang = "Change language"
+LaunchBackupJob = "Launch backup job"
+ListJobs = "List backup jobs"
+Log = "Choose a Log Type"
+Quit = "Quit"
+RemoveBackup = "Remove backup configuration"
+
+[Menu.Title]
+Lang = "=== Change Language ==="
+LogType = "=== Choose a Log Type ==="
+Main = "=== EasySave Menu ==="
+RemoveJob = "=== Remove a backup Job ==="
+StartJob = "=== Start a save ==="
+
+[Path]
+SourceNotAccessible = "Source directory is not accessible:"
+SourceNotFound = "Source directory does not exist. Please enter an existing directory."
+TargetNotAccessible = "Target directory is not accessible:"
+TargetNotFound = "Target directory does not exist. Please enter an existing directory."
+
+[Remove]
+Header = "Remove a backup job"
+NotFound = "No matching job found."
+Prompt = "Enter a job id (e.g. 1) or a job name:"
+Success = "Job removed."
+
+[Terminal.Log]
+AllJobsCompletedSuccessfully = "All jobs completed successfully ({0} jobs)"
+JobIdNotFound = "Job {0} not found."
+JobSourceNotFound = "Job {0} skipped: source directory not found."
+JobTargetNotFound = "Job {0} skipped: target directory not found."
+NoJobConfigured = "No backup job configured."
+Usage = "Usage:"

@@ -2,7 +2,6 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
-using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
@@ -25,34 +24,29 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     private readonly IUiTextService _uiTextService;
-    [ObservableProperty] private string _backButtonLabel = string.Empty;
+    private readonly IUiLocalizationService _uiLocalizationService;
     [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
-    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = string.Empty;
-    [ObservableProperty] private string _menuLabel = string.Empty;
-    [ObservableProperty] private string _menuSettingsItemLabel = string.Empty;
     private ViewScreen _previousScreen = ViewScreen.Main;
-
-    [ObservableProperty] private string _windowTitle = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
     /// </summary>
     public MainWindowViewModel()
     {
-        _uiTextService = new ResxUiTextService();
+        _uiTextService = new TlumachUiTextService();
+        _uiLocalizationService = new TlumachUiLocalizationService();
 
         StatusBar = new StatusBarViewModel();
-        Jobs = new JobsViewModel(StatusBar);
-        Settings = new SettingsViewModel(StatusBar,
-            RefreshLocalizedUi);
+        Jobs = new JobsViewModel(StatusBar, _uiTextService);
+        Settings = new SettingsViewModel(StatusBar, _uiTextService, _uiLocalizationService);
         BusinessSoftware = new BusinessSoftwareViewModel(
-            StatusBar);
+            StatusBar,
+            _uiTextService);
 
         BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
         BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
 
         ApplyConfiguredLocalization();
-        RefreshLocalizedUi();
         BusinessSoftware.Initialize();
         StatusBar.StatusMessage = _uiTextService.Get("Gui.Status.Ready", "Ready");
     }
@@ -180,24 +174,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var config = ApplicationConfiguration.Load();
         if (!string.IsNullOrWhiteSpace(config.Localization))
-            LocalizationApplier.Apply(config.Localization);
-    }
-
-    /// <summary>
-    ///     Refreshes localized labels for this ViewModel and all child ViewModels.
-    /// </summary>
-    private void RefreshLocalizedUi()
-    {
-        WindowTitle = _uiTextService.Get("Gui.Window.Title", "EasySave - Backup Manager");
-        MenuLabel = _uiTextService.Get("Gui.Menu.Root", "Menu");
-        MenuSettingsItemLabel = _uiTextService.Get("Gui.Menu.Settings", "Settings");
-        ManageBusinessSoftwareMenuItemLabel =
-            _uiTextService.Get("Gui.Menu.ManageBusinessSoftware", "Manage Business Software");
-        BackButtonLabel = _uiTextService.Get("Gui.Navigation.Back", "Back");
-
-        Jobs.UpdateUiText();
-        Settings.UpdateUiText();
-        BusinessSoftware.UpdateUiText();
+            _uiLocalizationService.Apply(config.Localization);
     }
 
     /// <summary>
