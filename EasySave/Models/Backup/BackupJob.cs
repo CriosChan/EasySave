@@ -128,6 +128,17 @@ public sealed class BackupJob
     }
 
     /// <summary>
+    ///     Gets or sets the coordinator used to apply automatic business-software pause/resume.
+    /// </summary>
+    [JsonIgnore]
+    public IBusinessSoftwarePauseCoordinator BusinessSoftwarePauseCoordinator
+    {
+        get => _transferOrchestrator.BusinessSoftwarePauseCoordinator;
+        set => _transferOrchestrator.BusinessSoftwarePauseCoordinator =
+            value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    /// <summary>
     ///     Gets or sets the global priority arbitrator shared across all jobs.
     /// </summary>
     [JsonIgnore]
