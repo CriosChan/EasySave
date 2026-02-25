@@ -17,12 +17,16 @@
         <Border Grid.Row="0"
                 Grid.Column="0"
                 Classes="main-section">
-            <StackPanel Spacing="8">
-                <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.JobsHeader}}"
+            <Grid RowDefinitions="Auto,*"
+                  RowSpacing="8">
+                <TextBlock Grid.Row="0"
+                           Text="{tlumach:Translate {x:Static translations:UiText.JobsHeader}}"
                            Classes="section-title" />
 
-                <ListBox ItemsSource="{Binding Jobs.Jobs}"
-                         SelectedItem="{Binding Jobs.SelectedJob}">
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding Jobs.Jobs}"
+                         SelectedItem="{Binding Jobs.SelectedJob}"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="vm:BackupJobItemViewModel">
                             <Border Classes="job-item">
@@ -72,7 +76,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
+            </Grid>
         </Border>
 
         <Border Grid.Row="0"
@@ -141,7 +145,7 @@
                 <ComboBox ItemsSource="{Binding Jobs.BackupTypes}"
                           SelectedItem="{Binding Jobs.SelectedBackupType}" />
 
-                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonAddJob}}"
+                <Button Classes="btn-green" Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonAddJob}}"
                         Command="{Binding Jobs.AddJobCommand}"
 
                         Margin="0,4,0,0" />
