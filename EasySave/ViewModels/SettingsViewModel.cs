@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
 using EasySave.Models.Data.Configuration;
+using EasySave.Models.Logger;
+using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
@@ -19,6 +21,11 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty] private string _cryptoSoftKey = CryptoSoftConfiguration.Load().Key;
     [ObservableProperty] private ObservableCollection<string> _cryptoSoftExtensions = new(ApplicationConfiguration.Load().ExtensionToCrypt);
     [ObservableProperty] private string _newExtensionContent = string.Empty;
+    [ObservableProperty] private RoutingType _selectedRoutingType = ApplicationConfiguration.Load().RoutingType;
+    [ObservableProperty] private string _routingIp = ApplicationConfiguration.Load().EasySaveServerIp;
+    [ObservableProperty] private string _routingPort = ApplicationConfiguration.Load().EasySaveServerPort.ToString();
+
+    public List<RoutingType> RoutingTypes => Enum.GetValues(typeof(RoutingType)).Cast<RoutingType>().ToList();
 
     [ObservableProperty] private ObservableCollection<string> _priorityExtensions = new(ApplicationConfiguration.Load().PriorityExtensions);
     [ObservableProperty] private string _newPriorityExtensionContent = string.Empty;
@@ -129,5 +136,42 @@ public partial class SettingsViewModel : ViewModelBase
     partial void OnCryptoSoftKeyChanged(string value)
     {
         CryptoSoftConfiguration.Load().Key = value;
+    }
+
+    partial void OnRoutingIpChanged(string value)
+    {
+        if (Validator.IsValidIPv4(value))
+        {
+            ApplicationConfiguration.Load().EasySaveServerIp = value;
+            if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local)
+            { 
+                new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
+            }
+        }
+    }
+    
+    partial void OnRoutingPortChanged(string value)
+    {
+        try
+        {
+            ApplicationConfiguration.Load().EasySaveServerPort = int.Parse(value);
+            if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local)
+            { 
+                new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
+            }
+        }
+        catch
+        {
+            // ignored
+        }
+    }
+
+    partial void OnSelectedRoutingTypeChanged(RoutingType type)
+    {
+        ApplicationConfiguration.Load().RoutingType = type;
+        if (type != RoutingType.Local)
+        {
+            new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
+        }
     }
 }

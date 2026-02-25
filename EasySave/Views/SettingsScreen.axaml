@@ -120,6 +120,40 @@
                         </StackPanel>
                     </Border>
                 </Grid>
+                
+                <Grid ColumnDefinitions="*,12,*">
+                    <Border Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsLogSaveRoute}}"
+                                       Classes="section-title" />
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox ItemsSource="{Binding Settings.RoutingTypes}"
+                                          SelectedItem="{Binding Settings.SelectedRoutingType, Mode=TwoWay}"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Priority extensions -->
+                    <Border Grid.Column="2" Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionPriority}}"
+                                       Classes="section-title" />
+                            <StackPanel Orientation="Horizontal" Classes="settings">
+                                <TextBlock Text="IP :" Classes="settings-label"></TextBlock>
+                                <TextBox Text="{Binding Settings.RoutingIp}" HorizontalContentAlignment="Stretch"></TextBox>
+                                <TextBlock Text="PORT :" Classes="settings-label"></TextBlock>
+                                <TextBox Text="{Binding Settings.RoutingPort}" HorizontalContentAlignment="Stretch"></TextBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </StackPanel>
         </Border>
 

@@ -1,4 +1,4 @@
-namespace EasySave.Core.Models;
+namespace EasySave.Log.Model;
 
 /// <summary>
 ///     Log entry for a backup operation.
@@ -11,6 +11,8 @@ public sealed class LogEntry
     ///     Default is the current time.
     /// </summary>
     public DateTime Timestamp { get; set; } = DateTime.Now;
+    
+    public string ClientIPAddress { get; set; } = "";
 
     /// <summary>
     ///     Gets or sets the name of the backup associated with this log entry.

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using EasySave.Models.Data.Configuration;
 using Microsoft.Extensions.Configuration;
 
 namespace EasySave.Data.Configuration;
@@ -94,6 +95,36 @@ public sealed class ApplicationConfiguration
             Save();
         }
     } = [];
+    
+    public string EasySaveServerIp
+    {
+        get;
+        set
+        {
+            field = value;
+            Save();
+        }
+    } = "127.0.0.1";
+    
+    public int EasySaveServerPort
+    {
+        get;
+        set
+        {
+            field = value;
+            Save();
+        }
+    } = 5000;
+    
+    public RoutingType RoutingType
+    {
+        get;
+        set
+        {
+            field = value;
+            Save();
+        }
+    } = RoutingType.Local;
 
     // Property to hold the configuration file path but not serialized
     [JsonIgnore] // Ensure to ignore this property

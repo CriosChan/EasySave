@@ -1,5 +1,6 @@
 using EasyLog;
 using EasySave.Data.Configuration;
+using EasySave.Models.Data.Configuration;
 
 namespace EasySave.Models.Logger;
 
@@ -25,6 +26,16 @@ public sealed class ConfigurableLogWriter<T>
 
     public void Log(T entry)
     {
-        _logger.Log(entry);
+        ApplicationConfiguration instance = ApplicationConfiguration.Load();
+        if (instance.RoutingType is RoutingType.Local or RoutingType.LocalCentral)
+        {
+            Console.WriteLine(entry);
+            _logger.Log(entry);
+        }
+
+        if (instance.RoutingType is RoutingType.Central or RoutingType.LocalCentral)
+        {
+            NetworkLog.Instance.Log(entry);
+        }
     }
 }

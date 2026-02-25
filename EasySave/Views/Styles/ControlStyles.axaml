@@ -7,6 +7,10 @@
         <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
+    
+    <Style Selector="StackPanel.settings > TextBlock, StackPanel.settings > TextBox">
+        <Setter Property="Margin" Value="0 0 10 0"/>
+    </Style>
 
     <!-- ProgressBar Style -->
     <Style Selector="ProgressBar">

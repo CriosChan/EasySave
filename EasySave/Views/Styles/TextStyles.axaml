@@ -6,4 +6,8 @@
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
+    
+    <Style Selector="TextBlock.settings-label">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
 </Styles>

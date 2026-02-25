@@ -1,7 +1,11 @@
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
+using EasySave.Models.Data.Configuration;
+using EasySave.Models.Logger;
 using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
@@ -26,6 +30,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IUiTextService _uiTextService;
     private readonly IUiLocalizationService _uiLocalizationService;
     [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
+    [ObservableProperty] private SolidColorBrush _serverColor = SolidColorBrush.Parse("#008000");
+    [ObservableProperty] private string _serverText = "";
+    [ObservableProperty] private bool _useServer = ApplicationConfiguration.Load().RoutingType != RoutingType.Local;
     private ViewScreen _previousScreen = ViewScreen.Main;
 
     /// <summary>
@@ -45,6 +52,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
         BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
         BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
+
+        NetworkLog.Instance.OnConnect += OnServerConnection;
+        NetworkLog.Instance.OnDisconnect += OnServerDisconnect;
+        
+        if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local)
+        {
+            NetworkLog.Instance.CreateSocket();
+        }
 
         ApplyConfiguredLocalization();
         BusinessSoftware.Initialize();
@@ -205,5 +220,25 @@ public partial class MainWindowViewModel : ViewModelBase
     private void SetCurrentScreen(ViewScreen screen)
     {
         CurrentScreen = screen;
+    }
+
+    private void OnServerConnection(object? sender, EventArgs args)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            UseServer = true;
+            ServerColor = SolidColorBrush.Parse("#27F535");
+            ServerText = "Serveur : En ligne";
+        });
+    }
+
+    private void OnServerDisconnect(object? sender, EventArgs args)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            UseServer = true;
+            ServerColor = SolidColorBrush.Parse("#F52727");
+            ServerText = "Serveur : Hors ligne";
+        });
     }
 }
