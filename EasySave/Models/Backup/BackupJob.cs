@@ -137,6 +137,17 @@ public sealed class BackupJob
         set => _transferOrchestrator.PriorityArbitrator = value;
     }
 
+    /// <summary>
+    ///     Gets or sets the global limiter used to serialize large-file transfers.
+    /// </summary>
+    [JsonIgnore]
+    public ILargeFileTransferLimiter LargeFileTransferLimiter
+    {
+        get => _transferOrchestrator.LargeFileTransferLimiter;
+        set => _transferOrchestrator.LargeFileTransferLimiter =
+            value ?? throw new ArgumentNullException(nameof(value));
+    }
+
     // --- Events (add/remove pass-through) ---
 
     public event EventHandler? ProgressChanged;

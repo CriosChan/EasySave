@@ -1,6 +1,8 @@
-﻿using EasySave.Data.Configuration;
+using EasySave.Core.Models;
+using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
 using EasySave.Models.Data.Configuration;
+using EasySave.Models.Logger;
 using EasySave.Models.State;
 using EasySave.Models.Utils;
 
@@ -13,6 +15,8 @@ namespace EasySave.Models.Backup;
 /// </summary>
 public sealed class BackupTransferOrchestrator
 {
+    private const int LargeFileWaitPollingIntervalMs = 100;
+
     private readonly BackupJobIdentity _identity;
     private readonly IBackupProgressTracker _progressTracker;
     private readonly IBackupJobController _controller;
@@ -29,6 +33,11 @@ public sealed class BackupTransferOrchestrator
     ///     Gets or sets the global priority arbitrator shared across all parallel jobs.
     /// </summary>
     public IPriorityArbitrator? PriorityArbitrator { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the global limiter that serializes transfers for files above the configured threshold.
+    /// </summary>
+    public ILargeFileTransferLimiter LargeFileTransferLimiter { get; set; } = GlobalLargeFileTransferLimiter.Shared;
 
     /// <summary>
     ///     Initializes a new instance of <see cref="BackupTransferOrchestrator" />.
@@ -72,7 +81,11 @@ public sealed class BackupTransferOrchestrator
 
         // Mirror directory structure and retrieve file list
         new BackupFolder(_identity.SourceDirectory, _identity.TargetDirectory, _identity.Name).MirrorFolder();
-        var selector = TypeSelectorHelper.GetSelector(_identity.Type, _identity.SourceDirectory, _identity.TargetDirectory, _identity.Name);
+        var selector = TypeSelectorHelper.GetSelector(
+            _identity.Type,
+            _identity.SourceDirectory,
+            _identity.TargetDirectory,
+            _identity.Name);
         _identity.Files = selector.GetFilesToBackup();
         _progressTracker.TotalSize = _identity.Files.GetAllSize();
         _progressTracker.TransferredSize = 0;
@@ -126,6 +139,7 @@ public sealed class BackupTransferOrchestrator
                 }
 
                 var file = queue.Dequeue();
+                var fileSizeBytes = file.GetSize();
 
                 // Enforce priority arbitration before processing standard files
                 if (transferType == FileTransferPriority.Low)
@@ -147,43 +161,84 @@ public sealed class BackupTransferOrchestrator
                     StateLogger.SetStateActive(state, _progressTracker.FilesCount, _progressTracker.TotalSize);
                 }
 
-                StateLogger.SetStateStartTransfer(
-                    state,
-                    file,
-                    transferType == FileTransferPriority.High ? "Priority file transfer" : "Standard File Transfer");
-
-                _progressTracker.SetCurrentFileIndex(processedCount);
-
+                var hasExclusiveLargeFileSlot = false;
                 try
                 {
-                    file.Copy();
+                    if (RequiresExclusiveLargeFileSlot(LargeFileTransferLimiter, fileSizeBytes))
+                    {
+                        var waitStartedAtUtc = DateTime.UtcNow;
+                        var waitedForSlot = false;
+
+                        while (!LargeFileTransferLimiter.TryAcquireExclusiveSlot(
+                                   TimeSpan.FromMilliseconds(LargeFileWaitPollingIntervalMs)))
+                        {
+                            waitedForSlot = true;
+                            StateLogger.SetStateWaitingLargeFile(state, file);
+                            _controller.WaitIfPaused(LargeFileWaitPollingIntervalMs);
+
+                            if (_controller.WasStopped)
+                            {
+                                aborted = true;
+                                break;
+                            }
+                        }
+
+                        if (aborted)
+                            break;
+
+                        hasExclusiveLargeFileSlot = true;
+
+                        if (waitedForSlot)
+                        {
+                            var waitedMs = Math.Max(0, (long)(DateTime.UtcNow - waitStartedAtUtc).TotalMilliseconds);
+                            LogLargeFileWait(file, fileSizeBytes, waitedMs);
+                        }
+                    }
+
+                    StateLogger.SetStateStartTransfer(
+                        state,
+                        file,
+                        transferType == FileTransferPriority.High ? "Priority file transfer" : "Standard File Transfer");
+
+                    _progressTracker.SetCurrentFileIndex(processedCount);
+
+                    try
+                    {
+                        file.Copy();
+                    }
+                    catch (Exception)
+                    {
+                        hadError = true;
+                    }
+
+                    _progressTracker.TransferredSize += fileSizeBytes;
+                    _progressTracker.SetCurrentProgress(
+                        MathUtil.Percentage(_progressTracker.TransferredSize, _progressTracker.TotalSize));
+
+                    processedCount++;
+
+                    if (transferType == FileTransferPriority.High && PriorityArbitrator != null)
+                        PriorityArbitrator.UpdateGlobalPriorityCount(_identity.Id, priorityQueue.Count);
+
+                    StateFileSingleton.Instance.UpdateState(state, s =>
+                    {
+                        s.PriorityFilesRemaining = priorityQueue.Count;
+                        s.StandardFilesRemaining = standardQueue.Count;
+                    });
+
+                    StateLogger.SetStateEndTransfer(
+                        state,
+                        _progressTracker.FilesCount,
+                        processedCount - 1,
+                        _progressTracker.TotalSize,
+                        _progressTracker.TransferredSize,
+                        _progressTracker.CurrentProgress);
                 }
-                catch (Exception)
+                finally
                 {
-                    hadError = true;
+                    if (hasExclusiveLargeFileSlot)
+                        LargeFileTransferLimiter.ReleaseExclusiveSlot();
                 }
-
-                _progressTracker.TransferredSize += file.GetSize();
-                _progressTracker.SetCurrentProgress(MathUtil.Percentage(_progressTracker.TransferredSize, _progressTracker.TotalSize));
-
-                processedCount++;
-
-                if (transferType == FileTransferPriority.High && PriorityArbitrator != null)
-                    PriorityArbitrator.UpdateGlobalPriorityCount(_identity.Id, priorityQueue.Count);
-
-                StateFileSingleton.Instance.UpdateState(state, s =>
-                {
-                    s.PriorityFilesRemaining = priorityQueue.Count;
-                    s.StandardFilesRemaining = standardQueue.Count;
-                });
-
-                StateLogger.SetStateEndTransfer(
-                    state,
-                    _progressTracker.FilesCount,
-                    processedCount - 1,
-                    _progressTracker.TotalSize,
-                    _progressTracker.TransferredSize,
-                    _progressTracker.CurrentProgress);
             }
         }
 
@@ -233,5 +288,29 @@ public sealed class BackupTransferOrchestrator
     {
         return arbitrator == null || arbitrator.CanProcessStandardFile(jobId);
     }
-}
 
+    /// <summary>
+    ///     Determines whether this file requires the global exclusive large-file transfer slot.
+    /// </summary>
+    private static bool RequiresExclusiveLargeFileSlot(ILargeFileTransferLimiter? limiter, long fileSizeBytes)
+    {
+        return limiter != null && limiter.RequiresExclusiveSlot(fileSizeBytes);
+    }
+
+    /// <summary>
+    ///     Logs time spent waiting for the global large-file transfer slot.
+    /// </summary>
+    private void LogLargeFileWait(IFile file, long fileSizeBytes, long waitedMs)
+    {
+        var logger = new ConfigurableLogWriter<LogEntry>();
+        logger.Log(new LogEntry
+        {
+            BackupName = _identity.Name,
+            SourcePath = PathService.ToFullUncLikePath(file.SourceFile),
+            TargetPath = PathService.ToFullUncLikePath(file.TargetFile),
+            FileSizeBytes = fileSizeBytes,
+            TransferTimeMs = 0,
+            ErrorMessage = $"Waited {waitedMs} ms for large-file transfer slot."
+        });
+    }
+}

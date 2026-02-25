@@ -28,6 +28,9 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<string> _priorityExtensions = new(ApplicationConfiguration.Load().PriorityExtensions);
 
+    [ObservableProperty]
+    private string _largeFileThresholdKo = ApplicationConfiguration.Load().LargeFileThresholdKo.ToString();
+
     [ObservableProperty] private string _routingIp = ApplicationConfiguration.Load().EasySaveServerIp;
     [ObservableProperty] private string _routingPort = ApplicationConfiguration.Load().EasySaveServerPort.ToString();
     [ObservableProperty] private RoutingType _selectedRoutingType = ApplicationConfiguration.Load().RoutingType;
@@ -184,11 +187,20 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     /// <summary>
+    ///     Updates the large-file threshold value in Ko if the input is valid.
+    /// </summary>
+    partial void OnLargeFileThresholdKoChanged(string value)
+    {
+        if (int.TryParse(value, out var thresholdKo) && thresholdKo > 0)
+            ApplicationConfiguration.Load().LargeFileThresholdKo = thresholdKo;
+    }
+
+    /// <summary>
     ///     Updates the routing type and initiates socket creation if not local.
     /// </summary>
-    partial void OnSelectedRoutingTypeChanged(RoutingType type)
+    partial void OnSelectedRoutingTypeChanged(RoutingType value)
     {
-        ApplicationConfiguration.Load().RoutingType = type;
-        if (type != RoutingType.Local) new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
+        ApplicationConfiguration.Load().RoutingType = value;
+        if (value != RoutingType.Local) new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
     }
 }

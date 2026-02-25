@@ -133,6 +133,19 @@
                     </Border>
                 </Grid>
 
+                <Border Classes="main-section">
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsLargeFileThreshold}}"
+                            Classes="section-title" />
+                        <StackPanel Orientation="Horizontal" Classes="settings">
+                            <TextBox Text="{Binding Settings.LargeFileThresholdKo, Mode=TwoWay}"
+                                     HorizontalContentAlignment="Stretch" />
+                            <TextBlock Text="Ko" Classes="settings-label" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
                 <Grid ColumnDefinitions="*,12,*">
                     <Border Classes="main-section">
                         <StackPanel Spacing="8">
