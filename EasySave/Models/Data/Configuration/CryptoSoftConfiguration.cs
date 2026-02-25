@@ -21,7 +21,8 @@ public sealed class CryptoSoftConfiguration
     }
 
     // Properties
-    public string Key {
+    public string Key
+    {
         get;
         set
         {
@@ -29,7 +30,7 @@ public sealed class CryptoSoftConfiguration
             Save();
         }
     } = "value";
-    
+
     // Property to hold the configuration file path but not serialized
     [JsonIgnore] // Ensure to ignore this property
     public string ConfigFile { get; set; } = "Tools/appsettings.json";
@@ -48,12 +49,10 @@ public sealed class CryptoSoftConfiguration
                 if (_instance == null)
                 {
                     // Vérifiez si le fichier de configuration existe déjà
-                    string filePath = Path.Combine(AppContext.BaseDirectory, configFile);
+                    var filePath = Path.Combine(AppContext.BaseDirectory, configFile);
                     if (!File.Exists(filePath))
-                    {
                         // Créez le fichier avec juste {}
                         File.WriteAllText(filePath, "{}");
-                    }
 
                     var configuration = new ConfigurationBuilder()
                         .SetBasePath(AppContext.BaseDirectory)

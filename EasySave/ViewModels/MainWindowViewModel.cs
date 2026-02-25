@@ -27,13 +27,14 @@ public partial class MainWindowViewModel : ViewModelBase
         AddedSoftware
     }
 
-    private readonly IUiTextService _uiTextService;
     private readonly IUiLocalizationService _uiLocalizationService;
+
+    private readonly IUiTextService _uiTextService;
     [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
+    private ViewScreen _previousScreen = ViewScreen.Main;
     [ObservableProperty] private SolidColorBrush _serverColor = SolidColorBrush.Parse("#008000");
     [ObservableProperty] private string _serverText = "";
     [ObservableProperty] private bool _useServer = ApplicationConfiguration.Load().RoutingType != RoutingType.Local;
-    private ViewScreen _previousScreen = ViewScreen.Main;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -55,11 +56,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         NetworkLog.Instance.OnConnect += OnServerConnection;
         NetworkLog.Instance.OnDisconnect += OnServerDisconnect;
-        
-        if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local)
-        {
-            NetworkLog.Instance.CreateSocket();
-        }
+
+        if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local) NetworkLog.Instance.CreateSocket();
 
         ApplyConfiguredLocalization();
         BusinessSoftware.Initialize();
@@ -221,7 +219,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         CurrentScreen = screen;
     }
-    
+
     /// <summary>
     ///     Updates the UI to reflect that the server is online.
     ///     Changes the server color to green and updates the status text.

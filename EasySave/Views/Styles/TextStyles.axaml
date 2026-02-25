@@ -1,13 +1,13 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+
     <!-- Section Title TextBlock -->
     <Style Selector="TextBlock.section-title">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
-    
+
     <Style Selector="TextBlock.settings-label">
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 </Styles>

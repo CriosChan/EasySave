@@ -75,4 +75,3 @@ public class StringExtensionTests
         Assert.That(result, Is.EqualTo("!@#$%^&*()"));
     }
 }
-

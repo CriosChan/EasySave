@@ -16,10 +16,7 @@ public class JsonFileTests
     [TearDown]
     public void TearDown()
     {
-        if (Directory.Exists(_testDirectory))
-        {
-            Directory.Delete(_testDirectory, true);
-        }
+        if (Directory.Exists(_testDirectory)) Directory.Delete(_testDirectory, true);
     }
 
     [Test]
@@ -154,4 +151,3 @@ public class JsonFileTests
         public int Value { get; set; }
     }
 }
-

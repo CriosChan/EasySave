@@ -9,15 +9,15 @@ namespace EasySaveTest;
 [TestFixture]
 public class ParallelJobOrchestratorTests
 {
-    private IBackupExecutionEngine _executionEngine = null!;
-    private ParallelJobOrchestrator _orchestrator = null!;
-
     [SetUp]
     public void SetUp()
     {
         _executionEngine = new BackupExecutionEngine();
         _orchestrator = new ParallelJobOrchestrator(_executionEngine);
     }
+
+    private IBackupExecutionEngine _executionEngine = null!;
+    private ParallelJobOrchestrator _orchestrator = null!;
 
     [Test]
     public void Constructor_ThrowsArgumentNullException_WhenEngineIsNull()
@@ -115,4 +115,3 @@ public class ParallelJobOrchestratorTests
         });
     }
 }
-

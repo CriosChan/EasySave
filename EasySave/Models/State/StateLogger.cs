@@ -66,10 +66,7 @@ public static class StateLogger
 
     public static void SetStatePaused(BackupJobState state)
     {
-        StateFileSingleton.Instance.UpdateState(state, s =>
-        {
-            s.State = JobRunState.Paused;
-        });
+        StateFileSingleton.Instance.UpdateState(state, s => { s.State = JobRunState.Paused; });
     }
 
     /// <summary>
@@ -81,7 +78,8 @@ public static class StateLogger
     {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
-            s.State = wasStopped ? JobRunState.Stopped : (hadError ? JobRunState.Failed : JobRunState.Completed); // Set job state
+            s.State = wasStopped ? JobRunState.Stopped :
+                hadError ? JobRunState.Failed : JobRunState.Completed; // Set job state
             s.CurrentAction = hadError ? "completed_with_errors" : "completed"; // Action message
             s.CurrentSourcePath = null; // Reset source path
             s.CurrentTargetPath = null; // Reset target path
@@ -97,7 +95,9 @@ public static class StateLogger
     /// <param name="state">The current state of the backup job.</param>
     /// <param name="file">The file being transferred.</param>
     public static void SetStateStartTransfer(BackupJobState state, IFile file)
-        => SetStateStartTransfer(state, file, "file_transfer");
+    {
+        SetStateStartTransfer(state, file, "file_transfer");
+    }
 
     /// <summary>
     ///     Sets the state for the beginning of a file transfer with an explicit transfer type label.

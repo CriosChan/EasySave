@@ -5,15 +5,15 @@ using EasySave.Models.Data.Configuration;
 namespace EasySave.Models.Logger;
 
 /// <summary>
-/// Log writer that routes entries based on current user preferences.
+///     Log writer that routes entries based on current user preferences.
 /// </summary>
 public sealed class ConfigurableLogWriter<T>
 {
     private readonly AbstractLogger<T> _logger; // Logger instance to handle log entries
 
     /// <summary>
-    /// Initializes a new instance of the ConfigurableLogWriter class.
-    /// Loads the application configuration to determine the log type.
+    ///     Initializes a new instance of the ConfigurableLogWriter class.
+    ///     Loads the application configuration to determine the log type.
     /// </summary>
     public ConfigurableLogWriter()
     {
@@ -32,23 +32,19 @@ public sealed class ConfigurableLogWriter<T>
     }
 
     /// <summary>
-    /// Logs an entry based on the current routing preferences.
+    ///     Logs an entry based on the current routing preferences.
     /// </summary>
     /// <param name="entry">The log entry to be recorded.</param>
     public void Log(T entry)
     {
-        ApplicationConfiguration instance = ApplicationConfiguration.Load(); // Reload config for the current operation
+        var instance = ApplicationConfiguration.Load(); // Reload config for the current operation
 
         // Check the routing type and log accordingly
-        if (instance.RoutingType is RoutingType.Local or RoutingType.LocalCentral)
-        {
-            _logger.Log(entry); // Log entry for local or local-central routing
-        }
+        if (instance.RoutingType is RoutingType.Local
+            or RoutingType.LocalCentral) _logger.Log(entry); // Log entry for local or local-central routing
 
         if (instance.RoutingType is RoutingType.Central or RoutingType.LocalCentral)
-        {
             // Send the log entry to the central server
             NetworkLog.Instance.Log(entry);
-        }
     }
 }

@@ -63,9 +63,10 @@
                 Classes="main-section">
             <StackPanel Orientation="Horizontal"
                         Spacing="8">
-                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiBusinessSoftwareButtonAddSelected}}"
-                        Command="{Binding BusinessSoftware.AddSelectedBusinessSoftwareCommand}"
-                        IsVisible="{Binding BusinessSoftware.CanAddSelectedBusinessSoftware}" />
+                <Button
+                    Content="{tlumach:Translate {x:Static translations:UiText.GuiBusinessSoftwareButtonAddSelected}}"
+                    Command="{Binding BusinessSoftware.AddSelectedBusinessSoftwareCommand}"
+                    IsVisible="{Binding BusinessSoftware.CanAddSelectedBusinessSoftware}" />
             </StackPanel>
         </Border>
     </Grid>

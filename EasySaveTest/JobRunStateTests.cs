@@ -69,7 +69,7 @@ public class JobRunStateTests
     [Test]
     public void CanAssignInactive()
     {
-        JobRunState state = JobRunState.Inactive;
+        var state = JobRunState.Inactive;
 
         Assert.That(state, Is.EqualTo(JobRunState.Inactive));
     }
@@ -77,7 +77,7 @@ public class JobRunStateTests
     [Test]
     public void CanAssignActive()
     {
-        JobRunState state = JobRunState.Active;
+        var state = JobRunState.Active;
 
         Assert.That(state, Is.EqualTo(JobRunState.Active));
     }
@@ -85,7 +85,7 @@ public class JobRunStateTests
     [Test]
     public void CanAssignCompleted()
     {
-        JobRunState state = JobRunState.Completed;
+        var state = JobRunState.Completed;
 
         Assert.That(state, Is.EqualTo(JobRunState.Completed));
     }
@@ -93,7 +93,7 @@ public class JobRunStateTests
     [Test]
     public void CanAssignFailed()
     {
-        JobRunState state = JobRunState.Failed;
+        var state = JobRunState.Failed;
 
         Assert.That(state, Is.EqualTo(JobRunState.Failed));
     }
@@ -101,7 +101,7 @@ public class JobRunStateTests
     [Test]
     public void CanAssignPaused()
     {
-        JobRunState state = JobRunState.Paused;
+        var state = JobRunState.Paused;
 
         Assert.That(state, Is.EqualTo(JobRunState.Paused));
     }
@@ -109,7 +109,7 @@ public class JobRunStateTests
     [Test]
     public void CanAssignStopped()
     {
-        JobRunState state = JobRunState.Stopped;
+        var state = JobRunState.Stopped;
 
         Assert.That(state, Is.EqualTo(JobRunState.Stopped));
     }
@@ -117,7 +117,7 @@ public class JobRunStateTests
     [Test]
     public void CanAssignWaitingPriority()
     {
-        JobRunState state = JobRunState.WaitingPriority;
+        var state = JobRunState.WaitingPriority;
 
         Assert.That(state, Is.EqualTo(JobRunState.WaitingPriority));
     }
@@ -125,7 +125,7 @@ public class JobRunStateTests
     [Test]
     public void CanAssignWaitingLargeFile()
     {
-        JobRunState state = JobRunState.WaitingLargeFile;
+        var state = JobRunState.WaitingLargeFile;
 
         Assert.That(state, Is.EqualTo(JobRunState.WaitingLargeFile));
     }
@@ -133,9 +133,8 @@ public class JobRunStateTests
     [Test]
     public void CanAssignPausedBusinessSoftware()
     {
-        JobRunState state = JobRunState.PausedBusinessSoftware;
+        var state = JobRunState.PausedBusinessSoftware;
 
         Assert.That(state, Is.EqualTo(JobRunState.PausedBusinessSoftware));
     }
 }
-

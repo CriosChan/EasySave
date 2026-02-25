@@ -7,6 +7,7 @@ using EasySave.Models.Backup;
 using EasySave.Models.Backup.Interfaces;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
+
 namespace EasySave.ViewModels;
 
 /// <summary>
@@ -66,23 +67,15 @@ public partial class JobsViewModel : ViewModelBase
         var missingJobs = jobModels
             .Where(jobModel => Jobs.All(job => job.Job.Id != jobModel.Id))
             .ToList();
-        
-        
+
+
         if (missingJobs.Any())
-        {
             foreach (var missingJob in missingJobs)
-            {
                 Jobs.Add(new BackupJobItemViewModel(missingJob, RunJobFromItemAsync));
-            }
-        }
-        
+
         foreach (var job in Jobs.ToList()) // ToList() pour éviter l'exception de modification de la collection
-        {
             if (jobModels.All(jobModel => jobModel.Id != job.Job.Id))
-            {
                 Jobs.Remove(job);
-            }
-        }
     }
 
     /// <summary>
@@ -129,7 +122,8 @@ public partial class JobsViewModel : ViewModelBase
 
         if (!PathService.IsDirectoryAccessible(NewSourceDirectory, out var sourceError))
         {
-            _statusBar.StatusMessage = $"{_uiTextService.Get("Path.SourceNotAccessible", "Source directory is not accessible:")} {sourceError}";
+            _statusBar.StatusMessage =
+                $"{_uiTextService.Get("Path.SourceNotAccessible", "Source directory is not accessible:")} {sourceError}";
             return;
         }
 
@@ -142,7 +136,8 @@ public partial class JobsViewModel : ViewModelBase
 
         if (!PathService.IsDirectoryAccessible(NewTargetDirectory, out var targetError))
         {
-            _statusBar.StatusMessage = $"{_uiTextService.Get("Path.TargetNotAccessible", "Target directory is not accessible:")} {targetError}";
+            _statusBar.StatusMessage =
+                $"{_uiTextService.Get("Path.TargetNotAccessible", "Target directory is not accessible:")} {targetError}";
             return;
         }
 
@@ -210,7 +205,7 @@ public partial class JobsViewModel : ViewModelBase
             return;
         }
 
-        
+
         _statusBar.OverallProgress = 0;
         _statusBar.MaxProgress = 100;
 
@@ -230,7 +225,6 @@ public partial class JobsViewModel : ViewModelBase
         }
         finally
         {
-            
             _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
@@ -251,7 +245,7 @@ public partial class JobsViewModel : ViewModelBase
         }
 
         _statusBar.StatusMessage = _uiTextService.Get("Launch.RunningAll", "Running all jobs...");
-        
+
         _statusBar.OverallProgress = 0;
         _statusBar.MaxProgress = 100;
 
@@ -266,19 +260,13 @@ public partial class JobsViewModel : ViewModelBase
 
             // Update final status based on result
             if (result.WasStoppedByBusinessSoftware)
-            {
                 _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.AllJobsStoppedByBusinessSoftware",
                     "Execution stopped: business software detected");
-            }
             else if (result.FailedCount > 0)
-            {
                 _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.AllJobsCompletedWithErrors",
                     "Execution finished: {0} completed, {1} failed", result.CompletedCount, result.FailedCount);
-            }
             else
-            {
                 _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
-            }
 
             _statusBar.OverallProgress = 100;
         }
@@ -288,7 +276,6 @@ public partial class JobsViewModel : ViewModelBase
         }
         finally
         {
-            
             _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
@@ -340,7 +327,6 @@ public partial class JobsViewModel : ViewModelBase
     /// <param name="job">Job to execute.</param>
     public async Task RunJobFromItemAsync(BackupJob job)
     {
-        
         _statusBar.OverallProgress = 0;
         _statusBar.MaxProgress = 100;
 
@@ -359,7 +345,6 @@ public partial class JobsViewModel : ViewModelBase
         }
         finally
         {
-            
             _statusBar.ClearActiveJobs();
             await Task.Delay(2000);
             _statusBar.OverallProgress = 0;
@@ -377,14 +362,16 @@ public partial class JobsViewModel : ViewModelBase
         // Verify that directories are accessible before starting
         if (!PathService.IsDirectoryAccessible(job.SourceDirectory, out var sourceError))
         {
-            _statusBar.StatusMessage = $"{_uiTextService.Get("Gui.Error.SourceNotAccessible", "Error: Source directory is not accessible")} (Job {job.Id}): {sourceError}";
+            _statusBar.StatusMessage =
+                $"{_uiTextService.Get("Gui.Error.SourceNotAccessible", "Error: Source directory is not accessible")} (Job {job.Id}): {sourceError}";
             Console.WriteLine($"[ERROR] Job {job.Id} - {job.Name}: Source directory error - {sourceError}");
             throw new Exception($"Source directory error - {sourceError}");
         }
 
         if (!PathService.IsDirectoryAccessible(job.TargetDirectory, out var targetError))
         {
-            _statusBar.StatusMessage = $"{_uiTextService.Get("Gui.Error.TargetNotAccessible", "Error: Target directory is not accessible")} (Job {job.Id}): {targetError}";
+            _statusBar.StatusMessage =
+                $"{_uiTextService.Get("Gui.Error.TargetNotAccessible", "Error: Target directory is not accessible")} (Job {job.Id}): {targetError}";
             Console.WriteLine($"[ERROR] Job {job.Id} - {job.Name}: Target directory error - {targetError}");
             throw new Exception($"Target directory error - {targetError}");
         }

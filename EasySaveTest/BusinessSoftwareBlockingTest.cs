@@ -1,5 +1,3 @@
-using EasySave.Core.Models;
-using EasySave.Models.Backup;
 using EasySave.Models.Backup.Interfaces;
 
 namespace EasySaveTest;

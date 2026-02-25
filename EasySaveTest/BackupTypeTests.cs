@@ -27,7 +27,7 @@ public class BackupTypeTests
     [Test]
     public void CanAssignComplete()
     {
-        BackupType type = BackupType.Complete;
+        var type = BackupType.Complete;
 
         Assert.That(type, Is.EqualTo(BackupType.Complete));
     }
@@ -35,7 +35,7 @@ public class BackupTypeTests
     [Test]
     public void CanAssignDifferential()
     {
-        BackupType type = BackupType.Differential;
+        var type = BackupType.Differential;
 
         Assert.That(type, Is.EqualTo(BackupType.Differential));
     }
@@ -58,4 +58,3 @@ public class BackupTypeTests
         Assert.That(Enum.IsDefined(typeof(BackupType), 999), Is.False);
     }
 }
-

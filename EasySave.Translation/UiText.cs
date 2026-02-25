@@ -48,8 +48,15 @@ public static class UiText
     public static TranslationUnit GuiBusinessSoftwareCatalogTitle => Strings.Gui.BusinessSoftware.Catalog.Title;
     public static TranslationUnit GuiBusinessSoftwareAddedTitle => Strings.Gui.BusinessSoftware.Added.Title;
     public static TranslationUnit GuiBusinessSoftwareSearchLabel => Strings.Gui.BusinessSoftware.Search.Label;
-    public static TranslationUnit GuiBusinessSoftwareSearchPlaceholder => Strings.Gui.BusinessSoftware.Search.Placeholder;
+
+    public static TranslationUnit GuiBusinessSoftwareSearchPlaceholder =>
+        Strings.Gui.BusinessSoftware.Search.Placeholder;
+
     public static TranslationUnit GuiBusinessSoftwareButtonViewAdded => Strings.Gui.BusinessSoftware.Button.ViewAdded;
-    public static TranslationUnit GuiBusinessSoftwareButtonAddSelected => Strings.Gui.BusinessSoftware.Button.AddSelected;
-    public static TranslationUnit GuiBusinessSoftwareButtonRemoveSelected => Strings.Gui.BusinessSoftware.Button.RemoveSelected;
+
+    public static TranslationUnit GuiBusinessSoftwareButtonAddSelected =>
+        Strings.Gui.BusinessSoftware.Button.AddSelected;
+
+    public static TranslationUnit GuiBusinessSoftwareButtonRemoveSelected =>
+        Strings.Gui.BusinessSoftware.Button.RemoveSelected;
 }

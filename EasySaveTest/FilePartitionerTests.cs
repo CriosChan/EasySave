@@ -10,7 +10,10 @@ public class FilePartitionerTests
 {
     // ── Helpers ────────────────────────────────────────────────────────────────
 
-    private static FakeFile File(string sourcePath) => new(sourcePath);
+    private static FakeFile File(string sourcePath)
+    {
+        return new FakeFile(sourcePath);
+    }
 
     // ── NormaliseExtension ─────────────────────────────────────────────────────
 
@@ -263,9 +266,14 @@ public class FilePartitionerTests
         public string SourceFile { get; }
         public string TargetFile { get; }
 
-        public void Copy() { /* no-op */ }
+        public void Copy()
+        {
+            /* no-op */
+        }
 
-        public long GetSize() => 0;
+        public long GetSize()
+        {
+            return 0;
+        }
     }
 }
-

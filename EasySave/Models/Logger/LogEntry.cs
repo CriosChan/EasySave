@@ -67,7 +67,7 @@ public sealed class LogEntry
         File Size (Bytes) : {FileSizeBytes:n0}
         Transfer Time (ms) : {TransferTimeMs}
         Crypting Time (ms) : {CryptingTimeMs}
-        Error Message   : {(ErrorMessage ?? "None")}
+        Error Message   : {ErrorMessage ?? "None"}
         -------------------------
         ";
     }

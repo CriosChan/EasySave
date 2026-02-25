@@ -8,6 +8,7 @@ namespace EasyLog;
 public abstract class AbstractLogger<T>(string logDirectory, string extension)
 {
     private static readonly ConcurrentDictionary<string, object> FileLocks = new();
+
     /// <summary>
     ///     Writes a log entry of type <typeparamref name="T" /> to a log file.
     /// </summary>

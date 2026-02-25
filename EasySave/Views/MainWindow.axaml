@@ -30,7 +30,7 @@
 
         <views:SoftwareCatalogScreen Grid.Row="0" IsVisible="{Binding IsSoftwareCatalogScreen}" />
 
-        <views:AddedSoftwareScreen Grid.Row="0" IsVisible="{Binding IsAddedSoftwareScreen}"/>
+        <views:AddedSoftwareScreen Grid.Row="0" IsVisible="{Binding IsAddedSoftwareScreen}" />
 
         <Border Grid.Row="1"
                 Classes="status-bar">
@@ -45,7 +45,7 @@
                              ShowProgressText="True" />
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" IsVisible="{Binding UseServer}">
                     <Border Background="{Binding ServerColor}" Width="20" Height="20" CornerRadius="10" />
-                    <TextBlock Text="{Binding ServerText}" Margin="10,0,0,0"/>
+                    <TextBlock Text="{Binding ServerText}" Margin="10,0,0,0" />
                 </StackPanel>
             </StackPanel>
         </Border>

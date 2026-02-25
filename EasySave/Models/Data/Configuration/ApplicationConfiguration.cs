@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 namespace EasySave.Data.Configuration;
 
 /// <summary>
-/// Loads and exposes application configuration (read/write).
+///     Loads and exposes application configuration (read/write).
 /// </summary>
 public sealed class ApplicationConfiguration
 {
@@ -15,7 +15,7 @@ public sealed class ApplicationConfiguration
     private static readonly object _lock = new();
 
     /// <summary>
-    /// Private constructor to create the singleton object.
+    ///     Private constructor to create the singleton object.
     /// </summary>
     private ApplicationConfiguration()
     {
@@ -24,21 +24,22 @@ public sealed class ApplicationConfiguration
     // Properties
 
     /// <summary>
-    /// Gets or sets the path for log files. Automatically saves the configuration when modified.
-    /// Default is "./log".
+    ///     Gets or sets the path for log files. Automatically saves the configuration when modified.
+    ///     Default is "./log".
     /// </summary>
-    public string LogPath {
+    public string LogPath
+    {
         get;
         set
         {
-            field = value;  // Assign new value
-            Save();         // Save the configuration
+            field = value; // Assign new value
+            Save(); // Save the configuration
         }
     } = "./log";
 
     /// <summary>
-    /// Gets or sets the path for job configuration files. Automatically saves when modified.
-    /// Default is "./config".
+    ///     Gets or sets the path for job configuration files. Automatically saves when modified.
+    ///     Default is "./config".
     /// </summary>
     public string JobConfigPath
     {
@@ -51,10 +52,11 @@ public sealed class ApplicationConfiguration
     } = "./config";
 
     /// <summary>
-    /// Gets or sets the localization settings.
-    /// Automatically saves when modified.
+    ///     Gets or sets the localization settings.
+    ///     Automatically saves when modified.
     /// </summary>
-    public string Localization {
+    public string Localization
+    {
         get;
         set
         {
@@ -64,10 +66,11 @@ public sealed class ApplicationConfiguration
     } = "";
 
     /// <summary>
-    /// Gets or sets the type of log (JSON or XML). Automatically saves when modified.
-    /// Default is "json".
+    ///     Gets or sets the type of log (JSON or XML). Automatically saves when modified.
+    ///     Default is "json".
     /// </summary>
-    public string LogType {
+    public string LogType
+    {
         get;
         set
         {
@@ -77,8 +80,8 @@ public sealed class ApplicationConfiguration
     } = "json";
 
     /// <summary>
-    /// Gets or sets the names of business software processes.
-    /// Automatically saves when set and ensures unique, trimmed, and non-empty names.
+    ///     Gets or sets the names of business software processes.
+    ///     Automatically saves when set and ensures unique, trimmed, and non-empty names.
     /// </summary>
     public string[] BusinessSoftwareProcessNames
     {
@@ -87,8 +90,8 @@ public sealed class ApplicationConfiguration
         {
             field = value
                 .Where(name => !string.IsNullOrWhiteSpace(name)) // Filter out empty names
-                .Select(name => name.Trim())                    // Trim whitespace
-                .Distinct(StringComparer.OrdinalIgnoreCase)      // Ensure uniqueness
+                .Select(name => name.Trim()) // Trim whitespace
+                .Distinct(StringComparer.OrdinalIgnoreCase) // Ensure uniqueness
                 .OrderBy(name => name, StringComparer.OrdinalIgnoreCase) // Sort alphabetically
                 .ToArray();
             Save(); // Automatically save when modified
@@ -96,34 +99,36 @@ public sealed class ApplicationConfiguration
     } = Array.Empty<string>();
 
     /// <summary>
-    /// Gets or sets the list of file extensions to be encrypted.
-    /// Automatically saves when modified.
+    ///     Gets or sets the list of file extensions to be encrypted.
+    ///     Automatically saves when modified.
     /// </summary>
-    public List<string> ExtensionToCrypt {
+    public List<string> ExtensionToCrypt
+    {
         get;
         set
         {
             field = value;
             Save();
         }
-    } = new List<string>();
+    } = new();
 
     /// <summary>
-    /// Gets or sets the list of file extensions that should be treated as priority during backup.
-    /// Automatically saves when modified.
+    ///     Gets or sets the list of file extensions that should be treated as priority during backup.
+    ///     Automatically saves when modified.
     /// </summary>
-    public List<string> PriorityExtensions {
+    public List<string> PriorityExtensions
+    {
         get;
         set
         {
             field = value;
             Save();
         }
-    } = new List<string>();
-        
+    } = new();
+
     /// <summary>
-    /// Gets or sets the EasySaveServer's IP address. Automatically saves when modified.
-    /// Default is "127.0.0.1" (localhost).
+    ///     Gets or sets the EasySaveServer's IP address. Automatically saves when modified.
+    ///     Default is "127.0.0.1" (localhost).
     /// </summary>
     public string EasySaveServerIp
     {
@@ -134,10 +139,10 @@ public sealed class ApplicationConfiguration
             Save();
         }
     } = "127.0.0.1";
-        
+
     /// <summary>
-    /// Gets or sets the EasySaveServer's port number. Automatically saves when modified.
-    /// Default is 5000.
+    ///     Gets or sets the EasySaveServer's port number. Automatically saves when modified.
+    ///     Default is 5000.
     /// </summary>
     public int EasySaveServerPort
     {
@@ -148,10 +153,10 @@ public sealed class ApplicationConfiguration
             Save();
         }
     } = 5000;
-        
+
     /// <summary>
-    /// Gets or sets the routing type for logs: local only, server only, or both. Automatically saves when modified.
-    /// Default is RoutingType.Local.
+    ///     Gets or sets the routing type for logs: local only, server only, or both. Automatically saves when modified.
+    ///     Default is RoutingType.Local.
     /// </summary>
     public RoutingType RoutingType
     {
@@ -164,11 +169,12 @@ public sealed class ApplicationConfiguration
     } = RoutingType.Local;
 
     /// <summary>
-    /// Gets or sets the configuration file path. Not serialized.
-    /// Default is "appsettings.json".
+    ///     Gets or sets the configuration file path. Not serialized.
+    ///     Default is "appsettings.json".
     /// </summary>
     [JsonIgnore] // Ensure this property is ignored during JSON serialization
-    public string ConfigFile {
+    public string ConfigFile
+    {
         get;
         set
         {
@@ -178,7 +184,7 @@ public sealed class ApplicationConfiguration
     } = "appsettings.json";
 
     /// <summary>
-    /// Loads configuration from a JSON file and returns the singleton instance.
+    ///     Loads configuration from a JSON file and returns the singleton instance.
     /// </summary>
     /// <param name="configFile">Configuration file name.</param>
     /// <returns>Loaded configuration.</returns>
@@ -190,12 +196,10 @@ public sealed class ApplicationConfiguration
             {
                 if (_instance == null)
                 {
-                    string filePath = Path.Combine(AppContext.BaseDirectory, configFile);
+                    var filePath = Path.Combine(AppContext.BaseDirectory, configFile);
                     if (!File.Exists(filePath))
-                    {
                         // Create the file with just {}
                         File.WriteAllText(filePath, "{}");
-                    }
 
                     var configuration = new ConfigurationBuilder()
                         .SetBasePath(AppContext.BaseDirectory)
@@ -217,7 +221,7 @@ public sealed class ApplicationConfiguration
     }
 
     /// <summary>
-    /// Saves the current configuration to the specified JSON file.
+    ///     Saves the current configuration to the specified JSON file.
     /// </summary>
     public void Save()
     {

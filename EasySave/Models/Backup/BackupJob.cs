@@ -9,10 +9,12 @@ using EasySave.Models.Utils;
 namespace EasySave.Models.Backup;
 
 /// <summary>
-/// Represents a backup job that manages the process of backing up files from a source directory to a target directory.
+///     Represents a backup job that manages the process of backing up files from a source directory to a target directory.
 /// </summary>
 public class BackupJob
 {
+    [JsonIgnore] private readonly ManualResetEvent _pauseEvent = new(true); // Event for managing pause and resume
+
     /// <summary> The total size of files to be backed up. </summary>
     [JsonIgnore] public long TotalSize;
 
@@ -20,7 +22,7 @@ public class BackupJob
     [JsonIgnore] public long TransferredSize;
 
     /// <summary>
-    /// Initializes a new instance of the BackupJob class with a specified ID.
+    ///     Initializes a new instance of the BackupJob class with a specified ID.
     /// </summary>
     /// <param name="id">Unique identifier for the backup job. Cannot be negative.</param>
     /// <param name="name">Name of the backup job.</param>
@@ -45,7 +47,7 @@ public class BackupJob
     }
 
     /// <summary>
-    /// Initializes a new instance of the BackupJob class without an ID.
+    ///     Initializes a new instance of the BackupJob class without an ID.
     /// </summary>
     /// <param name="name">Name of the backup job.</param>
     /// <param name="sourceDirectory">Source directory to backup.</param>
@@ -69,7 +71,7 @@ public class BackupJob
     [JsonIgnore]
     public int FilesCount
     {
-        get; 
+        get;
         private set
         {
             field = value; // Sets the total number of files
@@ -80,7 +82,7 @@ public class BackupJob
     [JsonIgnore]
     public double CurrentProgress
     {
-        get; 
+        get;
         private set
         {
             field = value; // Sets the current progress percentage
@@ -89,18 +91,16 @@ public class BackupJob
     }
 
     /// <summary>
-    /// Gets or sets the monitor used to detect business software activity.
-    /// Exposed for testability and dependency inversion.
+    ///     Gets or sets the monitor used to detect business software activity.
+    ///     Exposed for testability and dependency inversion.
     /// </summary>
     [JsonIgnore]
     public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
-    
-    [JsonIgnore] private ManualResetEvent _pauseEvent = new ManualResetEvent(true); // Event for managing pause and resume
 
     [JsonIgnore]
     public bool WasStopped
     {
-        get; 
+        get;
         set
         {
             field = value; // Indicates if the job was stopped
@@ -108,29 +108,29 @@ public class BackupJob
         }
     } = true;
 
+    /// <summary>
+    ///     Gets a value indicating whether the current job run was stopped because business software was detected.
+    /// </summary>
+    [JsonIgnore]
+    public bool WasStoppedByBusinessSoftware { get; private set; }
+
     // Events to handle various states of the backup job
     public event EventHandler? PauseEvent;
     public event EventHandler? StopEvent;
     public event EventHandler? EndEvent;
     public event EventHandler? FilesCountEvent;
-    
-    /// <summary>
-    /// Gets a value indicating whether the current job run was stopped because business software was detected.
-    /// </summary>
-    [JsonIgnore]
-    public bool WasStoppedByBusinessSoftware { get; private set; }
 
     public event EventHandler? ProgressChanged;
 
     /// <summary>
-    /// Checks if the source and target directories exist and are accessible.
+    ///     Checks if the source and target directories exist and are accessible.
     /// </summary>
     /// <param name="errorMessage">Error message if directories are not accessible.</param>
     /// <returns>True if both directories exist and are accessible; otherwise, false.</returns>
     private bool Check(out string errorMessage)
     {
         errorMessage = string.Empty;
-        
+
         // Check source directory
         if (!PathService.IsDirectoryAccessible(SourceDirectory, out var sourceError))
         {
@@ -151,9 +151,9 @@ public class BackupJob
     }
 
     /// <summary>
-    /// Starts the backup process.
-    /// Mirrors the folder structure, selects files to backup, and transfers them.
-    /// Logs the progress and state of the backup job.
+    ///     Starts the backup process.
+    ///     Mirrors the folder structure, selects files to backup, and transfers them.
+    ///     Logs the progress and state of the backup job.
     /// </summary>
     public void StartBackup()
     {
@@ -166,7 +166,7 @@ public class BackupJob
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
         var businessSoftwareStopHandler = new BusinessSoftwareStopHandler(BusinessSoftwareMonitor, Name);
-        
+
         // Check if directories are valid
         if (!Check(out var errorMessage))
         {
@@ -201,10 +201,10 @@ public class BackupJob
         var processedCount = 0;
         var aborted = false;
         foreach (var (queue, transferType) in new[]
-        {
-            (priorityQueue, "priority file transfer"),
-            (standardQueue, "standard file transfer")
-        })
+                 {
+                     (priorityQueue, "priority file transfer"),
+                     (standardQueue, "standard file transfer")
+                 })
         {
             if (aborted) break;
 
@@ -217,10 +217,7 @@ public class BackupJob
                 }
 
                 // Wait if paused
-                if (IsPaused())
-                {
-                    StateLogger.SetStatePaused(state); // Log pause state
-                }
+                if (IsPaused()) StateLogger.SetStatePaused(state); // Log pause state
                 _pauseEvent.WaitOne();
 
                 if (WasStopped)
@@ -254,7 +251,8 @@ public class BackupJob
                     s.PriorityFilesRemaining = priorityQueue.Count;
                     s.StandardFilesRemaining = standardQueue.Count;
                 });
-                StateLogger.SetStateEndTransfer(state, FilesCount, processedCount - 1, TotalSize, TransferredSize, CurrentProgress);
+                StateLogger.SetStateEndTransfer(state, FilesCount, processedCount - 1, TotalSize, TransferredSize,
+                    CurrentProgress);
             }
         }
 
@@ -264,15 +262,12 @@ public class BackupJob
         // Finalize the backup job state
         StateLogger.SetStateEnd(state, hadError, WasStopped);
 
-        if (!WasStopped)
-        {
-            CurrentProgress = 100; // Set progress to 100% at completion
-        }
+        if (!WasStopped) CurrentProgress = 100; // Set progress to 100% at completion
         OnEndEvent(); // Trigger end event
     }
 
     /// <summary>
-    /// Pauses the backup job, preventing further processing.
+    ///     Pauses the backup job, preventing further processing.
     /// </summary>
     public void Pause()
     {
@@ -281,7 +276,7 @@ public class BackupJob
     }
 
     /// <summary>
-    /// Resumes the backup job if it is paused.
+    ///     Resumes the backup job if it is paused.
     /// </summary>
     public void Resume()
     {
@@ -290,7 +285,7 @@ public class BackupJob
     }
 
     /// <summary>
-    /// Stops the backup job immediately.
+    ///     Stops the backup job immediately.
     /// </summary>
     public void Stop()
     {
@@ -313,7 +308,7 @@ public class BackupJob
     {
         StopEvent?.Invoke(this, EventArgs.Empty); // Trigger stop event
     }
-    
+
     protected virtual void OnEndEvent()
     {
         EndEvent?.Invoke(this, EventArgs.Empty); // Trigger end event
@@ -323,14 +318,14 @@ public class BackupJob
     {
         FilesCountEvent?.Invoke(this, EventArgs.Empty); // Trigger files count changed event
     }
-    
+
     /// <summary>
-    /// Checks if the backup job is currently paused.
+    ///     Checks if the backup job is currently paused.
     /// </summary>
     /// <returns>True if the job is paused; otherwise, false.</returns>
     public bool IsPaused()
     {
-        bool isSignaled = _pauseEvent.WaitOne(0);
+        var isSignaled = _pauseEvent.WaitOne(0);
         return !isSignaled; // Return the paused state
     }
 }

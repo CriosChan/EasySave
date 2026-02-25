@@ -14,21 +14,23 @@ namespace EasySave.ViewModels;
 /// </summary>
 public partial class SettingsViewModel : ViewModelBase
 {
-    private readonly IUiLocalizationService _uiLocalizationService;
     private readonly StatusBarViewModel _statusBar;
+    private readonly IUiLocalizationService _uiLocalizationService;
     private readonly IUiTextService _uiTextService;
 
+    [ObservableProperty]
+    private ObservableCollection<string> _cryptoSoftExtensions = new(ApplicationConfiguration.Load().ExtensionToCrypt);
+
     [ObservableProperty] private string _cryptoSoftKey = CryptoSoftConfiguration.Load().Key;
-    [ObservableProperty] private ObservableCollection<string> _cryptoSoftExtensions = new(ApplicationConfiguration.Load().ExtensionToCrypt);
     [ObservableProperty] private string _newExtensionContent = string.Empty;
-    [ObservableProperty] private RoutingType _selectedRoutingType = ApplicationConfiguration.Load().RoutingType;
+    [ObservableProperty] private string _newPriorityExtensionContent = string.Empty;
+
+    [ObservableProperty]
+    private ObservableCollection<string> _priorityExtensions = new(ApplicationConfiguration.Load().PriorityExtensions);
+
     [ObservableProperty] private string _routingIp = ApplicationConfiguration.Load().EasySaveServerIp;
     [ObservableProperty] private string _routingPort = ApplicationConfiguration.Load().EasySaveServerPort.ToString();
-
-    public List<RoutingType> RoutingTypes => Enum.GetValues(typeof(RoutingType)).Cast<RoutingType>().ToList();
-
-    [ObservableProperty] private ObservableCollection<string> _priorityExtensions = new(ApplicationConfiguration.Load().PriorityExtensions);
-    [ObservableProperty] private string _newPriorityExtensionContent = string.Empty;
+    [ObservableProperty] private RoutingType _selectedRoutingType = ApplicationConfiguration.Load().RoutingType;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
@@ -42,8 +44,11 @@ public partial class SettingsViewModel : ViewModelBase
     {
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
         _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
-        _uiLocalizationService = uiLocalizationService ?? throw new ArgumentNullException(nameof(uiLocalizationService));
+        _uiLocalizationService =
+            uiLocalizationService ?? throw new ArgumentNullException(nameof(uiLocalizationService));
     }
+
+    public List<RoutingType> RoutingTypes => Enum.GetValues(typeof(RoutingType)).Cast<RoutingType>().ToList();
 
     /// <summary>
     ///     Applies French localization and persists the setting.
@@ -95,10 +100,7 @@ public partial class SettingsViewModel : ViewModelBase
     private void AddExtensionToCryptoSoft()
     {
         var value = NewExtensionContent.Replace(".", "").Trim();
-        if (value == string.Empty || CryptoSoftExtensions.Contains(value))
-        {
-            return;
-        }
+        if (value == string.Empty || CryptoSoftExtensions.Contains(value)) return;
 
         CryptoSoftExtensions.Add(value);
         ApplicationConfiguration.Load().ExtensionToCrypt = CryptoSoftExtensions.ToList();
@@ -159,9 +161,7 @@ public partial class SettingsViewModel : ViewModelBase
         {
             ApplicationConfiguration.Load().EasySaveServerIp = value;
             if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local)
-            { 
                 new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
-            }
         }
     }
 
@@ -175,9 +175,7 @@ public partial class SettingsViewModel : ViewModelBase
         {
             ApplicationConfiguration.Load().EasySaveServerPort = int.Parse(value);
             if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local)
-            { 
                 new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
-            }
         }
         catch
         {
@@ -191,9 +189,6 @@ public partial class SettingsViewModel : ViewModelBase
     partial void OnSelectedRoutingTypeChanged(RoutingType type)
     {
         ApplicationConfiguration.Load().RoutingType = type;
-        if (type != RoutingType.Local)
-        {
-            new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
-        }
+        if (type != RoutingType.Local) new Thread(() => NetworkLog.Instance.CreateSocket()).Start();
     }
 }

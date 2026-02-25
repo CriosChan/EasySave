@@ -9,14 +9,35 @@ using EasySave.Models.Utils;
 namespace EasySave.ViewModels;
 
 /// <summary>
-/// ViewModel wrapper for the BackupJob model, providing UI-specific properties and commands.
+///     ViewModel wrapper for the BackupJob model, providing UI-specific properties and commands.
 /// </summary>
 public sealed partial class BackupJobItemViewModel : ViewModelBase
 {
     private readonly Func<BackupJob, Task>? _executeJobCallback;
+    [ObservableProperty] private bool _inverseStopped; // Inverse state for UI purposes
+
+    [ObservableProperty] private bool _paused; // Indicates if the job is paused
+
+    [ObservableProperty]
+    private Bitmap?
+        _pauseIcon =
+            ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/pause-button.png")); // Icon for pause
+
+    [ObservableProperty] private double _progress; // Progress percentage of the job
+
+    [ObservableProperty]
+    private Brush _progressBarColor = new SolidColorBrush(Color.FromRgb(33, 150, 243)); // Color of the progress bar
+
+    [ObservableProperty] private string _statusMessage = ""; // Message to display status updates
+
+    [ObservableProperty]
+    private Bitmap?
+        _stopIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png")); // Icon for stop
+
+    [ObservableProperty] private bool _stopped; // Indicates if the job is stopped
 
     /// <summary>
-    /// Initializes a new instance of the BackupJobItemViewModel class.
+    ///     Initializes a new instance of the BackupJobItemViewModel class.
     /// </summary>
     /// <param name="job">The BackupJob model to wrap.</param>
     /// <param name="executeJobCallback">Callback invoked when the user starts the job from the item button.</param>
@@ -34,47 +55,38 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Gets the underlying BackupJob model.
+    ///     Gets the underlying BackupJob model.
     /// </summary>
     public BackupJob Job { get; }
 
     /// <summary>
-    /// Gets the display name for the backup job, formatted with its ID and name.
+    ///     Gets the display name for the backup job, formatted with its ID and name.
     /// </summary>
     public string DisplayName => $"[{Job.Id}] {Job.Name}";
 
     /// <summary>
-    /// Gets the backup type as a string representation.
+    ///     Gets the backup type as a string representation.
     /// </summary>
     public string Type => Job.Type.ToString();
 
     /// <summary>
-    /// Gets the formatted display path for source and target directories.
+    ///     Gets the formatted display path for source and target directories.
     /// </summary>
     public string DisplayPath => $"{Job.SourceDirectory} → {Job.TargetDirectory}";
 
-    [ObservableProperty] private bool _paused = false; // Indicates if the job is paused
-    [ObservableProperty] private bool _stopped; // Indicates if the job is stopped
-    [ObservableProperty] private bool _inverseStopped; // Inverse state for UI purposes
-    [ObservableProperty] private double _progress = 0; // Progress percentage of the job
-    [ObservableProperty] private Brush _progressBarColor = new SolidColorBrush(Color.FromRgb(33, 150, 243)); // Color of the progress bar
-    [ObservableProperty] private Bitmap? _pauseIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/pause-button.png")); // Icon for pause
-    [ObservableProperty] private Bitmap? _stopIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png")); // Icon for stop
-    [ObservableProperty] private string _statusMessage = ""; // Message to display status updates
-
     /// <summary>
-    /// Event handler called when the paused state changes.
+    ///     Event handler called when the paused state changes.
     /// </summary>
     private void OnPausedChanged(object? sender, EventArgs e)
     {
         Paused = Job.IsPaused(); // Update the paused state
-        PauseIcon = Job.IsPaused() 
-            ? ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png")) 
+        PauseIcon = Job.IsPaused()
+            ? ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png"))
             : ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/pause-button.png"));
     }
 
     /// <summary>
-    /// Event handler called when the stopped state changes.
+    ///     Event handler called when the stopped state changes.
     /// </summary>
     private void OnStopChanged(object? sender, EventArgs e)
     {
@@ -84,7 +96,8 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
             StopIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/play-button.png"));
             Dispatcher.UIThread.InvokeAsync(() =>
             {
-                ProgressBarColor = new SolidColorBrush(Color.FromRgb(255, 0, 0)); // Change color to red for stopped state
+                ProgressBarColor =
+                    new SolidColorBrush(Color.FromRgb(255, 0, 0)); // Change color to red for stopped state
             });
         }
         else
@@ -95,11 +108,12 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
                 ProgressBarColor = new SolidColorBrush(Color.FromRgb(33, 150, 243)); // Change color back to original
             });
         }
+
         InverseStopped = !Job.WasStopped; // Toggle inverse stopped state for UI
     }
 
     /// <summary>
-    /// Event handler called when the job progress changes.
+    ///     Event handler called when the job progress changes.
     /// </summary>
     private void OnProgressChanged(object? sender, EventArgs e)
     {
@@ -113,12 +127,11 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Event handler called when the backup job ends.
+    ///     Event handler called when the backup job ends.
     /// </summary>
     private void OnJobEnded(object? sender, EventArgs e)
     {
         if (Job.WasStopped)
-        {
             Dispatcher.UIThread.InvokeAsync(() =>
             {
                 StatusMessage = ""; // Clear status message
@@ -127,8 +140,7 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
                 StopIcon = ImageHelper.LoadFromResource(
                     new Uri("avares://EasySave/Assets/play-button.png")); // Reset stop icon
             });
-        } else
-        {
+        else
             Dispatcher.UIThread.InvokeAsync(() =>
             {
                 StatusMessage = ""; // Clear status message
@@ -139,13 +151,14 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
                 StopIcon = ImageHelper.LoadFromResource(
                     new Uri("avares://EasySave/Assets/play-button.png")); // Reset stop icon
             });
-        }
     }
 
-    private void OnFilesCountChange(object? sender, EventArgs e) { }
+    private void OnFilesCountChange(object? sender, EventArgs e)
+    {
+    }
 
     /// <summary>
-    /// Command to pause or resume the backup job.
+    ///     Command to pause or resume the backup job.
     /// </summary>
     [RelayCommand]
     private void PauseResumeJob()
@@ -153,8 +166,9 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
         if (!Paused)
         {
             Job.Pause(); // Pause the job
-            ProgressBarColor = new SolidColorBrush(Job.WasStoppedByBusinessSoftware ? 
-                Color.FromRgb(255, 152, 0) : Color.FromRgb(251, 255, 0)); // Update progress bar color based on state
+            ProgressBarColor = new SolidColorBrush(Job.WasStoppedByBusinessSoftware
+                ? Color.FromRgb(255, 152, 0)
+                : Color.FromRgb(251, 255, 0)); // Update progress bar color based on state
         }
         else
         {
@@ -164,22 +178,16 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Command to start or stop the backup job.
+    ///     Command to start or stop the backup job.
     /// </summary>
     [RelayCommand]
     private void StartStopJob()
     {
         if (!Stopped)
-        {
             Job.Stop(); // Stop the job
-        }
         else if (_executeJobCallback != null)
-        {
             Task.Run(() => _executeJobCallback(Job));
-        }
         else
-        {
             new Thread(Job.StartBackup).Start(); // Start the job in a new thread
-        }
     }
 }

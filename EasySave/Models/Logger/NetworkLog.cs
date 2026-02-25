@@ -7,21 +7,21 @@ using EasySave.Data.Configuration;
 namespace EasySave.Models.Logger;
 
 /// <summary>
-/// Singleton class for logging over a network using UDP.
+///     Singleton class for logging over a network using UDP.
 /// </summary>
 public sealed class NetworkLog
 {
     // Lazy initialization for the singleton instance
-    private static readonly Lazy<NetworkLog> instance = new Lazy<NetworkLog>(() => new NetworkLog());
-
-    private UdpClient? _udpClient; // UDP client for sending log messages
-    public EventHandler? OnDisconnect; // Event triggered when the connection is lost
-    public EventHandler? OnConnect;    // Event triggered when the connection is established
+    private static readonly Lazy<NetworkLog> instance = new(() => new NetworkLog());
     private IPEndPoint _endpoint; // Endpoint for sending logs
 
+    private UdpClient? _udpClient; // UDP client for sending log messages
+    public EventHandler? OnConnect; // Event triggered when the connection is established
+    public EventHandler? OnDisconnect; // Event triggered when the connection is lost
+
     /// <summary>
-    /// Private constructor to prevent direct instantiation.
-    /// Initializes the socket.
+    ///     Private constructor to prevent direct instantiation.
+    ///     Initializes the socket.
     /// </summary>
     private NetworkLog()
     {
@@ -29,14 +29,19 @@ public sealed class NetworkLog
     }
 
     /// <summary>
-    /// Creates a UDP socket for logging.
+    ///     Gets the singleton instance of the NetworkLog class.
+    /// </summary>
+    public static NetworkLog Instance => instance.Value;
+
+    /// <summary>
+    ///     Creates a UDP socket for logging.
     /// </summary>
     public void CreateSocket()
     {
         lock (this) // Ensure thread safety
         {
             CloseSocket(); // Ensure any existing socket is closed
-                
+
             try
             {
                 // Load the server IP and port from the application configuration
@@ -57,7 +62,7 @@ public sealed class NetworkLog
     }
 
     /// <summary>
-    /// Closes the UDP socket if it is open.
+    ///     Closes the UDP socket if it is open.
     /// </summary>
     public void CloseSocket()
     {
@@ -77,12 +82,7 @@ public sealed class NetworkLog
     }
 
     /// <summary>
-    /// Gets the singleton instance of the NetworkLog class.
-    /// </summary>
-    public static NetworkLog Instance => instance.Value;
-
-    /// <summary>
-    /// Sends a log message to the defined endpoint.
+    ///     Sends a log message to the defined endpoint.
     /// </summary>
     /// <typeparam name="T">The type of the message to log.</typeparam>
     /// <param name="message">The message to be sent as a log.</param>
@@ -91,11 +91,11 @@ public sealed class NetworkLog
         lock (this) // Ensure thread safety
         {
             // Serialize the message to JSON and convert it to byte array
-            byte[] data = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(message, new JsonSerializerOptions
+            var data = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(message, new JsonSerializerOptions
             {
                 WriteIndented = false // No indentation for compact messages
             }));
-                
+
             try
             {
                 _udpClient?.Send(data, data.Length, _endpoint); // Send the log message
@@ -107,17 +107,17 @@ public sealed class NetworkLog
             }
         }
     }
-        
+
     /// <summary>
-    /// Raises the OnDisconnect event.
+    ///     Raises the OnDisconnect event.
     /// </summary>
     private void OnDisconnectEvent()
     {
         OnDisconnect?.Invoke(this, EventArgs.Empty);
     }
-        
+
     /// <summary>
-    /// Raises the OnConnect event.
+    ///     Raises the OnConnect event.
     /// </summary>
     private void OnConnectEvent()
     {

@@ -9,7 +9,8 @@
 public sealed class DirectProgress<T>(Action<T> handler) : IProgress<T>
 {
     /// <inheritdoc />
-    public void Report(T value) => handler(value);
+    public void Report(T value)
+    {
+        handler(value);
+    }
 }
-
-
