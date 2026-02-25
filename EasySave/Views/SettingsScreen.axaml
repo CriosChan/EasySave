@@ -28,7 +28,9 @@
 
         <Border Grid.Row="1"
                 Classes="main-section">
-            <StackPanel Spacing="12">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="12">
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
                         <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsSectionLanguage}}"
@@ -181,7 +183,8 @@
                         </StackPanel>
                     </Border>
                 </Grid>
-            </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
         </Border>
 
     </Grid>
