@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
 
 namespace EasySave.Models.Backup;
@@ -9,15 +10,18 @@ namespace EasySave.Models.Backup;
 public sealed class ParallelJobOrchestrator
 {
     private readonly IBackupExecutionEngine _executionEngine;
+    private readonly IPriorityArbitrator _priorityArbitrator;
     private readonly ConcurrentDictionary<int, JobExecutionState> _jobStates = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ParallelJobOrchestrator" /> class.
     /// </summary>
     /// <param name="executionEngine">Execution engine for running individual jobs.</param>
-    public ParallelJobOrchestrator(IBackupExecutionEngine executionEngine)
+    /// <param name="priorityArbitrator">Optional global priority arbitrator. If null, no global priority constraint is enforced.</param>
+    public ParallelJobOrchestrator(IBackupExecutionEngine executionEngine, IPriorityArbitrator? priorityArbitrator = null)
     {
         _executionEngine = executionEngine ?? throw new ArgumentNullException(nameof(executionEngine));
+        _priorityArbitrator = priorityArbitrator ?? new GlobalPriorityArbitrator();
     }
 
     /// <summary>
@@ -62,6 +66,23 @@ public sealed class ParallelJobOrchestrator
         _jobStates.Clear();
         foreach (var job in jobList)
             _jobStates[job.Id] = JobExecutionState.Pending;
+
+        // Calculate initial priority file counts for all jobs to initialize the global arbitrator
+        var jobPriorityCounts = new Dictionary<int, int>();
+        var config = ApplicationConfiguration.Load();
+        foreach (var job in jobList)
+        {
+            var selector = TypeSelectorHelper.GetSelector(job.Type, job.SourceDirectory, job.TargetDirectory, job.Name);
+            var files = selector.GetFilesToBackup();
+            var (priorityQueue, _) = FilePartitioner.Partition(files, config.PriorityExtensions);
+            jobPriorityCounts[job.Id] = priorityQueue.Count;
+            
+            // Assign the arbitrator to the job
+            job.PriorityArbitrator = _priorityArbitrator;
+        }
+
+        // Initialize the arbitrator with all priority counts
+        _priorityArbitrator.Initialize(jobPriorityCounts);
 
         var results = new ConcurrentBag<BackupExecutionResult>();
         var stoppedByBusinessSoftware = false;
