@@ -104,8 +104,6 @@ public sealed class BackupJob
     [JsonIgnore]
     public IPriorityArbitrator? PriorityArbitrator { get; set; }
     
-    [JsonIgnore] private readonly ManualResetEvent _pauseEvent = new ManualResetEvent(true); // Event for managing pause and resume
-
     [JsonIgnore]
     public bool WasStopped
     {
