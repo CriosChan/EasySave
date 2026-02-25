@@ -1,385 +1,165 @@
 using System.Text.Json.Serialization;
 using EasySave.Core.Models;
-using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Interfaces;
-using EasySave.Models.Data.Configuration;
-using EasySave.Models.State;
-using EasySave.Models.Utils;
 
 namespace EasySave.Models.Backup;
 
 /// <summary>
-///     Represents a backup job that manages the process of backing up files from a source directory to a target directory.
+///     Facade that aggregates the four SRP sub-components of a backup job.
+///     Public surface is unchanged so all consumers (ViewModels, engines, repositories) require no modification.
 /// </summary>
 public sealed class BackupJob
 {
-    [JsonIgnore] private readonly ManualResetEvent _pauseEvent = new(true); // Event for managing pause and resume
-
-    /// <summary> The total size of files to be backed up. </summary>
-    [JsonIgnore] public long TotalSize;
-
-    /// <summary> The size of files that have been transferred. </summary>
-    [JsonIgnore] public long TransferredSize;
+    private readonly BackupJobIdentity _identity;
+    private readonly BackupProgressTracker _progressTracker;
+    private readonly BackupJobController _controller;
+    private readonly BackupTransferOrchestrator _transferOrchestrator;
 
     /// <summary>
     ///     Initializes a new instance of the BackupJob class with a specified ID.
     /// </summary>
-    /// <param name="id">Unique identifier for the backup job. Cannot be negative.</param>
-    /// <param name="name">Name of the backup job.</param>
-    /// <param name="sourceDirectory">Source directory to backup.</param>
-    /// <param name="targetDirectory">Target directory for backup storage.</param>
-    /// <param name="type">Type of backup.</param>
     [JsonConstructor]
     public BackupJob(int id, string name, string sourceDirectory, string targetDirectory, BackupType type)
     {
-        if (id < 0)
-            throw new ArgumentOutOfRangeException(nameof(id), "Id cannot be negative.");
+        _identity = new BackupJobIdentity(id, name, sourceDirectory, targetDirectory, type);
+        _progressTracker = new BackupProgressTracker();
+        _controller = new BackupJobController();
+        _transferOrchestrator = new BackupTransferOrchestrator(_identity, _progressTracker, _controller);
 
-        Name = name.ValidateNonEmpty(nameof(name));
-        SourceDirectory = sourceDirectory.ValidateNonEmpty(nameof(sourceDirectory));
-        TargetDirectory = targetDirectory.ValidateNonEmpty(nameof(targetDirectory));
-
-        if (!Enum.IsDefined(typeof(BackupType), type))
-            throw new ArgumentOutOfRangeException(nameof(type), "Invalid backup type.");
-
-        Id = id;
-        Type = type;
+        // Forward sub-component events to facade events
+        _progressTracker.ProgressChanged += (_, e) => ProgressChanged?.Invoke(this, e);
+        _progressTracker.FilesCountEvent += (_, e) => FilesCountEvent?.Invoke(this, e);
+        _controller.PauseEvent += (_, e) => PauseEvent?.Invoke(this, e);
+        _controller.StopEvent += (_, e) => StopEvent?.Invoke(this, e);
+        _transferOrchestrator.EndEvent += (_, e) => EndEvent?.Invoke(this, e);
     }
 
     /// <summary>
     ///     Initializes a new instance of the BackupJob class without an ID.
     /// </summary>
-    /// <param name="name">Name of the backup job.</param>
-    /// <param name="sourceDirectory">Source directory to backup.</param>
-    /// <param name="targetDirectory">Target directory for backup storage.</param>
-    /// <param name="type">Type of backup.</param>
     public BackupJob(string name, string sourceDirectory, string targetDirectory, BackupType type)
         : this(0, name, sourceDirectory, targetDirectory, type)
     {
     }
 
-    // Properties for the backup job
-    public int Id { get; set; } // Unique identifier for the backup job
-    public string Name { get; } // Name of the backup job
-    public string SourceDirectory { get; } // Source directory to back up
-    public string TargetDirectory { get; } // Target directory for backup storage
-    public BackupType Type { get; } // Type of backup
+    // --- Identity pass-through ---
 
-    [JsonIgnore] public List<IFile> Files { get; private set; } = []; // List of files to backup
-    [JsonIgnore] public int CurrentFileIndex { get; private set; } // Index of the currently processed file
-
-    [JsonIgnore]
-    public int FilesCount
+    /// <summary> Unique identifier for the backup job. </summary>
+    public int Id
     {
-        get;
-        private set
-        {
-            field = value; // Sets the total number of files
-            OnFilesCountEvent(); // Triggers the event for files count updated
-        }
+        get => _identity.Id;
+        set => _identity.Id = value;
     }
 
+    /// <summary> Name of the backup job. </summary>
+    public string Name => _identity.Name;
+
+    /// <summary> Source directory to back up. </summary>
+    public string SourceDirectory => _identity.SourceDirectory;
+
+    /// <summary> Target directory for backup storage. </summary>
+    public string TargetDirectory => _identity.TargetDirectory;
+
+    /// <summary> Type of backup. </summary>
+    public BackupType Type => _identity.Type;
+
+    /// <summary> List of files to backup. </summary>
     [JsonIgnore]
-    public double CurrentProgress
+    public List<IFile> Files
     {
-        get;
-        private set
-        {
-            field = value; // Sets the current progress percentage
-            OnProgressChanged(); // Triggers the event for progress changed
-        }
+        get => _identity.Files;
+        set => _identity.Files = value;
     }
+
+    // --- Progress pass-through ---
+
+    /// <summary> The total size of files to be backed up. </summary>
+    [JsonIgnore]
+    public long TotalSize
+    {
+        get => _progressTracker.TotalSize;
+        set => _progressTracker.TotalSize = value;
+    }
+
+    /// <summary> The size of files that have been transferred. </summary>
+    [JsonIgnore]
+    public long TransferredSize
+    {
+        get => _progressTracker.TransferredSize;
+        set => _progressTracker.TransferredSize = value;
+    }
+
+    /// <summary> Current progress percentage. </summary>
+    [JsonIgnore]
+    public double CurrentProgress => _progressTracker.CurrentProgress;
+
+    /// <summary> Total number of files in the backup. </summary>
+    [JsonIgnore]
+    public int FilesCount => _progressTracker.FilesCount;
+
+    /// <summary> Index of the currently processed file. </summary>
+    [JsonIgnore]
+    public int CurrentFileIndex => _progressTracker.CurrentFileIndex;
+
+    // --- Controller pass-through ---
+
+    /// <summary> Gets a value indicating whether the job was stopped. </summary>
+    [JsonIgnore]
+    public bool WasStopped => _controller.WasStopped;
+
+    /// <summary> Gets or sets a value indicating whether the job was stopped by business-software detection. </summary>
+    [JsonIgnore]
+    public bool WasStoppedByBusinessSoftware
+    {
+        get => _controller.WasStoppedByBusinessSoftware;
+        set => _controller.WasStoppedByBusinessSoftware = value;
+    }
+
+    // --- Transfer orchestrator dependencies ---
 
     /// <summary>
     ///     Gets or sets the monitor used to detect business software activity.
-    ///     Exposed for testability and dependency inversion.
     /// </summary>
     [JsonIgnore]
-    public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
-
-    /// <summary>
-    /// Gets or sets the global priority arbitrator shared across all jobs.
-    /// Used to enforce the v3 business rule: no standard files while priority files exist.
-    /// </summary>
-    [JsonIgnore]
-    public IPriorityArbitrator? PriorityArbitrator { get; set; }
-    
-    [JsonIgnore]
-    public bool WasStopped
+    public IBusinessSoftwareMonitor BusinessSoftwareMonitor
     {
-        get;
-        private set
-        {
-            field = value; // Indicates if the job was stopped
-            OnStopEvent(); // Triggers the stop event
-        }
-    } = true;
+        get => _transferOrchestrator.BusinessSoftwareMonitor;
+        set => _transferOrchestrator.BusinessSoftwareMonitor = value;
+    }
 
     /// <summary>
-    ///     Gets a value indicating whether the current job run was stopped because business software was detected.
+    ///     Gets or sets the global priority arbitrator shared across all jobs.
     /// </summary>
     [JsonIgnore]
-    public bool WasStoppedByBusinessSoftware { get; private set; }
+    public IPriorityArbitrator? PriorityArbitrator
+    {
+        get => _transferOrchestrator.PriorityArbitrator;
+        set => _transferOrchestrator.PriorityArbitrator = value;
+    }
 
-    // Events to handle various states of the backup job
+    // --- Events (add/remove pass-through) ---
+
+    public event EventHandler? ProgressChanged;
+    public event EventHandler? FilesCountEvent;
     public event EventHandler? PauseEvent;
     public event EventHandler? StopEvent;
     public event EventHandler? EndEvent;
-    public event EventHandler? FilesCountEvent;
 
-    public event EventHandler? ProgressChanged;
+    // --- Methods pass-through ---
 
-    /// <summary>
-    ///     Checks if the source and target directories exist and are accessible.
-    /// </summary>
-    /// <param name="errorMessage">Error message if directories are not accessible.</param>
-    /// <returns>True if both directories exist and are accessible; otherwise, false.</returns>
-    private bool Check(out string errorMessage)
-    {
-        errorMessage = string.Empty;
+    /// <summary> Starts the backup process. </summary>
+    public void StartBackup() => _transferOrchestrator.Execute();
 
-        // Check source directory
-        if (!PathService.IsDirectoryAccessible(SourceDirectory, out var sourceError))
-        {
-            errorMessage = $"Source directory error: {sourceError}";
-            Console.WriteLine($"[ERROR] {errorMessage}");
-            return false;
-        }
+    /// <summary> Pauses the backup job. </summary>
+    public void Pause() => _controller.Pause();
 
-        // Check target directory
-        if (!PathService.IsDirectoryAccessible(TargetDirectory, out var targetError))
-        {
-            errorMessage = $"Target directory error: {targetError}";
-            Console.WriteLine($"[ERROR] {errorMessage}");
-            return false;
-        }
+    /// <summary> Resumes the backup job. </summary>
+    public void Resume() => _controller.Resume();
 
-        return true;
-    }
+    /// <summary> Stops the backup job immediately. </summary>
+    public void Stop() => _controller.Stop();
 
-    /// <summary>
-    ///     Starts the backup process.
-    ///     Mirrors the folder structure, selects files to backup, and transfers them.
-    ///     Logs the progress and state of the backup job.
-    /// </summary>
-    public void StartBackup()
-    {
-        WasStoppedByBusinessSoftware = false;
-        WasStopped = false;
-        CurrentProgress = 0;
-
-        // Save Key to file for cryptosoft just in case file doesn't exist
-        CryptoSoftConfiguration.Load().Save();
-        StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
-        var state = StateFileSingleton.Instance.GetOrCreate(Id, Name);
-        var businessSoftwareStopHandler = new BusinessSoftwareStopHandler(BusinessSoftwareMonitor, Name);
-
-        // Check if directories are valid
-        if (!Check(out var errorMessage))
-        {
-            Console.WriteLine($"[ERROR] Backup job '{Name}' (ID: {Id}) failed: {errorMessage}");
-            StateLogger.SetStateFailed(state); // Log failure state
-            WasStopped = true; // Mark job as stopped
-            return;
-        }
-
-        // Create the backup folder structure
-        new BackupFolder(SourceDirectory, TargetDirectory, Name).MirrorFolder();
-        var selector = TypeSelectorHelper.GetSelector(Type, SourceDirectory, TargetDirectory, Name);
-        Files = selector.GetFilesToBackup();
-        TotalSize = Files.GetAllSize();
-        TransferredSize = 0;
-        FilesCount = Files.Count();
-        var hadError = false;
-
-        // Partition files into priority and standard queues
-        var config = ApplicationConfiguration.Load();
-        var (priorityQueue, standardQueue) = FilePartitioner.Partition(Files, config.PriorityExtensions);
-
-        // Initialize the global priority arbitrator if available
-        PriorityArbitrator?.Initialize(new Dictionary<int, int> { { Id, priorityQueue.Count } });
-
-        // Set the state of the backup as active
-        StateLogger.SetStateActive(state, FilesCount, TotalSize);
-        StateFileSingleton.Instance.UpdateState(state, s =>
-        {
-            s.PriorityFilesRemaining = priorityQueue.Count;
-            s.StandardFilesRemaining = standardQueue.Count;
-        });
-
-        // Transfer priority files first, then standard files
-        var processedCount = 0;
-        var aborted = false;
-        foreach (var (queue, transferType) in new[]
-        {
-            (priorityQueue, FileTransferPriority.High),
-            (standardQueue, FileTransferPriority.Low)
-        })
-        {
-            if (aborted) break;
-
-            while (queue.Count > 0)
-            {
-                if (processedCount > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, queue.Peek()))
-                {
-                    WasStoppedByBusinessSoftware = true; // Mark as stopped by business software
-                    Pause();
-                }
-
-                // Wait if paused
-                if (IsPaused()) StateLogger.SetStatePaused(state); // Log pause state
-                _pauseEvent.WaitOne();
-
-                if (WasStopped)
-                {
-                    aborted = true; // Exit both loops if the job was manually stopped
-                    break;
-                }
-
-                var file = queue.Dequeue();
-
-                // Check priority arbitration for standard files
-                if (transferType == FileTransferPriority.Low)
-                {
-                    while (!CanProcessStandardFile(PriorityArbitrator, Id))
-                    {
-                        // Job is blocked waiting for priority files to be processed globally
-                        StateLogger.SetStatePausedPriority(state);
-                        _pauseEvent.WaitOne(100); // Small wait to avoid busy-spinning
-
-                        if (WasStopped)
-                        {
-                            aborted = true;
-                            break;
-                        }
-                    }
-
-                    if (aborted) break;
-
-                    // Resume to active state once unblocked
-                    StateLogger.SetStateActive(state, FilesCount, TotalSize);
-                }
-
-                StateLogger.SetStateStartTransfer(state, file, (transferType==(int)FileTransferPriority.High) ? "Priority file transfer" : "Standard File Transfer"); // Log start of transfer with type
-                CurrentFileIndex = processedCount;
-
-                try
-                {
-                    file.Copy(); // Execute the file copy
-                }
-                catch (Exception)
-                {
-                    hadError = true; // Log an error if the copy fails
-                }
-
-                TransferredSize += file.GetSize(); // Update transferred size
-                CurrentProgress = MathUtil.Percentage(TransferredSize, TotalSize); // Update current progress
-
-                processedCount++;
-
-                // Update global priority arbitrator after processing a priority file
-                if (transferType == FileTransferPriority.High && PriorityArbitrator != null)
-                {
-                    PriorityArbitrator.UpdateGlobalPriorityCount(Id, priorityQueue.Count);
-                }
-
-                // Update per-queue counters and global remaining counters
-                StateFileSingleton.Instance.UpdateState(state, s =>
-                {
-                    s.PriorityFilesRemaining = priorityQueue.Count;
-                    s.StandardFilesRemaining = standardQueue.Count;
-                });
-                StateLogger.SetStateEndTransfer(state, FilesCount, processedCount - 1, TotalSize, TransferredSize,
-                    CurrentProgress);
-            }
-        }
-
-        // Signal job completion to the arbitrator
-        PriorityArbitrator?.OnJobCompleted(Id);
-
-        if (WasStoppedByBusinessSoftware)
-            return; // Exit early if stopped by business software
-
-        // Finalize the backup job state
-        StateLogger.SetStateEnd(state, hadError, WasStopped);
-
-        if (!WasStopped) CurrentProgress = 100; // Set progress to 100% at completion
-        OnEndEvent(); // Trigger end event
-    }
-
-    /// <summary>
-    ///     Pauses the backup job, preventing further processing.
-    /// </summary>
-    public void Pause()
-    {
-        _pauseEvent.Reset();
-        OnPauseEvent(); // Trigger pause event
-    }
-
-    /// <summary>
-    ///     Resumes the backup job if it is paused.
-    /// </summary>
-    public void Resume()
-    {
-        _pauseEvent.Set();
-        OnPauseEvent(); // Trigger pause event
-    }
-
-    /// <summary>
-    ///     Stops the backup job immediately.
-    /// </summary>
-    public void Stop()
-    {
-        WasStopped = true; // Mark as stopped
-        _pauseEvent.Set(); // Release pause event
-        OnPauseEvent(); // Trigger pause event
-    }
-
-    private void OnProgressChanged()
-    {
-        ProgressChanged?.Invoke(this, EventArgs.Empty); // Trigger progress changed event
-    }
-
-    private void OnPauseEvent()
-    {
-        PauseEvent?.Invoke(this, EventArgs.Empty); // Trigger pause event
-    }
-
-    private void OnStopEvent()
-    {
-        StopEvent?.Invoke(this, EventArgs.Empty); // Trigger stop event
-    }
-
-    private void OnEndEvent()
-    {
-        EndEvent?.Invoke(this, EventArgs.Empty); // Trigger end event
-    }
-
-    private void OnFilesCountEvent()
-    {
-        FilesCountEvent?.Invoke(this, EventArgs.Empty); // Trigger files count changed event
-    }
-
-    /// <summary>
-    ///     Checks if the backup job is currently paused.
-    /// </summary>
-    /// <returns>True if the job is paused; otherwise, false.</returns>
-    public bool IsPaused()
-    {
-        var isSignaled = _pauseEvent.WaitOne(0);
-        return !isSignaled; // Return the paused state
-    }
-
-    /// <summary>
-    /// Determines whether a standard (non-priority) file can be processed.
-    /// Delegates to the global priority arbitrator if available, otherwise allows processing.
-    /// </summary>
-    /// <param name="arbitrator">The priority arbitrator (may be null).</param>
-    /// <param name="jobId">The current job ID.</param>
-    /// <returns>True if the file can be processed; false if it should be deferred.</returns>
-    private static bool CanProcessStandardFile(IPriorityArbitrator? arbitrator, int jobId)
-    {
-        return arbitrator == null || arbitrator.CanProcessStandardFile(jobId);
-    }
+    /// <summary> Checks if the backup job is currently paused. </summary>
+    public bool IsPaused() => _controller.IsPaused();
 }
 
