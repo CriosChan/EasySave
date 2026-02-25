@@ -221,7 +221,11 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         CurrentScreen = screen;
     }
-
+    
+    /// <summary>
+    ///     Updates the UI to reflect that the server is online.
+    ///     Changes the server color to green and updates the status text.
+    /// </summary>
     private void OnServerConnection(object? sender, EventArgs args)
     {
         Dispatcher.UIThread.InvokeAsync(() =>
@@ -232,6 +236,10 @@ public partial class MainWindowViewModel : ViewModelBase
         });
     }
 
+    /// <summary>
+    ///     Updates the UI to reflect that the server is offline.
+    ///     Changes the server color to red and updates the status text.
+    /// </summary>
     private void OnServerDisconnect(object? sender, EventArgs args)
     {
         Dispatcher.UIThread.InvokeAsync(() =>

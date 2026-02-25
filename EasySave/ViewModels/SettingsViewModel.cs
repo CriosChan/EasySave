@@ -87,6 +87,10 @@ public partial class SettingsViewModel : ViewModelBase
         _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.LogTypeXmlSet", "Log type set to XML");
     }
 
+    /// <summary>
+    ///     Adds a new extension to the CryptoSoft extensions list and persists the configuration.
+    ///     Ignores empty values and duplicates.
+    /// </summary>
     [RelayCommand]
     private void AddExtensionToCryptoSoft()
     {
@@ -95,12 +99,15 @@ public partial class SettingsViewModel : ViewModelBase
         {
             return;
         }
-        
+
         CryptoSoftExtensions.Add(value);
         ApplicationConfiguration.Load().ExtensionToCrypt = CryptoSoftExtensions.ToList();
         NewExtensionContent = string.Empty;
     }
 
+    /// <summary>
+    ///     Removes an extension from the CryptoSoft extensions list and persists the configuration.
+    /// </summary>
     [RelayCommand]
     private void RemoveExtension(string ext)
     {
@@ -110,6 +117,7 @@ public partial class SettingsViewModel : ViewModelBase
 
     /// <summary>
     ///     Adds a new priority extension to the list and persists the configuration.
+    ///     Ignores empty values and duplicates.
     /// </summary>
     [RelayCommand]
     private void AddPriorityExtension()
@@ -133,11 +141,18 @@ public partial class SettingsViewModel : ViewModelBase
         ApplicationConfiguration.Load().PriorityExtensions = PriorityExtensions.ToList();
     }
 
+    /// <summary>
+    ///     Updates the CryptoSoft configuration key.
+    /// </summary>
     partial void OnCryptoSoftKeyChanged(string value)
     {
         CryptoSoftConfiguration.Load().Key = value;
     }
 
+    /// <summary>
+    ///     Updates the EasySave server IP address if valid.
+    ///     Initiates socket creation if the routing type is not local.
+    /// </summary>
     partial void OnRoutingIpChanged(string value)
     {
         if (Validator.IsValidIPv4(value))
@@ -149,7 +164,11 @@ public partial class SettingsViewModel : ViewModelBase
             }
         }
     }
-    
+
+    /// <summary>
+    ///     Updates the EasySave server port if valid.
+    ///     Initiates socket creation if the routing type is not local.
+    /// </summary>
     partial void OnRoutingPortChanged(string value)
     {
         try
@@ -166,6 +185,9 @@ public partial class SettingsViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    ///     Updates the routing type and initiates socket creation if not local.
+    /// </summary>
     partial void OnSelectedRoutingTypeChanged(RoutingType type)
     {
         ApplicationConfiguration.Load().RoutingType = type;

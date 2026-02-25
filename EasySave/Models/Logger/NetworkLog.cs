@@ -4,92 +4,123 @@ using System.Text;
 using System.Text.Json;
 using EasySave.Data.Configuration;
 
-namespace EasySave.Models.Logger
+namespace EasySave.Models.Logger;
+
+/// <summary>
+/// Singleton class for logging over a network using UDP.
+/// </summary>
+public sealed class NetworkLog
 {
-    public class NetworkLog
+    // Lazy initialization for the singleton instance
+    private static readonly Lazy<NetworkLog> instance = new Lazy<NetworkLog>(() => new NetworkLog());
+
+    private UdpClient? _udpClient; // UDP client for sending log messages
+    public EventHandler? OnDisconnect; // Event triggered when the connection is lost
+    public EventHandler? OnConnect;    // Event triggered when the connection is established
+    private IPEndPoint _endpoint; // Endpoint for sending logs
+
+    /// <summary>
+    /// Private constructor to prevent direct instantiation.
+    /// Initializes the socket.
+    /// </summary>
+    private NetworkLog()
     {
-        private static readonly Lazy<NetworkLog> instance = new Lazy<NetworkLog>(() => new NetworkLog());
-        private UdpClient? _udpClient;
-        public EventHandler? OnDisconnect;
-        public EventHandler? OnConnect;
-        private IPEndPoint _endpoint;
+        CreateSocket();
+    }
 
-        private NetworkLog()
+    /// <summary>
+    /// Creates a UDP socket for logging.
+    /// </summary>
+    public void CreateSocket()
+    {
+        lock (this) // Ensure thread safety
         {
-            CreateSocket();
-        }
-
-        public void CreateSocket()
-        {
-            lock (this)
-            {
-                CloseSocket();
+            CloseSocket(); // Ensure any existing socket is closed
                 
-                try
-                {
-                    _endpoint = new IPEndPoint(
-                        IPAddress.Parse(ApplicationConfiguration.Load().EasySaveServerIp),
-                        ApplicationConfiguration.Load().EasySaveServerPort);
-
-                    _udpClient = new UdpClient();
-                    OnConnectEvent();
-                    Console.WriteLine("Socket created and ready to use.");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Error creating socket: {e.Message}");
-                    OnDisconnectEvent();
-                }
-            }
-        }
-        
-        public void CloseSocket()
-        {
             try
             {
-                if (_udpClient != null)
-                {
-                    _udpClient.Close();
-                    _udpClient = null; // Clear the reference
-                    Console.WriteLine("Socket closed.");
-                }
+                // Load the server IP and port from the application configuration
+                _endpoint = new IPEndPoint(
+                    IPAddress.Parse(ApplicationConfiguration.Load().EasySaveServerIp),
+                    ApplicationConfiguration.Load().EasySaveServerPort);
+
+                _udpClient = new UdpClient(); // Instantiate the UDP client
+                OnConnectEvent(); // Trigger the connect event
+                Console.WriteLine("Socket created and ready to use.");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine($"Error when closing socket: {ex.Message}");
+                Console.WriteLine($"Error creating socket: {e.Message}");
+                OnDisconnectEvent(); // Trigger the disconnect event on error
             }
         }
+    }
 
-        public static NetworkLog Instance => instance.Value;
-
-        public void Log<T>(T message)
+    /// <summary>
+    /// Closes the UDP socket if it is open.
+    /// </summary>
+    public void CloseSocket()
+    {
+        try
         {
-            lock (this) 
+            if (_udpClient != null)
             {
-                byte[] data = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(message, new JsonSerializerOptions
-                {
-                    WriteIndented = false
-                }));
+                _udpClient.Close(); // Close the socket
+                _udpClient = null; // Clear the reference
+                Console.WriteLine("Socket closed.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error when closing socket: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Gets the singleton instance of the NetworkLog class.
+    /// </summary>
+    public static NetworkLog Instance => instance.Value;
+
+    /// <summary>
+    /// Sends a log message to the defined endpoint.
+    /// </summary>
+    /// <typeparam name="T">The type of the message to log.</typeparam>
+    /// <param name="message">The message to be sent as a log.</param>
+    public void Log<T>(T message)
+    {
+        lock (this) // Ensure thread safety
+        {
+            // Serialize the message to JSON and convert it to byte array
+            byte[] data = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(message, new JsonSerializerOptions
+            {
+                WriteIndented = false // No indentation for compact messages
+            }));
                 
-                try
-                {
-                    _udpClient?.Send(data, data.Length, _endpoint);
-                }
-                catch
-                {
-                    CreateSocket(); // Try to recreate connection.
-                }
+            try
+            {
+                _udpClient?.Send(data, data.Length, _endpoint); // Send the log message
+            }
+            catch
+            {
+                // On failure to send, attempt to recreate the socket
+                CreateSocket();
             }
         }
+    }
         
-        protected virtual void OnDisconnectEvent()
-        {
-            OnDisconnect?.Invoke(this, EventArgs.Empty);
-        }
+    /// <summary>
+    /// Raises the OnDisconnect event.
+    /// </summary>
+    private void OnDisconnectEvent()
+    {
+        OnDisconnect?.Invoke(this, EventArgs.Empty);
+    }
         
-        protected virtual void OnConnectEvent()
-        {
-            OnConnect?.Invoke(this, EventArgs.Empty);
-        }
+    /// <summary>
+    /// Raises the OnConnect event.
+    /// </summary>
+    private void OnConnectEvent()
+    {
+        OnConnect?.Invoke(this, EventArgs.Empty);
     }
 }
