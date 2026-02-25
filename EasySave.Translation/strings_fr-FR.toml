@@ -82,6 +82,7 @@ CryptoSoftKey = "Clé CryptoSoft."
 ExtensionToCrypt = "Extension à chiffrer"
 ExtensionPriority = "Extensions prioritaires"
 Label = "Paramètres"
+LogSaveRoute = "Emplacement sauvegarde des logs (Local, en ligne, ou les deux)"
 
 [Gui.Settings.Hint]
 FutureExtension = "Cet écran de paramètres est prêt à accueillir de nouveaux réglages."

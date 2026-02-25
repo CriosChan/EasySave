@@ -61,4 +61,3 @@ public class DataPathResolverTests
         Assert.That(result, Is.Not.Empty);
     }
 }
-

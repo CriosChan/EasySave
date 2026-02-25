@@ -102,4 +102,3 @@ public class BackupJobItemViewModelTests
         Assert.That(viewModel.DisplayPath, Is.EqualTo("C:\\Source → C:\\Target"));
     }
 }
-

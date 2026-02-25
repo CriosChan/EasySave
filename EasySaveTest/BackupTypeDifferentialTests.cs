@@ -121,9 +121,9 @@ public class BackupTypeDifferentialTests
         var targetFile1 = Path.Combine(_testTargetDir, "same.txt");
         File.WriteAllText(sourceFile1, "content");
         File.WriteAllText(targetFile1, "content");
-        
+
         File.WriteAllText(Path.Combine(_testSourceDir, "new.txt"), "new content");
-        
+
         var selector = new BackupTypeDifferential(_testSourceDir, _testTargetDir, "TestBackup");
 
         var result = selector.GetFilesToBackup();
@@ -131,4 +131,3 @@ public class BackupTypeDifferentialTests
         Assert.That(result, Has.Count.GreaterThanOrEqualTo(1));
     }
 }
-

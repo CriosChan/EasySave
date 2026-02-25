@@ -8,7 +8,8 @@ public sealed class OrchestrationResult
     /// <summary>
     ///     Initializes a new instance of the <see cref="OrchestrationResult" /> class.
     /// </summary>
-    public OrchestrationResult(int completedCount, int failedCount, int cancelledCount, bool wasStoppedByBusinessSoftware)
+    public OrchestrationResult(int completedCount, int failedCount, int cancelledCount,
+        bool wasStoppedByBusinessSoftware)
     {
         CompletedCount = completedCount;
         FailedCount = failedCount;

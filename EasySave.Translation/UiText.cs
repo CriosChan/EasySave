@@ -35,6 +35,7 @@ public static class UiText
     public static TranslationUnit GuiSettingsCryptoSoftKey => Strings.Gui.Settings.CryptoSoftKey;
     public static TranslationUnit GuiSettingsExtensionToCrypt => Strings.Gui.Settings.ExtensionToCrypt;
     public static TranslationUnit GuiSettingsExtensionPriority => Strings.Gui.Settings.ExtensionPriority;
+    public static TranslationUnit GuiSettingsLogSaveRoute => Strings.Gui.Settings.LogSaveRoute;
 
     public static TranslationUnit GuiButtonFrench => Strings.Gui.Button.French;
     public static TranslationUnit GuiButtonEnglish => Strings.Gui.Button.English;
@@ -47,8 +48,15 @@ public static class UiText
     public static TranslationUnit GuiBusinessSoftwareCatalogTitle => Strings.Gui.BusinessSoftware.Catalog.Title;
     public static TranslationUnit GuiBusinessSoftwareAddedTitle => Strings.Gui.BusinessSoftware.Added.Title;
     public static TranslationUnit GuiBusinessSoftwareSearchLabel => Strings.Gui.BusinessSoftware.Search.Label;
-    public static TranslationUnit GuiBusinessSoftwareSearchPlaceholder => Strings.Gui.BusinessSoftware.Search.Placeholder;
+
+    public static TranslationUnit GuiBusinessSoftwareSearchPlaceholder =>
+        Strings.Gui.BusinessSoftware.Search.Placeholder;
+
     public static TranslationUnit GuiBusinessSoftwareButtonViewAdded => Strings.Gui.BusinessSoftware.Button.ViewAdded;
-    public static TranslationUnit GuiBusinessSoftwareButtonAddSelected => Strings.Gui.BusinessSoftware.Button.AddSelected;
-    public static TranslationUnit GuiBusinessSoftwareButtonRemoveSelected => Strings.Gui.BusinessSoftware.Button.RemoveSelected;
+
+    public static TranslationUnit GuiBusinessSoftwareButtonAddSelected =>
+        Strings.Gui.BusinessSoftware.Button.AddSelected;
+
+    public static TranslationUnit GuiBusinessSoftwareButtonRemoveSelected =>
+        Strings.Gui.BusinessSoftware.Button.RemoveSelected;
 }

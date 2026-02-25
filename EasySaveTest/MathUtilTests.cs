@@ -84,4 +84,3 @@ public class MathUtilTests
         Assert.That(result, Is.EqualTo(0.001).Within(0.0001));
     }
 }
-

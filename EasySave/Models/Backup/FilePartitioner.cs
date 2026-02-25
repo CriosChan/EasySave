@@ -66,4 +66,3 @@ public static class FilePartitioner
         return trimmed.StartsWith('.') ? trimmed : '.' + trimmed;
     }
 }
-

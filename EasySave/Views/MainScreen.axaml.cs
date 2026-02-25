@@ -9,6 +9,7 @@ public partial class MainScreen : UserControl
     {
         InitializeComponent();
     }
+
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);

@@ -4,12 +4,12 @@ using Avalonia.Platform;
 namespace EasySave.Models.Utils;
 
 /// <summary>
-/// Provides utilities for image operations, specifically loading images from resources.
+///     Provides utilities for image operations, specifically loading images from resources.
 /// </summary>
 public class ImageHelper
 {
     /// <summary>
-    /// Loads a bitmap image from a specified resource URI.
+    ///     Loads a bitmap image from a specified resource URI.
     /// </summary>
     /// <param name="resourceUri">The URI of the resource to load the image from.</param>
     /// <returns>A Bitmap object if successful; otherwise, null.</returns>

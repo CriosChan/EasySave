@@ -82,6 +82,7 @@ CryptoSoftKey = "CryptoSoft key."
 ExtensionToCrypt = "Extension to crypt"
 ExtensionPriority = "Priority extensions"
 Label = "Settings"
+LogSaveRoute = "Log backup location (Local, online, or both)"
 
 [Gui.Settings.Hint]
 FutureExtension = "This settings screen is ready for future parameters."

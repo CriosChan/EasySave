@@ -1,7 +1,11 @@
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
+using EasySave.Models.Data.Configuration;
+using EasySave.Models.Logger;
 using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
@@ -23,10 +27,14 @@ public partial class MainWindowViewModel : ViewModelBase
         AddedSoftware
     }
 
-    private readonly IUiTextService _uiTextService;
     private readonly IUiLocalizationService _uiLocalizationService;
+
+    private readonly IUiTextService _uiTextService;
     [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
     private ViewScreen _previousScreen = ViewScreen.Main;
+    [ObservableProperty] private SolidColorBrush _serverColor = SolidColorBrush.Parse("#008000");
+    [ObservableProperty] private string _serverText = "";
+    [ObservableProperty] private bool _useServer = ApplicationConfiguration.Load().RoutingType != RoutingType.Local;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
@@ -45,6 +53,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
         BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
         BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
+
+        NetworkLog.Instance.OnConnect += OnServerConnection;
+        NetworkLog.Instance.OnDisconnect += OnServerDisconnect;
+
+        if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local) NetworkLog.Instance.CreateSocket();
 
         ApplyConfiguredLocalization();
         BusinessSoftware.Initialize();
@@ -205,5 +218,33 @@ public partial class MainWindowViewModel : ViewModelBase
     private void SetCurrentScreen(ViewScreen screen)
     {
         CurrentScreen = screen;
+    }
+
+    /// <summary>
+    ///     Updates the UI to reflect that the server is online.
+    ///     Changes the server color to green and updates the status text.
+    /// </summary>
+    private void OnServerConnection(object? sender, EventArgs args)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            UseServer = true;
+            ServerColor = SolidColorBrush.Parse("#27F535");
+            ServerText = "Serveur : En ligne";
+        });
+    }
+
+    /// <summary>
+    ///     Updates the UI to reflect that the server is offline.
+    ///     Changes the server color to red and updates the status text.
+    /// </summary>
+    private void OnServerDisconnect(object? sender, EventArgs args)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            UseServer = true;
+            ServerColor = SolidColorBrush.Parse("#F52727");
+            ServerText = "Serveur : Hors ligne";
+        });
     }
 }

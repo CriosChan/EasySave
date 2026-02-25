@@ -36,7 +36,7 @@ public static class PathService
     public static bool IsDirectoryAccessible(string path, out string errorMessage)
     {
         errorMessage = string.Empty;
-        
+
         if (string.IsNullOrWhiteSpace(path))
         {
             errorMessage = "Path is empty or null.";
@@ -57,7 +57,7 @@ public static class PathService
             // Try to access the directory to ensure it's really accessible
             // This will fail if it's a disconnected drive or inaccessible network location
             _ = Directory.GetFiles(normalized, "*", SearchOption.TopDirectoryOnly);
-            
+
             return true;
         }
         catch (UnauthorizedAccessException)

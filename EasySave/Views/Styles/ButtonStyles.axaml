@@ -1,6 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+
     <!-- Default Button Style -->
     <Style Selector="Button">
         <Setter Property="Background" Value="{DynamicResource SecondaryBackground}" />
@@ -13,7 +13,7 @@
         <Setter Property="CornerRadius" Value="4" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
-    
+
     <!-- Button Hover State -->
     <Style Selector="Button:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource ButtonSelected}" />

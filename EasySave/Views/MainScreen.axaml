@@ -28,41 +28,43 @@
                             <Border Classes="job-item">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="80*"></ColumnDefinition>
-                                        <ColumnDefinition Width="20*"></ColumnDefinition>
+                                        <ColumnDefinition Width="80*" />
+                                        <ColumnDefinition Width="20*" />
                                     </Grid.ColumnDefinitions>
-    
+
                                     <StackPanel Spacing="2">
                                         <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" />
                                         <TextBlock Text="{Binding Type}" Opacity="0.8" />
                                         <TextBlock Text="{Binding DisplayPath}" TextWrapping="Wrap" Opacity="0.8" />
                                     </StackPanel>
-    
+
                                     <StackPanel Grid.Column="1">
                                         <Grid HorizontalAlignment="Stretch">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/> <!-- Colonne flexible -->
-                                                <ColumnDefinition Width="Auto"/> <!-- Colonne pour le StackPanel -->
+                                                <ColumnDefinition Width="*" /> <!-- Colonne flexible -->
+                                                <ColumnDefinition Width="Auto" /> <!-- Colonne pour le StackPanel -->
                                             </Grid.ColumnDefinitions>
 
-                                            <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
-                                                <Button Command="{Binding PauseResumeJobCommand}" IsVisible="{Binding InverseStopped}">
+                                            <StackPanel Orientation="Horizontal" Grid.Column="1"
+                                                        HorizontalAlignment="Right">
+                                                <Button Command="{Binding PauseResumeJobCommand}"
+                                                        IsVisible="{Binding InverseStopped}">
                                                     <Image Source="{Binding PauseIcon}" Width="24" Height="24" />
                                                 </Button>
                                                 <Button Command="{Binding StartStopJobCommand}" IsEnabled="True">
-                                                    <Image Source="{Binding StopIcon}" Width="24" Height="24"/>
+                                                    <Image Source="{Binding StopIcon}" Width="24" Height="24" />
                                                 </Button>
                                             </StackPanel>
                                         </Grid>
                                         <TextBlock Text="{Binding StatusMessage}"
                                                    TextWrapping="Wrap" />
-                                        <ProgressBar 
+                                        <ProgressBar
                                             Minimum="0"
                                             Maximum="100"
                                             Value="{Binding Progress}"
                                             Foreground="{Binding ProgressBarColor}"
                                             MinWidth="0"
-                                            HorizontalAlignment="Stretch" 
+                                            HorizontalAlignment="Stretch"
                                             Margin="5" />
                                     </StackPanel>
                                 </Grid>
@@ -81,8 +83,9 @@
                     <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuRoot}}">
                         <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuSettings}}"
                                   Command="{Binding OpenSettingsCommand}" />
-                        <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuManageBusinessSoftware}}"
-                                  Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
+                        <MenuItem
+                            Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuManageBusinessSoftware}}"
+                            Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
                     </MenuItem>
                 </Menu>
 
@@ -92,13 +95,12 @@
                            Classes="section-title" />
 
                 <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptName}}" />
-                <TextBox Text="{Binding Jobs.NewJobName}"
-                          />
+                <TextBox Text="{Binding Jobs.NewJobName}" />
 
                 <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptSource}}" />
                 <StackPanel Spacing="4">
                     <Button Command="{Binding Jobs.BrowseSourceDirectoryCommand}"
-                            
+
                             HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <PathIcon
@@ -117,7 +119,7 @@
                 <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptTarget}}" />
                 <StackPanel Spacing="4">
                     <Button Command="{Binding Jobs.BrowseTargetDirectoryCommand}"
-                            
+
                             HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <PathIcon
@@ -135,19 +137,17 @@
 
                 <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptType}}" />
                 <ComboBox ItemsSource="{Binding Jobs.BackupTypes}"
-                          SelectedItem="{Binding Jobs.SelectedBackupType}"
-                           />
+                          SelectedItem="{Binding Jobs.SelectedBackupType}" />
 
                 <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonAddJob}}"
                         Command="{Binding Jobs.AddJobCommand}"
-                        
+
                         Margin="0,4,0,0" />
 
                 <Separator Margin="0,8,0,8" />
 
                 <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRemoveSelected}}"
-                        Command="{Binding Jobs.RemoveSelectedJobCommand}"
-                         />
+                        Command="{Binding Jobs.RemoveSelectedJobCommand}" />
             </StackPanel>
         </Border>
 
@@ -157,11 +157,10 @@
             <WrapPanel ItemHeight="32" VerticalAlignment="Center">
                 <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRunSelectedJob}}"
                         Command="{Binding Jobs.RunSelectedJobCommand}"
-                        
+
                         Margin="0,0,8,0" />
                 <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRunAllJobs}}"
-                        Command="{Binding Jobs.RunAllJobsCommand}"
-                         />
+                        Command="{Binding Jobs.RunAllJobsCommand}" />
             </WrapPanel>
         </Border>
 

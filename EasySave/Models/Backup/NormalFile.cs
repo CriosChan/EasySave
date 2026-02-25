@@ -40,7 +40,7 @@ public class NormalFile : IFile
         var fi = new FileInfo(SourceFile);
         fileSize = fi.Length; // Get the length of the file
         var sw = Stopwatch.StartNew(); // Start the stopwatch for timing the operation
-        File.Copy(SourceFile, TargetFile); // Copy the file
+        File.Copy(SourceFile, TargetFile, true); // Copy the file
         sw.Stop();
         elapsedMs = sw.ElapsedMilliseconds; // Get elapsed time in milliseconds
 

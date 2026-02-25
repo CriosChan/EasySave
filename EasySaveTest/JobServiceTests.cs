@@ -5,7 +5,6 @@ namespace EasySaveTest;
 
 public class JobServiceTests
 {
-
     [Test]
     public void GetAll_ReturnsNotNull()
     {
@@ -29,7 +28,7 @@ public class JobServiceTests
             Assert.That(ok, Is.True);
             Assert.That(error, Is.Empty);
         });
-        
+
         // Cleanup
         service.RemoveJob(job.Id.ToString());
     }
@@ -43,7 +42,7 @@ public class JobServiceTests
         service.AddJob(job);
 
         Assert.That(job.Id, Is.GreaterThan(0));
-        
+
         // Cleanup
         service.RemoveJob(job.Id.ToString());
     }
@@ -95,7 +94,7 @@ public class JobServiceTests
         var result = service.RemoveJob(job.Id.ToString());
 
         Assert.That(result, Is.True);
-        
+
         // Verify it's actually removed
         var allJobs = service.GetAll();
         Assert.That(allJobs.Any(j => j.Id == job.Id), Is.False);
@@ -111,7 +110,7 @@ public class JobServiceTests
         var result = service.RemoveJob("TestJobRemoveByName");
 
         Assert.That(result, Is.True);
-        
+
         // Verify it's actually removed
         var allJobs = service.GetAll();
         Assert.That(allJobs.Any(j => j.Name == "TestJobRemoveByName"), Is.False);
@@ -192,7 +191,7 @@ public class JobServiceTests
             Assert.That(ourJobs[0].Id, Is.LessThan(ourJobs[1].Id));
             Assert.That(ourJobs[1].Id, Is.LessThan(ourJobs[2].Id));
         });
-        
+
         // Cleanup
         service.RemoveJob(job1.Id.ToString());
         service.RemoveJob(job2.Id.ToString());
@@ -210,7 +209,7 @@ public class JobServiceTests
         service.AddJob(job2);
 
         Assert.That(job2.Id, Is.EqualTo(job1.Id + 1));
-        
+
         // Cleanup
         service.RemoveJob(job1.Id.ToString());
         service.RemoveJob(job2.Id.ToString());
@@ -226,10 +225,9 @@ public class JobServiceTests
         var result = service.RemoveJob("testjobcaseinsensitive");
 
         Assert.That(result, Is.True);
-        
+
         // Verify removal
         var allJobs = service.GetAll();
         Assert.That(allJobs.Any(j => j.Name == "TestJobCaseInsensitive"), Is.False);
     }
 }
-

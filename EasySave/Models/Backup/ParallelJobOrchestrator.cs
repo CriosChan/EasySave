@@ -121,6 +121,7 @@ public sealed class ParallelJobOrchestrator
                         _jobStates[job.Id] = JobExecutionState.Failed;
                         return;
                     }
+
                     if (t.IsCanceled)
                     {
                         _jobStates[job.Id] = JobExecutionState.Cancelled;
@@ -132,7 +133,11 @@ public sealed class ParallelJobOrchestrator
 
                     if (result.WasStoppedByBusinessSoftware)
                     {
-                        lock (lockObject) { stoppedByBusinessSoftware = true; }
+                        lock (lockObject)
+                        {
+                            stoppedByBusinessSoftware = true;
+                        }
+
                         _jobStates[job.Id] = JobExecutionState.StoppedByBusinessSoftware;
                     }
                     else
@@ -159,7 +164,8 @@ public sealed class ParallelJobOrchestrator
 
         var completed = results.Count(r => !r.WasStoppedByBusinessSoftware);
         var failed = _jobStates.Count(kvp => kvp.Value == JobExecutionState.Failed);
-        var cancelled = _jobStates.Count(kvp => kvp.Value == JobExecutionState.Cancelled || kvp.Value == JobExecutionState.Skipped);
+        var cancelled = _jobStates.Count(kvp =>
+            kvp.Value == JobExecutionState.Cancelled || kvp.Value == JobExecutionState.Skipped);
 
         return new OrchestrationResult(completed, failed, cancelled, stoppedByBusinessSoftware);
     }

@@ -138,7 +138,8 @@ public class BackupJobTests
     public void StartBackup_WithDisconnectedDrive_FailsGracefully()
     {
         // Simule un disque déconnecté (Z: est généralement non utilisé)
-        var job = new BackupJob(1, "TestJob", "Z:\\NonExistent\\Source", "Z:\\NonExistent\\Target", BackupType.Complete);
+        var job = new BackupJob(1, "TestJob", "Z:\\NonExistent\\Source", "Z:\\NonExistent\\Target",
+            BackupType.Complete);
 
         // Capture la sortie console pour vérifier que l'erreur est loggée
         using var consoleOutput = new StringWriter();
@@ -148,7 +149,7 @@ public class BackupJobTests
         Assert.DoesNotThrow(() => job.StartBackup());
 
         var output = consoleOutput.ToString();
-        
+
         // Vérifie que l'erreur est loggée dans la console
         Assert.That(output, Does.Contain("[ERROR]"));
     }
@@ -157,7 +158,8 @@ public class BackupJobTests
     public void StartBackup_WithNonExistentSourceDirectory_FailsGracefully()
     {
         var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        var job = new BackupJob(1, "TestJob", Path.Combine(tempDir, "Source"), Path.Combine(tempDir, "Target"), BackupType.Complete);
+        var job = new BackupJob(1, "TestJob", Path.Combine(tempDir, "Source"), Path.Combine(tempDir, "Target"),
+            BackupType.Complete);
 
         using var consoleOutput = new StringWriter();
         Console.SetOut(consoleOutput);
@@ -168,4 +170,3 @@ public class BackupJobTests
         Assert.That(output, Does.Contain("[ERROR]"));
     }
 }
-

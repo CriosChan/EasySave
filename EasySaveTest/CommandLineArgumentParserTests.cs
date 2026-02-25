@@ -133,4 +133,3 @@ public class CommandLineArgumentParserTests
         Assert.Throws<FormatException>(() => CommandLineArgumentParser.Parse(""));
     }
 }
-

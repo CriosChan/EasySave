@@ -6,16 +6,15 @@ using EasySave.Models.Backup;
 namespace EasySave.ViewModels;
 
 /// <summary>
-/// Holds the global status and progress state displayed in the bottom status layer of the application.
+///     Holds the global status and progress state displayed in the bottom status layer of the application.
 /// </summary>
 public partial class StatusBarViewModel : ViewModelBase
 {
-    [ObservableProperty] private double _overallProgress;
-    [ObservableProperty] private double _maxProgress;
-    [ObservableProperty] private string _statusMessage = string.Empty;
-
     // Active job snapshots keyed by job ID
     private readonly ConcurrentDictionary<int, BackupExecutionProgressSnapshot> _activeSnapshots = new();
+    [ObservableProperty] private double _maxProgress;
+    [ObservableProperty] private double _overallProgress;
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
     /// <summary>
     ///     Registers or updates the progress snapshot for a running job,

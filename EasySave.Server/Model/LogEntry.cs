@@ -1,4 +1,4 @@
-namespace EasySave.Core.Models;
+namespace EasySave.Log.Model;
 
 /// <summary>
 ///     Log entry for a backup operation.
@@ -11,6 +11,11 @@ public sealed class LogEntry
     ///     Default is the current time.
     /// </summary>
     public DateTime Timestamp { get; set; } = DateTime.Now;
+
+    /// <summary>
+    ///     Gets or sets the IP address of the client that initiated the backup.
+    /// </summary>
+    public string ClientIPAddress { get; set; } = "";
 
     /// <summary>
     ///     Gets or sets the name of the backup associated with this log entry.
@@ -58,17 +63,17 @@ public sealed class LogEntry
     public override string ToString()
     {
         return $@"
-        Log Entry:
-        -------------------------
-        Timestamp      : {Timestamp:yyyy-MM-dd HH:mm:ss}
-        Backup Name    : {BackupName}
-        Source Path    : {SourcePath}
-        Target Path    : {TargetPath}
-        File Size (Bytes) : {FileSizeBytes:n0}
-        Transfer Time (ms) : {TransferTimeMs}
-        Crypting Time (ms) : {CryptingTimeMs}
-        Error Message   : {ErrorMessage ?? "None"}
-        -------------------------
-        ";
+            Log Entry:
+            -------------------------
+            Timestamp      : {Timestamp:yyyy-MM-dd HH:mm:ss}
+            Backup Name    : {BackupName}
+            Source Path    : {SourcePath}
+            Target Path    : {TargetPath}
+            File Size (Bytes) : {FileSizeBytes:n0}
+            Transfer Time (ms) : {TransferTimeMs}
+            Crypting Time (ms) : {CryptingTimeMs}
+            Error Message   : {ErrorMessage ?? "None"}
+            -------------------------
+            ";
     }
 }

@@ -36,11 +36,10 @@
                         <WrapPanel>
                             <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonFrench}}"
                                     Command="{Binding Settings.SetFrenchLanguageCommand}"
-                                    
+
                                     Margin="0,0,8,0" />
                             <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonEnglish}}"
-                                    Command="{Binding Settings.SetEnglishLanguageCommand}"
-                                     />
+                                    Command="{Binding Settings.SetEnglishLanguageCommand}" />
                         </WrapPanel>
                     </StackPanel>
                 </Border>
@@ -52,34 +51,36 @@
                         <WrapPanel>
                             <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonJson}}"
                                     Command="{Binding Settings.SetJsonLogTypeCommand}"
-                                    
+
                                     Margin="0,0,8,0" />
                             <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonXml}}"
-                                    Command="{Binding Settings.SetXmlLogTypeCommand}"
-                                     />
+                                    Command="{Binding Settings.SetXmlLogTypeCommand}" />
                         </WrapPanel>
                     </StackPanel>
                 </Border>
-                
+
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
                         <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsCryptoSoftKey}}"
                                    Classes="section-title" />
                         <StackPanel Orientation="Vertical">
-                            <TextBox Text="{Binding Settings.CryptoSoftKey}" HorizontalContentAlignment="Stretch"></TextBox>
+                            <TextBox Text="{Binding Settings.CryptoSoftKey}" HorizontalContentAlignment="Stretch" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                
+
                 <Grid ColumnDefinitions="*,12,*">
                     <!-- CryptoSoft extensions -->
                     <Border Grid.Column="0" Classes="main-section">
                         <StackPanel Spacing="8">
-                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionToCrypt}}"
-                                       Classes="section-title" />
+                            <TextBlock
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionToCrypt}}"
+                                Classes="section-title" />
                             <StackPanel Orientation="Horizontal">
-                                <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}" HorizontalContentAlignment="Stretch"></TextBox>
-                                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiAddExtension}}" Command="{Binding Settings.AddExtensionToCryptoSoftCommand}"></Button>
+                                <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}"
+                                         HorizontalContentAlignment="Stretch" />
+                                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiAddExtension}}"
+                                        Command="{Binding Settings.AddExtensionToCryptoSoftCommand}" />
                             </StackPanel>
                             <ItemsControl ItemsSource="{Binding Settings.CryptoSoftExtensions}">
                                 <ItemsControl.ItemsPanel>
@@ -89,7 +90,11 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:CompileBindings="False">
-                                        <Button ToolTip.Tip="{tlumach:Translate {x:Static translations:UiText.GuiTooltipDeleteExtension}}" Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}" CommandParameter="{Binding}" IsEnabled="True"/>
+                                        <Button
+                                            ToolTip.Tip="{tlumach:Translate {x:Static translations:UiText.GuiTooltipDeleteExtension}}"
+                                            Content="{Binding}"
+                                            Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}"
+                                            CommandParameter="{Binding}" IsEnabled="True" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -99,11 +104,14 @@
                     <!-- Priority extensions -->
                     <Border Grid.Column="2" Classes="main-section">
                         <StackPanel Spacing="8">
-                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionPriority}}"
-                                       Classes="section-title" />
+                            <TextBlock
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionPriority}}"
+                                Classes="section-title" />
                             <StackPanel Orientation="Horizontal">
-                                <TextBox Text="{Binding Settings.NewPriorityExtensionContent, Mode=TwoWay}" HorizontalContentAlignment="Stretch"></TextBox>
-                                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiAddExtension}}" Command="{Binding Settings.AddPriorityExtensionCommand}"></Button>
+                                <TextBox Text="{Binding Settings.NewPriorityExtensionContent, Mode=TwoWay}"
+                                         HorizontalContentAlignment="Stretch" />
+                                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiAddExtension}}"
+                                        Command="{Binding Settings.AddPriorityExtensionCommand}" />
                             </StackPanel>
                             <ItemsControl ItemsSource="{Binding Settings.PriorityExtensions}">
                                 <ItemsControl.ItemsPanel>
@@ -113,10 +121,50 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate x:CompileBindings="False">
-                                        <Button ToolTip.Tip="{tlumach:Translate {x:Static translations:UiText.GuiTooltipDeleteExtension}}" Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemovePriorityExtensionCommand}" CommandParameter="{Binding}" IsEnabled="True"/>
+                                        <Button
+                                            ToolTip.Tip="{tlumach:Translate {x:Static translations:UiText.GuiTooltipDeleteExtension}}"
+                                            Content="{Binding}"
+                                            Command="{Binding $parent[UserControl].DataContext.Settings.RemovePriorityExtensionCommand}"
+                                            CommandParameter="{Binding}" IsEnabled="True" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,12,*">
+                    <Border Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsLogSaveRoute}}"
+                                Classes="section-title" />
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox ItemsSource="{Binding Settings.RoutingTypes}"
+                                          SelectedItem="{Binding Settings.SelectedRoutingType, Mode=TwoWay}"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Priority extensions -->
+                    <Border Grid.Column="2" Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionPriority}}"
+                                Classes="section-title" />
+                            <StackPanel Orientation="Horizontal" Classes="settings">
+                                <TextBlock Text="IP :" Classes="settings-label" />
+                                <TextBox Text="{Binding Settings.RoutingIp}" HorizontalContentAlignment="Stretch" />
+                                <TextBlock Text="PORT :" Classes="settings-label" />
+                                <TextBox Text="{Binding Settings.RoutingPort}" HorizontalContentAlignment="Stretch" />
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                 </Grid>

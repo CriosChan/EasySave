@@ -121,4 +121,3 @@ public class NormalFileTests
         Assert.Throws<FileNotFoundException>(() => normalFile.Copy());
     }
 }
-

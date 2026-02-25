@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using EasySave.Models.Data.Configuration;
 using Microsoft.Extensions.Configuration;
 
 namespace EasySave.Data.Configuration;
@@ -21,15 +22,25 @@ public sealed class ApplicationConfiguration
     }
 
     // Properties
-    public string LogPath {
+
+    /// <summary>
+    ///     Gets or sets the path for log files. Automatically saves the configuration when modified.
+    ///     Default is "./log".
+    /// </summary>
+    public string LogPath
+    {
         get;
         set
         {
-            field = value;
-            Save();
+            field = value; // Assign new value
+            Save(); // Save the configuration
         }
     } = "./log";
 
+    /// <summary>
+    ///     Gets or sets the path for job configuration files. Automatically saves when modified.
+    ///     Default is "./config".
+    /// </summary>
     public string JobConfigPath
     {
         get;
@@ -40,7 +51,12 @@ public sealed class ApplicationConfiguration
         }
     } = "./config";
 
-    public string Localization {
+    /// <summary>
+    ///     Gets or sets the localization settings.
+    ///     Automatically saves when modified.
+    /// </summary>
+    public string Localization
+    {
         get;
         set
         {
@@ -49,7 +65,12 @@ public sealed class ApplicationConfiguration
         }
     } = "";
 
-    public string LogType {
+    /// <summary>
+    ///     Gets or sets the type of log (JSON or XML). Automatically saves when modified.
+    ///     Default is "json".
+    /// </summary>
+    public string LogType
+    {
         get;
         set
         {
@@ -58,46 +79,102 @@ public sealed class ApplicationConfiguration
         }
     } = "json";
 
+    /// <summary>
+    ///     Gets or sets the names of business software processes.
+    ///     Automatically saves when set and ensures unique, trimmed, and non-empty names.
+    /// </summary>
     public string[] BusinessSoftwareProcessNames
     {
         get;
         set
         {
             field = value
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .Select(name => name.Trim())
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
+                .Where(name => !string.IsNullOrWhiteSpace(name)) // Filter out empty names
+                .Select(name => name.Trim()) // Trim whitespace
+                .Distinct(StringComparer.OrdinalIgnoreCase) // Ensure uniqueness
+                .OrderBy(name => name, StringComparer.OrdinalIgnoreCase) // Sort alphabetically
                 .ToArray();
-            Save(); // Automatically save when BusinessSoftwareProcessNames is set
+            Save(); // Automatically save when modified
         }
     } = Array.Empty<string>();
 
-    public List<string> ExtensionToCrypt {
+    /// <summary>
+    ///     Gets or sets the list of file extensions to be encrypted.
+    ///     Automatically saves when modified.
+    /// </summary>
+    public List<string> ExtensionToCrypt
+    {
         get;
         set
         {
             field = value;
             Save();
         }
-    } = [];
+    } = new();
 
     /// <summary>
     ///     Gets or sets the list of file extensions that should be treated as priority during backup.
-    ///     Priority files are transferred before standard files.
+    ///     Automatically saves when modified.
     /// </summary>
-    public List<string> PriorityExtensions {
+    public List<string> PriorityExtensions
+    {
         get;
         set
         {
             field = value;
             Save();
         }
-    } = [];
+    } = new();
 
-    // Property to hold the configuration file path but not serialized
-    [JsonIgnore] // Ensure to ignore this property
-    public string ConfigFile {
+    /// <summary>
+    ///     Gets or sets the EasySaveServer's IP address. Automatically saves when modified.
+    ///     Default is "127.0.0.1" (localhost).
+    /// </summary>
+    public string EasySaveServerIp
+    {
+        get;
+        set
+        {
+            field = value;
+            Save();
+        }
+    } = "127.0.0.1";
+
+    /// <summary>
+    ///     Gets or sets the EasySaveServer's port number. Automatically saves when modified.
+    ///     Default is 5000.
+    /// </summary>
+    public int EasySaveServerPort
+    {
+        get;
+        set
+        {
+            field = value;
+            Save();
+        }
+    } = 5000;
+
+    /// <summary>
+    ///     Gets or sets the routing type for logs: local only, server only, or both. Automatically saves when modified.
+    ///     Default is RoutingType.Local.
+    /// </summary>
+    public RoutingType RoutingType
+    {
+        get;
+        set
+        {
+            field = value;
+            Save();
+        }
+    } = RoutingType.Local;
+
+    /// <summary>
+    ///     Gets or sets the configuration file path. Not serialized.
+    ///     Default is "appsettings.json".
+    /// </summary>
+    [JsonIgnore] // Ensure this property is ignored during JSON serialization
+    public string ConfigFile
+    {
         get;
         set
         {
@@ -119,12 +196,10 @@ public sealed class ApplicationConfiguration
             {
                 if (_instance == null)
                 {
-                    string filePath = Path.Combine(AppContext.BaseDirectory, configFile);
+                    var filePath = Path.Combine(AppContext.BaseDirectory, configFile);
                     if (!File.Exists(filePath))
-                    {
-                        // Créez le fichier avec juste {}
+                        // Create the file with just {}
                         File.WriteAllText(filePath, "{}");
-                    }
 
                     var configuration = new ConfigurationBuilder()
                         .SetBasePath(AppContext.BaseDirectory)
