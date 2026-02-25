@@ -7,6 +7,8 @@ namespace EasySave.Models.Backup;
 
 public class CryptedFile : IFile
 {
+    
+    private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
     /// <summary>
     ///     Initializes a new instance of the CryptedFile class.
     /// </summary>
@@ -40,34 +42,57 @@ public class CryptedFile : IFile
         var fi = new FileInfo(SourceFile);
         fileSize = fi.Length; // Get the length of the file
         var sw = Stopwatch.StartNew(); // Start the stopwatch for timing the operation
-        // Copy the file
-        var process = new Process
+        _semaphore.Wait();
+        try
         {
-            StartInfo =
+            // Copy the file
+            var process = new Process
             {
-                FileName = "Tools/CryptoSoft.exe",
-                Arguments = $"\"{SourceFile}\" \"{TargetFile}\""
-            }
-        };
-        process.Start();
-        process.WaitForExit();
-        sw.Stop();
-        elapsedMs = sw.ElapsedMilliseconds; // Get elapsed time in milliseconds
-        var log = new LogEntry
+                StartInfo =
+                {
+                    FileName = "Tools/CryptoSoft.exe",
+                    Arguments = $"\"{SourceFile}\" \"{TargetFile}\""
+                }
+            };
+            process.Start();
+            process.WaitForExit();
+            sw.Stop();
+            elapsedMs = sw.ElapsedMilliseconds; // Get elapsed time in milliseconds
+            var log = new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = elapsedMs,
+                ErrorMessage = errorMessage, // Log any error messages (currently unused)
+                CryptingTimeMs = process.ExitCode
+            };
+            if (process.ExitCode != 0)
+                log.CryptingTimeMs = process.ExitCode;
+            else
+                log.CryptingTimeMs = elapsedMs;
+            logger.Log(log);
+        }
+        catch (Exception e)
         {
-            BackupName = BackupName,
-            SourcePath = SourceFile,
-            TargetPath = TargetFile,
-            FileSizeBytes = fileSize,
-            TransferTimeMs = elapsedMs,
-            ErrorMessage = errorMessage, // Log any error messages (currently unused)
-            CryptingTimeMs = process.ExitCode
-        };
-        if (process.ExitCode != 0)
-            log.CryptingTimeMs = process.ExitCode;
-        else
-            log.CryptingTimeMs = elapsedMs;
-        logger.Log(log);
+            sw.Stop();
+            var log = new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = sw.ElapsedMilliseconds,
+                ErrorMessage = e.Message, // Log any error messages (currently unused)
+                CryptingTimeMs = -1
+            };
+            logger.Log(log);
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     /// <summary>
