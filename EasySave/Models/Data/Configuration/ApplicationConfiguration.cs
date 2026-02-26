@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using EasySave.Models.Data.Configuration;
 using Microsoft.Extensions.Configuration;
 
 namespace EasySave.Data.Configuration;

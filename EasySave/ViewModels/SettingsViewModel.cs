@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
-using EasySave.Models.Data.Configuration;
 using EasySave.Models.Logger;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;

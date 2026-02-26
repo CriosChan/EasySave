@@ -32,7 +32,7 @@ Le diagramme complet est disponible ici: `docs/uml/EasySave-full.puml`
 
 Pour regenerer le diagramme:
 ```bash
-dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -c Debug
+dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -- --config Debug
 ```
 
 ## Contribution
@@ -71,7 +71,7 @@ Full diagram: `docs/uml/EasySave-full.puml`
 
 To regenerate:
 ```bash
-dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -c Debug
+dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -- --config Debug
 ```
 
 ## Contribution

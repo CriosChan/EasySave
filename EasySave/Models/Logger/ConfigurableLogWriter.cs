@@ -1,6 +1,5 @@
 using EasyLog;
 using EasySave.Data.Configuration;
-using EasySave.Models.Data.Configuration;
 
 namespace EasySave.Models.Logger;
 
