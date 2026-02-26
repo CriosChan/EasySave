@@ -23,5 +23,10 @@ public interface IBusinessSoftwarePauseCoordinator
     /// <param name="state">Runtime state entry of the calling job.</param>
     /// <param name="blockedFile">File currently blocked by the pause, when available.</param>
     /// <param name="shouldStop">Function that indicates whether caller should stop waiting.</param>
-    void WaitWhileBusinessSoftwareRuns(int jobId, BackupJobState state, IFile? blockedFile, Func<bool> shouldStop);
+    /// <param name="onPauseStateChanged">
+    ///     Optional callback invoked when the business-software pause state changes for this job.
+    ///     Receives <c>true</c> when paused, <c>false</c> when resumed.
+    /// </param>
+    void WaitWhileBusinessSoftwareRuns(int jobId, BackupJobState state, IFile? blockedFile, Func<bool> shouldStop,
+        Action<bool>? onPauseStateChanged = null);
 }

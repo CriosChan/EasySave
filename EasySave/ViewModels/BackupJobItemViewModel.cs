@@ -14,6 +14,7 @@ namespace EasySave.ViewModels;
 public sealed partial class BackupJobItemViewModel : ViewModelBase
 {
     private readonly Func<BackupJob, Task>? _executeJobCallback;
+    private string _previousStatusMessage = ""; // Saves status before business-software pause
     [ObservableProperty] private bool _inverseStopped; // Inverse state for UI purposes
 
     [ObservableProperty] private bool _paused; // Indicates if the job is paused
@@ -52,6 +53,7 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
         Job.StopEvent += OnStopChanged;
         Job.EndEvent += OnJobEnded;
         Job.FilesCountEvent += OnFilesCountChange;
+        Job.BusinessSoftwarePauseChanged += OnBusinessSoftwarePauseChanged;
     }
 
     /// <summary>
@@ -155,6 +157,30 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
 
     private void OnFilesCountChange(object? sender, EventArgs e)
     {
+    }
+
+    /// <summary>
+    ///     Event handler called when the business-software pause state changes.
+    /// </summary>
+    private void OnBusinessSoftwarePauseChanged(object? sender, EventArgs e)
+    {
+        if (Job.PausedByBusiness)
+        {
+            _previousStatusMessage = StatusMessage;
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                ProgressBarColor = new SolidColorBrush(Color.FromRgb(255, 152, 0)); // Orange: paused by business software
+                StatusMessage = "Backup paused: business software is running.";
+            });
+        }
+        else
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                ProgressBarColor = new SolidColorBrush(Color.FromRgb(33, 150, 243)); // Blue: back to normal
+                StatusMessage = _previousStatusMessage;
+            });
+        }
     }
 
     /// <summary>

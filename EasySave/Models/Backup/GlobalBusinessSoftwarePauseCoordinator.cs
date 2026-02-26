@@ -56,7 +56,8 @@ public sealed class GlobalBusinessSoftwarePauseCoordinator : IBusinessSoftwarePa
     }
 
     /// <inheritdoc />
-    public void WaitWhileBusinessSoftwareRuns(int jobId, BackupJobState state, IFile? blockedFile, Func<bool> shouldStop)
+    public void WaitWhileBusinessSoftwareRuns(int jobId, BackupJobState state, IFile? blockedFile, Func<bool> shouldStop,
+        Action<bool>? onPauseStateChanged = null)
     {
         ArgumentNullException.ThrowIfNull(state);
         ArgumentNullException.ThrowIfNull(shouldStop);
@@ -66,11 +67,11 @@ public sealed class GlobalBusinessSoftwarePauseCoordinator : IBusinessSoftwarePa
             if (shouldStop())
                 return;
 
-            MarkPaused(jobId, state, blockedFile);
+            MarkPaused(jobId, state, blockedFile, onPauseStateChanged);
             Thread.Sleep(_pollingIntervalMs);
         }
 
-        MarkResumed(jobId, blockedFile);
+        MarkResumed(jobId, blockedFile, onPauseStateChanged);
     }
 
     /// <summary>
@@ -125,7 +126,7 @@ public sealed class GlobalBusinessSoftwarePauseCoordinator : IBusinessSoftwarePa
     /// <summary>
     ///     Marks a job as paused by business software and logs transition once.
     /// </summary>
-    private void MarkPaused(int jobId, BackupJobState state, IFile? blockedFile)
+    private void MarkPaused(int jobId, BackupJobState state, IFile? blockedFile, Action<bool>? onPauseStateChanged = null)
     {
         StateLogger.SetStatePausedBusinessSoftware(state, blockedFile);
 
@@ -141,13 +142,16 @@ public sealed class GlobalBusinessSoftwarePauseCoordinator : IBusinessSoftwarePa
         }
 
         if (shouldLog)
+        {
             LogPauseTransition(registration, blockedFile, started: true);
+            onPauseStateChanged?.Invoke(true);
+        }
     }
 
     /// <summary>
     ///     Marks a job as resumed from business software pause and logs transition once.
     /// </summary>
-    private void MarkResumed(int jobId, IFile? blockedFile)
+    private void MarkResumed(int jobId, IFile? blockedFile, Action<bool>? onPauseStateChanged = null)
     {
         JobRegistration? registration;
         var shouldLog = false;
@@ -161,7 +165,10 @@ public sealed class GlobalBusinessSoftwarePauseCoordinator : IBusinessSoftwarePa
         }
 
         if (shouldLog)
+        {
             LogPauseTransition(registration, blockedFile, started: false);
+            onPauseStateChanged?.Invoke(false);
+        }
     }
 
     /// <summary>

@@ -27,10 +27,28 @@ public sealed class BackupJobController : IBackupJobController
     }
 
     /// <inheritdoc />
+    public bool PausedByBusiness { get;
+        private set
+        {
+            field = value;
+            BusinessSoftwarePauseChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    /// <inheritdoc />
+    public void NotifyBusinessSoftwarePause(bool paused)
+    {
+        PausedByBusiness = paused;
+    }
+
+    /// <inheritdoc />
     public event EventHandler? PauseEvent;
 
     /// <inheritdoc />
     public event EventHandler? StopEvent;
+
+    /// <inheritdoc />
+    public event EventHandler? BusinessSoftwarePauseChanged;
 
     /// <inheritdoc />
     public void Pause()
