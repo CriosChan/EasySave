@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 
 namespace EasySave.Views;
 
-public partial class MainScreen : UserControl
+public partial class JobScreen : UserControl
 {
-    public MainScreen()
+    public JobScreen()
     {
         InitializeComponent();
     }

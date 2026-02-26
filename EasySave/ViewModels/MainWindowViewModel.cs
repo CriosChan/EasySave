@@ -87,7 +87,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     ///     Gets a value indicating whether the main screen is visible.
     /// </summary>
-    public bool IsMainScreen => CurrentScreen == ViewScreen.Main;
+    public bool IsJobScreen => CurrentScreen == ViewScreen.Main;
 
     /// <summary>
     ///     Gets a value indicating whether the settings screen is visible.
@@ -174,7 +174,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     partial void OnCurrentScreenChanged(ViewScreen value)
     {
-        OnPropertyChanged(nameof(IsMainScreen));
+        OnPropertyChanged(nameof(IsJobScreen));
         OnPropertyChanged(nameof(IsSettingsScreen));
         OnPropertyChanged(nameof(IsSoftwareCatalogScreen));
         OnPropertyChanged(nameof(IsAddedSoftwareScreen));

@@ -1,5 +1,3 @@
-<!-- TODO -->
-
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:EasySave.ViewModels"
@@ -19,12 +17,13 @@
         d:DesignWidth="1200"
         d:DesignHeight="760"
         xmlns:views="using:EasySave.Views"
-        Background="{DynamicResource PrimaryBackground}">
+        Background="{DynamicResource PrimaryBackground}"
+        Foreground="#F8F8F8">
 
     <Grid Margin="16"
           RowDefinitions="*,Auto"
           RowSpacing="12">
-        <views:MainScreen IsVisible="{Binding IsMainScreen}" />
+        <views:JobScreen IsVisible="{Binding IsJobScreen}" />
 
         <views:SettingsScreen Grid.Row="0" IsVisible="{Binding IsSettingsScreen}" />
 

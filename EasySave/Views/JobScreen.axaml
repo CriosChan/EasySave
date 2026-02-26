@@ -5,11 +5,11 @@
              xmlns:tlumach="clr-namespace:Tlumach.Avalonia;assembly=Tlumach.Avalonia"
              xmlns:translations="using:EasySave.Translation"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="EasySave.Views.MainScreen"
+             x:Class="EasySave.Views.JobScreen"
              xmlns:vm="using:EasySave.ViewModels"
              x:DataType="vm:MainWindowViewModel">
     <Grid
-        IsVisible="{Binding IsMainScreen}"
+        IsVisible="{Binding IsJobScreen}"
         RowDefinitions="*,Auto"
         ColumnDefinitions="2*,1*"
         RowSpacing="12"
@@ -17,12 +17,16 @@
         <Border Grid.Row="0"
                 Grid.Column="0"
                 Classes="main-section">
-            <StackPanel Spacing="8">
-                <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.JobsHeader}}"
+            <Grid RowDefinitions="Auto,*"
+                  RowSpacing="8">
+                <TextBlock Grid.Row="0"
+                           Text="{tlumach:Translate {x:Static translations:UiText.JobsHeader}}"
                            Classes="section-title" />
 
-                <ListBox ItemsSource="{Binding Jobs.Jobs}"
-                         SelectedItem="{Binding Jobs.SelectedJob}">
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding Jobs.Jobs}"
+                         SelectedItem="{Binding Jobs.SelectedJob}"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListBox.ItemTemplate>
                         <DataTemplate x:DataType="vm:BackupJobItemViewModel">
                             <Border Classes="job-item">
@@ -72,7 +76,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
+            </Grid>
         </Border>
 
         <Border Grid.Row="0"
@@ -141,7 +145,7 @@
                 <ComboBox ItemsSource="{Binding Jobs.BackupTypes}"
                           SelectedItem="{Binding Jobs.SelectedBackupType}" />
 
-                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonAddJob}}"
+                <Button Classes="btn-green" Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonAddJob}}"
                         Command="{Binding Jobs.AddJobCommand}"
 
                         Margin="0,4,0,0" />
@@ -158,10 +162,6 @@
                 Grid.ColumnSpan="2"
                 Classes="main-section">
             <WrapPanel ItemHeight="32" VerticalAlignment="Center">
-                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRunSelectedJob}}"
-                        Command="{Binding Jobs.RunSelectedJobCommand}"
-
-                        Margin="0,0,8,0" />
                 <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRunAllJobs}}"
                         Command="{Binding Jobs.RunAllJobsCommand}" />
             </WrapPanel>
