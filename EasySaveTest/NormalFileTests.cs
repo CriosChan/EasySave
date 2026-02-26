@@ -1,4 +1,3 @@
-﻿using EasySave.Models.Backup;
 
 namespace EasySaveTest;
 
@@ -121,4 +120,3 @@ public class NormalFileTests
         Assert.Throws<FileNotFoundException>(() => normalFile.Copy());
     }
 }
-

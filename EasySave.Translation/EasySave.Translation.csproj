@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TlumachGeneratorUsingNamespace>Tlumach.Avalonia</TlumachGeneratorUsingNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AlliedBits.Tlumach" Version="1.2.3.2"/>
+        <PackageReference Include="System.Reactive" Version="6.1.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <CompilerVisibleProperty Include="TlumachGeneratorUsingNamespace"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="strings.cfg"/>
+        <AdditionalFiles Include="strings.toml"/>
+        <AdditionalFiles Include="strings_fr-FR.toml"/>
+        <EmbeddedResource Include="strings.toml"/>
+        <EmbeddedResource Include="strings_fr-FR.toml"/>
+    </ItemGroup>
+
+</Project>

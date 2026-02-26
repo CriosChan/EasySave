@@ -1,3 +1,6 @@
+using EasySave.Data.Configuration;
+using EasySave.ViewModels.Services;
+
 namespace EasySave.Cli;
 
 /// <summary>
@@ -16,10 +19,14 @@ public static class CommandController
     public static int Run(
         string[] args)
     {
+        IUiTextService uiTextService = new TlumachUiTextService();
+        IUiLocalizationService localizationService = new TlumachUiLocalizationService();
+        localizationService.Apply(ApplicationConfiguration.Load().Localization);
+
         var raw = string.Join(string.Empty, args).Trim();
         if (string.IsNullOrWhiteSpace(raw))
         {
-            PrintUsage();
+            PrintUsage(uiTextService);
             return 1;
         }
 
@@ -30,20 +37,21 @@ public static class CommandController
         }
         catch
         {
-            PrintUsage();
+            PrintUsage(uiTextService);
             return 1;
         }
 
-        var runner = new CommandJobRunner();
+        var runner = new CommandJobRunner(uiTextService);
         return runner.RunJobs(ids);
     }
 
     /// <summary>
     ///     Prints usage syntax.
     /// </summary>
-    private static void PrintUsage()
+    /// <param name="uiTextService">Localized text service.</param>
+    private static void PrintUsage(IUiTextService uiTextService)
     {
-        CommandUsagePrinter.Print();
+        CommandUsagePrinter.Print(uiTextService);
     }
 
     /// <summary>

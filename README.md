@@ -1,7 +1,9 @@
 # EasySave
 ![Version 1.0](https://img.shields.io/badge/Version-1.0-green) ![Project framework .NET](https://img.shields.io/badge/Project%20framework-.NET-purple)
 
-[English version](#ENGLISH)
+[English version](#english)
+
+[🔧 Accès à la documentation technique / Technical documentation here 🔧](https://crioschan.github.io/EasySave/)
 
 EasySave est un outil de sauvegarde automatise.
 
@@ -30,7 +32,7 @@ Le diagramme complet est disponible ici: `docs/uml/EasySave-full.puml`
 
 Pour regenerer le diagramme:
 ```bash
-dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -c Debug
+dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -- --config Debug
 ```
 
 ## Contribution
@@ -69,7 +71,7 @@ Full diagram: `docs/uml/EasySave-full.puml`
 
 To regenerate:
 ```bash
-dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -c Debug
+dotnet run --project tools/UmlGenerator/UmlGenerator.csproj -- --config Debug
 ```
 
 ## Contribution

@@ -1,5 +1,4 @@
-﻿using EasySave.Core.Models;
-using EasySave.Models.Backup;
+using EasySave.Core.Models;
 using EasySave.ViewModels;
 
 namespace EasySaveTest;
@@ -102,4 +101,3 @@ public class BackupJobItemViewModelTests
         Assert.That(viewModel.DisplayPath, Is.EqualTo("C:\\Source → C:\\Target"));
     }
 }
-

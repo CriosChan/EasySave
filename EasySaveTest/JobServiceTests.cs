@@ -1,11 +1,9 @@
-﻿using EasySave.Core.Models;
-using EasySave.Models.Backup;
+using EasySave.Core.Models;
 
 namespace EasySaveTest;
 
 public class JobServiceTests
 {
-
     [Test]
     public void GetAll_ReturnsNotNull()
     {
@@ -29,7 +27,7 @@ public class JobServiceTests
             Assert.That(ok, Is.True);
             Assert.That(error, Is.Empty);
         });
-        
+
         // Cleanup
         service.RemoveJob(job.Id.ToString());
     }
@@ -43,7 +41,7 @@ public class JobServiceTests
         service.AddJob(job);
 
         Assert.That(job.Id, Is.GreaterThan(0));
-        
+
         // Cleanup
         service.RemoveJob(job.Id.ToString());
     }
@@ -95,7 +93,7 @@ public class JobServiceTests
         var result = service.RemoveJob(job.Id.ToString());
 
         Assert.That(result, Is.True);
-        
+
         // Verify it's actually removed
         var allJobs = service.GetAll();
         Assert.That(allJobs.Any(j => j.Id == job.Id), Is.False);
@@ -111,7 +109,7 @@ public class JobServiceTests
         var result = service.RemoveJob("TestJobRemoveByName");
 
         Assert.That(result, Is.True);
-        
+
         // Verify it's actually removed
         var allJobs = service.GetAll();
         Assert.That(allJobs.Any(j => j.Name == "TestJobRemoveByName"), Is.False);
@@ -192,7 +190,7 @@ public class JobServiceTests
             Assert.That(ourJobs[0].Id, Is.LessThan(ourJobs[1].Id));
             Assert.That(ourJobs[1].Id, Is.LessThan(ourJobs[2].Id));
         });
-        
+
         // Cleanup
         service.RemoveJob(job1.Id.ToString());
         service.RemoveJob(job2.Id.ToString());
@@ -210,7 +208,7 @@ public class JobServiceTests
         service.AddJob(job2);
 
         Assert.That(job2.Id, Is.EqualTo(job1.Id + 1));
-        
+
         // Cleanup
         service.RemoveJob(job1.Id.ToString());
         service.RemoveJob(job2.Id.ToString());
@@ -226,10 +224,46 @@ public class JobServiceTests
         var result = service.RemoveJob("testjobcaseinsensitive");
 
         Assert.That(result, Is.True);
-        
+
         // Verify removal
         var allJobs = service.GetAll();
         Assert.That(allJobs.Any(j => j.Name == "TestJobCaseInsensitive"), Is.False);
     }
-}
 
+    [Test]
+    public void UpdateJob_WithExistingId_ReturnsTrue_AndPersistsChanges()
+    {
+        var service = new JobService();
+        var original = new BackupJob("TestJobUpdateOriginal", "C:\\Source", "C:\\Target", BackupType.Complete);
+        service.AddJob(original);
+
+        var updated = new BackupJob(original.Id, "TestJobUpdateModified", "C:\\Source2", "C:\\Target2",
+            BackupType.Differential);
+
+        var result = service.UpdateJob(updated);
+        var persisted = service.GetAll().FirstOrDefault(job => job.Id == original.Id);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.True);
+            Assert.That(persisted, Is.Not.Null);
+            Assert.That(persisted!.Name, Is.EqualTo("TestJobUpdateModified"));
+            Assert.That(persisted.SourceDirectory, Is.EqualTo("C:\\Source2"));
+            Assert.That(persisted.TargetDirectory, Is.EqualTo("C:\\Target2"));
+            Assert.That(persisted.Type, Is.EqualTo(BackupType.Differential));
+        });
+
+        service.RemoveJob(original.Id.ToString());
+    }
+
+    [Test]
+    public void UpdateJob_WithUnknownId_ReturnsFalse()
+    {
+        var service = new JobService();
+        var updated = new BackupJob(999999, "Unknown", "C:\\Source", "C:\\Target", BackupType.Complete);
+
+        var result = service.UpdateJob(updated);
+
+        Assert.That(result, Is.False);
+    }
+}

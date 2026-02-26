@@ -1,5 +1,3 @@
-﻿using EasySave.Models.Backup;
-using EasySave.Core.Models;
 
 namespace EasySaveTest;
 
@@ -104,4 +102,3 @@ public class BackupTypeCompleteTests
         Assert.That(result[0].TargetFile, Does.Contain(_testTargetDir));
     }
 }
-

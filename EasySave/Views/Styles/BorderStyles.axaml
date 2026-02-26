@@ -1,0 +1,42 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Main Section Border -->
+    <Style Selector="Border.main-section">
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Background" Value="{DynamicResource SecondaryBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BoxShadow" Value="-4 0 16 0 #44000000" />
+    </Style>
+
+    <!-- Job Item Border -->
+    <Style Selector="Border.job-item">
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Margin" Value="0,6,0,6" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Background" Value="{DynamicResource JobItemBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <!-- Status Bar Border -->
+    <Style Selector="Border.status-bar">
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Background" Value="{DynamicResource StatusBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StatusBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <!-- Software Item Border -->
+    <Style Selector="Border.software-item">
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Margin" Value="0,4,0,4" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Background" Value="{DynamicResource JobItemBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderLine}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+</Styles>

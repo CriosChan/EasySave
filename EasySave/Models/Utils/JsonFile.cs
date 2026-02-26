@@ -69,9 +69,6 @@ public static class JsonFile
         var json = JsonSerializer.Serialize(value, Options);
         File.WriteAllText(tmp, json);
 
-        if (File.Exists(path))
-            File.Delete(path);
-
-        File.Move(tmp, path);
+        File.Move(tmp, path, overwrite: true); // Atomic overwrite — avoids delete+move race window
     }
 }

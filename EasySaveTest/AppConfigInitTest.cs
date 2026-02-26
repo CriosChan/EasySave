@@ -7,6 +7,12 @@ namespace EasySaveTest;
 /// </summary>
 public class AppConfigInitTest
 {
+    [TearDown]
+    public void TearDown()
+    {
+        ApplicationConfiguration.ResetForTests();
+    }
+
     /// <summary>
     ///     Ensures Load returns a configuration instance.
     /// </summary>

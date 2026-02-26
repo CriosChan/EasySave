@@ -1,8 +1,10 @@
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
-using EasySave.Models.Utils;
+using EasySave.Models.Logger;
 using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
@@ -21,38 +23,46 @@ public partial class MainWindowViewModel : ViewModelBase
         Main,
         Settings,
         SoftwareCatalog,
-        AddedSoftware
+        AddedSoftware,
+        EditBackup
     }
 
-    private readonly IUiTextService _uiTextService;
-    [ObservableProperty] private string _backButtonLabel = string.Empty;
-    [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
-    [ObservableProperty] private string _manageBusinessSoftwareMenuItemLabel = string.Empty;
-    [ObservableProperty] private string _menuLabel = string.Empty;
-    [ObservableProperty] private string _menuSettingsItemLabel = string.Empty;
-    private ViewScreen _previousScreen = ViewScreen.Main;
+    private readonly IUiLocalizationService _uiLocalizationService;
 
-    [ObservableProperty] private string _windowTitle = string.Empty;
+    private readonly IUiTextService _uiTextService;
+    [ObservableProperty] private ViewScreen _currentScreen = ViewScreen.Main;
+    private ViewScreen _previousScreen = ViewScreen.Main;
+    [ObservableProperty] private SolidColorBrush _serverColor = SolidColorBrush.Parse("#008000");
+    [ObservableProperty] private string _serverText = "";
+    [ObservableProperty] private bool _useServer = ApplicationConfiguration.Load().RoutingType != RoutingType.Local;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
     /// </summary>
     public MainWindowViewModel()
     {
-        _uiTextService = new ResxUiTextService();
+        _uiTextService = new TlumachUiTextService();
+        _uiLocalizationService = new TlumachUiLocalizationService();
 
-        StatusBar = new StatusBarViewModel();
-        Jobs = new JobsViewModel(StatusBar);
-        Settings = new SettingsViewModel(StatusBar,
-            RefreshLocalizedUi);
+        StatusBar = new StatusBarViewModel(_uiTextService);
+        Jobs = new JobsViewModel(StatusBar, _uiTextService);
+        Settings = new SettingsViewModel(StatusBar, _uiTextService, _uiLocalizationService);
+        EditBackup = new EditBackupViewModel(StatusBar, _uiTextService);
         BusinessSoftware = new BusinessSoftwareViewModel(
-            StatusBar);
+            StatusBar,
+            _uiTextService);
 
+        Jobs.EditJobRequested += OnEditJobRequested;
+        EditBackup.JobUpdated += OnBackupJobUpdated;
         BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
         BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
 
+        NetworkLog.Instance.OnConnect += OnServerConnection;
+        NetworkLog.Instance.OnDisconnect += OnServerDisconnect;
+
+        if (ApplicationConfiguration.Load().RoutingType != RoutingType.Local) NetworkLog.Instance.CreateSocket();
+
         ApplyConfiguredLocalization();
-        RefreshLocalizedUi();
         BusinessSoftware.Initialize();
         StatusBar.StatusMessage = _uiTextService.Get("Gui.Status.Ready", "Ready");
     }
@@ -68,6 +78,11 @@ public partial class MainWindowViewModel : ViewModelBase
     public SettingsViewModel Settings { get; }
 
     /// <summary>
+    ///     Gets the backup edition screen ViewModel.
+    /// </summary>
+    public EditBackupViewModel EditBackup { get; }
+
+    /// <summary>
     ///     Gets the business software section ViewModel.
     /// </summary>
     public BusinessSoftwareViewModel BusinessSoftware { get; }
@@ -80,7 +95,7 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>
     ///     Gets a value indicating whether the main screen is visible.
     /// </summary>
-    public bool IsMainScreen => CurrentScreen == ViewScreen.Main;
+    public bool IsJobScreen => CurrentScreen == ViewScreen.Main;
 
     /// <summary>
     ///     Gets a value indicating whether the settings screen is visible.
@@ -98,12 +113,18 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsAddedSoftwareScreen => CurrentScreen == ViewScreen.AddedSoftware;
 
     /// <summary>
+    ///     Gets a value indicating whether the backup edition screen is visible.
+    /// </summary>
+    public bool IsEditBackupScreen => CurrentScreen == ViewScreen.EditBackup;
+
+    /// <summary>
     ///     Forwards the storage provider to the jobs ViewModel.
     /// </summary>
     /// <param name="storageProvider">Window storage provider.</param>
     public void SetStorageProvider(IStorageProvider storageProvider)
     {
         Jobs.SetStorageProvider(storageProvider);
+        EditBackup.SetStorageProvider(storageProvider);
     }
 
     /// <summary>
@@ -165,12 +186,22 @@ public partial class MainWindowViewModel : ViewModelBase
         SetCurrentScreen(_previousScreen);
     }
 
+    /// <summary>
+    ///     Returns from backup edition screen to main screen.
+    /// </summary>
+    [RelayCommand]
+    private void BackFromEditBackup()
+    {
+        SetCurrentScreen(ViewScreen.Main);
+    }
+
     partial void OnCurrentScreenChanged(ViewScreen value)
     {
-        OnPropertyChanged(nameof(IsMainScreen));
+        OnPropertyChanged(nameof(IsJobScreen));
         OnPropertyChanged(nameof(IsSettingsScreen));
         OnPropertyChanged(nameof(IsSoftwareCatalogScreen));
         OnPropertyChanged(nameof(IsAddedSoftwareScreen));
+        OnPropertyChanged(nameof(IsEditBackupScreen));
     }
 
     /// <summary>
@@ -180,24 +211,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var config = ApplicationConfiguration.Load();
         if (!string.IsNullOrWhiteSpace(config.Localization))
-            LocalizationApplier.Apply(config.Localization);
-    }
-
-    /// <summary>
-    ///     Refreshes localized labels for this ViewModel and all child ViewModels.
-    /// </summary>
-    private void RefreshLocalizedUi()
-    {
-        WindowTitle = _uiTextService.Get("Gui.Window.Title", "EasySave - Backup Manager");
-        MenuLabel = _uiTextService.Get("Gui.Menu.Root", "Menu");
-        MenuSettingsItemLabel = _uiTextService.Get("Gui.Menu.Settings", "Settings");
-        ManageBusinessSoftwareMenuItemLabel =
-            _uiTextService.Get("Gui.Menu.ManageBusinessSoftware", "Manage Business Software");
-        BackButtonLabel = _uiTextService.Get("Gui.Navigation.Back", "Back");
-
-        Jobs.UpdateUiText();
-        Settings.UpdateUiText();
-        BusinessSoftware.UpdateUiText();
+            _uiLocalizationService.Apply(config.Localization);
     }
 
     /// <summary>
@@ -222,11 +236,58 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     /// <summary>
+    ///     Opens backup edition for the selected job.
+    /// </summary>
+    /// <param name="job">Job to edit.</param>
+    private void OnEditJobRequested(BackupJob job)
+    {
+        EditBackup.BeginEdit(job);
+        SetCurrentScreen(ViewScreen.EditBackup);
+    }
+
+    /// <summary>
+    ///     Refreshes job list when a job has been updated from edition screen.
+    /// </summary>
+    /// <param name="job">Updated job.</param>
+    private void OnBackupJobUpdated(BackupJob job)
+    {
+        Jobs.RefreshJobs();
+    }
+
+    /// <summary>
     ///     Sets the currently visible screen.
     /// </summary>
     /// <param name="screen">Target screen value.</param>
     private void SetCurrentScreen(ViewScreen screen)
     {
         CurrentScreen = screen;
+    }
+
+    /// <summary>
+    ///     Updates the UI to reflect that the server is online.
+    ///     Changes the server color to green and updates the status text.
+    /// </summary>
+    private void OnServerConnection(object? sender, EventArgs args)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            UseServer = true;
+            ServerColor = SolidColorBrush.Parse("#27F535");
+            ServerText = _uiTextService.Get("Gui.Status.ServerOnline", "Server: Online");
+        });
+    }
+
+    /// <summary>
+    ///     Updates the UI to reflect that the server is offline.
+    ///     Changes the server color to red and updates the status text.
+    /// </summary>
+    private void OnServerDisconnect(object? sender, EventArgs args)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            UseServer = true;
+            ServerColor = SolidColorBrush.Parse("#F52727");
+            ServerText = _uiTextService.Get("Gui.Status.ServerOffline", "Server: Offline");
+        });
     }
 }

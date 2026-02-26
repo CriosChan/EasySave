@@ -1,4 +1,4 @@
-using EasySave.Views.Resources;
+using EasySave.ViewModels.Services;
 
 namespace EasySave.Cli;
 
@@ -10,9 +10,12 @@ internal static class CommandUsagePrinter
     /// <summary>
     ///     Prints command-line usage help.
     /// </summary>
-    internal static void Print()
+    /// <param name="uiTextService">Localized text service.</param>
+    internal static void Print(IUiTextService uiTextService)
     {
-        Console.WriteLine(UserInterface.Terminal_log_Usage);
+        ArgumentNullException.ThrowIfNull(uiTextService);
+
+        Console.WriteLine(uiTextService.Get("Terminal.Log.Usage", "Usage:"));
         Console.WriteLine("  EasySave.exe 1-3");
         Console.WriteLine("  EasySave.exe 1;3");
         Console.WriteLine("  EasySave.exe 2");

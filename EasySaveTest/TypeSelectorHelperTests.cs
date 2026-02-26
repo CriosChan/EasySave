@@ -1,5 +1,4 @@
-﻿using EasySave.Core.Models;
-using EasySave.Models.Backup;
+using EasySave.Core.Models;
 
 namespace EasySaveTest;
 
@@ -9,9 +8,9 @@ public class TypeSelectorHelperTests
     public void GetSelector_WithCompleteBackupType_ReturnsBackupTypeComplete()
     {
         var selector = TypeSelectorHelper.GetSelector(
-            BackupType.Complete, 
-            "C:\\Source", 
-            "C:\\Target", 
+            BackupType.Complete,
+            "C:\\Source",
+            "C:\\Target",
             "TestBackup");
 
         Assert.That(selector, Is.TypeOf<BackupTypeComplete>());
@@ -21,9 +20,9 @@ public class TypeSelectorHelperTests
     public void GetSelector_WithDifferentialBackupType_ReturnsBackupTypeDifferential()
     {
         var selector = TypeSelectorHelper.GetSelector(
-            BackupType.Differential, 
-            "C:\\Source", 
-            "C:\\Target", 
+            BackupType.Differential,
+            "C:\\Source",
+            "C:\\Target",
             "TestBackup");
 
         Assert.That(selector, Is.TypeOf<BackupTypeDifferential>());
@@ -33,9 +32,9 @@ public class TypeSelectorHelperTests
     public void GetSelector_WithInvalidBackupType_ReturnsBackupTypeComplete()
     {
         var selector = TypeSelectorHelper.GetSelector(
-            (BackupType)999, 
-            "C:\\Source", 
-            "C:\\Target", 
+            (BackupType)999,
+            "C:\\Source",
+            "C:\\Target",
             "TestBackup");
 
         Assert.That(selector, Is.TypeOf<BackupTypeComplete>());
@@ -45,12 +44,11 @@ public class TypeSelectorHelperTests
     public void GetSelector_ReturnedSelector_IsNotNull()
     {
         var selector = TypeSelectorHelper.GetSelector(
-            BackupType.Complete, 
-            "C:\\Source", 
-            "C:\\Target", 
+            BackupType.Complete,
+            "C:\\Source",
+            "C:\\Target",
             "TestBackup");
 
         Assert.That(selector, Is.Not.Null);
     }
 }
-

@@ -1,14 +1,14 @@
-<!-- TODO -->
-
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:EasySave.ViewModels"
+        xmlns:tlumach="clr-namespace:Tlumach.Avalonia;assembly=Tlumach.Avalonia"
+        xmlns:translations="using:EasySave.Translation"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Class="EasySave.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="{Binding WindowTitle}"
+        Title="{tlumach:Translate {x:Static translations:UiText.GuiWindowTitle}}"
         Icon="/Assets/avalonia-logo.ico"
         Width="1200"
         Height="760"
@@ -17,33 +17,37 @@
         d:DesignWidth="1200"
         d:DesignHeight="760"
         xmlns:views="using:EasySave.Views"
-        Background="{DynamicResource PrimaryBackground}">
+        Background="{DynamicResource PrimaryBackground}"
+        Foreground="#F8F8F8">
 
     <Grid Margin="16"
           RowDefinitions="*,Auto"
           RowSpacing="12">
-        <views:MainScreen IsVisible="{Binding IsMainScreen}" />
+        <views:JobScreen IsVisible="{Binding IsJobScreen}" />
 
         <views:SettingsScreen Grid.Row="0" IsVisible="{Binding IsSettingsScreen}" />
 
         <views:SoftwareCatalogScreen Grid.Row="0" IsVisible="{Binding IsSoftwareCatalogScreen}" />
 
-        <views:AddedSoftwareScreen Grid.Row="0" IsVisible="{Binding IsAddedSoftwareScreen}"/>
+        <views:AddedSoftwareScreen Grid.Row="0" IsVisible="{Binding IsAddedSoftwareScreen}" />
+
+        <views:EditBackupScreen Grid.Row="0" IsVisible="{Binding IsEditBackupScreen}" />
 
         <Border Grid.Row="1"
-                Padding="12"
-                CornerRadius="8"
-                Background="#18003D7A"
-                BorderBrush="#33003D7A"
-                BorderThickness="1">
+                Classes="status-bar">
             <StackPanel Spacing="8">
                 <TextBlock Text="{Binding StatusBar.StatusMessage}"
                            TextWrapping="Wrap" />
 
                 <ProgressBar Minimum="0"
-                             Maximum="100"
+                             Maximum="{Binding StatusBar.MaxProgress}"
                              Value="{Binding StatusBar.OverallProgress}"
-                             Height="18" />
+                             Foreground="{DynamicResource ProgressSuccess}"
+                             ShowProgressText="True" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" IsVisible="{Binding UseServer}">
+                    <Border Background="{Binding ServerColor}" Width="20" Height="20" CornerRadius="10" />
+                    <TextBlock Text="{Binding ServerText}" Margin="10,0,0,0" />
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>

@@ -1,4 +1,4 @@
-using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.Backup.Abstractions;
 using EasySave.Models.Utils;
 
 namespace EasySave.Models.State;
@@ -57,10 +57,63 @@ public static class StateLogger
     {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
-            s.State = JobRunState.Failed;
+            s.State = JobRunState.Stopped;
             s.CurrentAction = "Stopped: business software running";
             s.CurrentSourcePath = null;
             s.CurrentTargetPath = null;
+        });
+    }
+
+    public static void SetStatePaused(BackupJobState state)
+    {
+        StateFileSingleton.Instance.UpdateState(state, s => { s.State = JobRunState.Paused; });
+    }
+
+    /// <summary>
+    ///     Sets the state of the backup job to paused due to business software detection.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    /// <param name="blockedFile">File currently blocked by the pause, when available.</param>
+    public static void SetStatePausedBusinessSoftware(BackupJobState state, IFile? blockedFile = null)
+    {
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.PausedBusinessSoftware;
+            s.CurrentAction = "Paused: business software running";
+            s.CurrentSourcePath = blockedFile == null ? null : PathService.ToFullUncLikePath(blockedFile.SourceFile);
+            s.CurrentTargetPath = blockedFile == null ? null : PathService.ToFullUncLikePath(blockedFile.TargetFile);
+        });
+    }
+
+    /// <summary>
+    ///     Sets the state of the backup job to waiting for priority files (WaitingPriority).
+    ///     Job is blocked because standard files cannot be processed while priority files exist in the system.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    public static void SetStatePausedPriority(BackupJobState state)
+    {
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.WaitingPriority;
+            s.CurrentAction = "Waiting for priority files"; // Indicate the reason for waiting
+        });
+    }
+
+    /// <summary>
+    ///     Sets the state of the backup job to waiting for the global large-file transfer slot.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    /// <param name="file">The large file waiting for transfer.</param>
+    public static void SetStateWaitingLargeFile(BackupJobState state, IFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.WaitingLargeFile;
+            s.CurrentAction = "Waiting for large-file transfer slot";
+            s.CurrentSourcePath = PathService.ToFullUncLikePath(file.SourceFile);
+            s.CurrentTargetPath = PathService.ToFullUncLikePath(file.TargetFile);
         });
     }
 
@@ -69,11 +122,12 @@ public static class StateLogger
     /// </summary>
     /// <param name="state">The current state of the backup job.</param>
     /// <param name="hadError">Indicates if an error occurred during the backup.</param>
-    public static void SetStateEnd(BackupJobState state, bool hadError)
+    public static void SetStateEnd(BackupJobState state, bool hadError, bool wasStopped)
     {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
-            s.State = hadError ? JobRunState.Failed : JobRunState.Completed; // Set job state
+            s.State = wasStopped ? JobRunState.Stopped :
+                hadError ? JobRunState.Failed : JobRunState.Completed; // Set job state
             s.CurrentAction = hadError ? "completed_with_errors" : "completed"; // Action message
             s.CurrentSourcePath = null; // Reset source path
             s.CurrentTargetPath = null; // Reset target path
@@ -90,9 +144,24 @@ public static class StateLogger
     /// <param name="file">The file being transferred.</param>
     public static void SetStateStartTransfer(BackupJobState state, IFile file)
     {
+        SetStateStartTransfer(state, file, "file_transfer");
+    }
+
+    /// <summary>
+    ///     Sets the state for the beginning of a file transfer with an explicit transfer type label.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    /// <param name="file">The file being transferred.</param>
+    /// <param name="transferType">
+    ///     Label describing the transfer category, e.g. <c>"priority file transfer"</c>
+    ///     or <c>"standard file transfer"</c>.
+    /// </param>
+    public static void SetStateStartTransfer(BackupJobState state, IFile file, string transferType)
+    {
         StateFileSingleton.Instance.UpdateState(state, s =>
         {
-            s.CurrentAction = "file_transfer"; // Set current action
+            s.State = JobRunState.Active;
+            s.CurrentAction = transferType; // Set current action to the provided transfer type
             s.CurrentSourcePath = PathService.ToFullUncLikePath(file.SourceFile); // Set source path
             s.CurrentTargetPath = PathService.ToFullUncLikePath(file.TargetFile); // Set target path
         });

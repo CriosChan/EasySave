@@ -73,3 +73,7 @@ docs/markdown/
 *.pdf
 .vscode/*
 *.ps1
+
+docs/uml/livrable-3-roadmap-hierarchique.puml
+/config
+docs/texte/

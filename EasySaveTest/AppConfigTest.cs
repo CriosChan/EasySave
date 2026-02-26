@@ -9,6 +9,12 @@ public class AppConfigTest
 {
     private ApplicationConfiguration _appSettings = null!;
 
+    [OneTimeTearDown]
+    public void TearDown()
+    {
+        ApplicationConfiguration.ResetForTests();
+    }
+
     /// <summary>
     ///     Loads configuration once for the rest of the tests.
     /// </summary>
@@ -62,5 +68,14 @@ public class AppConfigTest
     {
         Assert.That(_appSettings.BusinessSoftwareProcessNames, Is.Not.Null);
         Assert.That(_appSettings.BusinessSoftwareProcessNames.Length, Is.EqualTo(0));
+    }
+
+    /// <summary>
+    ///     Verifies the default large-file threshold in Ko.
+    /// </summary>
+    [Test]
+    public void ConfigHasDefaultLargeFileThresholdKo()
+    {
+        Assert.That(_appSettings.LargeFileThresholdKo, Is.EqualTo(1024));
     }
 }

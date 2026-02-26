@@ -1,5 +1,4 @@
-﻿using EasySave.Models.Backup;
-using EasySave.Models.Backup.Interfaces;
+﻿using EasySave.Models.Backup.Abstractions;
 
 namespace EasySaveTest;
 
@@ -63,7 +62,7 @@ public class FileExtensionsTests
         var files = new List<IFile>
         {
             new FakeFile(1073741824), // 1 GB
-            new FakeFile(2147483648)  // 2 GB
+            new FakeFile(2147483648) // 2 GB
         };
 
         var result = files.GetAllSize();
@@ -80,14 +79,17 @@ public class FileExtensionsTests
             _size = size;
         }
 
+        public string BackupName => "TestBackup";
+
         public string SourceFile => "C:\\Source\\File.txt";
         public string TargetFile => "C:\\Target\\File.txt";
-        public string BackupName => "TestBackup";
 
         public void Copy()
         {
             // No-op for testing
         }
+
+        public Task CopyAsync() => Task.CompletedTask;
 
         public long GetSize()
         {
@@ -95,4 +97,3 @@ public class FileExtensionsTests
         }
     }
 }
-

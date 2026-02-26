@@ -1,5 +1,4 @@
 using EasySave.Data.Configuration;
-using EasySave.Models.Backup;
 using EasySave.Models.Utils;
 
 namespace EasySave.Models.Data.Persistence;

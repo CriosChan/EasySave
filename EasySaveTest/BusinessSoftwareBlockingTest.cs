@@ -1,72 +1,86 @@
+using System.Diagnostics;
 using EasySave.Core.Models;
-using EasySave.Models.Backup;
-using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.Backup.Abstractions;
+using EasySave.Models.State;
 
 namespace EasySaveTest;
 
 /// <summary>
 ///     Tests business software blocking behavior during backup execution.
 /// </summary>
+[NonParallelizable]
 public class BusinessSoftwareBlockingTest
 {
-    /// <summary>
-    ///     Verifies that no file is copied when business software is already running before job start.
-    /// </summary>
     [Test]
-    public void StartBackup_WhenBusinessSoftwareAlreadyRunning_DoesNotCopyFiles()
+    public void Coordinator_WaitsWhenAnotherRegisteredJobDetectsBusinessSoftware()
     {
-        var root = Path.Combine(Path.GetTempPath(), $"EasySaveTest_{Guid.NewGuid():N}");
-        var source = Path.Combine(root, "source");
-        var target = Path.Combine(root, "target");
-
-        Directory.CreateDirectory(source);
-        Directory.CreateDirectory(target);
-        File.WriteAllText(Path.Combine(source, "a.txt"), "content-a");
+        var stateRoot = Path.Combine(Path.GetTempPath(), $"EasySaveState_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(stateRoot);
 
         try
         {
-            var job = new BackupJob("blocked-before-start", source, target, BackupType.Complete)
+            StateFileSingleton.Instance.Initialize(stateRoot);
+            var state = StateFileSingleton.Instance.GetOrCreate(50109, "Feature09.Job2");
+
+            var coordinator = new GlobalBusinessSoftwarePauseCoordinator(TimeSpan.FromMilliseconds(15));
+            using var registration1 = coordinator.RegisterJob(
+                50108,
+                "Feature09.Job1",
+                new SequenceBusinessSoftwareMonitor(true, true, false));
+            using var registration2 = coordinator.RegisterJob(
+                50109,
+                "Feature09.Job2",
+                new SequenceBusinessSoftwareMonitor(false, false, false));
+
+            var startedAt = Stopwatch.StartNew();
+            coordinator.WaitWhileBusinessSoftwareRuns(50109, state, null, () => false);
+            startedAt.Stop();
+
+            Assert.Multiple(() =>
             {
-                BusinessSoftwareMonitor = new SequenceBusinessSoftwareMonitor(true)
-            };
-
-            job.StartBackup();
-
-            Assert.That(job.WasStoppedByBusinessSoftware, Is.True);
-            Assert.That(Directory.GetFiles(target, "*", SearchOption.AllDirectories).Length, Is.EqualTo(0));
+                Assert.That(startedAt.ElapsedMilliseconds, Is.GreaterThanOrEqualTo(20));
+                Assert.That(state.State, Is.EqualTo(JobRunState.PausedBusinessSoftware));
+            });
         }
         finally
         {
-            Directory.Delete(root, true);
+            Directory.Delete(stateRoot, true);
         }
     }
 
-    /// <summary>
-    ///     Verifies that sequential processing stops before the next file when business software appears.
-    /// </summary>
     [Test]
-    public void StartBackup_WhenBusinessSoftwareAppearsDuringSequentialRun_StopsAfterCurrentFile()
+    public async Task ExecuteJobAsync_AutoPausesThenResumes_InsteadOfStopping()
     {
         var root = Path.Combine(Path.GetTempPath(), $"EasySaveTest_{Guid.NewGuid():N}");
         var source = Path.Combine(root, "source");
         var target = Path.Combine(root, "target");
+        var sourceFile = Path.Combine(source, "feature09-blocked.dat");
+        var targetFile = Path.Combine(target, "feature09-blocked.dat");
 
         Directory.CreateDirectory(source);
         Directory.CreateDirectory(target);
-        File.WriteAllText(Path.Combine(source, "a.txt"), "content-a");
-        File.WriteAllText(Path.Combine(source, "b.txt"), "content-b");
+        File.WriteAllText(sourceFile, "feature-09");
 
         try
         {
-            var job = new BackupJob("blocked-during-sequence", source, target, BackupType.Complete)
+            var job = new BackupJob("feature-09-job", source, target, BackupType.Complete)
             {
-                BusinessSoftwareMonitor = new SequenceBusinessSoftwareMonitor(false, true)
+                BusinessSoftwareMonitor = new SequenceBusinessSoftwareMonitor(true, true, false),
+                BusinessSoftwarePauseCoordinator =
+                    new GlobalBusinessSoftwarePauseCoordinator(TimeSpan.FromMilliseconds(15))
             };
 
-            job.StartBackup();
+            var engine = new BackupExecutionEngine();
+            var startedAt = Stopwatch.StartNew();
+            var result = await engine.ExecuteJobAsync(job);
+            startedAt.Stop();
 
-            Assert.That(job.WasStoppedByBusinessSoftware, Is.True);
-            Assert.That(Directory.GetFiles(target, "*", SearchOption.AllDirectories).Length, Is.EqualTo(1));
+            Assert.Multiple(() =>
+            {
+                Assert.That(startedAt.ElapsedMilliseconds, Is.GreaterThanOrEqualTo(20));
+                Assert.That(result.WasStoppedByBusinessSoftware, Is.False);
+                Assert.That(File.Exists(targetFile), Is.True);
+            });
         }
         finally
         {

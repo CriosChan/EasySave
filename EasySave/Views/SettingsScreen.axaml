@@ -2,6 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tlumach="clr-namespace:Tlumach.Avalonia;assembly=Tlumach.Avalonia"
+             xmlns:translations="using:EasySave.Translation"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="EasySave.Views.SettingsScreen"
              xmlns:vm="using:EasySave.ViewModels"
@@ -11,96 +13,178 @@
         RowDefinitions="Auto,*"
         RowSpacing="12">
         <Border Grid.Row="0"
-                Padding="12"
-                CornerRadius="8"
-                Background="{DynamicResource SecondaryBackground}"
-                BorderBrush="{DynamicResource BorderLine}"
-                BorderThickness="1">
+                Classes="main-section">
             <Grid ColumnDefinitions="Auto,*"
                   ColumnSpacing="12">
                 <Button Grid.Column="0"
-                        Content="{Binding BackButtonLabel}"
+                        Content="{tlumach:Translate {x:Static translations:UiText.GuiNavigationBack}}"
                         Command="{Binding BackFromSettingsCommand}" />
                 <TextBlock Grid.Column="1"
-                           Text="{Binding Settings.SettingsScreenTitle}"
-                           FontSize="18"
-                           FontWeight="Bold"
+                           Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsScreenTitle}}"
+                           Classes="section-title"
                            VerticalAlignment="Center" />
             </Grid>
         </Border>
 
         <Border Grid.Row="1"
-                Padding="12"
-                CornerRadius="8"
-                Background="{DynamicResource SecondaryBackground}"
-                BorderBrush="{DynamicResource BorderLine}"
-                BorderThickness="1">
-            <StackPanel Spacing="12">
+                Classes="main-section">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="12">
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsLanguageSectionTitle}"
+                        <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsSectionLanguage}}"
                                    Classes="section-title" />
                         <WrapPanel>
-                            <Button Content="{Binding Settings.FrenchButtonLabel}"
+                            <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonFrench}}"
                                     Command="{Binding Settings.SetFrenchLanguageCommand}"
-                                    IsEnabled="{Binding StatusBar.IsNotBusy}"
+
                                     Margin="0,0,8,0" />
-                            <Button Content="{Binding Settings.EnglishButtonLabel}"
-                                    Command="{Binding Settings.SetEnglishLanguageCommand}"
-                                    IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                            <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonEnglish}}"
+                                    Command="{Binding Settings.SetEnglishLanguageCommand}" />
                         </WrapPanel>
                     </StackPanel>
                 </Border>
 
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsLogTypeSectionTitle}"
+                        <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsSectionLogType}}"
                                    Classes="section-title" />
                         <WrapPanel>
-                            <Button Content="{Binding Settings.JsonButtonLabel}"
+                            <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonJson}}"
                                     Command="{Binding Settings.SetJsonLogTypeCommand}"
-                                    IsEnabled="{Binding StatusBar.IsNotBusy}"
+
                                     Margin="0,0,8,0" />
-                            <Button Content="{Binding Settings.XmlButtonLabel}"
-                                    Command="{Binding Settings.SetXmlLogTypeCommand}"
-                                    IsEnabled="{Binding StatusBar.IsNotBusy}" />
+                            <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonXml}}"
+                                    Command="{Binding Settings.SetXmlLogTypeCommand}" />
                         </WrapPanel>
                     </StackPanel>
                 </Border>
-                
+
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.SettingsCryptoSoftKey}"
+                        <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsCryptoSoftKey}}"
                                    Classes="section-title" />
                         <StackPanel Orientation="Vertical">
-                            <TextBox Text="{Binding Settings.CryptoSoftKey}" HorizontalContentAlignment="Stretch"></TextBox>
+                            <TextBox Text="{Binding Settings.CryptoSoftKey}" HorizontalContentAlignment="Stretch" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                
+
+                <Grid ColumnDefinitions="*,12,*">
+                    <!-- CryptoSoft extensions -->
+                    <Border Grid.Column="0" Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionToCrypt}}"
+                                Classes="section-title" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}"
+                                         HorizontalContentAlignment="Stretch" />
+                                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiAddExtension}}"
+                                        Command="{Binding Settings.AddExtensionToCryptoSoftCommand}" />
+                            </StackPanel>
+                            <ItemsControl ItemsSource="{Binding Settings.CryptoSoftExtensions}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:CompileBindings="False">
+                                        <Button
+                                            ToolTip.Tip="{tlumach:Translate {x:Static translations:UiText.GuiTooltipDeleteExtension}}"
+                                            Content="{Binding}"
+                                            Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}"
+                                            CommandParameter="{Binding}" IsEnabled="True" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Priority extensions -->
+                    <Border Grid.Column="2" Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionPriority}}"
+                                Classes="section-title" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Text="{Binding Settings.NewPriorityExtensionContent, Mode=TwoWay}"
+                                         HorizontalContentAlignment="Stretch" />
+                                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiAddExtension}}"
+                                        Command="{Binding Settings.AddPriorityExtensionCommand}" />
+                            </StackPanel>
+                            <ItemsControl ItemsSource="{Binding Settings.PriorityExtensions}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:CompileBindings="False">
+                                        <Button
+                                            ToolTip.Tip="{tlumach:Translate {x:Static translations:UiText.GuiTooltipDeleteExtension}}"
+                                            Content="{Binding}"
+                                            Command="{Binding $parent[UserControl].DataContext.Settings.RemovePriorityExtensionCommand}"
+                                            CommandParameter="{Binding}" IsEnabled="True" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
                 <Border Classes="main-section">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="{Binding Settings.ExtensionToCrypt}"
-                                   Classes="section-title" />
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Text="{Binding Settings.NewExtensionContent, Mode=TwoWay}" HorizontalContentAlignment="Stretch"></TextBox>
-                            <Button Content="{Binding Settings.AddExtensionToList}" Command="{Binding Settings.AddExtensionToCryptoSoftCommand}"></Button>
+                        <TextBlock
+                            Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsLargeFileThreshold}}"
+                            Classes="section-title" />
+                        <StackPanel Orientation="Horizontal" Classes="settings">
+                            <TextBox Text="{Binding Settings.LargeFileThresholdKo, Mode=TwoWay}"
+                                     HorizontalContentAlignment="Stretch" />
+                            <TextBlock Text="Ko" Classes="settings-label" />
                         </StackPanel>
-                        <ItemsControl ItemsSource="{Binding Settings.CryptoSoftExtensions}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:CompileBindings="False">
-                                    <Button ToolTip.Tip="{Binding $parent[UserControl].DataContext.Settings.TooltipRemoveExtension}" Content="{Binding}" Command="{Binding $parent[UserControl].DataContext.Settings.RemoveExtensionCommand}" CommandParameter="{Binding}" IsEnabled="True"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
                     </StackPanel>
                 </Border>
-            </StackPanel>
+
+                <Grid ColumnDefinitions="*,12,*">
+                    <Border Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsLogSaveRoute}}"
+                                Classes="section-title" />
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox ItemsSource="{Binding Settings.RoutingTypes}"
+                                          SelectedItem="{Binding Settings.SelectedRoutingType, Mode=TwoWay}"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Network settings (IP / PORT) -->
+                    <Border Grid.Column="2" Classes="main-section">
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsNetworkSection}}"
+                                Classes="section-title" />
+                            <StackPanel Orientation="Horizontal" Classes="settings">
+                                <TextBlock Text="IP :" Classes="settings-label" />
+                                <TextBox Text="{Binding Settings.RoutingIp}" HorizontalContentAlignment="Stretch" />
+                                <TextBlock Text="PORT :" Classes="settings-label" />
+                                <TextBox Text="{Binding Settings.RoutingPort}" HorizontalContentAlignment="Stretch" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                </StackPanel>
+            </ScrollViewer>
         </Border>
 
     </Grid>

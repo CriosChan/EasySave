@@ -1,0 +1,105 @@
+using EasySave.Models.Backup.Abstractions;
+using EasySave.Models.Data.Persistence;
+
+namespace EasySave.Models.Backup.Services;
+
+/// <summary>
+///     Manages backup jobs and enforces business rules.
+/// </summary>
+public sealed class JobService : IJobService
+{
+    // Repository to handle backup job data persistence
+    private readonly JobRepository _repository = new();
+
+    /// <summary>
+    ///     Retrieves all backup jobs, ordered by their ID.
+    /// </summary>
+    /// <returns>A read-only list of BackupJob objects.</returns>
+    public IReadOnlyList<BackupJob> GetAll()
+    {
+        return _repository.GetAll().OrderBy(j => j.Id).ToList();
+    }
+
+    /// <summary>
+    ///     Adds a new backup job to the repository.
+    /// </summary>
+    /// <param name="job">The BackupJob object to add.</param>
+    /// <returns>A tuple containing a boolean indicating success and an error message if applicable.</returns>
+    public (bool ok, string error) AddJob(BackupJob job)
+    {
+        if (job == null)
+            throw new ArgumentNullException(nameof(job));
+
+        if (job.Id != 0)
+            throw new InvalidOperationException("New jobs must not have an id assigned.");
+
+        var jobs = _repository.GetAll().ToList();
+
+        var id = GetNextFreeId(jobs);
+        job.Id = id; // Assign a new ID to the job
+        jobs.Add(job);
+        _repository.SaveAll(jobs); // Persist the updated job list
+        return (true, string.Empty);
+    }
+
+    /// <summary>
+    ///     Removes an existing backup job by ID or name.
+    /// </summary>
+    /// <param name="idOrName">The ID or name of the job to remove.</param>
+    /// <returns>True if the job was successfully removed; otherwise, false.</returns>
+    public bool RemoveJob(string idOrName)
+    {
+        if (string.IsNullOrWhiteSpace(idOrName))
+            return false;
+
+        var jobs = _repository.GetAll().ToList();
+        BackupJob? toRemove = null;
+
+        // Try to find the job by ID or name
+        if (int.TryParse(idOrName, out var id))
+            toRemove = jobs.FirstOrDefault(j => j.Id == id);
+        else
+            toRemove = jobs.FirstOrDefault(j => string.Equals(j.Name, idOrName, StringComparison.OrdinalIgnoreCase));
+
+        if (toRemove == null)
+            return false; // Job not found
+
+        jobs.Remove(toRemove); // Remove the job from the list
+        _repository.SaveAll(jobs); // Persist the updated job list
+        return true;
+    }
+
+    /// <summary>
+    ///     Updates an existing backup job by replacing its persisted definition.
+    /// </summary>
+    /// <param name="job">Updated backup job.</param>
+    /// <returns>True when the job exists and is updated; otherwise, false.</returns>
+    public bool UpdateJob(BackupJob job)
+    {
+        if (job == null)
+            throw new ArgumentNullException(nameof(job));
+
+        if (job.Id <= 0)
+            return false;
+
+        var jobs = _repository.GetAll().ToList();
+        var index = jobs.FindIndex(existing => existing.Id == job.Id);
+        if (index < 0)
+            return false;
+
+        jobs[index] = job;
+        _repository.SaveAll(jobs);
+        return true;
+    }
+
+    /// <summary>
+    ///     Gets the next available ID for a new backup job.
+    ///     Returns <c>max(existing IDs) + 1</c>, or 1 when no jobs exist yet.
+    /// </summary>
+    /// <param name="jobs">The current list of backup jobs.</param>
+    /// <returns>The next free ID (always positive).</returns>
+    private static int GetNextFreeId(IReadOnlyCollection<BackupJob> jobs)
+    {
+        return jobs.Count == 0 ? 1 : jobs.Max(j => j.Id) + 1;
+    }
+}
