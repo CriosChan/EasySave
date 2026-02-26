@@ -36,9 +36,6 @@ public sealed class JobService : IJobService
         var jobs = _repository.GetAll().ToList();
 
         var id = GetNextFreeId(jobs);
-        if (id == -1)
-            return (false, "Error.NoFreeSlot");
-
         job.Id = id; // Assign a new ID to the job
         jobs.Add(job);
         _repository.SaveAll(jobs); // Persist the updated job list
@@ -97,17 +94,12 @@ public sealed class JobService : IJobService
 
     /// <summary>
     ///     Gets the next available ID for a new backup job.
+    ///     Returns <c>max(existing IDs) + 1</c>, or 1 when no jobs exist yet.
     /// </summary>
     /// <param name="jobs">The current list of backup jobs.</param>
-    /// <returns>The next free ID, or -1 if no free ID is available.</returns>
+    /// <returns>The next free ID (always positive).</returns>
     private static int GetNextFreeId(IReadOnlyCollection<BackupJob> jobs)
     {
-        var i = 0;
-        while (true)
-        {
-            i++;
-            if (jobs.All(j => j.Id != i))
-                return i; // Return the first free ID
-        }
+        return jobs.Count == 0 ? 1 : jobs.Max(j => j.Id) + 1;
     }
 }

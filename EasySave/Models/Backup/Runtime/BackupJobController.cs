@@ -15,7 +15,7 @@ public sealed class BackupJobController : IBackupJobController
         {
             field = value;
             StopEvent?.Invoke(this, EventArgs.Empty);
-        } } = true;
+        } } = false;
 
     /// <inheritdoc />
     public bool WasStoppedByBusinessSoftware { get;

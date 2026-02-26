@@ -40,7 +40,7 @@ public class BackupTypeDifferential : IBackupTypeSelector
             // Add the file if it does not exist in the target directory
             if (!File.Exists(targetPath))
             {
-                if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file)))
+                if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file).TrimStart('.')))
                     filesToBackup.Add(new CryptedFile(file, targetPath, _backupName));
                 else
                     filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Create a NormalFile instance
@@ -54,7 +54,7 @@ public class BackupTypeDifferential : IBackupTypeSelector
             var isDifferent = src.Length != dst.Length || src.LastWriteTimeUtc > dst.LastWriteTimeUtc;
             if (isDifferent)
             {
-                if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file)))
+                if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file).TrimStart('.')))
                     filesToBackup.Add(new CryptedFile(file, targetPath, _backupName));
                 else
                     filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Create a NormalFile instance

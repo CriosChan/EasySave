@@ -237,10 +237,26 @@ public sealed class ApplicationConfiguration
 
     /// <summary>
     ///     Saves the current configuration to the specified JSON file.
+    ///     Thread-safe: serializes concurrent writes via the shared lock.
     /// </summary>
     public void Save()
     {
-        var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, ConfigFile), json);
+        lock (_lock)
+        {
+            var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(Path.Combine(AppContext.BaseDirectory, ConfigFile), json);
+        }
+    }
+
+    /// <summary>
+    ///     Resets the singleton instance. For use in unit tests only.
+    /// </summary>
+    internal static void ResetForTests()
+    {
+        lock (_lock)
+        {
+            _instance = null!;
+        }
     }
 }
+

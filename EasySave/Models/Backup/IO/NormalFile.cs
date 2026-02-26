@@ -1,11 +1,10 @@
 using System.Diagnostics;
 using EasySave.Core.Models;
-using EasySave.Models.Backup.Abstractions;
 using EasySave.Models.Logger;
 
 namespace EasySave.Models.Backup.IO;
 
-public class NormalFile : IFile
+public class NormalFile : BaseFile
 {
     /// <summary>
     ///     Initializes a new instance of the NormalFile class.
@@ -13,61 +12,52 @@ public class NormalFile : IFile
     /// <param name="sourceFile">The path of the source file to back up.</param>
     /// <param name="targetFile">The path where the backup file will be stored.</param>
     /// <param name="backupName">The name of the backup process.</param>
-    public NormalFile(string sourceFile, string targetFile, string backupName)
+    /// <param name="logger">Optional shared log writer. A new instance is created when null.</param>
+    public NormalFile(string sourceFile, string targetFile, string backupName,
+        ConfigurableLogWriter<LogEntry>? logger = null)
+        : base(sourceFile, targetFile, backupName, logger)
     {
-        SourceFile = sourceFile;
-        TargetFile = targetFile;
-        BackupName = backupName;
     }
-
-    public string BackupName { get; }
-
-    // Properties for source and target file paths
-    public string SourceFile { get; } // Read-only property for the source file path
-    public string TargetFile { get; } // Read-only property for the target file path
 
     /// <summary>
     ///     Copies the file from the source location to the target location.
     ///     Logs the operation details including file size and transfer time.
     /// </summary>
-    public void Copy()
+    public override void Copy()
     {
-        var logger = new ConfigurableLogWriter<LogEntry>();
-        long fileSize; // Size of the file to be copied
-        long elapsedMs; // Time taken to copy the file
-        string? errorMessage = null; // Placeholder for any error messages
+        string? errorMessage = null;
 
-        var fi = new FileInfo(SourceFile);
-        fileSize = fi.Length; // Get the length of the file
-        var sw = Stopwatch.StartNew(); // Start the stopwatch for timing the operation
-        File.Copy(SourceFile, TargetFile, true); // Copy the file
-        sw.Stop();
-        elapsedMs = sw.ElapsedMilliseconds; // Get elapsed time in milliseconds
-
-        // Log the details of the file copy operation
-        logger.Log(new LogEntry
+        var fileSize = GetSize();
+        var sw = Stopwatch.StartNew();
+        try
         {
-            BackupName = BackupName,
-            SourcePath = SourceFile,
-            TargetPath = TargetFile,
-            FileSizeBytes = fileSize,
-            TransferTimeMs = elapsedMs,
-            ErrorMessage = errorMessage // Log any error messages (currently unused)
-        });
-    }
+            File.Copy(SourceFile, TargetFile, true);
+            sw.Stop();
 
-    /// <summary>
-    ///     Copies the file from the source location to the target location asynchronously.
-    ///     Offloads the blocking I/O to a thread-pool thread.
-    /// </summary>
-    public Task CopyAsync() => Task.Run(Copy);
-
-    /// <summary>
-    ///     Gets the size of the source file in bytes.
-    /// </summary>
-    /// <returns>The size of the file in bytes.</returns>
-    public long GetSize()
-    {
-        return new FileInfo(SourceFile).Length; // Return the size of the source file
+            Logger.Log(new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = sw.ElapsedMilliseconds,
+                ErrorMessage = errorMessage
+            });
+        }
+        catch (Exception e)
+        {
+            sw.Stop();
+            Logger.Log(new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = sw.ElapsedMilliseconds,
+                ErrorMessage = e.Message
+            });
+            throw;
+        }
     }
 }
+

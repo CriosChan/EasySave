@@ -1,82 +1,54 @@
 using System.Diagnostics;
 using EasySave.Core.Models;
-using EasySave.Models.Backup.Abstractions;
 using EasySave.Models.Logger;
 
 namespace EasySave.Models.Backup.IO;
 
-public class CryptedFile : IFile
+public class CryptedFile : BaseFile
 {
-    
-    private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+    private static readonly SemaphoreSlim _semaphore = new(1, 1);
+
+    private static readonly string CryptoSoftPath =
+        Path.Combine(AppContext.BaseDirectory, "Tools", "CryptoSoft.exe");
+
     /// <summary>
     ///     Initializes a new instance of the CryptedFile class.
     /// </summary>
     /// <param name="sourceFile">The path of the source file to back up.</param>
     /// <param name="targetFile">The path where the backup file will be stored.</param>
     /// <param name="backupName">The name of the backup process.</param>
-    public CryptedFile(string sourceFile, string targetFile, string backupName)
+    /// <param name="logger">Optional shared log writer. A new instance is created when null.</param>
+    public CryptedFile(string sourceFile, string targetFile, string backupName,
+        ConfigurableLogWriter<LogEntry>? logger = null)
+        : base(sourceFile, targetFile, backupName, logger)
     {
-        SourceFile = sourceFile;
-        TargetFile = targetFile;
-        BackupName = backupName;
     }
 
-    public string BackupName { get; }
-
-    // Properties for source and target file paths
-    public string SourceFile { get; } // Read-only property for the source file path
-    public string TargetFile { get; } // Read-only property for the target file path
-
     /// <summary>
-    ///     Copies the file from the source location to the target location.
-    ///     Logs the operation details including file size and transfer time.
+    ///     Copies and encrypts the file synchronously via CryptoSoft.
+    ///     Serializes access to CryptoSoft via a semaphore (one process at a time).
     /// </summary>
-    public void Copy()
+    public override void Copy()
     {
-        var logger = new ConfigurableLogWriter<LogEntry>();
-        long fileSize; // Size of the file to be copied
-        long elapsedMs; // Time taken to copy the file
-        string? errorMessage = null; // Placeholder for any error messages
+        string? errorMessage = null;
+        var fileSize = GetSize();
 
-        var fi = new FileInfo(SourceFile);
-        fileSize = fi.Length; // Get the length of the file
-        var sw = Stopwatch.StartNew(); // Start the stopwatch for timing the operation
         _semaphore.Wait();
+        var sw = Stopwatch.StartNew(); // Start timer only after acquiring the semaphore
         try
         {
-            // Copy the file
             var process = new Process
             {
                 StartInfo =
                 {
-                    FileName = "Tools/CryptoSoft.exe",
+                    FileName = CryptoSoftPath,
                     Arguments = $"\"{SourceFile}\" \"{TargetFile}\""
                 }
             };
             process.Start();
             process.WaitForExit();
             sw.Stop();
-            elapsedMs = sw.ElapsedMilliseconds; // Get elapsed time in milliseconds
-            var log = new LogEntry
-            {
-                BackupName = BackupName,
-                SourcePath = SourceFile,
-                TargetPath = TargetFile,
-                FileSizeBytes = fileSize,
-                TransferTimeMs = elapsedMs,
-                ErrorMessage = errorMessage, // Log any error messages (currently unused)
-                CryptingTimeMs = process.ExitCode
-            };
-            if (process.ExitCode != 0)
-                log.CryptingTimeMs = process.ExitCode;
-            else
-                log.CryptingTimeMs = elapsedMs;
-            logger.Log(log);
-        }
-        catch (Exception e)
-        {
-            sw.Stop();
+
             var log = new LogEntry
             {
                 BackupName = BackupName,
@@ -84,10 +56,24 @@ public class CryptedFile : IFile
                 TargetPath = TargetFile,
                 FileSizeBytes = fileSize,
                 TransferTimeMs = sw.ElapsedMilliseconds,
-                ErrorMessage = e.Message, // Log any error messages (currently unused)
-                CryptingTimeMs = -1
+                ErrorMessage = errorMessage,
+                CryptingTimeMs = process.ExitCode != 0 ? process.ExitCode : sw.ElapsedMilliseconds
             };
-            logger.Log(log);
+            Logger.Log(log);
+        }
+        catch (Exception e)
+        {
+            sw.Stop();
+            Logger.Log(new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = sw.ElapsedMilliseconds,
+                ErrorMessage = e.Message,
+                CryptingTimeMs = -1
+            });
         }
         finally
         {
@@ -96,23 +82,12 @@ public class CryptedFile : IFile
     }
 
     /// <summary>
-    ///     Gets the size of the source file in bytes.
-    /// </summary>
-    /// <returns>The size of the file in bytes.</returns>
-    public long GetSize()
-    {
-        return new FileInfo(SourceFile).Length; // Return the size of the source file
-    }
-
-    /// <summary>
     ///     Copies and encrypts the file asynchronously via CryptoSoft.
     ///     Awaits the semaphore and the CryptoSoft process without blocking a thread-pool thread.
     /// </summary>
-    public async Task CopyAsync()
+    public override async Task CopyAsync()
     {
-        var logger = new ConfigurableLogWriter<LogEntry>();
-        var fi = new FileInfo(SourceFile);
-        long fileSize = fi.Length;
+        var fileSize = GetSize();
         var sw = Stopwatch.StartNew();
 
         await _semaphore.WaitAsync();
@@ -122,7 +97,7 @@ public class CryptedFile : IFile
             {
                 StartInfo =
                 {
-                    FileName = "Tools/CryptoSoft.exe",
+                    FileName = CryptoSoftPath,
                     Arguments = $"\"{SourceFile}\" \"{TargetFile}\""
                 }
             };
@@ -130,7 +105,7 @@ public class CryptedFile : IFile
             await process.WaitForExitAsync();
             sw.Stop();
 
-            var log = new LogEntry
+            Logger.Log(new LogEntry
             {
                 BackupName = BackupName,
                 SourcePath = SourceFile,
@@ -138,13 +113,12 @@ public class CryptedFile : IFile
                 FileSizeBytes = fileSize,
                 TransferTimeMs = sw.ElapsedMilliseconds,
                 CryptingTimeMs = process.ExitCode != 0 ? process.ExitCode : sw.ElapsedMilliseconds
-            };
-            logger.Log(log);
+            });
         }
         catch (Exception e)
         {
             sw.Stop();
-            logger.Log(new LogEntry
+            Logger.Log(new LogEntry
             {
                 BackupName = BackupName,
                 SourcePath = SourceFile,
@@ -161,3 +135,4 @@ public class CryptedFile : IFile
         }
     }
 }
+
