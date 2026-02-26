@@ -112,6 +112,38 @@ public class BusinessSoftwarePauseNotificationTests
         Assert.That(job.PausedByBusiness, Is.False);
     }
 
+    [Test]
+    public void WaitWhileBusinessSoftwareRuns_StopRequestedDuringPause_InvokesResumeCallback()
+    {
+        var stateRoot = Path.Combine(Path.GetTempPath(), $"EasySaveState_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(stateRoot);
+
+        try
+        {
+            StateFileSingleton.Instance.Initialize(stateRoot);
+            var state = StateFileSingleton.Instance.GetOrCreate(99004, "PauseNotif.Job4");
+
+            var coordinator = new GlobalBusinessSoftwarePauseCoordinator(TimeSpan.FromMilliseconds(15));
+            using var reg = coordinator.RegisterJob(99004, "PauseNotif.Job4",
+                new SequenceMonitor(true, true, true));
+
+            var callbackValues = new List<bool>();
+            var checks = 0;
+            coordinator.WaitWhileBusinessSoftwareRuns(
+                99004,
+                state,
+                null,
+                () => ++checks >= 2,
+                paused => callbackValues.Add(paused));
+
+            Assert.That(callbackValues, Is.EqualTo(new[] { true, false }));
+        }
+        finally
+        {
+            Directory.Delete(stateRoot, true);
+        }
+    }
+
     /// <summary>
     ///     Minimal monitor that returns a predefined sequence of values.
     /// </summary>

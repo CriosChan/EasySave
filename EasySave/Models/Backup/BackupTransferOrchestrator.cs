@@ -67,6 +67,7 @@ public sealed class BackupTransferOrchestrator
     public void Execute()
     {
         _controller.WasStoppedByBusinessSoftware = false;
+        _controller.NotifyBusinessSoftwarePause(false);
         _controller.ResetStopped();
         _progressTracker.SetCurrentProgress(0);
 
