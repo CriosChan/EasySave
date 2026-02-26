@@ -74,6 +74,8 @@ Title = "Modifier un job de sauvegarde"
 
 [Gui.Delete]
 Confirm = "Êtes-vous sûr ?"
+Yes = "Oui"
+No = "Non"
 
 [Gui.Menu]
 Features = "Fonctionnalités"
@@ -91,6 +93,7 @@ ExtensionPriority = "Extensions prioritaires"
 LargeFileThreshold = "Seuil gros fichiers (Ko)"
 Label = "Paramètres"
 LogSaveRoute = "Emplacement sauvegarde des logs (Local, en ligne, ou les deux)"
+NetworkSection = "Réseau"
 
 [Gui.Settings.Hint]
 FutureExtension = "Cet écran de paramètres est prêt à accueillir de nouveaux réglages."
@@ -106,14 +109,18 @@ LogType = "Type de log"
 AllJobsCompletedWithErrors = "Execution terminee : {0} reussis, {1} en echec"
 AllJobsStoppedByBusinessSoftware = "Execution arretee : logiciel metier detecte"
 BackupAsFinished = "Sauvegarde '{0}' terminée."
+BackupPausedByBusiness = "Sauvegarde en pause : un logiciel métier est en cours d'exécution."
 BackupStoppedByBusinessSoftware = "Sauvegarde '{0}' arrêtée : un logiciel métier est en cours d'exécution"
 JobRemoved = "Travail '{0}' supprime avec succes"
 JobUpdated = "Travail '{0}' mis a jour avec succes"
+JobsRunning = "{0} travail(s) en cours - ({2} / {3} fichiers) - ({4} / {5} Mo)"
 LanguageChangedEn = "Langue changée en Anglais"
 LanguageChangedFr = "Langue changée en Français"
 LogTypeJsonSet = "Type de log défini sur JSON"
 LogTypeXmlSet = "Type de log défini sur XML"
 Ready = "Pret"
+ServerOffline = "Serveur : Hors ligne"
+ServerOnline = "Serveur : En ligne"
 
 [Gui.Tooltip]
 DeleteExtension = "Retirer l'extension."

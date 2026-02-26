@@ -168,11 +168,11 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Priority extensions -->
+                    <!-- Network settings (IP / PORT) -->
                     <Border Grid.Column="2" Classes="main-section">
                         <StackPanel Spacing="8">
                             <TextBlock
-                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsExtensionPriority}}"
+                                Text="{tlumach:Translate {x:Static translations:UiText.GuiSettingsNetworkSection}}"
                                 Classes="section-title" />
                             <StackPanel Orientation="Horizontal" Classes="settings">
                                 <TextBlock Text="IP :" Classes="settings-label" />
