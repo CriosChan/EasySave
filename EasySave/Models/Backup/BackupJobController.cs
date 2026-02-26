@@ -10,10 +10,21 @@ public sealed class BackupJobController : IBackupJobController
     private readonly ManualResetEvent _pauseEvent = new(true);
 
     /// <inheritdoc />
-    public bool WasStopped { get; private set; } = true;
+    public bool WasStopped { get;
+        private set
+        {
+            field = value;
+            StopEvent?.Invoke(this, EventArgs.Empty);
+        } } = true;
 
     /// <inheritdoc />
-    public bool WasStoppedByBusinessSoftware { get; set; }
+    public bool WasStoppedByBusinessSoftware { get;
+        set
+        {
+            field = value;
+            //StopEPavent?.Invoke(this, EventArgs.Empty);
+        }
+    }
 
     /// <inheritdoc />
     public event EventHandler? PauseEvent;
@@ -41,7 +52,6 @@ public sealed class BackupJobController : IBackupJobController
         WasStopped = true;
         _pauseEvent.Set();
         PauseEvent?.Invoke(this, EventArgs.Empty);
-        StopEvent?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc />

@@ -136,7 +136,7 @@ public sealed class GlobalBusinessSoftwarePauseCoordinator : IBusinessSoftwarePa
         {
             if (!_registrations.TryGetValue(jobId, out registration))
                 return;
-
+            
             shouldLog = _pausedJobs.Add(jobId);
         }
 
