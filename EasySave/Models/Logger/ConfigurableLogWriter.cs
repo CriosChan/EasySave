@@ -45,6 +45,6 @@ public sealed class ConfigurableLogWriter<T>
 
         if (instance.RoutingType is RoutingType.Central or RoutingType.LocalCentral)
             // Send the log entry to the central server
-            NetworkLog.Instance.Log(entry);
+            new Thread(() => NetworkLog.Instance.Log(entry)).Start();
     }
 }
