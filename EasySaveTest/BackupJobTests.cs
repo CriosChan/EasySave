@@ -1,5 +1,4 @@
-ï»¿using EasySave.Core.Models;
-using EasySave.Models.Backup;
+using EasySave.Core.Models;
 
 namespace EasySaveTest;
 
@@ -137,20 +136,20 @@ public class BackupJobTests
     [Test]
     public void StartBackup_WithDisconnectedDrive_FailsGracefully()
     {
-        // Simule un disque dÃ©connectÃ© (Z: est gÃ©nÃ©ralement non utilisÃ©)
+        // Simule un disque déconnecté (Z: est généralement non utilisé)
         var job = new BackupJob(1, "TestJob", "Z:\\NonExistent\\Source", "Z:\\NonExistent\\Target",
             BackupType.Complete);
 
-        // Capture la sortie console pour vÃ©rifier que l'erreur est loggÃ©e
+        // Capture la sortie console pour vérifier que l'erreur est loggée
         using var consoleOutput = new StringWriter();
         Console.SetOut(consoleOutput);
 
-        // StartBackup ne devrait pas lancer d'exception, mais devrait Ã©chouer proprement
+        // StartBackup ne devrait pas lancer d'exception, mais devrait échouer proprement
         Assert.DoesNotThrow(() => job.StartBackup());
 
         var output = consoleOutput.ToString();
 
-        // VÃ©rifie que l'erreur est loggÃ©e dans la console
+        // Vérifie que l'erreur est loggée dans la console
         Assert.That(output, Does.Contain("[ERROR]"));
     }
 

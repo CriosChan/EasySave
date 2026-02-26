@@ -27,7 +27,6 @@ public static class UiText
     public static TranslationUnit GuiButtonAddJob => Strings.Gui.Button.AddJob;
     public static TranslationUnit GuiButtonRemoveSelected => Strings.Gui.Button.RemoveSelected;
     public static TranslationUnit GuiButtonRunSelectedJob => Strings.Gui.Button.RunSelectedJob;
-    public static TranslationUnit GuiButtonRunAllJobs => Strings.Gui.Button.RunAllJobs;
     public static TranslationUnit GuiButtonSaveChanges => Strings.Gui.Button.SaveChanges;
 
     public static TranslationUnit GuiSettingsScreenTitle => Strings.Gui.Settings.Screen.Title;

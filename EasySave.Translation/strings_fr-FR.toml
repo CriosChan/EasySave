@@ -50,7 +50,6 @@ English = "Anglais"
 French = "Français"
 Json = "JSON"
 RemoveSelected = "Supprimer la sélection"
-RunAllJobs = "Lancer tous les jobs"
 RunSelectedJob = "Lancer le job sélectionné"
 SaveChanges = "Enregistrer les modifications"
 Xml = "XML"
@@ -128,7 +127,6 @@ Header = "Travaux de sauvegarde configurés"
 None = "Aucun travail de sauvegarde n'est configuré."
 
 [Jobs.Execute]
-All = "Exécuter tous les travaux"
 ID = "Exécuter le job - {0} - {1}"
 
 [Jobs.Remove]
@@ -139,8 +137,7 @@ Done = "Exécution terminée."
 Header = "Lancer une sauvegarde"
 Invalid = "Id invalide."
 NotFound = "Travail introuvable."
-Prompt = "Saisissez l'id à exécuter, ou 0 pour exécuter tous les travaux séquentiellement :"
-RunningAll = "Exécution de tous les travaux..."
+Prompt = "Saisissez l'id à exécuter :"
 RunningOne = "Exécution du travail {0} - {1}..."
 
 [Menu]

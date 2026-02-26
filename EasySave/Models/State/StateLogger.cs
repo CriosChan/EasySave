@@ -1,4 +1,4 @@
-using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.Backup.Abstractions;
 using EasySave.Models.Utils;
 
 namespace EasySave.Models.State;

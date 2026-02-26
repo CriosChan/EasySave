@@ -3,7 +3,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using EasySave.Models.Backup;
 using EasySave.Models.Utils;
 
 namespace EasySave.ViewModels;
