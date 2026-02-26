@@ -65,7 +65,10 @@ public sealed class GlobalBusinessSoftwarePauseCoordinator : IBusinessSoftwarePa
         while (IsAnyBusinessSoftwareRunning())
         {
             if (shouldStop())
+            {
+                MarkResumed(jobId, blockedFile, onPauseStateChanged);
                 return;
+            }
 
             MarkPaused(jobId, state, blockedFile, onPauseStateChanged);
             Thread.Sleep(_pollingIntervalMs);
