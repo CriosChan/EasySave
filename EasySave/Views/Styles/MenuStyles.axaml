@@ -10,7 +10,5 @@
     <Style Selector="MenuItem:selected /template/ ContentPresenter">
         <Setter Property="Foreground" Value="#F8F8F8"/>
     </Style>
-    <Style Selector="TextBlock">
-        <Setter Property="Foreground" Value="#F8F8F8"/>
-    </Style>
+    
 </Styles>

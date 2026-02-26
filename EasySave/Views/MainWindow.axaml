@@ -23,7 +23,7 @@
     <Grid Margin="16"
           RowDefinitions="*,Auto"
           RowSpacing="12">
-        <views:MainScreen IsVisible="{Binding IsMainScreen}" />
+        <views:JobScreen IsVisible="{Binding IsJobScreen}" />
 
         <views:SettingsScreen Grid.Row="0" IsVisible="{Binding IsSettingsScreen}" />
 

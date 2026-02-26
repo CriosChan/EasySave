@@ -5,11 +5,11 @@
              xmlns:tlumach="clr-namespace:Tlumach.Avalonia;assembly=Tlumach.Avalonia"
              xmlns:translations="using:EasySave.Translation"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="EasySave.Views.MainScreen"
+             x:Class="EasySave.Views.JobScreen"
              xmlns:vm="using:EasySave.ViewModels"
              x:DataType="vm:MainWindowViewModel">
     <Grid
-        IsVisible="{Binding IsMainScreen}"
+        IsVisible="{Binding IsJobScreen}"
         RowDefinitions="*,Auto"
         ColumnDefinitions="2*,1*"
         RowSpacing="12"
@@ -162,10 +162,6 @@
                 Grid.ColumnSpan="2"
                 Classes="main-section">
             <WrapPanel ItemHeight="32" VerticalAlignment="Center">
-                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRunSelectedJob}}"
-                        Command="{Binding Jobs.RunSelectedJobCommand}"
-
-                        Margin="0,0,8,0" />
                 <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRunAllJobs}}"
                         Command="{Binding Jobs.RunAllJobsCommand}" />
             </WrapPanel>
