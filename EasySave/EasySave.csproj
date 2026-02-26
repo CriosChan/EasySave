@@ -34,4 +34,10 @@
         <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Views\EditBackupScreen.axaml.cs">
+        <DependentUpon>EditBackupScreen.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

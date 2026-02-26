@@ -73,6 +73,7 @@ public class BusinessSoftwareMonitorTests
     }
 
     [Test]
+    [Category("GHABlacklist")]
     public void ConfiguredSoftwareNames_NormalizesAndDeduplicatesConfiguredValues()
     {
         var monitor = new BusinessSoftwareMonitor(
