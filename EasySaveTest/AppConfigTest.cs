@@ -9,6 +9,12 @@ public class AppConfigTest
 {
     private ApplicationConfiguration _appSettings = null!;
 
+    [OneTimeTearDown]
+    public void TearDown()
+    {
+        ApplicationConfiguration.ResetForTests();
+    }
+
     /// <summary>
     ///     Loads configuration once for the rest of the tests.
     /// </summary>
