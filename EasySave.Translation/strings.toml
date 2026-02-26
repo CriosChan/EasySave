@@ -127,7 +127,6 @@ Header = "Configured backup jobs"
 None = "No backup job is configured."
 
 [Jobs.Execute]
-All = "Execute all jobs"
 ID = "Run the job - {0} - {1}"
 
 [Jobs.Remove]
@@ -138,7 +137,7 @@ Done = "Execution finished."
 Header = "Launch backup"
 Invalid = "Invalid id."
 NotFound = "Job not found."
-Prompt = "Enter a job id to run, or 0 to run all jobs sequentially:"
+Prompt = "Enter a job id to run:"
 RunningOne = "Running job {0} - {1}..."
 
 [Menu]
