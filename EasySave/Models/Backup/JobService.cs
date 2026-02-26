@@ -73,6 +73,29 @@ public sealed class JobService : IJobService
     }
 
     /// <summary>
+    ///     Updates an existing backup job by replacing its persisted definition.
+    /// </summary>
+    /// <param name="job">Updated backup job.</param>
+    /// <returns>True when the job exists and is updated; otherwise, false.</returns>
+    public bool UpdateJob(BackupJob job)
+    {
+        if (job == null)
+            throw new ArgumentNullException(nameof(job));
+
+        if (job.Id <= 0)
+            return false;
+
+        var jobs = _repository.GetAll().ToList();
+        var index = jobs.FindIndex(existing => existing.Id == job.Id);
+        if (index < 0)
+            return false;
+
+        jobs[index] = job;
+        _repository.SaveAll(jobs);
+        return true;
+    }
+
+    /// <summary>
     ///     Gets the next available ID for a new backup job.
     /// </summary>
     /// <param name="jobs">The current list of backup jobs.</param>

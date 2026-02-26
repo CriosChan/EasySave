@@ -52,6 +52,7 @@ Json = "JSON"
 RemoveSelected = "Remove Selected"
 RunAllJobs = "Run All Jobs"
 RunSelectedJob = "Run Selected Job"
+SaveChanges = "Save Changes"
 Xml = "XML"
 
 [Gui.Dialog]
@@ -67,6 +68,10 @@ SourceNotAccessible = "Error: Source directory is not accessible"
 SourceRequired = "Error: Source directory is required"
 TargetNotAccessible = "Error: Target directory is not accessible"
 TargetRequired = "Error: Target directory is required"
+UpdateFailed = "Error: Failed to update job"
+
+[Gui.EditBackup.Screen]
+Title = "Edit backup job"
 
 [Gui.Menu]
 Features = "Features"
@@ -101,6 +106,7 @@ AllJobsStoppedByBusinessSoftware = "Execution stopped: business software detecte
 BackupAsFinished = "Backup '{0}' finished."
 BackupStoppedByBusinessSoftware = "Backup '{0}' stopped: business software is running"
 JobRemoved = "Job '{0}' removed successfully"
+JobUpdated = "Job '{0}' updated successfully"
 LanguageChangedEn = "Language changed to English"
 LanguageChangedFr = "Language changed to French"
 LogTypeJsonSet = "Log type set to JSON"

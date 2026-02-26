@@ -32,6 +32,11 @@ public partial class JobsViewModel : ViewModelBase
     private IStorageProvider? _storageProvider;
 
     /// <summary>
+    ///     Raised when a job edition is requested from a list item.
+    /// </summary>
+    public event Action<BackupJob>? EditJobRequested;
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="JobsViewModel" /> class.
     /// </summary>
     /// <param name="statusBar">Shared status bar state.</param>
@@ -63,19 +68,31 @@ public partial class JobsViewModel : ViewModelBase
     public void RefreshJobs()
     {
         var jobModels = _jobService.GetAll().ToList();
+        var selectedJobId = SelectedJob?.Job.Id;
 
-        var missingJobs = jobModels
-            .Where(jobModel => Jobs.All(job => job.Job.Id != jobModel.Id))
-            .ToList();
+        foreach (var jobModel in jobModels)
+        {
+            var existingItem = Jobs.FirstOrDefault(item => item.Job.Id == jobModel.Id);
+            if (existingItem == null)
+            {
+                Jobs.Add(CreateJobItem(jobModel));
+                continue;
+            }
 
+            if (!HasSameDefinition(existingItem.Job, jobModel))
+            {
+                var index = Jobs.IndexOf(existingItem);
+                Jobs[index] = CreateJobItem(jobModel);
+            }
+        }
 
-        if (missingJobs.Any())
-            foreach (var missingJob in missingJobs)
-                Jobs.Add(new BackupJobItemViewModel(missingJob, RunJobFromItemAsync));
+        foreach (var item in Jobs.ToList())
+            if (jobModels.All(jobModel => jobModel.Id != item.Job.Id))
+                Jobs.Remove(item);
 
-        foreach (var job in Jobs.ToList()) // ToList() pour éviter l'exception de modification de la collection
-            if (jobModels.All(jobModel => jobModel.Id != job.Job.Id))
-                Jobs.Remove(job);
+        SelectedJob = selectedJobId.HasValue
+            ? Jobs.FirstOrDefault(item => item.Job.Id == selectedJobId.Value)
+            : null;
     }
 
     /// <summary>
@@ -419,4 +436,39 @@ public partial class JobsViewModel : ViewModelBase
         NewSourceDirectory = string.Empty;
         NewTargetDirectory = string.Empty;
     }
+
+    /// <summary>
+    ///     Creates a job item ViewModel with callbacks wired to this section.
+    /// </summary>
+    /// <param name="job">Job model to wrap.</param>
+    /// <returns>Configured item ViewModel.</returns>
+    private BackupJobItemViewModel CreateJobItem(BackupJob job)
+    {
+        return new BackupJobItemViewModel(job, RunJobFromItemAsync, RequestEditFromItem);
+    }
+
+    /// <summary>
+    ///     Emits a request to open backup edition for the selected item.
+    /// </summary>
+    /// <param name="job">Job to edit.</param>
+    private void RequestEditFromItem(BackupJob job)
+    {
+        EditJobRequested?.Invoke(job);
+    }
+
+    /// <summary>
+    ///     Compares persisted job definitions (identity + editable fields).
+    /// </summary>
+    /// <param name="left">Current in-memory job item.</param>
+    /// <param name="right">Job loaded from persistence.</param>
+    /// <returns>True when both definitions match.</returns>
+    private static bool HasSameDefinition(BackupJob left, BackupJob right)
+    {
+        return left.Id == right.Id &&
+               string.Equals(left.Name, right.Name, StringComparison.Ordinal) &&
+               string.Equals(left.SourceDirectory, right.SourceDirectory, StringComparison.Ordinal) &&
+               string.Equals(left.TargetDirectory, right.TargetDirectory, StringComparison.Ordinal) &&
+               left.Type == right.Type;
+    }
 }
+

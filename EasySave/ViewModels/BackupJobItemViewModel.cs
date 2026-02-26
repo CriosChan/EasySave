@@ -14,7 +14,12 @@ namespace EasySave.ViewModels;
 public sealed partial class BackupJobItemViewModel : ViewModelBase
 {
     private readonly Func<BackupJob, Task>? _executeJobCallback;
+    private readonly Action<BackupJob>? _openEditCallback;
     private string _previousStatusMessage = ""; // Saves status before business-software pause
+    [ObservableProperty]
+    private Bitmap?
+        _editIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/edit-button.png")); // Icon for edit
+
     [ObservableProperty] private bool _inverseStopped; // Inverse state for UI purposes
 
     [ObservableProperty] private bool _paused; // Indicates if the job is paused
@@ -42,11 +47,16 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     /// </summary>
     /// <param name="job">The BackupJob model to wrap.</param>
     /// <param name="executeJobCallback">Callback invoked when the user starts the job from the item button.</param>
-    public BackupJobItemViewModel(BackupJob job, Func<BackupJob, Task>? executeJobCallback = null)
+    /// <param name="openEditCallback">Callback invoked when the user opens backup edition from the item button.</param>
+    public BackupJobItemViewModel(
+        BackupJob job,
+        Func<BackupJob, Task>? executeJobCallback = null,
+        Action<BackupJob>? openEditCallback = null)
     {
         Job = job ?? throw new ArgumentNullException(nameof(job));
         _stopped = job.WasStopped;
         _executeJobCallback = executeJobCallback;
+        _openEditCallback = openEditCallback;
 
         Job.PauseEvent += OnPausedChanged;
         Job.ProgressChanged += OnProgressChanged;
@@ -215,5 +225,14 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
             Task.Run(() => _executeJobCallback(Job));
         else
             new Thread(Job.StartBackup).Start(); // Start the job in a new thread
+    }
+
+    /// <summary>
+    ///     Command to open backup edition screen for this job.
+    /// </summary>
+    [RelayCommand]
+    private void EditJob()
+    {
+        _openEditCallback?.Invoke(Job);
     }
 }

@@ -28,6 +28,7 @@ public static class UiText
     public static TranslationUnit GuiButtonRemoveSelected => Strings.Gui.Button.RemoveSelected;
     public static TranslationUnit GuiButtonRunSelectedJob => Strings.Gui.Button.RunSelectedJob;
     public static TranslationUnit GuiButtonRunAllJobs => Strings.Gui.Button.RunAllJobs;
+    public static TranslationUnit GuiButtonSaveChanges => Strings.Gui.Button.SaveChanges;
 
     public static TranslationUnit GuiSettingsScreenTitle => Strings.Gui.Settings.Screen.Title;
     public static TranslationUnit GuiSettingsSectionLanguage => Strings.Gui.Settings.Section.Language;
@@ -60,4 +61,6 @@ public static class UiText
 
     public static TranslationUnit GuiBusinessSoftwareButtonRemoveSelected =>
         Strings.Gui.BusinessSoftware.Button.RemoveSelected;
+
+    public static TranslationUnit GuiEditBackupScreenTitle => Strings.Gui.EditBackup.Screen.Title;
 }

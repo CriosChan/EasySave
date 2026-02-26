@@ -24,4 +24,11 @@ public interface IJobService
     /// <param name="idOrName">Identifier or name value.</param>
     /// <returns>True when a job was removed; otherwise, false.</returns>
     bool RemoveJob(string idOrName);
+
+    /// <summary>
+    ///     Updates an existing backup job using its identifier.
+    /// </summary>
+    /// <param name="job">Updated job definition.</param>
+    /// <returns>True when the job exists and was updated; otherwise, false.</returns>
+    bool UpdateJob(BackupJob job);
 }

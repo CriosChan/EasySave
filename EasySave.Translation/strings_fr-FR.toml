@@ -52,6 +52,7 @@ Json = "JSON"
 RemoveSelected = "Supprimer la sélection"
 RunAllJobs = "Lancer tous les jobs"
 RunSelectedJob = "Lancer le job sélectionné"
+SaveChanges = "Enregistrer les modifications"
 Xml = "XML"
 
 [Gui.Dialog]
@@ -67,6 +68,10 @@ SourceNotAccessible = "Erreur : le repertoire source est inaccessible"
 SourceRequired = "Erreur : le repertoire source est obligatoire"
 TargetNotAccessible = "Erreur : le repertoire cible est inaccessible"
 TargetRequired = "Erreur : le repertoire cible est obligatoire"
+UpdateFailed = "Erreur : echec de mise a jour du travail"
+
+[Gui.EditBackup.Screen]
+Title = "Modifier un job de sauvegarde"
 
 [Gui.Menu]
 Features = "Fonctionnalités"
@@ -101,6 +106,7 @@ AllJobsStoppedByBusinessSoftware = "Execution arretee : logiciel metier detecte"
 BackupAsFinished = "Sauvegarde '{0}' terminée."
 BackupStoppedByBusinessSoftware = "Sauvegarde '{0}' arrêtée : un logiciel métier est en cours d'exécution"
 JobRemoved = "Travail '{0}' supprime avec succes"
+JobUpdated = "Travail '{0}' mis a jour avec succes"
 LanguageChangedEn = "Langue changée en Anglais"
 LanguageChangedFr = "Langue changée en Français"
 LogTypeJsonSet = "Type de log défini sur JSON"

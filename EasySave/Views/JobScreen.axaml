@@ -58,6 +58,9 @@
                                                 <Button Command="{Binding StartStopJobCommand}" IsEnabled="True">
                                                     <Image Source="{Binding StopIcon}" Width="24" Height="24" />
                                                 </Button>
+                                                <Button Command="{Binding EditJobCommand}" IsEnabled="True">
+                                                    <Image Source="{Binding EditIcon}" Width="24" Height="24" />
+                                                </Button>
                                             </StackPanel>
                                         </Grid>
                                         <TextBlock Text="{Binding StatusMessage}"
