@@ -14,7 +14,7 @@ public sealed class NetworkLog
 {
     // Lazy initialization for the singleton instance
     private static readonly Lazy<NetworkLog> instance = new(() => new NetworkLog());
-    private IPEndPoint _endpoint; // Endpoint for sending logs
+    private IPEndPoint? _endpoint; // Endpoint for sending logs
 
     private TcpClient? _tcpClient; // TCP client for sending log messages
     public EventHandler? OnConnect; // Event triggered when the connection is established
@@ -22,11 +22,12 @@ public sealed class NetworkLog
 
     /// <summary>
     ///     Private constructor to prevent direct instantiation.
-    ///     Initializes the socket.
+    ///     Socket creation is deferred to an explicit <see cref="CreateSocket"/> call
+    ///     so that callers can subscribe to <see cref="OnConnect"/>/<see cref="OnDisconnect"/>
+    ///     before the connection is attempted.
     /// </summary>
     private NetworkLog()
     {
-        CreateSocket();
     }
 
     /// <summary>

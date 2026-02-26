@@ -29,18 +29,35 @@ public class NormalFile : BaseFile
 
         var fileSize = GetSize();
         var sw = Stopwatch.StartNew();
-        File.Copy(SourceFile, TargetFile, true);
-        sw.Stop();
-
-        Logger.Log(new LogEntry
+        try
         {
-            BackupName = BackupName,
-            SourcePath = SourceFile,
-            TargetPath = TargetFile,
-            FileSizeBytes = fileSize,
-            TransferTimeMs = sw.ElapsedMilliseconds,
-            ErrorMessage = errorMessage
-        });
+            File.Copy(SourceFile, TargetFile, true);
+            sw.Stop();
+
+            Logger.Log(new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = sw.ElapsedMilliseconds,
+                ErrorMessage = errorMessage
+            });
+        }
+        catch (Exception e)
+        {
+            sw.Stop();
+            Logger.Log(new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = sw.ElapsedMilliseconds,
+                ErrorMessage = e.Message
+            });
+            throw;
+        }
     }
 }
 

@@ -32,9 +32,9 @@ public class CryptedFile : BaseFile
     {
         string? errorMessage = null;
         var fileSize = GetSize();
-        var sw = Stopwatch.StartNew();
 
         _semaphore.Wait();
+        var sw = Stopwatch.StartNew(); // Start timer only after acquiring the semaphore
         try
         {
             var process = new Process

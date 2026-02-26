@@ -241,9 +241,9 @@ public sealed class ApplicationConfiguration
     /// </summary>
     public void Save()
     {
-        var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
         lock (_lock)
         {
+            var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(Path.Combine(AppContext.BaseDirectory, ConfigFile), json);
         }
     }
