@@ -1,4 +1,4 @@
-namespace EasySave.Models.Data.Configuration;
+namespace EasySave.Data.Configuration;
 
 /// <summary>
 ///     Represents the different routing types for log storage.

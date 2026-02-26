@@ -1,7 +1,6 @@
 using EasySave.Core.Models;
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Abstractions;
-using EasySave.Models.Data.Configuration;
 using EasySave.Models.Logger;
 using EasySave.Models.State;
 using EasySave.Models.Utils;

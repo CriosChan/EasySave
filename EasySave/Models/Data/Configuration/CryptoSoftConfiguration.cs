@@ -2,7 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
-namespace EasySave.Models.Data.Configuration;
+namespace EasySave.Data.Configuration;
 
 /// <summary>
 ///     Loads and exposes application configuration (read/write).

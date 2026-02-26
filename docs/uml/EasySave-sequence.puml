@@ -1,78 +1,248 @@
 @startuml
-title EasySave - Main sequence (UI or CLI) and job execution
+title EasySave - Sequence globale de la solution
+autonumber
+
+skinparam sequenceArrowThickness 1
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 120
 
 actor User
+actor "Ops/Server" as Ops
+
 participant Program
-participant EasySaveApplication as App
-participant ApplicationConfiguration as Config
-participant DataPathResolver as DataPaths
-participant PathService as Paths
-participant JobRepository as Repo
-participant StateFileService as State
-participant "JsonLogWriter<LogEntry>" as LogWriter
-participant StateSynchronizer as Sync
-participant BackupService as Backup
-participant BackupDirectoryPreparer as DirPrep
-participant BackupFileSelector as Selector
-participant FileCopier as Copier
-participant UserInterface as UI
-participant MainMenuController as Menu
-participant JobLaunchView as Launch
+participant App
+participant MainWindowViewModel as MainVM
+participant JobsViewModel as JobsVM
+participant SettingsViewModel as SettingsVM
+participant BusinessSoftwareViewModel as BizVM
+participant EditBackupViewModel as EditVM
+participant StatusBarViewModel as StatusBar
+
 participant CommandController as CLI
+participant CommandLineArgumentParser as Parser
 participant CommandJobRunner as Runner
-participant ProgressWidget as Progress
 
-Program -> App: Run(args)
-App -> Config: Load()\nInstance
-App -> DataPaths: ResolveDirectory(config/log)
-App -> Paths: new()
-App -> Repo: new(configDir)
-App -> State: new(configDir)
-App -> LogWriter: new(logDir)
-App -> Selector: new(Paths)
-App -> DirPrep: new(LogWriter, Paths)
-App -> Copier: new()
-App -> Backup: new(LogWriter, State, Paths, Selector, DirPrep, Copier)
-App -> Sync: new(Repo, State)
-App -> State: Initialize(Repo.Load())
+participant TlumachUiLocalizationService as LocSvc
+participant TlumachUiTextService as TextSvc
+participant ApplicationConfiguration as AppConfig
+participant CryptoSoftConfiguration as CryptoConfig
 
-alt args.Length > 0 (CLI mode)
-  App -> CLI: Run(args, Repo, Backup, State, Paths)
-  CLI -> Runner: RunJobs(ids)
-  Runner -> Repo: Load()
-  Runner -> State: Initialize(jobs)
-  loop each id
-    Runner -> Paths: TryNormalizeExistingDirectory(src/target)
-    Runner -> Backup: RunJob(job)
+participant JobService as JobSvc
+participant JobRepository as JobRepo
+participant JsonFile
+participant StateFileSingleton as StateFile
+participant StateLogger
+
+participant ParallelJobOrchestrator as Orchestrator
+participant BackupExecutionEngine as Engine
+participant BackupJob as Job
+participant BackupTransferOrchestrator as Transfer
+participant BackupJobController as Ctrl
+participant BackupProgressTracker as Progress
+participant PathService as Paths
+participant TypeSelectorHelper as SelectorHelper
+participant IBackupTypeSelector as Selector
+participant BackupFolder
+participant FilePartitioner
+participant GlobalPriorityArbitrator as Priority
+participant GlobalLargeFileTransferLimiter as LargeLimiter
+participant GlobalBusinessSoftwarePauseCoordinator as BizPause
+participant BusinessSoftwareMonitor as BizMonitor
+participant IFile as File
+
+participant "ConfigurableLogWriter<LogEntry>" as LogRouter
+participant "JsonLogger<LogEntry>" as JsonLogger
+participant "XmlLogger<LogEntry>" as XmlLogger
+participant NetworkLog
+participant "EasySave.Server" as LogServer
+participant "EasyLog(AbstractLogger)" as EasyLogCore
+
+== Entree application ==
+User -> Program: Main(args)
+
+alt args.Length > 0 (mode CLI)
+  Program -> CLI: Run(args)
+  CLI -> AppConfig: Load()
+  CLI -> LocSvc: Apply(Localization)
+  CLI -> Parser: Parse(rawArgs)
+  Parser --> CLI: ids
+  CLI -> Runner: new(uiTextService)\nRunJobs(ids)
+
+  Runner -> JobSvc: GetAll()
+  JobSvc -> JobRepo: GetAll()
+  JobRepo -> AppConfig: Load().JobConfigPath
+  JobRepo -> JsonFile: ReadOrDefault(jobs.json)
+  JsonFile --> JobRepo: jobs
+  JobRepo --> JobSvc: jobs
+  JobSvc --> Runner: jobs
+
+  Runner -> AppConfig: Load().LogPath
+  Runner -> StateFile: Initialize(logPath)
+  Runner -> Orchestrator: ExecuteAllAsync(jobsToRun)
+
+  Orchestrator -> AppConfig: Load().PriorityExtensions
+  loop each selected job (preparation)
+    Orchestrator -> SelectorHelper: GetSelector(type, source, target, name)
+    SelectorHelper --> Orchestrator: selector
+    Orchestrator -> Selector: GetFilesToBackup()
+    Orchestrator -> FilePartitioner: Partition(files, PriorityExtensions)
+    Orchestrator -> Job: set PriorityArbitrator/LargeLimiter/BizPauseCoordinator
   end
-else interactive UI mode
-  App -> UI: Initialize(Repo, Backup, State, Sync, Paths)
-  App -> UI: ShowMenu()
-  UI -> Menu: Show()
-  User -> Menu: select "Launch backup"
-  Menu -> Launch: Show()
-  Launch -> Repo: Load()
-  Launch -> Paths: TryNormalizeExistingDirectory(src/target)
-  Launch -> Backup: RunJob(job)
+  Orchestrator -> Priority: Initialize(globalPriorityCounts)
+
+  par jobs run in parallel
+    loop each selected job
+      Orchestrator -> Engine: ExecuteJobAsync(job, progress, ct)
+      Engine -> Job: StartBackup()
+      Job -> Transfer: Execute()
+      Transfer --> Job: EndEvent
+      Job --> Engine: completed
+      Engine --> Orchestrator: BackupExecutionResult
+    end
+  end
+  Orchestrator --> Runner: OrchestrationResult
+  Runner --> CLI: exit code
+  CLI --> Program: return code
+
+else args.Length == 0 (mode UI Avalonia)
+  Program -> App: StartWithClassicDesktopLifetime(args)
+  App -> MainVM: new MainWindowViewModel()
+  MainVM -> TextSvc: new()
+  MainVM -> LocSvc: new()
+  MainVM -> JobsVM: new(StatusBar, TextSvc)
+  MainVM -> SettingsVM: new(StatusBar, TextSvc, LocSvc)
+  MainVM -> BizVM: new(StatusBar, TextSvc)
+  MainVM -> EditVM: new(StatusBar, TextSvc)
+  MainVM -> AppConfig: Load()
+  MainVM -> LocSvc: Apply(Localization)
+  opt RoutingType != Local
+    MainVM -> NetworkLog: CreateSocket()
+  end
+
+  JobsVM -> JobSvc: GetAll()
+  JobSvc -> JobRepo: GetAll()
+  JobRepo -> JsonFile: ReadOrDefault(jobs.json)
+  JsonFile --> JobRepo: jobs
+  JobRepo --> JobSvc: jobs
+  JobSvc --> JobsVM: jobs
+
+  User -> JobsVM: RunSelectedJob() / RunJobFromItemAsync(job)
+  JobsVM -> Engine: ExecuteJobAsync(job, progress)
+  Engine -> Job: StartBackup()
+  Job -> Transfer: Execute()
+  Transfer --> Job: EndEvent
+  Job --> Engine: completed
+  Engine --> JobsVM: BackupExecutionResult
+  JobsVM -> StatusBar: ReportJobProgress(snapshot)\nUnregisterJob(jobId)
+
+  User -> SettingsVM: change lang/log/routing/crypto key
+  SettingsVM -> AppConfig: set properties (auto Save())
+  SettingsVM -> CryptoConfig: set Key (auto Save())
+  opt routing now uses server
+    SettingsVM -> NetworkLog: CreateSocket()
+  end
+
+  User -> BizVM: configure business software names
+  BizVM -> AppConfig: BusinessSoftwareProcessNames = [...]
+  BizVM --> JobsVM: RefreshBusinessSoftwareMonitors()
+  JobsVM -> Job: BusinessSoftwareMonitor = new BusinessSoftwareMonitor()
+
+  User -> EditVM: update existing job
+  EditVM -> JobSvc: UpdateJob(job)
+  JobSvc -> JobRepo: SaveAll(updatedJobs)
+  JobRepo -> JsonFile: WriteAtomic(jobs.json)
 end
 
-activate Backup
-Backup -> State: GetOrCreate(job)
-Backup -> Paths: TryNormalizeExistingDirectory(src/target)
-Backup -> LogWriter: Log(start)
-Backup -> DirPrep: EnsureTargetDirectories(...)
-Backup -> Selector: GetFilesToCopy(...)
-Backup -> State: Update(state=start)
-Backup -> Progress: new(SystemConsole)
-loop each file
-  Backup -> DirPrep: EnsureTargetDirectoryForFile(...)
-  Backup -> State: Update(state=file_transfer)
-  Backup -> Copier: Copy(source, target)
-  Backup -> LogWriter: Log(file)
-  Backup -> State: Update(progress)
-  Backup -> Progress: UpdateProgress(%)
+== Execution detaillee d'un BackupJob ==
+activate Transfer
+Transfer -> Ctrl: WasStoppedByBusinessSoftware = false
+Transfer -> Ctrl: NotifyBusinessSoftwarePause(false)
+Transfer -> Ctrl: ResetStopped()
+Transfer -> Progress: SetCurrentProgress(0)
+
+Transfer -> CryptoConfig: Load().Save()
+Transfer -> AppConfig: Load().LogPath
+Transfer -> StateFile: Initialize(logPath)\nGetOrCreate(jobId, jobName)
+Transfer -> BizPause: RegisterJob(jobId, jobName, BizMonitor)
+
+Transfer -> Paths: IsDirectoryAccessible(sourceDirectory)
+Transfer -> Paths: IsDirectoryAccessible(targetDirectory)
+alt source/target inaccessible
+  Transfer -> StateLogger: SetStateFailed(state)
+  Transfer -> Ctrl: Stop()
+  Transfer --> Job: return
+else source/target OK
+  Transfer -> BackupFolder: MirrorFolder()
+  Transfer -> SelectorHelper: GetSelector(type,...)
+  SelectorHelper --> Transfer: selector
+  Transfer -> Selector: GetFilesToBackup()
+  Transfer -> FilePartitioner: Partition(files, PriorityExtensions)
+  Transfer -> StateLogger: SetStateActive(...)
+  opt PriorityArbitrator available
+    Transfer -> Priority: Initialize/UpdateGlobalPriorityCount(...)
+  end
+
+  loop priority queue then standard queue
+    Transfer -> BizPause: WaitWhileBusinessSoftwareRuns(...)
+    opt waiting on global priority rule
+      Transfer -> Priority: CanProcessStandardFile(jobId)
+      Transfer -> StateLogger: SetStatePausedPriority(state)
+    end
+
+    Transfer -> File: GetSize()
+    Transfer -> LargeLimiter: RequiresExclusiveSlot(size)
+    opt exclusive large-file slot required
+      loop until acquired
+        Transfer -> LargeLimiter: TryAcquireExclusiveSlot(100ms)
+        Transfer -> StateLogger: SetStateWaitingLargeFile(state,file)
+      end
+    end
+
+    Transfer -> StateLogger: SetStateStartTransfer(state,file,type)
+    Transfer -> File: CopyAsync()
+    File -> LogRouter: Log(LogEntry)
+    LogRouter -> AppConfig: Load(LogType, RoutingType, LogPath)
+
+    alt LogType == xml
+      LogRouter -> XmlLogger: Log(entry)
+      XmlLogger -> EasyLogCore: WriteLogFile()
+    else LogType == json
+      LogRouter -> JsonLogger: Log(entry)
+      JsonLogger -> EasyLogCore: WriteLogFile()
+    end
+
+    opt RoutingType includes Central
+      LogRouter -> NetworkLog: Log(entry) (background thread)
+      NetworkLog -> LogServer: TCP(length + payload JSON)
+      LogServer -> EasyLogCore: Log(entry received)
+    end
+
+    opt large slot held
+      Transfer -> LargeLimiter: ReleaseExclusiveSlot()
+    end
+    Transfer -> Progress: SetCurrentProgress(%)
+    Transfer -> StateLogger: SetStateEndTransfer(...)
+  end
+
+  Transfer -> Priority: OnJobCompleted(jobId)
+  Transfer -> StateLogger: SetStateEnd(state, hadError, wasStopped)
+  Transfer -> Progress: SetCurrentProgress(100)
 end
-Backup -> State: Update(state=completed/failed)
-Backup -> LogWriter: Log(end)
-deactivate Backup
+Transfer --> Job: EndEvent
+deactivate Transfer
+
+== Service de logs central (EasySave.Server) ==
+Ops -> LogServer: Main()
+LogServer -> LogServer: StartServer()\nListenForClients()
+loop each TCP message
+  LogServer -> LogServer: Deserialize LogEntry + set ClientIPAddress
+  alt EasySaveLogType == xml
+    LogServer -> XmlLogger: Log(entry)
+  else default json
+    LogServer -> JsonLogger: Log(entry)
+  end
+  XmlLogger -> EasyLogCore: WriteLogFile(logs/yyyy-MM-dd.xml)
+  JsonLogger -> EasyLogCore: WriteLogFile(logs/yyyy-MM-dd.json)
+end
+
 @enduml
