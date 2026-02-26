@@ -31,6 +31,7 @@ public sealed class BackupJob
         _progressTracker.FilesCountEvent += (_, e) => FilesCountEvent?.Invoke(this, e);
         _controller.PauseEvent += (_, e) => PauseEvent?.Invoke(this, e);
         _controller.StopEvent += (_, e) => StopEvent?.Invoke(this, e);
+        _controller.BusinessSoftwarePauseChanged += (_, e) => BusinessSoftwarePauseChanged?.Invoke(this, e);
         _transferOrchestrator.EndEvent += (_, e) => EndEvent?.Invoke(this, e);
     }
 
@@ -115,6 +116,10 @@ public sealed class BackupJob
         set => _controller.WasStoppedByBusinessSoftware = value;
     }
 
+    /// <summary> Gets a value indicating whether the job is currently paused by business-software detection. </summary>
+    [JsonIgnore]
+    public bool PausedByBusiness => _controller.PausedByBusiness;
+
     // --- Transfer orchestrator dependencies ---
 
     /// <summary>
@@ -166,6 +171,7 @@ public sealed class BackupJob
     public event EventHandler? PauseEvent;
     public event EventHandler? StopEvent;
     public event EventHandler? EndEvent;
+    public event EventHandler? BusinessSoftwarePauseChanged;
 
     // --- Methods pass-through ---
 

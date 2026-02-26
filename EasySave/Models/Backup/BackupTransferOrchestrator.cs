@@ -258,7 +258,8 @@ public sealed class BackupTransferOrchestrator
             _identity.Id,
             state,
             blockedFile,
-            () => _controller.WasStopped);
+            () => _controller.WasStopped,
+            _controller.NotifyBusinessSoftwarePause);
 
         if (_controller.WasStopped)
             return false;

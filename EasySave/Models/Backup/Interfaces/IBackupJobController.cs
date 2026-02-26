@@ -11,6 +11,13 @@ public interface IBackupJobController
     /// <summary> Gets a value indicating whether the job was stopped by business-software detection. </summary>
     bool WasStoppedByBusinessSoftware { get; set; }
 
+    /// <summary> Gets a value indicating whether the job is currently paused by business-software detection. </summary>
+    bool PausedByBusiness { get; }
+
+    /// <summary> Notifies the controller that business-software pause state has changed. </summary>
+    /// <param name="paused">True when the job is now paused by business software; false when resumed.</param>
+    void NotifyBusinessSoftwarePause(bool paused);
+
     /// <summary> Pauses the job execution. </summary>
     void Pause();
 
@@ -40,5 +47,8 @@ public interface IBackupJobController
 
     /// <summary> Raised when the job is stopped. </summary>
     event EventHandler? StopEvent;
+
+    /// <summary> Raised when the business-software pause state changes. </summary>
+    event EventHandler? BusinessSoftwarePauseChanged;
 }
 
