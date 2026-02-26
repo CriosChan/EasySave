@@ -3,8 +3,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Core.Models;
-using EasySave.Models.Backup;
-using EasySave.Models.Backup.Interfaces;
+using EasySave.Models.Backup.Abstractions;
 using EasySave.Models.Utils;
 using EasySave.ViewModels.Services;
 
@@ -17,7 +16,6 @@ public partial class JobsViewModel : ViewModelBase
 {
     private readonly IBackupExecutionEngine _backupExecutionEngine;
     private readonly IJobService _jobService;
-    private readonly ParallelJobOrchestrator _orchestrator;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
     private BackupJobItemViewModel? _pendingDeleteJob;
@@ -65,7 +63,6 @@ public partial class JobsViewModel : ViewModelBase
         _jobService = new JobService();
         _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
         _statusBar = statusBar ?? throw new ArgumentNullException(nameof(statusBar));
-        _orchestrator = new ParallelJobOrchestrator(_backupExecutionEngine);
 
         InitializeBackupTypes();
         RefreshJobs();
@@ -318,57 +315,6 @@ public partial class JobsViewModel : ViewModelBase
         {
             _statusBar.StatusMessage =
                 $"Error executing job '{SelectedJob.Job.Name}' (ID: {SelectedJob.Job.Id}): {ex.Message}";
-        }
-        finally
-        {
-            _statusBar.ClearActiveJobs();
-            await Task.Delay(2000);
-            _statusBar.OverallProgress = 0;
-            _statusBar.MaxProgress = 0;
-        }
-    }
-
-    /// <summary>
-    ///     Executes all backup jobs in parallel using orchestrator.
-    /// </summary>
-    [RelayCommand]
-    private async Task RunAllJobs()
-    {
-        if (Jobs.Count == 0)
-        {
-            _statusBar.StatusMessage = _uiTextService.Get("Jobs.None", "No backup job is configured.");
-            return;
-        }
-
-        _statusBar.StatusMessage = _uiTextService.Get("Launch.RunningAll", "Running all jobs...");
-
-        _statusBar.OverallProgress = 0;
-        _statusBar.MaxProgress = 100;
-
-        try
-        {
-            var jobList = Jobs.Select(j => j.Job).ToList();
-
-            // Execute jobs in parallel with progress tracking
-            var result = await _orchestrator.ExecuteAllAsync(
-                jobList,
-                (_, snapshot) => _statusBar.ReportJobProgress(snapshot));
-
-            // Update final status based on result
-            if (result.WasStoppedByBusinessSoftware)
-                _statusBar.StatusMessage = _uiTextService.Get("Gui.Status.AllJobsStoppedByBusinessSoftware",
-                    "Execution stopped: business software detected");
-            else if (result.FailedCount > 0)
-                _statusBar.StatusMessage = _uiTextService.Format("Gui.Status.AllJobsCompletedWithErrors",
-                    "Execution finished: {0} completed, {1} failed", result.CompletedCount, result.FailedCount);
-            else
-                _statusBar.StatusMessage = _uiTextService.Get("Launch.Done", "Execution finished.");
-
-            _statusBar.OverallProgress = 100;
-        }
-        catch (Exception ex)
-        {
-            _statusBar.StatusMessage = $"Error during execution: {ex.Message}";
         }
         finally
         {

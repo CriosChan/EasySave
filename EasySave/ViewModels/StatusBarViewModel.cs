@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using EasySave.Models.Backup;
 
 namespace EasySave.ViewModels;
 
