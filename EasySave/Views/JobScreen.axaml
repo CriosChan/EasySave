@@ -8,167 +8,230 @@
              x:Class="EasySave.Views.JobScreen"
              xmlns:vm="using:EasySave.ViewModels"
              x:DataType="vm:MainWindowViewModel">
-    <Grid
-        IsVisible="{Binding IsJobScreen}"
-        RowDefinitions="*,Auto"
-        ColumnDefinitions="2*,1*"
-        RowSpacing="12"
-        ColumnSpacing="12">
+    <Grid IsVisible="{Binding IsJobScreen}"
+          RowDefinitions="Auto,*,Auto"
+          RowSpacing="12">
         <Border Grid.Row="0"
-                Grid.Column="0"
                 Classes="main-section">
-            <Grid RowDefinitions="Auto,*"
-                  RowSpacing="8">
-                <TextBlock Grid.Row="0"
-                           Text="{tlumach:Translate {x:Static translations:UiText.JobsHeader}}"
-                           Classes="section-title" />
+            <Menu HorizontalAlignment="Left"
+                  Background="Transparent">
+                <MenuItem Padding="0"
+                          Classes="menu-icon-item">
+                    <MenuItem.Header>
+                        <Border CornerRadius="10"
+                                Padding="8,6"
+                                BorderThickness="1"
+                                BorderBrush="{DynamicResource BorderLine}"
+                                Background="{DynamicResource SecondaryBackground}">
+                            <Image Source="/Assets/menu-button.png"
+                                   Width="28"
+                                   Height="28"
+                                   Stretch="Uniform" />
+                        </Border>
+                    </MenuItem.Header>
+                    <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuSettings}}"
+                              Command="{Binding OpenSettingsCommand}" />
+                    <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuManageBusinessSoftware}}"
+                              Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
+                </MenuItem>
+            </Menu>
+        </Border>
 
-                <ListBox Grid.Row="1"
-                         ItemsSource="{Binding Jobs.Jobs}"
-                         SelectedItem="{Binding Jobs.SelectedJob}"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="vm:BackupJobItemViewModel">
-                            <Border Classes="job-item">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="80*" />
-                                        <ColumnDefinition Width="20*" />
-                                    </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1">
+            <Border Classes="main-section"
+                    IsVisible="{Binding Jobs.IsJobListVisible}">
+                <Grid RowDefinitions="Auto,*,Auto"
+                      RowSpacing="10">
+                    <TextBlock Grid.Row="0"
+                               Text="{tlumach:Translate {x:Static translations:UiText.JobsHeader}}"
+                               Classes="section-title" />
 
-                                    <StackPanel Spacing="2">
-                                        <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" />
-                                        <TextBlock Text="{Binding Type}" Opacity="0.8" />
-                                        <TextBlock Text="{Binding DisplayPath}" TextWrapping="Wrap" Opacity="0.8" />
-                                    </StackPanel>
+                    <ListBox Grid.Row="1"
+                             ItemsSource="{Binding Jobs.Jobs}"
+                             SelectedItem="{Binding Jobs.SelectedJob}"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:BackupJobItemViewModel">
+                                <Border Classes="job-item">
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="12">
+                                        <StackPanel Grid.Column="0"
+                                                    Spacing="2">
+                                            <TextBlock Text="{Binding DisplayName}"
+                                                       FontWeight="SemiBold" />
+                                            <TextBlock Text="{Binding Type}"
+                                                       Opacity="0.8" />
+                                            <TextBlock Text="{Binding DisplayPath}"
+                                                       TextWrapping="Wrap"
+                                                       Opacity="0.8" />
+                                        </StackPanel>
 
-                                    <StackPanel Grid.Column="1">
-                                        <Grid HorizontalAlignment="Stretch">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" /> <!-- Colonne flexible -->
-                                                <ColumnDefinition Width="Auto" /> <!-- Colonne pour le StackPanel -->
-                                            </Grid.ColumnDefinitions>
-
-                                            <StackPanel Orientation="Horizontal" Grid.Column="1"
+                                        <StackPanel Grid.Column="1"
+                                                    Spacing="6"
+                                                    HorizontalAlignment="Right">
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="4"
                                                         HorizontalAlignment="Right">
                                                 <Button Command="{Binding PauseResumeJobCommand}"
                                                         IsVisible="{Binding InverseStopped}">
-                                                    <Image Source="{Binding PauseIcon}" Width="24" Height="24" />
+                                                    <Image Source="{Binding PauseIcon}"
+                                                           Width="24"
+                                                           Height="24" />
                                                 </Button>
-                                                <Button Command="{Binding StartStopJobCommand}" IsEnabled="True">
-                                                    <Image Source="{Binding StopIcon}" Width="24" Height="24" />
+                                                <Button Command="{Binding StartStopJobCommand}">
+                                                    <Image Source="{Binding StopIcon}"
+                                                           Width="24"
+                                                           Height="24" />
                                                 </Button>
-                                                <Button Command="{Binding EditJobCommand}" IsEnabled="True">
-                                                    <Image Source="{Binding EditIcon}" Width="24" Height="24" />
+                                                <Button Command="{Binding EditJobCommand}">
+                                                    <Image Source="{Binding EditIcon}"
+                                                           Width="24"
+                                                           Height="24" />
+                                                </Button>
+                                                <Button Command="{Binding DeleteJobCommand}">
+                                                    <Image Source="{Binding DeleteIcon}"
+                                                           Width="24"
+                                                           Height="24" />
                                                 </Button>
                                             </StackPanel>
-                                        </Grid>
-                                        <TextBlock Text="{Binding StatusMessage}"
-                                                   TextWrapping="Wrap" />
-                                        <ProgressBar
-                                            Minimum="0"
-                                            Maximum="100"
-                                            Value="{Binding Progress}"
-                                            Foreground="{Binding ProgressBarColor}"
-                                            MinWidth="0"
-                                            HorizontalAlignment="Stretch"
-                                            Margin="5" />
+                                            <TextBlock Text="{Binding StatusMessage}"
+                                                       TextWrapping="Wrap"
+                                                       HorizontalAlignment="Right" />
+                                            <ProgressBar Minimum="0"
+                                                         Maximum="100"
+                                                         Value="{Binding Progress}"
+                                                         Foreground="{Binding ProgressBarColor}"
+                                                         MinWidth="220"
+                                                         HorizontalAlignment="Stretch" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Button Grid.Row="2"
+                            Command="{Binding Jobs.OpenAddJobFormCommand}"
+                            Padding="0"
+                            HorizontalAlignment="Stretch"
+                            Height="96">
+                        <Image Source="/Assets/add-button.png"
+                               Stretch="Uniform"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               MaxHeight="84" />
+                    </Button>
+                </Grid>
+            </Border>
+
+            <Border Classes="main-section"
+                    IsVisible="{Binding Jobs.IsAddFormVisible}">
+                <Grid RowDefinitions="Auto,*"
+                      RowSpacing="10">
+                    <Grid Grid.Row="0"
+                          ColumnDefinitions="Auto,*"
+                          ColumnSpacing="12">
+                        <Button Grid.Column="0"
+                                Content="{tlumach:Translate {x:Static translations:UiText.GuiNavigationBack}}"
+                                Command="{Binding Jobs.CancelAddJobFormCommand}" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{tlumach:Translate {x:Static translations:UiText.AddHeader}}"
+                                   Classes="section-title"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptName}}" />
+                            <TextBox Text="{Binding Jobs.NewJobName, Mode=TwoWay}" />
+
+                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptSource}}" />
+                            <StackPanel Spacing="4">
+                                <Button Command="{Binding Jobs.BrowseSourceDirectoryCommand}"
+                                        HorizontalAlignment="Left">
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="8">
+                                        <PathIcon
+                                            Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                                            Width="16"
+                                            Height="16" />
+                                        <TextBlock
+                                            Text="{tlumach:Translate {x:Static translations:UiText.GuiButtonBrowseSource}}" />
                                     </StackPanel>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-        </Border>
+                                </Button>
+                                <TextBlock Text="{Binding Jobs.NewSourceDirectory}"
+                                           TextWrapping="Wrap"
+                                           Opacity="0.7"
+                                           FontSize="12"
+                                           IsVisible="{Binding Jobs.NewSourceDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                            </StackPanel>
 
-        <Border Grid.Row="0"
-                Grid.Column="1"
-                Classes="main-section">
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled">
-                <StackPanel Spacing="8">
-                <Menu HorizontalAlignment="Left">
-                    <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuRoot}}">
-                        <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuSettings}}"
-                                  Command="{Binding OpenSettingsCommand}" />
-                        <MenuItem
-                            Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuManageBusinessSoftware}}"
-                            Command="{Binding OpenBusinessSoftwareCatalogCommand}" />
-                    </MenuItem>
-                </Menu>
+                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptTarget}}" />
+                            <StackPanel Spacing="4">
+                                <Button Command="{Binding Jobs.BrowseTargetDirectoryCommand}"
+                                        HorizontalAlignment="Left">
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="8">
+                                        <PathIcon
+                                            Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                                            Width="16"
+                                            Height="16" />
+                                        <TextBlock
+                                            Text="{tlumach:Translate {x:Static translations:UiText.GuiButtonBrowseTarget}}" />
+                                    </StackPanel>
+                                </Button>
+                                <TextBlock Text="{Binding Jobs.NewTargetDirectory}"
+                                           TextWrapping="Wrap"
+                                           Opacity="0.7"
+                                           FontSize="12"
+                                           IsVisible="{Binding Jobs.NewTargetDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                            </StackPanel>
 
-                <Separator Margin="0,8,0,8" />
+                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptType}}" />
+                            <ComboBox ItemsSource="{Binding Jobs.BackupTypes}"
+                                      SelectedItem="{Binding Jobs.SelectedBackupType, Mode=TwoWay}" />
 
-                <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddHeader}}"
-                           Classes="section-title" />
-
-                <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptName}}" />
-                <TextBox Text="{Binding Jobs.NewJobName}" />
-
-                <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptSource}}" />
-                <StackPanel Spacing="4">
-                    <Button Command="{Binding Jobs.BrowseSourceDirectoryCommand}"
-
-                            HorizontalAlignment="Left">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <PathIcon
-                                Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
-                                Width="16" Height="16" />
-                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiButtonBrowseSource}}" />
+                            <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonAddJob}}"
+                                    Command="{Binding Jobs.AddJobCommand}"
+                                    IsVisible="{Binding Jobs.CanSubmitNewJob}" />
                         </StackPanel>
-                    </Button>
-                    <TextBlock Text="{Binding Jobs.NewSourceDirectory}"
-                               TextWrapping="Wrap"
-                               Opacity="0.7"
-                               FontSize="12"
-                               IsVisible="{Binding Jobs.NewSourceDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
 
-                <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptTarget}}" />
-                <StackPanel Spacing="4">
-                    <Button Command="{Binding Jobs.BrowseTargetDirectoryCommand}"
-
-                            HorizontalAlignment="Left">
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <PathIcon
-                                Data="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
-                                Width="16" Height="16" />
-                            <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.GuiButtonBrowseTarget}}" />
+            <Border IsVisible="{Binding Jobs.IsDeleteConfirmationVisible}"
+                    Background="#99000000"
+                    CornerRadius="8"
+                    Padding="16">
+                <Border Width="280"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Classes="main-section">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="{Binding Jobs.DeleteConfirmationMessage}"
+                                   HorizontalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Spacing="8">
+                            <Button Content="oui"
+                                    Command="{Binding Jobs.ConfirmDeleteJobCommand}" />
+                            <Button Content="non"
+                                    Command="{Binding Jobs.CancelDeleteJobCommand}" />
                         </StackPanel>
-                    </Button>
-                    <TextBlock Text="{Binding Jobs.NewTargetDirectory}"
-                               TextWrapping="Wrap"
-                               Opacity="0.7"
-                               FontSize="12"
-                               IsVisible="{Binding Jobs.NewTargetDirectory, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Border>
+        </Grid>
 
-                <TextBlock Text="{tlumach:Translate {x:Static translations:UiText.AddPromptType}}" />
-                <ComboBox ItemsSource="{Binding Jobs.BackupTypes}"
-                          SelectedItem="{Binding Jobs.SelectedBackupType}" />
-
-                <Button Classes="btn-green" Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonAddJob}}"
-                        Command="{Binding Jobs.AddJobCommand}"
-
-                        Margin="0,4,0,0" />
-
-                <Separator Margin="0,8,0,8" />
-
-                <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRemoveSelected}}"
-                        Command="{Binding Jobs.RemoveSelectedJobCommand}" />
-                </StackPanel>
-            </ScrollViewer>
-        </Border>
-
-        <Border Grid.Row="1"
-                Grid.ColumnSpan="2"
+        <Border Grid.Row="2"
                 Classes="main-section">
-            <WrapPanel ItemHeight="32" VerticalAlignment="Center">
+            <WrapPanel ItemHeight="32"
+                       VerticalAlignment="Center">
                 <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRunAllJobs}}"
                         Command="{Binding Jobs.RunAllJobsCommand}" />
             </WrapPanel>
         </Border>
-
     </Grid>
 </UserControl>

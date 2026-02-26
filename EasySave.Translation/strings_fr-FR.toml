@@ -73,6 +73,9 @@ UpdateFailed = "Erreur : echec de mise a jour du travail"
 [Gui.EditBackup.Screen]
 Title = "Modifier un job de sauvegarde"
 
+[Gui.Delete]
+Confirm = "Êtes-vous sûr ?"
+
 [Gui.Menu]
 Features = "Fonctionnalités"
 ManageBusinessSoftware = "Gérer les logiciels métier"

@@ -15,7 +15,12 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
 {
     private readonly Func<BackupJob, Task>? _executeJobCallback;
     private readonly Action<BackupJob>? _openEditCallback;
+    private readonly Action<BackupJob>? _requestDeleteCallback;
     private string _previousStatusMessage = ""; // Saves status before business-software pause
+    [ObservableProperty]
+    private Bitmap?
+        _deleteIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/delete_button.png"));
+
     [ObservableProperty]
     private Bitmap?
         _editIcon = ImageHelper.LoadFromResource(new Uri("avares://EasySave/Assets/edit-button.png")); // Icon for edit
@@ -48,15 +53,18 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     /// <param name="job">The BackupJob model to wrap.</param>
     /// <param name="executeJobCallback">Callback invoked when the user starts the job from the item button.</param>
     /// <param name="openEditCallback">Callback invoked when the user opens backup edition from the item button.</param>
+    /// <param name="requestDeleteCallback">Callback invoked when the user requests deletion from the item button.</param>
     public BackupJobItemViewModel(
         BackupJob job,
         Func<BackupJob, Task>? executeJobCallback = null,
-        Action<BackupJob>? openEditCallback = null)
+        Action<BackupJob>? openEditCallback = null,
+        Action<BackupJob>? requestDeleteCallback = null)
     {
         Job = job ?? throw new ArgumentNullException(nameof(job));
         _stopped = job.WasStopped;
         _executeJobCallback = executeJobCallback;
         _openEditCallback = openEditCallback;
+        _requestDeleteCallback = requestDeleteCallback;
 
         Job.PauseEvent += OnPausedChanged;
         Job.ProgressChanged += OnProgressChanged;
@@ -234,5 +242,14 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     private void EditJob()
     {
         _openEditCallback?.Invoke(Job);
+    }
+
+    /// <summary>
+    ///     Command to request job deletion from this list item.
+    /// </summary>
+    [RelayCommand]
+    private void DeleteJob()
+    {
+        _requestDeleteCallback?.Invoke(Job);
     }
 }

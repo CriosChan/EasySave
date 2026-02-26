@@ -73,6 +73,9 @@ UpdateFailed = "Error: Failed to update job"
 [Gui.EditBackup.Screen]
 Title = "Edit backup job"
 
+[Gui.Delete]
+Confirm = "Are you sure?"
+
 [Gui.Menu]
 Features = "Features"
 ManageBusinessSoftware = "Manage Business Software"

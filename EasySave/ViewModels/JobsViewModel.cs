@@ -20,7 +20,11 @@ public partial class JobsViewModel : ViewModelBase
     private readonly ParallelJobOrchestrator _orchestrator;
     private readonly StatusBarViewModel _statusBar;
     private readonly IUiTextService _uiTextService;
+    private BackupJobItemViewModel? _pendingDeleteJob;
     [ObservableProperty] private ObservableCollection<string> _backupTypes = [];
+    [ObservableProperty] private string _deleteConfirmationMessage = string.Empty;
+    [ObservableProperty] private bool _isAddFormVisible;
+    [ObservableProperty] private bool _isDeleteConfirmationVisible;
 
     [ObservableProperty] private ObservableCollection<BackupJobItemViewModel> _jobs = [];
 
@@ -30,6 +34,20 @@ public partial class JobsViewModel : ViewModelBase
     [ObservableProperty] private string _selectedBackupType = string.Empty;
     [ObservableProperty] private BackupJobItemViewModel? _selectedJob;
     private IStorageProvider? _storageProvider;
+
+    /// <summary>
+    ///     Gets a value indicating whether the job list view is currently visible.
+    /// </summary>
+    public bool IsJobListVisible => !IsAddFormVisible;
+
+    /// <summary>
+    ///     Gets a value indicating whether add-job fields are all filled.
+    /// </summary>
+    public bool CanSubmitNewJob =>
+        !string.IsNullOrWhiteSpace(NewJobName) &&
+        !string.IsNullOrWhiteSpace(NewSourceDirectory) &&
+        !string.IsNullOrWhiteSpace(NewTargetDirectory) &&
+        !string.IsNullOrWhiteSpace(SelectedBackupType);
 
     /// <summary>
     ///     Raised when a job edition is requested from a list item.
@@ -102,6 +120,25 @@ public partial class JobsViewModel : ViewModelBase
     {
         foreach (var job in Jobs)
             job.Job.BusinessSoftwareMonitor = new BusinessSoftwareMonitor();
+    }
+
+    /// <summary>
+    ///     Opens the add-job form screen.
+    /// </summary>
+    [RelayCommand]
+    private void OpenAddJobForm()
+    {
+        IsAddFormVisible = true;
+    }
+
+    /// <summary>
+    ///     Returns from add-job form to the jobs list.
+    /// </summary>
+    [RelayCommand]
+    private void CancelAddJobForm()
+    {
+        ClearInputFields();
+        IsAddFormVisible = false;
     }
 
     /// <summary>
@@ -180,6 +217,7 @@ public partial class JobsViewModel : ViewModelBase
         _statusBar.StatusMessage = _uiTextService.Get("Add.Success", "Backup job created.");
         RefreshJobs();
         ClearInputFields();
+        IsAddFormVisible = false;
     }
 
     /// <summary>
@@ -208,6 +246,47 @@ public partial class JobsViewModel : ViewModelBase
             selectedName);
         SelectedJob = null;
         RefreshJobs();
+    }
+
+    /// <summary>
+    ///     Confirms pending deletion and removes the selected backup job item.
+    /// </summary>
+    [RelayCommand]
+    private void ConfirmDeleteJob()
+    {
+        if (_pendingDeleteJob == null)
+        {
+            IsDeleteConfirmationVisible = false;
+            return;
+        }
+
+        var selectedName = _pendingDeleteJob.Job.Name;
+        var selectedId = _pendingDeleteJob.Job.Id.ToString();
+        var removed = _jobService.RemoveJob(selectedId);
+        if (!removed)
+        {
+            _statusBar.StatusMessage = _uiTextService.Get("Gui.Error.RemoveFailed", "Error: Failed to remove job");
+            ClearDeleteConfirmation();
+            return;
+        }
+
+        _statusBar.StatusMessage = string.Format(
+            _uiTextService.Get("Gui.Status.JobRemoved", "Job '{0}' removed successfully"),
+            selectedName);
+        if (SelectedJob?.Job.Id == _pendingDeleteJob.Job.Id)
+            SelectedJob = null;
+
+        RefreshJobs();
+        ClearDeleteConfirmation();
+    }
+
+    /// <summary>
+    ///     Cancels pending deletion.
+    /// </summary>
+    [RelayCommand]
+    private void CancelDeleteJob()
+    {
+        ClearDeleteConfirmation();
     }
 
     /// <summary>
@@ -435,6 +514,7 @@ public partial class JobsViewModel : ViewModelBase
         NewJobName = string.Empty;
         NewSourceDirectory = string.Empty;
         NewTargetDirectory = string.Empty;
+        OnPropertyChanged(nameof(CanSubmitNewJob));
     }
 
     /// <summary>
@@ -444,7 +524,7 @@ public partial class JobsViewModel : ViewModelBase
     /// <returns>Configured item ViewModel.</returns>
     private BackupJobItemViewModel CreateJobItem(BackupJob job)
     {
-        return new BackupJobItemViewModel(job, RunJobFromItemAsync, RequestEditFromItem);
+        return new BackupJobItemViewModel(job, RunJobFromItemAsync, RequestEditFromItem, RequestDeleteFromItem);
     }
 
     /// <summary>
@@ -454,6 +534,55 @@ public partial class JobsViewModel : ViewModelBase
     private void RequestEditFromItem(BackupJob job)
     {
         EditJobRequested?.Invoke(job);
+    }
+
+    /// <summary>
+    ///     Opens delete confirmation for a job selected from list item action buttons.
+    /// </summary>
+    /// <param name="job">Job selected for deletion.</param>
+    private void RequestDeleteFromItem(BackupJob job)
+    {
+        _pendingDeleteJob = Jobs.FirstOrDefault(item => item.Job.Id == job.Id);
+        if (_pendingDeleteJob == null)
+            return;
+
+        DeleteConfirmationMessage = _uiTextService.Get("Gui.Delete.Confirm", "\u00CAtes-vous s\u00FBr ?");
+        IsDeleteConfirmationVisible = true;
+    }
+
+    partial void OnIsAddFormVisibleChanged(bool value)
+    {
+        OnPropertyChanged(nameof(IsJobListVisible));
+    }
+
+    partial void OnNewJobNameChanged(string value)
+    {
+        OnPropertyChanged(nameof(CanSubmitNewJob));
+    }
+
+    partial void OnNewSourceDirectoryChanged(string value)
+    {
+        OnPropertyChanged(nameof(CanSubmitNewJob));
+    }
+
+    partial void OnNewTargetDirectoryChanged(string value)
+    {
+        OnPropertyChanged(nameof(CanSubmitNewJob));
+    }
+
+    partial void OnSelectedBackupTypeChanged(string value)
+    {
+        OnPropertyChanged(nameof(CanSubmitNewJob));
+    }
+
+    /// <summary>
+    ///     Clears pending delete confirmation state.
+    /// </summary>
+    private void ClearDeleteConfirmation()
+    {
+        _pendingDeleteJob = null;
+        IsDeleteConfirmationVisible = false;
+        DeleteConfirmationMessage = string.Empty;
     }
 
     /// <summary>
