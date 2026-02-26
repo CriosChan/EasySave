@@ -1,4 +1,4 @@
-using EasySave.Models.Backup.Abstractions;
+ï»¿using EasySave.Models.Backup.Abstractions;
 
 namespace EasySaveTest;
 
@@ -64,7 +64,7 @@ public class FilePartitionerTests
         Assert.That(result, Is.EqualTo(string.Empty));
     }
 
-    // -- Partition – empty inputs ----------------------------------------------
+    // -- Partition ï¿½ empty inputs ----------------------------------------------
 
     [Test]
     public void Partition_WithEmptyFileList_ReturnsTwoEmptyQueues()
@@ -97,7 +97,7 @@ public class FilePartitionerTests
         });
     }
 
-    // -- Partition – correct routing -------------------------------------------
+    // -- Partition ï¿½ correct routing -------------------------------------------
 
     [Test]
     public void Partition_WithMatchingExtension_RoutesPriorityFilesCorrectly()
@@ -155,7 +155,7 @@ public class FilePartitionerTests
         });
     }
 
-    // -- Partition – extension normalisation during matching -------------------
+    // -- Partition ï¿½ extension normalisation during matching -------------------
 
     [Test]
     public void Partition_PriorityExtensionWithoutDot_StillMatchesFiles()
@@ -212,7 +212,7 @@ public class FilePartitionerTests
         });
     }
 
-    // -- Partition – ordering preserved ---------------------------------------
+    // -- Partition ï¿½ ordering preserved ---------------------------------------
 
     [Test]
     public void Partition_PreservesRelativeOrderInBothQueues()
@@ -236,7 +236,7 @@ public class FilePartitionerTests
         Assert.That(sq.Dequeue().SourceFile, Does.EndWith("d.txt"));
     }
 
-    // -- Partition – null guards -----------------------------------------------
+    // -- Partition ï¿½ null guards -----------------------------------------------
 
     [Test]
     public void Partition_NullFiles_ThrowsArgumentNullException()
@@ -269,6 +269,8 @@ public class FilePartitionerTests
         {
             /* no-op */
         }
+
+        public Task CopyAsync() => Task.CompletedTask;
 
         public long GetSize()
         {

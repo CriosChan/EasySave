@@ -1,4 +1,4 @@
-using EasySave.Models.Backup.Abstractions;
+﻿using EasySave.Models.Backup.Abstractions;
 
 namespace EasySaveTest;
 
@@ -88,6 +88,8 @@ public class FileExtensionsTests
         {
             // No-op for testing
         }
+
+        public Task CopyAsync() => Task.CompletedTask;
 
         public long GetSize()
         {

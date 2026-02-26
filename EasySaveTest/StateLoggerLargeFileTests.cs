@@ -50,6 +50,7 @@ public class StateLoggerLargeFileTests
         public string SourceFile { get; }
         public string TargetFile { get; }
         public void Copy() { }
+        public Task CopyAsync() => Task.CompletedTask;
         public long GetSize() => _sizeBytes;
     }
 }
