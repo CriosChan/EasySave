@@ -70,6 +70,22 @@ public static class StateLogger
     }
 
     /// <summary>
+    ///     Sets the state of the backup job to paused due to business software detection.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    /// <param name="blockedFile">File currently blocked by the pause, when available.</param>
+    public static void SetStatePausedBusinessSoftware(BackupJobState state, IFile? blockedFile = null)
+    {
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.PausedBusinessSoftware;
+            s.CurrentAction = "Paused: business software running";
+            s.CurrentSourcePath = blockedFile == null ? null : PathService.ToFullUncLikePath(blockedFile.SourceFile);
+            s.CurrentTargetPath = blockedFile == null ? null : PathService.ToFullUncLikePath(blockedFile.TargetFile);
+        });
+    }
+
+    /// <summary>
     ///     Sets the state of the backup job to waiting for priority files (WaitingPriority).
     ///     Job is blocked because standard files cannot be processed while priority files exist in the system.
     /// </summary>

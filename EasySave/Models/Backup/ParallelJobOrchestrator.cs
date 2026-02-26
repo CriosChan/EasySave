@@ -12,6 +12,7 @@ public sealed class ParallelJobOrchestrator
     private readonly IBackupExecutionEngine _executionEngine;
     private readonly IPriorityArbitrator _priorityArbitrator;
     private readonly ILargeFileTransferLimiter _largeFileTransferLimiter;
+    private readonly IBusinessSoftwarePauseCoordinator _businessSoftwarePauseCoordinator;
     private readonly ConcurrentDictionary<int, JobExecutionState> _jobStates = new();
 
     /// <summary>
@@ -22,14 +23,21 @@ public sealed class ParallelJobOrchestrator
     /// <param name="largeFileTransferLimiter">
     ///     Optional global limiter for large-file transfers. If null, a shared default limiter is used.
     /// </param>
+    /// <param name="businessSoftwarePauseCoordinator">
+    ///     Optional global coordinator for automatic pause/resume when business software is detected.
+    ///     If null, a shared default coordinator is used.
+    /// </param>
     public ParallelJobOrchestrator(
         IBackupExecutionEngine executionEngine,
         IPriorityArbitrator? priorityArbitrator = null,
-        ILargeFileTransferLimiter? largeFileTransferLimiter = null)
+        ILargeFileTransferLimiter? largeFileTransferLimiter = null,
+        IBusinessSoftwarePauseCoordinator? businessSoftwarePauseCoordinator = null)
     {
         _executionEngine = executionEngine ?? throw new ArgumentNullException(nameof(executionEngine));
         _priorityArbitrator = priorityArbitrator ?? new GlobalPriorityArbitrator();
         _largeFileTransferLimiter = largeFileTransferLimiter ?? GlobalLargeFileTransferLimiter.Shared;
+        _businessSoftwarePauseCoordinator =
+            businessSoftwarePauseCoordinator ?? GlobalBusinessSoftwarePauseCoordinator.Shared;
     }
 
     /// <summary>
@@ -88,6 +96,7 @@ public sealed class ParallelJobOrchestrator
             // Assign the arbitrator to the job
             job.PriorityArbitrator = _priorityArbitrator;
             job.LargeFileTransferLimiter = _largeFileTransferLimiter;
+            job.BusinessSoftwarePauseCoordinator = _businessSoftwarePauseCoordinator;
         }
 
         // Initialize the arbitrator with all priority counts

@@ -30,6 +30,12 @@ public sealed class BackupTransferOrchestrator
     public IBusinessSoftwareMonitor BusinessSoftwareMonitor { get; set; } = new BusinessSoftwareMonitor();
 
     /// <summary>
+    ///     Gets or sets the global coordinator for automatic pause/resume on business software detection.
+    /// </summary>
+    public IBusinessSoftwarePauseCoordinator BusinessSoftwarePauseCoordinator { get; set; } =
+        GlobalBusinessSoftwarePauseCoordinator.Shared;
+
+    /// <summary>
     ///     Gets or sets the global priority arbitrator shared across all parallel jobs.
     /// </summary>
     public IPriorityArbitrator? PriorityArbitrator { get; set; }
@@ -68,7 +74,8 @@ public sealed class BackupTransferOrchestrator
         CryptoSoftConfiguration.Load().Save();
         StateFileSingleton.Instance.Initialize(ApplicationConfiguration.Load().LogPath);
         var state = StateFileSingleton.Instance.GetOrCreate(_identity.Id, _identity.Name);
-        var businessSoftwareStopHandler = new BusinessSoftwareStopHandler(BusinessSoftwareMonitor, _identity.Name);
+        using var businessSoftwareRegistration =
+            BusinessSoftwarePauseCoordinator.RegisterJob(_identity.Id, _identity.Name, BusinessSoftwareMonitor);
 
         // Verify source and target directories
         if (!Check(out var errorMessage))
@@ -120,19 +127,7 @@ public sealed class BackupTransferOrchestrator
 
             while (queue.Count > 0)
             {
-                if (processedCount > 0 && businessSoftwareStopHandler.ShouldStopBackup(state, queue.Peek()))
-                {
-                    _controller.WasStoppedByBusinessSoftware = true;
-                    _controller.Pause();
-                }
-
-                // Wait if paused
-                if (_controller.IsPaused())
-                    StateLogger.SetStatePaused(state);
-
-                _controller.WaitIfPaused();
-
-                if (_controller.WasStopped)
+                if (!WaitForRuntimeAvailability(state, queue.Peek()))
                 {
                     aborted = true;
                     break;
@@ -147,9 +142,7 @@ public sealed class BackupTransferOrchestrator
                     while (!CanProcessStandardFile(PriorityArbitrator, _identity.Id))
                     {
                         StateLogger.SetStatePausedPriority(state);
-                        _controller.WaitIfPaused(100);
-
-                        if (_controller.WasStopped)
+                        if (!WaitForRuntimeAvailability(state, file, 100))
                         {
                             aborted = true;
                             break;
@@ -174,9 +167,7 @@ public sealed class BackupTransferOrchestrator
                         {
                             waitedForSlot = true;
                             StateLogger.SetStateWaitingLargeFile(state, file);
-                            _controller.WaitIfPaused(LargeFileWaitPollingIntervalMs);
-
-                            if (_controller.WasStopped)
+                            if (!WaitForRuntimeAvailability(state, file, LargeFileWaitPollingIntervalMs))
                             {
                                 aborted = true;
                                 break;
@@ -244,15 +235,43 @@ public sealed class BackupTransferOrchestrator
 
         PriorityArbitrator?.OnJobCompleted(_identity.Id);
 
-        if (_controller.WasStoppedByBusinessSoftware)
-            return;
-
         StateLogger.SetStateEnd(state, hadError, _controller.WasStopped);
 
         if (!_controller.WasStopped)
             _progressTracker.SetCurrentProgress(100);
 
         EndEvent?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    ///     Applies runtime gates in order: automatic business-software pause, then manual pause/stop.
+    /// </summary>
+    /// <param name="state">Current job runtime state.</param>
+    /// <param name="blockedFile">Current blocked file when available.</param>
+    /// <param name="pauseWaitTimeoutMs">
+    ///     Optional manual-pause wait timeout. When null, waits indefinitely like standard file loop behavior.
+    /// </param>
+    /// <returns>True when execution may continue; false when job is stopped.</returns>
+    private bool WaitForRuntimeAvailability(BackupJobState state, IFile? blockedFile, int? pauseWaitTimeoutMs = null)
+    {
+        BusinessSoftwarePauseCoordinator.WaitWhileBusinessSoftwareRuns(
+            _identity.Id,
+            state,
+            blockedFile,
+            () => _controller.WasStopped);
+
+        if (_controller.WasStopped)
+            return false;
+
+        if (_controller.IsPaused())
+            StateLogger.SetStatePaused(state);
+
+        if (pauseWaitTimeoutMs.HasValue)
+            _controller.WaitIfPaused(pauseWaitTimeoutMs.Value);
+        else
+            _controller.WaitIfPaused();
+
+        return !_controller.WasStopped;
     }
 
     /// <summary>
