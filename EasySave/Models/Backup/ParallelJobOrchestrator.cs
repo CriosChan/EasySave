@@ -11,6 +11,7 @@ public sealed class ParallelJobOrchestrator
 {
     private readonly IBackupExecutionEngine _executionEngine;
     private readonly IPriorityArbitrator _priorityArbitrator;
+    private readonly ILargeFileTransferLimiter _largeFileTransferLimiter;
     private readonly ConcurrentDictionary<int, JobExecutionState> _jobStates = new();
 
     /// <summary>
@@ -18,10 +19,17 @@ public sealed class ParallelJobOrchestrator
     /// </summary>
     /// <param name="executionEngine">Execution engine for running individual jobs.</param>
     /// <param name="priorityArbitrator">Optional global priority arbitrator. If null, no global priority constraint is enforced.</param>
-    public ParallelJobOrchestrator(IBackupExecutionEngine executionEngine, IPriorityArbitrator? priorityArbitrator = null)
+    /// <param name="largeFileTransferLimiter">
+    ///     Optional global limiter for large-file transfers. If null, a shared default limiter is used.
+    /// </param>
+    public ParallelJobOrchestrator(
+        IBackupExecutionEngine executionEngine,
+        IPriorityArbitrator? priorityArbitrator = null,
+        ILargeFileTransferLimiter? largeFileTransferLimiter = null)
     {
         _executionEngine = executionEngine ?? throw new ArgumentNullException(nameof(executionEngine));
         _priorityArbitrator = priorityArbitrator ?? new GlobalPriorityArbitrator();
+        _largeFileTransferLimiter = largeFileTransferLimiter ?? GlobalLargeFileTransferLimiter.Shared;
     }
 
     /// <summary>
@@ -79,6 +87,7 @@ public sealed class ParallelJobOrchestrator
             
             // Assign the arbitrator to the job
             job.PriorityArbitrator = _priorityArbitrator;
+            job.LargeFileTransferLimiter = _largeFileTransferLimiter;
         }
 
         // Initialize the arbitrator with all priority counts

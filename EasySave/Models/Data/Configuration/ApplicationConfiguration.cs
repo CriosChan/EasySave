@@ -127,6 +127,21 @@ public sealed class ApplicationConfiguration
     } = new();
 
     /// <summary>
+    ///     Gets or sets the threshold in Ko above which a file is considered "large".
+    ///     Large files are globally serialized (only one transfer at a time).
+    ///     Automatically saves when modified.
+    /// </summary>
+    public int LargeFileThresholdKo
+    {
+        get;
+        set
+        {
+            field = value > 0 ? value : 1;
+            Save();
+        }
+    } = 1024;
+
+    /// <summary>
     ///     Gets or sets the EasySaveServer's IP address. Automatically saves when modified.
     ///     Default is "127.0.0.1" (localhost).
     /// </summary>

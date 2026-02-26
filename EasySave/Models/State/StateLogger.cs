@@ -84,6 +84,24 @@ public static class StateLogger
     }
 
     /// <summary>
+    ///     Sets the state of the backup job to waiting for the global large-file transfer slot.
+    /// </summary>
+    /// <param name="state">The current state of the backup job.</param>
+    /// <param name="file">The large file waiting for transfer.</param>
+    public static void SetStateWaitingLargeFile(BackupJobState state, IFile file)
+    {
+        ArgumentNullException.ThrowIfNull(file);
+
+        StateFileSingleton.Instance.UpdateState(state, s =>
+        {
+            s.State = JobRunState.WaitingLargeFile;
+            s.CurrentAction = "Waiting for large-file transfer slot";
+            s.CurrentSourcePath = PathService.ToFullUncLikePath(file.SourceFile);
+            s.CurrentTargetPath = PathService.ToFullUncLikePath(file.TargetFile);
+        });
+    }
+
+    /// <summary>
     ///     Sets the state of the backup job to completed, based on if an error occurred.
     /// </summary>
     /// <param name="state">The current state of the backup job.</param>

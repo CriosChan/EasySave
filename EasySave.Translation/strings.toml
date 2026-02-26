@@ -81,6 +81,7 @@ Back = "Back"
 CryptoSoftKey = "CryptoSoft key."
 ExtensionToCrypt = "Extension to crypt"
 ExtensionPriority = "Priority extensions"
+LargeFileThreshold = "Large-file threshold (Ko)"
 Label = "Settings"
 LogSaveRoute = "Log backup location (Local, online, or both)"
 

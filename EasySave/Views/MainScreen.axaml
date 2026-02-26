@@ -78,7 +78,9 @@
         <Border Grid.Row="0"
                 Grid.Column="1"
                 Classes="main-section">
-            <StackPanel Spacing="8">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="8">
                 <Menu HorizontalAlignment="Left">
                     <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuRoot}}">
                         <MenuItem Header="{tlumach:Translate {x:Static translations:UiText.GuiMenuSettings}}"
@@ -148,7 +150,8 @@
 
                 <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiButtonRemoveSelected}}"
                         Command="{Binding Jobs.RemoveSelectedJobCommand}" />
-            </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
         </Border>
 
         <Border Grid.Row="1"
