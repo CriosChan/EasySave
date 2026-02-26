@@ -31,6 +31,8 @@
 
         <views:AddedSoftwareScreen Grid.Row="0" IsVisible="{Binding IsAddedSoftwareScreen}" />
 
+        <views:EditBackupScreen Grid.Row="0" IsVisible="{Binding IsEditBackupScreen}" />
+
         <Border Grid.Row="1"
                 Classes="status-bar">
             <StackPanel Spacing="8">

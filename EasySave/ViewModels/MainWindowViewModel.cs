@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Data.Configuration;
+using EasySave.Models.Backup;
 using EasySave.Models.Data.Configuration;
 using EasySave.Models.Logger;
 using EasySave.ViewModels.Services;
@@ -24,7 +25,8 @@ public partial class MainWindowViewModel : ViewModelBase
         Main,
         Settings,
         SoftwareCatalog,
-        AddedSoftware
+        AddedSoftware,
+        EditBackup
     }
 
     private readonly IUiLocalizationService _uiLocalizationService;
@@ -47,10 +49,13 @@ public partial class MainWindowViewModel : ViewModelBase
         StatusBar = new StatusBarViewModel();
         Jobs = new JobsViewModel(StatusBar, _uiTextService);
         Settings = new SettingsViewModel(StatusBar, _uiTextService, _uiLocalizationService);
+        EditBackup = new EditBackupViewModel(StatusBar, _uiTextService);
         BusinessSoftware = new BusinessSoftwareViewModel(
             StatusBar,
             _uiTextService);
 
+        Jobs.EditJobRequested += OnEditJobRequested;
+        EditBackup.JobUpdated += OnBackupJobUpdated;
         BusinessSoftware.ConfiguredProcessNamesChanged += OnConfiguredProcessNamesChanged;
         BusinessSoftware.OpenAddedSoftwareRequested += OnOpenAddedSoftwareRequested;
 
@@ -73,6 +78,11 @@ public partial class MainWindowViewModel : ViewModelBase
     ///     Gets the settings section ViewModel.
     /// </summary>
     public SettingsViewModel Settings { get; }
+
+    /// <summary>
+    ///     Gets the backup edition screen ViewModel.
+    /// </summary>
+    public EditBackupViewModel EditBackup { get; }
 
     /// <summary>
     ///     Gets the business software section ViewModel.
@@ -105,12 +115,18 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsAddedSoftwareScreen => CurrentScreen == ViewScreen.AddedSoftware;
 
     /// <summary>
+    ///     Gets a value indicating whether the backup edition screen is visible.
+    /// </summary>
+    public bool IsEditBackupScreen => CurrentScreen == ViewScreen.EditBackup;
+
+    /// <summary>
     ///     Forwards the storage provider to the jobs ViewModel.
     /// </summary>
     /// <param name="storageProvider">Window storage provider.</param>
     public void SetStorageProvider(IStorageProvider storageProvider)
     {
         Jobs.SetStorageProvider(storageProvider);
+        EditBackup.SetStorageProvider(storageProvider);
     }
 
     /// <summary>
@@ -172,12 +188,22 @@ public partial class MainWindowViewModel : ViewModelBase
         SetCurrentScreen(_previousScreen);
     }
 
+    /// <summary>
+    ///     Returns from backup edition screen to main screen.
+    /// </summary>
+    [RelayCommand]
+    private void BackFromEditBackup()
+    {
+        SetCurrentScreen(ViewScreen.Main);
+    }
+
     partial void OnCurrentScreenChanged(ViewScreen value)
     {
         OnPropertyChanged(nameof(IsJobScreen));
         OnPropertyChanged(nameof(IsSettingsScreen));
         OnPropertyChanged(nameof(IsSoftwareCatalogScreen));
         OnPropertyChanged(nameof(IsAddedSoftwareScreen));
+        OnPropertyChanged(nameof(IsEditBackupScreen));
     }
 
     /// <summary>
@@ -209,6 +235,25 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _previousScreen = ViewScreen.SoftwareCatalog;
         SetCurrentScreen(ViewScreen.AddedSoftware);
+    }
+
+    /// <summary>
+    ///     Opens backup edition for the selected job.
+    /// </summary>
+    /// <param name="job">Job to edit.</param>
+    private void OnEditJobRequested(BackupJob job)
+    {
+        EditBackup.BeginEdit(job);
+        SetCurrentScreen(ViewScreen.EditBackup);
+    }
+
+    /// <summary>
+    ///     Refreshes job list when a job has been updated from edition screen.
+    /// </summary>
+    /// <param name="job">Updated job.</param>
+    private void OnBackupJobUpdated(BackupJob job)
+    {
+        Jobs.RefreshJobs();
     }
 
     /// <summary>
