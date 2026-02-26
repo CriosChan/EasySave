@@ -229,9 +229,9 @@
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center"
                                     Spacing="8">
-                            <Button Content="oui"
+                            <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiDeleteYes}}"
                                     Command="{Binding Jobs.ConfirmDeleteJobCommand}" />
-                            <Button Content="non"
+                            <Button Content="{tlumach:Translate {x:Static translations:UiText.GuiDeleteNo}}"
                                     Command="{Binding Jobs.CancelDeleteJobCommand}" />
                         </StackPanel>
                     </StackPanel>

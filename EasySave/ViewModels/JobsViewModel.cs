@@ -470,7 +470,7 @@ public partial class JobsViewModel : ViewModelBase
     /// <returns>Configured item ViewModel.</returns>
     private BackupJobItemViewModel CreateJobItem(BackupJob job)
     {
-        return new BackupJobItemViewModel(job, RunJobFromItemAsync, RequestEditFromItem, RequestDeleteFromItem);
+        return new BackupJobItemViewModel(job, _uiTextService, RunJobFromItemAsync, RequestEditFromItem, RequestDeleteFromItem);
     }
 
     /// <summary>

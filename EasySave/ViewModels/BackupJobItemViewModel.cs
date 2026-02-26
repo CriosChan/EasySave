@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EasySave.Models.Utils;
+using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
 
@@ -15,6 +16,7 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     private readonly Func<BackupJob, Task>? _executeJobCallback;
     private readonly Action<BackupJob>? _openEditCallback;
     private readonly Action<BackupJob>? _requestDeleteCallback;
+    private readonly IUiTextService _uiTextService;
     private string _previousStatusMessage = ""; // Saves status before business-software pause
     [ObservableProperty]
     private Bitmap?
@@ -50,16 +52,19 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
     ///     Initializes a new instance of the BackupJobItemViewModel class.
     /// </summary>
     /// <param name="job">The BackupJob model to wrap.</param>
+    /// <param name="uiTextService">Service used to resolve localized strings. Defaults to a no-op fallback when null.</param>
     /// <param name="executeJobCallback">Callback invoked when the user starts the job from the item button.</param>
     /// <param name="openEditCallback">Callback invoked when the user opens backup edition from the item button.</param>
     /// <param name="requestDeleteCallback">Callback invoked when the user requests deletion from the item button.</param>
     public BackupJobItemViewModel(
         BackupJob job,
+        IUiTextService? uiTextService = null,
         Func<BackupJob, Task>? executeJobCallback = null,
         Action<BackupJob>? openEditCallback = null,
         Action<BackupJob>? requestDeleteCallback = null)
     {
         Job = job ?? throw new ArgumentNullException(nameof(job));
+        _uiTextService = uiTextService ?? new NullUiTextService();
         _stopped = job.WasStopped;
         _executeJobCallback = executeJobCallback;
         _openEditCallback = openEditCallback;
@@ -187,7 +192,8 @@ public sealed partial class BackupJobItemViewModel : ViewModelBase
             Dispatcher.UIThread.InvokeAsync(() =>
             {
                 ProgressBarColor = new SolidColorBrush(Color.FromRgb(255, 152, 0)); // Orange: paused by business software
-                StatusMessage = "Backup paused: business software is running.";
+                StatusMessage = _uiTextService.Get("Gui.Status.BackupPausedByBusiness",
+                    "Backup paused: business software is running.");
             });
         }
         else

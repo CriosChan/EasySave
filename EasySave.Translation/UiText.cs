@@ -62,4 +62,9 @@ public static class UiText
         Strings.Gui.BusinessSoftware.Button.RemoveSelected;
 
     public static TranslationUnit GuiEditBackupScreenTitle => Strings.Gui.EditBackup.Screen.Title;
+
+    public static TranslationUnit GuiDeleteYes => Strings.Gui.Delete.Yes;
+    public static TranslationUnit GuiDeleteNo => Strings.Gui.Delete.No;
+
+    public static TranslationUnit GuiSettingsNetworkSection => Strings.Gui.Settings.NetworkSection;
 }

@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using EasySave.ViewModels.Services;
 
 namespace EasySave.ViewModels;
 
@@ -11,9 +12,19 @@ public partial class StatusBarViewModel : ViewModelBase
 {
     // Active job snapshots keyed by job ID
     private readonly ConcurrentDictionary<int, BackupExecutionProgressSnapshot> _activeSnapshots = new();
+    private readonly IUiTextService _uiTextService;
     [ObservableProperty] private double _maxProgress;
     [ObservableProperty] private double _overallProgress;
     [ObservableProperty] private string _statusMessage = string.Empty;
+
+    /// <summary>
+    ///     Initializes a new instance of <see cref="StatusBarViewModel" />.
+    /// </summary>
+    /// <param name="uiTextService">Service used to resolve localized strings.</param>
+    public StatusBarViewModel(IUiTextService uiTextService)
+    {
+        _uiTextService = uiTextService ?? throw new ArgumentNullException(nameof(uiTextService));
+    }
 
     /// <summary>
     ///     Registers or updates the progress snapshot for a running job,
@@ -58,7 +69,8 @@ public partial class StatusBarViewModel : ViewModelBase
         var totalBytes = snapshots.Sum(s => s.TotalSize);
         var processedBytes = snapshots.Sum(s => s.TransferredSize);
 
-        var message = string.Format(
+        var message = _uiTextService.Format(
+            "Gui.Status.JobsRunning",
             "Running {0} job{1} - ({2} / {3} files) - ({4} / {5} MB)",
             snapshots.Count,
             snapshots.Count > 1 ? "s" : "",

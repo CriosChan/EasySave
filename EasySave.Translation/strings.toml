@@ -74,6 +74,8 @@ Title = "Edit backup job"
 
 [Gui.Delete]
 Confirm = "Are you sure?"
+Yes = "Yes"
+No = "No"
 
 [Gui.Menu]
 Features = "Features"
@@ -91,6 +93,7 @@ ExtensionPriority = "Priority extensions"
 LargeFileThreshold = "Large-file threshold (Ko)"
 Label = "Settings"
 LogSaveRoute = "Log backup location (Local, online, or both)"
+NetworkSection = "Network"
 
 [Gui.Settings.Hint]
 FutureExtension = "This settings screen is ready for future parameters."
@@ -106,14 +109,18 @@ LogType = "Log Type"
 AllJobsCompletedWithErrors = "Execution finished: {0} completed, {1} failed"
 AllJobsStoppedByBusinessSoftware = "Execution stopped: business software detected"
 BackupAsFinished = "Backup '{0}' finished."
+BackupPausedByBusiness = "Backup paused: business software is running."
 BackupStoppedByBusinessSoftware = "Backup '{0}' stopped: business software is running"
 JobRemoved = "Job '{0}' removed successfully"
 JobUpdated = "Job '{0}' updated successfully"
+JobsRunning = "Running {0} job{1} - ({2} / {3} files) - ({4} / {5} MB)"
 LanguageChangedEn = "Language changed to English"
 LanguageChangedFr = "Language changed to French"
 LogTypeJsonSet = "Log type set to JSON"
 LogTypeXmlSet = "Log type set to XML"
 Ready = "Ready"
+ServerOffline = "Server: Offline"
+ServerOnline = "Server: Online"
 
 [Gui.Tooltip]
 DeleteExtension = "Remove extension."

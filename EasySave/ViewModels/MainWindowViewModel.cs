@@ -45,7 +45,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _uiTextService = new TlumachUiTextService();
         _uiLocalizationService = new TlumachUiLocalizationService();
 
-        StatusBar = new StatusBarViewModel();
+        StatusBar = new StatusBarViewModel(_uiTextService);
         Jobs = new JobsViewModel(StatusBar, _uiTextService);
         Settings = new SettingsViewModel(StatusBar, _uiTextService, _uiLocalizationService);
         EditBackup = new EditBackupViewModel(StatusBar, _uiTextService);
@@ -274,7 +274,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             UseServer = true;
             ServerColor = SolidColorBrush.Parse("#27F535");
-            ServerText = "Serveur : En ligne";
+            ServerText = _uiTextService.Get("Gui.Status.ServerOnline", "Server: Online");
         });
     }
 
@@ -288,7 +288,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             UseServer = true;
             ServerColor = SolidColorBrush.Parse("#F52727");
-            ServerText = "Serveur : Hors ligne";
+            ServerText = _uiTextService.Get("Gui.Status.ServerOffline", "Server: Offline");
         });
     }
 }
