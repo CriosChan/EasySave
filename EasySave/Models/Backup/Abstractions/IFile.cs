@@ -18,6 +18,12 @@ public interface IFile
     public void Copy();
 
     /// <summary>
+    ///     Copies the file from the source to the target location asynchronously.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous copy operation.</returns>
+    public Task CopyAsync();
+
+    /// <summary>
     ///     Retrieves the size of the file in bytes.
     /// </summary>
     /// <returns>The size of the file in bytes.</returns>

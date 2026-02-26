@@ -57,6 +57,12 @@ public class NormalFile : IFile
     }
 
     /// <summary>
+    ///     Copies the file from the source location to the target location asynchronously.
+    ///     Offloads the blocking I/O to a thread-pool thread.
+    /// </summary>
+    public Task CopyAsync() => Task.Run(Copy);
+
+    /// <summary>
     ///     Gets the size of the source file in bytes.
     /// </summary>
     /// <returns>The size of the file in bytes.</returns>

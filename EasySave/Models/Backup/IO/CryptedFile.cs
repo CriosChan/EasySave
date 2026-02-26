@@ -103,4 +103,61 @@ public class CryptedFile : IFile
     {
         return new FileInfo(SourceFile).Length; // Return the size of the source file
     }
+
+    /// <summary>
+    ///     Copies and encrypts the file asynchronously via CryptoSoft.
+    ///     Awaits the semaphore and the CryptoSoft process without blocking a thread-pool thread.
+    /// </summary>
+    public async Task CopyAsync()
+    {
+        var logger = new ConfigurableLogWriter<LogEntry>();
+        var fi = new FileInfo(SourceFile);
+        long fileSize = fi.Length;
+        var sw = Stopwatch.StartNew();
+
+        await _semaphore.WaitAsync();
+        try
+        {
+            var process = new Process
+            {
+                StartInfo =
+                {
+                    FileName = "Tools/CryptoSoft.exe",
+                    Arguments = $"\"{SourceFile}\" \"{TargetFile}\""
+                }
+            };
+            process.Start();
+            await process.WaitForExitAsync();
+            sw.Stop();
+
+            var log = new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = sw.ElapsedMilliseconds,
+                CryptingTimeMs = process.ExitCode != 0 ? process.ExitCode : sw.ElapsedMilliseconds
+            };
+            logger.Log(log);
+        }
+        catch (Exception e)
+        {
+            sw.Stop();
+            logger.Log(new LogEntry
+            {
+                BackupName = BackupName,
+                SourcePath = SourceFile,
+                TargetPath = TargetFile,
+                FileSizeBytes = fileSize,
+                TransferTimeMs = sw.ElapsedMilliseconds,
+                ErrorMessage = e.Message,
+                CryptingTimeMs = -1
+            });
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
 }

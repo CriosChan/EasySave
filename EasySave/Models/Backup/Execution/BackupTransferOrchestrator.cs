@@ -62,9 +62,15 @@ public sealed class BackupTransferOrchestrator
     }
 
     /// <summary>
-    ///     Executes the full backup transfer: directory check, file selection, partitioning, and transfer loop.
+    ///     Synchronous entry point — wraps <see cref="ExecuteAsync" /> for callers that cannot await.
     /// </summary>
-    public void Execute()
+    public void Execute() => ExecuteAsync().GetAwaiter().GetResult();
+
+    /// <summary>
+    ///     Executes the full backup transfer asynchronously: directory check, file selection,
+    ///     partitioning, and parallel transfer dispatch.
+    /// </summary>
+    private async Task ExecuteAsync()
     {
         _controller.WasStoppedByBusinessSoftware = false;
         _controller.NotifyBusinessSoftwarePause(false);
@@ -99,8 +105,6 @@ public sealed class BackupTransferOrchestrator
         _progressTracker.TransferredSize = 0;
         _progressTracker.SetFilesCount(_identity.Files.Count);
 
-        var hadError = false;
-
         // Partition files into priority and standard queues
         var config = ApplicationConfiguration.Load();
         var (priorityQueue, standardQueue) = FilePartitioner.Partition(_identity.Files, config.PriorityExtensions);
@@ -115,8 +119,14 @@ public sealed class BackupTransferOrchestrator
             s.StandardFilesRemaining = standardQueue.Count;
         });
 
+        var hadError = false;
+        var hadErrorLock = new object();
+        // processedCount is only incremented on the dispatch thread (sequential); no Interlocked needed.
         var processedCount = 0;
-        var aborted = false;
+        // transferredBytes is updated concurrently by file tasks; use Interlocked for thread-safety.
+        long transferredBytes = 0;
+
+        var fileTasks = new List<Task>();
 
         foreach (var (queue, transferType) in new[]
         {
@@ -124,115 +134,118 @@ public sealed class BackupTransferOrchestrator
             (standardQueue, FileTransferPriority.Low)
         })
         {
-            if (aborted) break;
+            if (_controller.WasStopped) break;
 
             while (queue.Count > 0)
             {
                 if (!WaitForRuntimeAvailability(state, queue.Peek()))
-                {
-                    aborted = true;
                     break;
-                }
 
-                var file = queue.Dequeue();
-                var fileSizeBytes = file.GetSize();
-
-                // Enforce priority arbitration before processing standard files
+                // Enforce priority arbitration before dispatching standard files
                 if (transferType == FileTransferPriority.Low)
                 {
                     while (!CanProcessStandardFile(PriorityArbitrator, _identity.Id))
                     {
                         StateLogger.SetStatePausedPriority(state);
-                        if (!WaitForRuntimeAvailability(state, file, 100))
-                        {
-                            aborted = true;
-                            break;
-                        }
+                        if (!WaitForRuntimeAvailability(state, queue.Peek(), 100))
+                            goto done;
                     }
-
-                    if (aborted) break;
 
                     StateLogger.SetStateActive(state, _progressTracker.FilesCount, _progressTracker.TotalSize);
                 }
 
-                var hasExclusiveLargeFileSlot = false;
-                try
+                var file = queue.Dequeue();
+                var fileSizeBytes = file.GetSize();
+
+                // Update priority counter immediately after dequeue (dispatch order)
+                if (transferType == FileTransferPriority.High)
+                    PriorityArbitrator?.UpdateGlobalPriorityCount(_identity.Id, queue.Count);
+
+                StateFileSingleton.Instance.UpdateState(state, s =>
                 {
-                    if (RequiresExclusiveLargeFileSlot(LargeFileTransferLimiter, fileSizeBytes))
+                    s.PriorityFilesRemaining = priorityQueue.Count;
+                    s.StandardFilesRemaining = standardQueue.Count;
+                });
+
+                // Acquire large-file slot on the dispatch thread before launching the task
+                var hasExclusiveLargeFileSlot = false;
+                if (RequiresExclusiveLargeFileSlot(LargeFileTransferLimiter, fileSizeBytes))
+                {
+                    var waitStartedAtUtc = DateTime.UtcNow;
+                    var waitedForSlot = false;
+
+                    while (!LargeFileTransferLimiter.TryAcquireExclusiveSlot(
+                               TimeSpan.FromMilliseconds(LargeFileWaitPollingIntervalMs)))
                     {
-                        var waitStartedAtUtc = DateTime.UtcNow;
-                        var waitedForSlot = false;
-
-                        while (!LargeFileTransferLimiter.TryAcquireExclusiveSlot(
-                                   TimeSpan.FromMilliseconds(LargeFileWaitPollingIntervalMs)))
-                        {
-                            waitedForSlot = true;
-                            StateLogger.SetStateWaitingLargeFile(state, file);
-                            if (!WaitForRuntimeAvailability(state, file, LargeFileWaitPollingIntervalMs))
-                            {
-                                aborted = true;
-                                break;
-                            }
-                        }
-
-                        if (aborted)
-                            break;
-
-                        hasExclusiveLargeFileSlot = true;
-
-                        if (waitedForSlot)
-                        {
-                            var waitedMs = Math.Max(0, (long)(DateTime.UtcNow - waitStartedAtUtc).TotalMilliseconds);
-                            LogLargeFileWait(file, fileSizeBytes, waitedMs);
-                        }
+                        waitedForSlot = true;
+                        StateLogger.SetStateWaitingLargeFile(state, file);
+                        if (!WaitForRuntimeAvailability(state, file, LargeFileWaitPollingIntervalMs))
+                            goto done;
                     }
 
-                    StateLogger.SetStateStartTransfer(
-                        state,
-                        file,
-                        transferType == FileTransferPriority.High ? "Priority file transfer" : "Standard File Transfer");
+                    hasExclusiveLargeFileSlot = true;
 
-                    _progressTracker.SetCurrentFileIndex(processedCount);
+                    if (waitedForSlot)
+                    {
+                        var waitedMs = Math.Max(0, (long)(DateTime.UtcNow - waitStartedAtUtc).TotalMilliseconds);
+                        LogLargeFileWait(file, fileSizeBytes, waitedMs);
+                    }
+                }
 
+                StateLogger.SetStateStartTransfer(
+                    state,
+                    file,
+                    transferType == FileTransferPriority.High ? "Priority file transfer" : "Standard File Transfer");
+
+                // Capture loop variables for the closure
+                var capturedFile = file;
+                var capturedSize = fileSizeBytes;
+                var capturedSlot = hasExclusiveLargeFileSlot;
+                var capturedIndex = processedCount++;
+
+                _progressTracker.SetCurrentFileIndex(capturedIndex);
+
+                // Dispatch the actual I/O to a thread-pool task
+                var fileTask = Task.Run(async () =>
+                {
                     try
                     {
-                        file.Copy();
+                        if (!_controller.WasStopped)
+                            await capturedFile.CopyAsync();
                     }
                     catch (Exception)
                     {
-                        hadError = true;
+                        lock (hadErrorLock) { hadError = true; }
+                    }
+                    finally
+                    {
+                        if (capturedSlot)
+                            LargeFileTransferLimiter.ReleaseExclusiveSlot();
                     }
 
-                    _progressTracker.TransferredSize += fileSizeBytes;
+                    // Update progress counters thread-safely
+                    var newTransferred = Interlocked.Add(ref transferredBytes, capturedSize);
+                    _progressTracker.TransferredSize = newTransferred;
+
                     _progressTracker.SetCurrentProgress(
                         MathUtil.Percentage(_progressTracker.TransferredSize, _progressTracker.TotalSize));
-
-                    processedCount++;
-
-                    if (transferType == FileTransferPriority.High && PriorityArbitrator != null)
-                        PriorityArbitrator.UpdateGlobalPriorityCount(_identity.Id, priorityQueue.Count);
-
-                    StateFileSingleton.Instance.UpdateState(state, s =>
-                    {
-                        s.PriorityFilesRemaining = priorityQueue.Count;
-                        s.StandardFilesRemaining = standardQueue.Count;
-                    });
 
                     StateLogger.SetStateEndTransfer(
                         state,
                         _progressTracker.FilesCount,
-                        processedCount - 1,
+                        capturedIndex,
                         _progressTracker.TotalSize,
                         _progressTracker.TransferredSize,
                         _progressTracker.CurrentProgress);
-                }
-                finally
-                {
-                    if (hasExclusiveLargeFileSlot)
-                        LargeFileTransferLimiter.ReleaseExclusiveSlot();
-                }
+                });
+
+                fileTasks.Add(fileTask);
             }
         }
+
+        done:
+        // Wait for all in-flight file transfers to complete
+        await Task.WhenAll(fileTasks);
 
         PriorityArbitrator?.OnJobCompleted(_identity.Id);
 
