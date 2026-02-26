@@ -5,18 +5,18 @@ using System.Text.Json;
 using EasyLog;
 using EasySave.Log.Model;
 
-namespace Server;
+namespace EasySave.Server;
 
 /// <summary>
-///     Main class for the UDP server that receives messages.
+///     Main class for the TCP server that receives messages.
 /// </summary>
 public static class Server
 {
     // Logger used for logging messages
     private static AbstractLogger<LogEntry> _logger;
 
-    // UDP client for receiving messages
-    private static UdpClient _udpServer;
+    // TCP listener for receiving messages
+    private static TcpListener _tcpServer;
 
     /// <summary>
     ///     Main entry point of the application.
@@ -32,43 +32,68 @@ public static class Server
         else
             _logger = new JsonLogger<LogEntry>("./logs/"); // Initialize JSON logger
 
-        Console.WriteLine("Server is listening for UDP messages...");
+        Console.WriteLine("Server is listening for TCP messages...");
 
         // Infinite loop to listen for client messages
-        while (true) ListenForClients(); // Listen for incoming messages
+        while (true)
+        {
+            ListenForClients(); // Listen for incoming messages
+        }
     }
 
     /// <summary>
-    ///     Initializes the UDP server by binding to a specified port.
+    ///     Initializes the TCP server by binding to a specified port.
     /// </summary>
     private static void StartServer()
     {
-        _udpServer = new UdpClient(5000); // Bind to port 5000
+        _tcpServer = new TcpListener(IPAddress.Any, 5000); // Bind to port 5000
+        _tcpServer.Start(); // Start listening for TCP connections
     }
 
     /// <summary>
-    ///     Listens for clients to receive UDP messages.
+    ///     Listens for clients to receive TCP messages.
     /// </summary>
     private static void ListenForClients()
     {
-        var remoteEndPoint = new IPEndPoint(IPAddress.Any, 0); // Remote endpoint for receiving messages
-        var buffer = new byte[1024]; // Buffer for storing received data
-
         try
         {
-            // Receive asynchronously and get the remote endpoint info
-            var receivedResult = _udpServer.Receive(ref remoteEndPoint);
-            var data = Encoding.ASCII.GetString(receivedResult); // Convert received data to string
+            using var client = _tcpServer.AcceptTcpClient(); // Accept incoming TCP client connection
+            using var networkStream = client.GetStream(); // Get the network stream for the client
 
-            // Deserialize the received data into a log entry
-            var entry = JsonSerializer.Deserialize<LogEntry>(data);
-            if (entry != null)
+            var lengthBuffer = new byte[4]; // Buffer to read the length of the incoming message
+
+            try
             {
-                entry.ClientIPAddress = remoteEndPoint.Address.ToString(); // Add client IP address to log entry
-                var logMessage = FormatLogMessage(entry.ToString(), remoteEndPoint); // Format log message
-                Console.WriteLine(logMessage); // Display the message in the console
+                // Read the first 4 bytes to get the length of the incoming data
+                int bytesRead = networkStream.Read(lengthBuffer, 0, lengthBuffer.Length);
+                if (bytesRead == 4) // Make sure we read the correct amount
+                {
+                    int dataLength = BitConverter.ToInt32(lengthBuffer, 0); // Convert bytes to integer
 
-                Log(entry); // Log the entry
+                    var dataBuffer = new byte[dataLength]; // Create a buffer for the incoming data
+                    bytesRead = networkStream.Read(dataBuffer, 0, dataLength); // Read the actual data
+
+                    var data = Encoding.ASCII.GetString(dataBuffer, 0, bytesRead); // Convert received data to string
+
+                    // Deserialize the received data into a log entry
+                    var entry = JsonSerializer.Deserialize<LogEntry>(data);
+                    if (entry != null)
+                    {
+                        entry.ClientIPAddress = ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString(); // Add client IP address to log entry
+                        var logMessage = FormatLogMessage(entry.ToString(), (IPEndPoint)client.Client.RemoteEndPoint); // Format log message
+                        Console.WriteLine(logMessage); // Display the message in the console
+
+                        Log(entry); // Log the entry
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Failed to read the length of the incoming data.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}"); // Handle exceptions and display the error
             }
         }
         catch (Exception ex)

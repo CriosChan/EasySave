@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -7,7 +8,7 @@ using EasySave.Data.Configuration;
 namespace EasySave.Models.Logger;
 
 /// <summary>
-///     Singleton class for logging over a network using UDP.
+///     Singleton class for logging over a network using TCP.
 /// </summary>
 public sealed class NetworkLog
 {
@@ -15,7 +16,7 @@ public sealed class NetworkLog
     private static readonly Lazy<NetworkLog> instance = new(() => new NetworkLog());
     private IPEndPoint _endpoint; // Endpoint for sending logs
 
-    private UdpClient? _udpClient; // UDP client for sending log messages
+    private TcpClient? _tcpClient; // TCP client for sending log messages
     public EventHandler? OnConnect; // Event triggered when the connection is established
     public EventHandler? OnDisconnect; // Event triggered when the connection is lost
 
@@ -34,7 +35,7 @@ public sealed class NetworkLog
     public static NetworkLog Instance => instance.Value;
 
     /// <summary>
-    ///     Creates a UDP socket for logging.
+    ///     Creates a TCP socket for logging.
     /// </summary>
     public void CreateSocket()
     {
@@ -49,8 +50,10 @@ public sealed class NetworkLog
                     IPAddress.Parse(ApplicationConfiguration.Load().EasySaveServerIp),
                     ApplicationConfiguration.Load().EasySaveServerPort);
 
-                _udpClient = new UdpClient(); // Instantiate the UDP client
+                _tcpClient = new TcpClient(); // Instantiate the TCP client
+                _tcpClient.Connect(_endpoint); // Establish the TCP connection
                 OnConnectEvent(); // Trigger the connect event
+                
                 Console.WriteLine("Socket created and ready to use.");
             }
             catch (Exception e)
@@ -62,16 +65,16 @@ public sealed class NetworkLog
     }
 
     /// <summary>
-    ///     Closes the UDP socket if it is open.
+    ///     Closes the TCP socket if it is open.
     /// </summary>
     public void CloseSocket()
     {
         try
         {
-            if (_udpClient != null)
+            if (_tcpClient != null)
             {
-                _udpClient.Close(); // Close the socket
-                _udpClient = null; // Clear the reference
+                _tcpClient.Close(); // Close the socket
+                _tcpClient = null; // Clear the reference
                 Console.WriteLine("Socket closed.");
             }
         }
@@ -81,6 +84,11 @@ public sealed class NetworkLog
         }
     }
 
+    private readonly JsonSerializerOptions _options = new JsonSerializerOptions
+    {
+        WriteIndented = false // No indentation for compact messages
+    };
+    
     /// <summary>
     ///     Sends a log message to the defined endpoint.
     /// </summary>
@@ -91,17 +99,28 @@ public sealed class NetworkLog
         lock (this) // Ensure thread safety
         {
             // Serialize the message to JSON and convert it to byte array
-            var data = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(message, new JsonSerializerOptions
-            {
-                WriteIndented = false // No indentation for compact messages
-            }));
+            var data = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(message, _options));
 
             try
             {
-                _udpClient?.Send(data, data.Length, _endpoint); // Send the log message
+                if (_tcpClient is { Connected: true })
+                {
+                    NetworkStream stream = _tcpClient.GetStream();
+                    // Send the length of the data first
+                    var lengthBytes = BitConverter.GetBytes(data.Length);
+                    stream.Write(lengthBytes, 0, lengthBytes.Length); // Send length (4 bytes)
+            
+                    // Then send the actual data
+                    stream.Write(data, 0, data.Length); // Send log entry data
+                }
+                else
+                {
+                    throw new InvalidOperationException("TCP client is not connected.");
+                }
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 // On failure to send, attempt to recreate the socket
                 CreateSocket();
             }
