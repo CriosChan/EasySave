@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class FilePartitioner | easy-save </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class FilePartitioner | easy-save ">
+      
+      <meta name="description" content="Partitions a flat list of files into a priority queue and a standard queue based on a configurable set of priority extensions.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CriosChan/EasySave/new/dev/apiSpec/new?filename=EasySave_Models_Backup_Coordination_FilePartitioner.md&amp;value=---%0Auid%3A%20EasySave.Models.Backup.Coordination.FilePartitioner%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="easy-save">
+            easy-save
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="EasySave.Models.Backup.Coordination.FilePartitioner">
+
+
+
+  <h1 id="EasySave_Models_Backup_Coordination_FilePartitioner" data-uid="EasySave.Models.Backup.Coordination.FilePartitioner" class="text-break">
+Class FilePartitioner  <a class="header-action link-secondary" title="View source" href="https://github.com/CriosChan/EasySave/blob/dev/EasySave/Models/Backup/Coordination/FilePartitioner.cs/#L9"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="EasySave.html">EasySave</a>.<a class="xref" href="EasySave.Models.html">Models</a>.<a class="xref" href="EasySave.Models.Backup.html">Backup</a>.<a class="xref" href="EasySave.Models.Backup.Coordination.html">Coordination</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>EasySave.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Partitions a flat list of files into a priority queue and a standard queue
+based on a configurable set of priority extensions.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class FilePartitioner</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">FilePartitioner</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="EasySave_Models_Backup_Coordination_FilePartitioner_NormaliseExtension_" data-uid="EasySave.Models.Backup.Coordination.FilePartitioner.NormaliseExtension*"></a>
+
+  <h3 id="EasySave_Models_Backup_Coordination_FilePartitioner_NormaliseExtension_System_String_" data-uid="EasySave.Models.Backup.Coordination.FilePartitioner.NormaliseExtension(System.String)">
+  NormaliseExtension(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CriosChan/EasySave/blob/dev/EasySave/Models/Backup/Coordination/FilePartitioner.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Normalises an extension string: trims surrounding whitespace, converts to lower-case,
+and ensures a leading dot is present.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string NormaliseExtension(string extension)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>extension</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Raw extension value (e.g. <code>&quot;PDF&quot;</code>, <code>&quot;.pdf&quot;</code>, <code>&quot; pdf &quot;</code>).</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Normalised extension, e.g. <code>&quot;.pdf&quot;</code>. Returns an empty string when the input is empty.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="EasySave_Models_Backup_Coordination_FilePartitioner_Partition_" data-uid="EasySave.Models.Backup.Coordination.FilePartitioner.Partition*"></a>
+
+  <h3 id="EasySave_Models_Backup_Coordination_FilePartitioner_Partition_System_Collections_Generic_IEnumerable_EasySave_Models_Backup_Abstractions_IFile__System_Collections_Generic_IEnumerable_System_String__" data-uid="EasySave.Models.Backup.Coordination.FilePartitioner.Partition(System.Collections.Generic.IEnumerable{EasySave.Models.Backup.Abstractions.IFile},System.Collections.Generic.IEnumerable{System.String})">
+  Partition(IEnumerable&lt;IFile&gt;, IEnumerable&lt;string&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CriosChan/EasySave/blob/dev/EasySave/Models/Backup/Coordination/FilePartitioner.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Splits <code class="paramref">files</code> into two queues according to the provided
+<code class="paramref">priorityExtensions</code>.
+Extensions are normalised before matching: trimmed, lowercased, and prefixed with a dot
+if not already present.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (Queue&lt;IFile&gt; PriorityQueue, Queue&lt;IFile&gt; StandardQueue) Partition(IEnumerable&lt;IFile&gt; files, IEnumerable&lt;string&gt; priorityExtensions)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>files</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="EasySave.Models.Backup.Abstractions.IFile.html">IFile</a>&gt;</dt>
+    <dd><p>Full list of files returned by the backup type selector.</p>
+</dd>
+    <dt><code>priorityExtensions</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd><p>Collection of extensions that identify priority files (e.g. <code>&quot;.pdf&quot;</code>, <code>&quot;pdf&quot;</code>,
+<code>&quot; .PDF &quot;</code> � all normalised to <code>&quot;.pdf&quot;</code>).</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.queue-1">Queue</a>&lt;<a class="xref" href="EasySave.Models.Backup.Abstractions.IFile.html">IFile</a>&gt; <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-system.collections.generic.queue-easysave.models.backup.abstractions.ifile-,system.collections.generic.queue-easysave.models.backup.abstractions.ifile--.priorityqueue">PriorityQueue</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.queue-1">Queue</a>&lt;<a class="xref" href="EasySave.Models.Backup.Abstractions.IFile.html">IFile</a>&gt; <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-system.collections.generic.queue-easysave.models.backup.abstractions.ifile-,system.collections.generic.queue-easysave.models.backup.abstractions.ifile--.standardqueue">StandardQueue</a>)</dt>
+    <dd><p>A named tuple where <code>PriorityQueue</code> contains files whose extension matches a
+priority extension, and <code>StandardQueue</code> contains the remaining files.
+Both queues preserve the original relative order of the input list.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CriosChan/EasySave/blob/dev/EasySave/Models/Backup/Coordination/FilePartitioner.cs/#L9" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

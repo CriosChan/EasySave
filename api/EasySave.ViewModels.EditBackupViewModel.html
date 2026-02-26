@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class EditBackupViewModel | easy-save </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class EditBackupViewModel | easy-save ">
+      
+      <meta name="description" content="Handles backup job edition workflow and persistence.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="easy-save">
+            easy-save
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="EasySave.ViewModels.EditBackupViewModel">
+
+
+
+  <h1 id="EasySave_ViewModels_EditBackupViewModel" data-uid="EasySave.ViewModels.EditBackupViewModel" class="text-break">
+Class EditBackupViewModel  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="EasySave.html">EasySave</a>.<a class="xref" href="EasySave.ViewModels.html">ViewModels</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>EasySave.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Handles backup job edition workflow and persistence.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class EditBackupViewModel : ViewModelBase, INotifyPropertyChanged, INotifyPropertyChanging</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject">ObservableObject</a></div>
+      <div><a class="xref" href="EasySave.ViewModels.ViewModelBase.html">ViewModelBase</a></div>
+      <div><span class="xref">EditBackupViewModel</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanged">INotifyPropertyChanged</a></div>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.inotifypropertychanging">INotifyPropertyChanging</a></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanged#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanged(system-componentmodel-propertychangedeventargs)">ObservableObject.OnPropertyChanged(PropertyChangedEventArgs)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanging#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanging(system-componentmodel-propertychangingeventargs)">ObservableObject.OnPropertyChanging(PropertyChangingEventArgs)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanged#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanged(system-string)">ObservableObject.OnPropertyChanged(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.onpropertychanging#communitytoolkit-mvvm-componentmodel-observableobject-onpropertychanging(system-string)">ObservableObject.OnPropertyChanging(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-string)">ObservableObject.SetProperty&lt;T&gt;(ref T, T, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0@-0-system-collections-generic-iequalitycomparer((-0))-system-string)">ObservableObject.SetProperty&lt;T&gt;(ref T, T, IEqualityComparer&lt;T&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-action((-0))-system-string)">ObservableObject.SetProperty&lt;T&gt;(T, T, Action&lt;T&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-1(-0-0-system-collections-generic-iequalitycomparer((-0))-system-action((-0))-system-string)">ObservableObject.SetProperty&lt;T&gt;(T, T, IEqualityComparer&lt;T&gt;, Action&lt;T&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-0-system-action((-0-1))-system-string)">ObservableObject.SetProperty&lt;TModel, T&gt;(T, T, TModel, Action&lt;TModel, T&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setproperty#communitytoolkit-mvvm-componentmodel-observableobject-setproperty-2(-1-1-system-collections-generic-iequalitycomparer((-1))-0-system-action((-0-1))-system-string)">ObservableObject.SetProperty&lt;TModel, T&gt;(T, T, IEqualityComparer&lt;T&gt;, TModel, Action&lt;TModel, T&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier@-system-threading-tasks-task-system-string)">ObservableObject.SetPropertyAndNotifyOnCompletion(ref ObservableObject.TaskNotifier, Task, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier@-system-threading-tasks-task-system-action((system-threading-tasks-task))-system-string)">ObservableObject.SetPropertyAndNotifyOnCompletion(ref ObservableObject.TaskNotifier, Task, Action&lt;Task&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-string)">ObservableObject.SetPropertyAndNotifyOnCompletion&lt;T&gt;(ref ObservableObject.TaskNotifier&lt;T&gt;, Task&lt;T&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.setpropertyandnotifyoncompletion#communitytoolkit-mvvm-componentmodel-observableobject-setpropertyandnotifyoncompletion-1(communitytoolkit-mvvm-componentmodel-observableobject-tasknotifier((-0))@-system-threading-tasks-task((-0))-system-action((system-threading-tasks-task((-0))))-system-string)">ObservableObject.SetPropertyAndNotifyOnCompletion&lt;T&gt;(ref ObservableObject.TaskNotifier&lt;T&gt;, Task&lt;T&gt;, Action&lt;Task&lt;T&gt;&gt;, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.propertychanged">ObservableObject.PropertyChanged</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.componentmodel.observableobject.propertychanging">ObservableObject.PropertyChanging</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel__ctor_" data-uid="EasySave.ViewModels.EditBackupViewModel.#ctor*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel__ctor_EasySave_ViewModels_StatusBarViewModel_EasySave_ViewModels_Services_IUiTextService_EasySave_Models_Backup_Abstractions_IJobService_" data-uid="EasySave.ViewModels.EditBackupViewModel.#ctor(EasySave.ViewModels.StatusBarViewModel,EasySave.ViewModels.Services.IUiTextService,EasySave.Models.Backup.Abstractions.IJobService)">
+  EditBackupViewModel(StatusBarViewModel, IUiTextService, IJobService?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CriosChan/EasySave/blob/dev/EasySave/ViewModels/EditBackupViewModel.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="EasySave.ViewModels.EditBackupViewModel.html">EditBackupViewModel</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public EditBackupViewModel(StatusBarViewModel statusBar, IUiTextService uiTextService, IJobService? jobService = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>statusBar</code> <a class="xref" href="EasySave.ViewModels.StatusBarViewModel.html">StatusBarViewModel</a></dt>
+    <dd><p>Shared status bar state.</p>
+</dd>
+    <dt><code>uiTextService</code> <a class="xref" href="EasySave.ViewModels.Services.IUiTextService.html">IUiTextService</a></dt>
+    <dd><p>Localized UI text service.</p>
+</dd>
+    <dt><code>jobService</code> <a class="xref" href="EasySave.Models.Backup.Abstractions.IJobService.html">IJobService</a></dt>
+    <dd><p>Backup job service. If null, default implementation is used.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_BackupTypes_" data-uid="EasySave.ViewModels.EditBackupViewModel.BackupTypes*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_BackupTypes" data-uid="EasySave.ViewModels.EditBackupViewModel.BackupTypes">
+  BackupTypes
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ObservableCollection&lt;string&gt; BackupTypes { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.objectmodel.observablecollection-1">ObservableCollection</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_BrowseSourceDirectoryCommand_" data-uid="EasySave.ViewModels.EditBackupViewModel.BrowseSourceDirectoryCommand*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_BrowseSourceDirectoryCommand" data-uid="EasySave.ViewModels.EditBackupViewModel.BrowseSourceDirectoryCommand">
+  BrowseSourceDirectoryCommand
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets an <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input.iasyncrelaycommand">IAsyncRelayCommand</a> instance wrapping <span class="xref">EasySave.ViewModels.EditBackupViewModel.BrowseSourceDirectory()</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IAsyncRelayCommand BrowseSourceDirectoryCommand { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input.iasyncrelaycommand">IAsyncRelayCommand</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_BrowseTargetDirectoryCommand_" data-uid="EasySave.ViewModels.EditBackupViewModel.BrowseTargetDirectoryCommand*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_BrowseTargetDirectoryCommand" data-uid="EasySave.ViewModels.EditBackupViewModel.BrowseTargetDirectoryCommand">
+  BrowseTargetDirectoryCommand
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets an <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input.iasyncrelaycommand">IAsyncRelayCommand</a> instance wrapping <span class="xref">EasySave.ViewModels.EditBackupViewModel.BrowseTargetDirectory()</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IAsyncRelayCommand BrowseTargetDirectoryCommand { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input.iasyncrelaycommand">IAsyncRelayCommand</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_HasPendingChanges_" data-uid="EasySave.ViewModels.EditBackupViewModel.HasPendingChanges*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_HasPendingChanges" data-uid="EasySave.ViewModels.EditBackupViewModel.HasPendingChanges">
+  HasPendingChanges
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasPendingChanges { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_JobId_" data-uid="EasySave.ViewModels.EditBackupViewModel.JobId*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_JobId" data-uid="EasySave.ViewModels.EditBackupViewModel.JobId">
+  JobId
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int JobId { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_JobName_" data-uid="EasySave.ViewModels.EditBackupViewModel.JobName*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_JobName" data-uid="EasySave.ViewModels.EditBackupViewModel.JobName">
+  JobName
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string JobName { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_SaveChangesCommand_" data-uid="EasySave.ViewModels.EditBackupViewModel.SaveChangesCommand*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_SaveChangesCommand" data-uid="EasySave.ViewModels.EditBackupViewModel.SaveChangesCommand">
+  SaveChangesCommand
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets an <a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input.irelaycommand">IRelayCommand</a> instance wrapping <span class="xref">EasySave.ViewModels.EditBackupViewModel.SaveChanges()</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IRelayCommand SaveChangesCommand { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/communitytoolkit.mvvm.input.irelaycommand">IRelayCommand</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_SelectedBackupType_" data-uid="EasySave.ViewModels.EditBackupViewModel.SelectedBackupType*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_SelectedBackupType" data-uid="EasySave.ViewModels.EditBackupViewModel.SelectedBackupType">
+  SelectedBackupType
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string SelectedBackupType { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_SourceDirectory_" data-uid="EasySave.ViewModels.EditBackupViewModel.SourceDirectory*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_SourceDirectory" data-uid="EasySave.ViewModels.EditBackupViewModel.SourceDirectory">
+  SourceDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string SourceDirectory { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_TargetDirectory_" data-uid="EasySave.ViewModels.EditBackupViewModel.TargetDirectory*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_TargetDirectory" data-uid="EasySave.ViewModels.EditBackupViewModel.TargetDirectory">
+  TargetDirectory
+  
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string TargetDirectory { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_BeginEdit_" data-uid="EasySave.ViewModels.EditBackupViewModel.BeginEdit*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_BeginEdit_EasySave_Models_Backup_Entities_BackupJob_" data-uid="EasySave.ViewModels.EditBackupViewModel.BeginEdit(EasySave.Models.Backup.Entities.BackupJob)">
+  BeginEdit(BackupJob)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CriosChan/EasySave/blob/dev/EasySave/ViewModels/EditBackupViewModel.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Loads a job into editable fields.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BeginEdit(BackupJob job)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>job</code> <a class="xref" href="EasySave.Models.Backup.Entities.BackupJob.html">BackupJob</a></dt>
+    <dd><p>Job to edit.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="EasySave_ViewModels_EditBackupViewModel_SetStorageProvider_" data-uid="EasySave.ViewModels.EditBackupViewModel.SetStorageProvider*"></a>
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_SetStorageProvider_Avalonia_Platform_Storage_IStorageProvider_" data-uid="EasySave.ViewModels.EditBackupViewModel.SetStorageProvider(Avalonia.Platform.Storage.IStorageProvider)">
+  SetStorageProvider(IStorageProvider)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CriosChan/EasySave/blob/dev/EasySave/ViewModels/EditBackupViewModel.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the storage provider used by folder picker dialogs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetStorageProvider(IStorageProvider storageProvider)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>storageProvider</code> <span class="xref">IStorageProvider</span></dt>
+    <dd><p>Storage provider from the main window.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="events">Events
+</h2>
+
+
+
+  <h3 id="EasySave_ViewModels_EditBackupViewModel_JobUpdated" data-uid="EasySave.ViewModels.EditBackupViewModel.JobUpdated">
+  JobUpdated
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CriosChan/EasySave/blob/dev/EasySave/ViewModels/EditBackupViewModel.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Raised when a backup job is successfully updated.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event Action&lt;BackupJob&gt;? JobUpdated</code></pre>
+  </div>
+
+
+
+
+
+
+  <h4 class="section">Event Type</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="EasySave.Models.Backup.Entities.BackupJob.html">BackupJob</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
