@@ -6,6 +6,13 @@ namespace EasySave.Models.Backup.Entities;
 
 public class BackupFolder
 {
+    private static readonly EnumerationOptions RecursiveAccessibleEnumeration = new()
+    {
+        RecurseSubdirectories = true,
+        IgnoreInaccessible = true,
+        ReturnSpecialDirectories = false
+    };
+
     private readonly string _backupName; // Name of the current backup process
     private readonly string _sourcePath; // Source directory for backup
     private readonly string _targetPath; // Target directory for backup storage
@@ -31,27 +38,59 @@ public class BackupFolder
     public void MirrorFolder()
     {
         var logger = new ConfigurableLogWriter<LogEntry>();
-        // Enumerate directories in the source path
-        var folders = Directory.EnumerateDirectories(_sourcePath, "*", SearchOption.AllDirectories);
+        IEnumerable<string> folders;
+        try
+        {
+            folders = Directory.EnumerateDirectories(_sourcePath, "*", RecursiveAccessibleEnumeration);
+        }
+        catch (Exception ex)
+        {
+            logger.Log(new LogEntry
+            {
+                BackupName = _backupName,
+                SourcePath = PathService.ToFullUncLikePath(_sourcePath),
+                TargetPath = PathService.ToFullUncLikePath(_targetPath),
+                FileSizeBytes = 0,
+                TransferTimeMs = 0,
+                ErrorMessage = ex.Message
+            });
+            return;
+        }
 
         foreach (var folder in folders)
         {
-            var target = folder.Replace(_sourcePath, _targetPath);
+            var relativePath = PathService.GetRelativePath(_sourcePath, folder);
+            var target = Path.Combine(_targetPath, relativePath);
 
             // Skip if the target directory already exists
             if (Directory.Exists(target))
                 continue;
 
-            // Create the target directory
-            Directory.CreateDirectory(target);
-            logger.Log(new LogEntry
+            try
             {
-                BackupName = _backupName,
-                SourcePath = PathService.ToFullUncLikePath(folder),
-                TargetPath = PathService.ToFullUncLikePath(target),
-                FileSizeBytes = 0,
-                TransferTimeMs = 0
-            });
+                // Create the target directory
+                Directory.CreateDirectory(target);
+                logger.Log(new LogEntry
+                {
+                    BackupName = _backupName,
+                    SourcePath = PathService.ToFullUncLikePath(folder),
+                    TargetPath = PathService.ToFullUncLikePath(target),
+                    FileSizeBytes = 0,
+                    TransferTimeMs = 0
+                });
+            }
+            catch (Exception ex)
+            {
+                logger.Log(new LogEntry
+                {
+                    BackupName = _backupName,
+                    SourcePath = PathService.ToFullUncLikePath(folder),
+                    TargetPath = PathService.ToFullUncLikePath(target),
+                    FileSizeBytes = 0,
+                    TransferTimeMs = 0,
+                    ErrorMessage = ex.Message
+                });
+            }
         }
     }
 }

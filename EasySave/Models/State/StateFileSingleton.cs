@@ -1,4 +1,5 @@
 using EasySave.Models.Utils;
+using System.Threading;
 
 namespace EasySave.Models.State;
 
@@ -174,7 +175,23 @@ public sealed class StateFileSingleton
     /// </summary>
     private void PersistLocked()
     {
-        JsonFile.WriteAtomic(_statePath, _states);
+        const int maxAttempts = 8;
+        for (var attempt = 1; attempt <= maxAttempts; attempt++)
+            try
+            {
+                JsonFile.WriteAtomic(_statePath, _states);
+                return;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                if (attempt == maxAttempts)
+                {
+                    Console.WriteLine($"[WARN] Failed to persist state file '{_statePath}': {ex.Message}");
+                    return;
+                }
+
+                Thread.Sleep(attempt * 25);
+            }
     }
 
     /// <summary>
