@@ -1,10 +1,18 @@
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Abstractions;
+using EasySave.Models.Utils;
 
 namespace EasySave.Models.Backup.Selection;
 
 public class BackupTypeDifferential : IBackupTypeSelector
 {
+    private static readonly EnumerationOptions RecursiveAccessibleEnumeration = new()
+    {
+        RecurseSubdirectories = true,
+        IgnoreInaccessible = true,
+        ReturnSpecialDirectories = false
+    };
+
     private readonly string _backupName; // Name of the backup
     private readonly string _sourceDir; // Source directory for backup files
     private readonly string _targetDir; // Target directory for backup files
@@ -29,38 +37,61 @@ public class BackupTypeDifferential : IBackupTypeSelector
     /// <returns>A list of files to back up based on the differential criteria.</returns>
     public List<IFile> GetFilesToBackup()
     {
-        var allFiles = Directory.EnumerateFiles(_sourceDir, "*", SearchOption.AllDirectories);
-        var allFilesList = allFiles.ToList(); // Convert the enumerable to a list
         var filesToBackup = new List<IFile>();
+        var extensionToCrypt = new HashSet<string>(ApplicationConfiguration.Load().ExtensionToCrypt,
+            StringComparer.OrdinalIgnoreCase);
+        IEnumerable<string> allFiles;
+
+        try
+        {
+            allFiles = Directory.EnumerateFiles(_sourceDir, "*", RecursiveAccessibleEnumeration);
+        }
+        catch
+        {
+            return filesToBackup;
+        }
 
         // Iterate through all files to determine which need to be backed up
-        foreach (var file in allFilesList)
+        foreach (var file in allFiles)
         {
-            var targetPath = file.Replace(_sourceDir, _targetDir);
-            // Add the file if it does not exist in the target directory
-            if (!File.Exists(targetPath))
+            var relativePath = PathService.GetRelativePath(_sourceDir, file);
+            var targetPath = Path.Combine(_targetDir, relativePath);
+
+            try
             {
-                if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file).TrimStart('.')))
-                    filesToBackup.Add(new CryptedFile(file, targetPath, _backupName));
-                else
-                    filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Create a NormalFile instance
-                continue;
+                // Add the file if it does not exist in the target directory
+                if (!File.Exists(targetPath))
+                {
+                    AddBackupFile(filesToBackup, extensionToCrypt, file, targetPath);
+                    continue;
+                }
+
+                var src = new FileInfo(file); // Source file info
+                var dst = new FileInfo(targetPath); // Target file info
+
+                // Check if the files are different based on size or last write time
+                var isDifferent = src.Length != dst.Length || src.LastWriteTimeUtc > dst.LastWriteTimeUtc;
+                if (isDifferent)
+                    AddBackupFile(filesToBackup, extensionToCrypt, file, targetPath);
             }
-
-            var src = new FileInfo(file); // Source file info
-            var dst = new FileInfo(targetPath); // Target file info
-
-            // Check if the files are different based on size or last write time
-            var isDifferent = src.Length != dst.Length || src.LastWriteTimeUtc > dst.LastWriteTimeUtc;
-            if (isDifferent)
+            catch (UnauthorizedAccessException)
             {
-                if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file).TrimStart('.')))
-                    filesToBackup.Add(new CryptedFile(file, targetPath, _backupName));
-                else
-                    filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Create a NormalFile instance
+                // Skip inaccessible files instead of failing the whole backup job.
+            }
+            catch (IOException)
+            {
+                // Skip transient I/O failures for a single file.
             }
         }
 
         return filesToBackup; // Return the list of files to be backed up based on differential criteria
+    }
+
+    private void AddBackupFile(List<IFile> filesToBackup, ISet<string> extensionToCrypt, string sourcePath, string targetPath)
+    {
+        if (extensionToCrypt.Contains(Path.GetExtension(sourcePath).TrimStart('.')))
+            filesToBackup.Add(new CryptedFile(sourcePath, targetPath, _backupName));
+        else
+            filesToBackup.Add(new NormalFile(sourcePath, targetPath, _backupName));
     }
 }

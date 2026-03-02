@@ -100,7 +100,9 @@ public sealed class BackupTransferOrchestrator
             _identity.TargetDirectory,
             _identity.Name);
         _identity.Files = selector.GetFilesToBackup();
-        _progressTracker.TotalSize = _identity.Files.GetAllSize();
+        var hadError = false;
+        var hadErrorLock = new object();
+        _progressTracker.TotalSize = ComputeTotalSizeSafely(_identity.Files, ref hadError);
         _progressTracker.TransferredSize = 0;
         _progressTracker.SetFilesCount(_identity.Files.Count);
 
@@ -118,8 +120,6 @@ public sealed class BackupTransferOrchestrator
             s.StandardFilesRemaining = standardQueue.Count;
         });
 
-        var hadError = false;
-        var hadErrorLock = new object();
         // processedCount is only incremented on the dispatch thread (sequential); no Interlocked needed.
         var processedCount = 0;
         // transferredBytes is updated concurrently by file tasks; use Interlocked for thread-safety.
@@ -154,7 +154,12 @@ public sealed class BackupTransferOrchestrator
                 }
 
                 var file = queue.Dequeue();
-                var fileSizeBytes = file.GetSize();
+                if (!TryGetFileSize(file, out var fileSizeBytes, out var fileSizeError))
+                {
+                    lock (hadErrorLock) { hadError = true; }
+                    LogFilePreparationError(file, fileSizeError);
+                    continue;
+                }
 
                 // Update priority counter immediately after dequeue (dispatch order)
                 if (transferType == FileTransferPriority.High)
@@ -312,6 +317,63 @@ public sealed class BackupTransferOrchestrator
         }
 
         return true;
+    }
+
+    /// <summary>
+    ///     Computes the total size of files while tolerating transient/unreadable files.
+    /// </summary>
+    private long ComputeTotalSizeSafely(IEnumerable<IFile> files, ref bool hadError)
+    {
+        long totalSize = 0;
+        foreach (var file in files)
+        {
+            if (TryGetFileSize(file, out var fileSizeBytes, out var fileSizeError))
+            {
+                totalSize += fileSizeBytes;
+                continue;
+            }
+
+            hadError = true;
+            LogFilePreparationError(file, fileSizeError);
+        }
+
+        return totalSize;
+    }
+
+    /// <summary>
+    ///     Tries to read file size without letting a single inaccessible file stop the whole job.
+    /// </summary>
+    private static bool TryGetFileSize(IFile file, out long fileSizeBytes, out string errorMessage)
+    {
+        try
+        {
+            fileSizeBytes = file.GetSize();
+            errorMessage = string.Empty;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            fileSizeBytes = 0;
+            errorMessage = ex.Message;
+            return false;
+        }
+    }
+
+    /// <summary>
+    ///     Logs a pre-transfer file preparation error (typically metadata/permission issues).
+    /// </summary>
+    private void LogFilePreparationError(IFile file, string errorMessage)
+    {
+        var logger = new ConfigurableLogWriter<LogEntry>();
+        logger.Log(new LogEntry
+        {
+            BackupName = _identity.Name,
+            SourcePath = PathService.ToFullUncLikePath(file.SourceFile),
+            TargetPath = PathService.ToFullUncLikePath(file.TargetFile),
+            FileSizeBytes = 0,
+            TransferTimeMs = 0,
+            ErrorMessage = $"Unable to prepare file transfer: {errorMessage}"
+        });
     }
 
     /// <summary>

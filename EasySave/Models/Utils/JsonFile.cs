@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 
 namespace EasySave.Models.Utils;
 
@@ -65,10 +66,42 @@ public static class JsonFile
     public static void WriteAtomic<T>(string path, T value)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(path) ?? ".");
-        var tmp = path + ".tmp";
         var json = JsonSerializer.Serialize(value, Options);
-        File.WriteAllText(tmp, json);
+        var tmp = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
 
-        File.Move(tmp, path, overwrite: true); // Atomic overwrite — avoids delete+move race window
+        try
+        {
+            File.WriteAllText(tmp, json);
+            const int maxAttempts = 8;
+
+            for (var attempt = 1; ; attempt++)
+                try
+                {
+                    File.Move(tmp, path, overwrite: true); // Atomic overwrite — avoids delete+move race window
+                    return;
+                }
+                catch (Exception ex) when (IsRetryableWriteException(ex) && attempt < maxAttempts)
+                {
+                    // Retry transient file-lock races (AV/indexer/parallel readers).
+                    Thread.Sleep(attempt * 25);
+                }
+        }
+        finally
+        {
+            try
+            {
+                if (File.Exists(tmp))
+                    File.Delete(tmp);
+            }
+            catch
+            {
+                // Ignore cleanup failures for temp files.
+            }
+        }
+    }
+
+    private static bool IsRetryableWriteException(Exception exception)
+    {
+        return exception is IOException or UnauthorizedAccessException;
     }
 }

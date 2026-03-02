@@ -1,10 +1,18 @@
 using EasySave.Data.Configuration;
 using EasySave.Models.Backup.Abstractions;
+using EasySave.Models.Utils;
 
 namespace EasySave.Models.Backup.Selection;
 
 public class BackupTypeComplete : IBackupTypeSelector
 {
+    private static readonly EnumerationOptions RecursiveAccessibleEnumeration = new()
+    {
+        RecurseSubdirectories = true,
+        IgnoreInaccessible = true,
+        ReturnSpecialDirectories = false
+    };
+
     private readonly string _backupName; // Name of the backup
     private readonly string _sourceDir; // Source directory for backup files
     private readonly string _targetDir; // Target directory for backup files
@@ -29,15 +37,26 @@ public class BackupTypeComplete : IBackupTypeSelector
     /// <returns>A list of files to back up.</returns>
     public List<IFile> GetFilesToBackup()
     {
-        var allFiles = Directory.EnumerateFiles(_sourceDir, "*", SearchOption.AllDirectories);
-        var allFilesList = allFiles.ToList(); // Convert the enumerable to a list
         var filesToBackup = new List<IFile>();
+        var extensionToCrypt = new HashSet<string>(ApplicationConfiguration.Load().ExtensionToCrypt,
+            StringComparer.OrdinalIgnoreCase);
+        IEnumerable<string> allFiles;
+
+        try
+        {
+            allFiles = Directory.EnumerateFiles(_sourceDir, "*", RecursiveAccessibleEnumeration);
+        }
+        catch
+        {
+            return filesToBackup;
+        }
 
         // Iterate through all files to create backup file objects
-        foreach (var file in allFilesList)
+        foreach (var file in allFiles)
         {
-            var targetPath = file.Replace(_sourceDir, _targetDir);
-            if (ApplicationConfiguration.Load().ExtensionToCrypt.Contains(Path.GetExtension(file).TrimStart('.')))
+            var relativePath = PathService.GetRelativePath(_sourceDir, file);
+            var targetPath = Path.Combine(_targetDir, relativePath);
+            if (extensionToCrypt.Contains(Path.GetExtension(file).TrimStart('.')))
                 filesToBackup.Add(new CryptedFile(file, targetPath, _backupName));
             else
                 filesToBackup.Add(new NormalFile(file, targetPath, _backupName)); // Create a NormalFile instance
